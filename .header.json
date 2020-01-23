@@ -1,0 +1,13 @@
+{
+  "Dir": ".",
+  "Template": ".header.txt",
+  "Includes": [
+    "*.go"
+  ],
+  "Excludes": ["html/**"],
+  "UseDefaultExcludes": true,
+  "Properties": {
+    "Year": "2020-present",
+    "Owner": "b3log.org"
+  }
+}
