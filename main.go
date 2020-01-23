@@ -88,7 +88,7 @@ func main() {
 
 	go serveWebDAV()
 
-	addr := "localhost:" + util.ServerPort
+	addr := "127.0.0.1:" + util.ServerPort
 	logger.Infof("链滴笔记内核进程 [v%s] 正在启动，监听端口 [%s]", util.Ver, "http://"+addr)
 	if err := r.Run(addr); nil != err {
 		logger.Errorf("启动链滴笔记内核失败 [%s]", err)
@@ -110,8 +110,8 @@ func serveWebDAV() {
 		fs.ServeHTTP(w, req)
 	})
 
-	addr := "localhost:" + util.WebDAVPort
-	logger.Infof("WebDAV 服务器正在启动 [%s]", "http://"+addr)
+	addr := "127.0.0.1:" + util.WebDAVPort
+	logger.Infof("链滴笔记 WebDAV 服务器正在启动 [%s]", "http://"+addr+"/webdav/")
 	http.ListenAndServe(addr, nil)
 }
 func handleDirList(fs webdav.FileSystem, w http.ResponseWriter, req *http.Request) bool {
