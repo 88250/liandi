@@ -38,7 +38,6 @@ func init() {
 	logger = gulu.Log.NewLogger(os.Stdout)
 
 	util.InitConf()
-	util.InitCert()
 
 	go util.ParentExited()
 }
@@ -112,8 +111,6 @@ func serveWebDAV() {
 	})
 
 	addr := "localhost:" + util.WebDAVPort
-	//logger.Infof("WebDAV 服务器正在启动 [%s]", "https://"+addr)
-	//http.ListenAndServeTLS(addr, util.CertPath, util.KeyPath, nil)
 	logger.Infof("WebDAV 服务器正在启动 [%s]", "http://"+addr)
 	http.ListenAndServe(addr, nil)
 }
