@@ -21,7 +21,8 @@ import (
 
 const (
 	Ver        = "1.0.0"
-	ServerPort = 6806
+	ServerPort = "6806"
+	WebDAVPort = "6807"
 	UserAgent  = "LianDi/v" + Ver
 )
 
@@ -30,6 +31,10 @@ var (
 	HomeDir, _ = gulu.OS.Home()
 	LianDiDir  = filepath.Join(HomeDir, ".liandi")
 )
+
+func InitConf() {
+	os.Mkdir(LianDiDir, 0755)
+}
 
 // AppConf 维护应用元数据，保存在 ~/.liandi/conf.json ，记录已经打开的文件夹、各种配置项等。
 type AppConf struct {
