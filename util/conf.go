@@ -19,16 +19,22 @@ import (
 	"github.com/88250/gulu"
 )
 
-const Ver = "1.0.0"
-
-var UserAgent = "LianDi/v" + Ver
-
-var logger = gulu.Log.NewLogger(os.Stdout)
-
 const (
-	ServerPort = 6804
-	AriaPort   = 6805
+	Ver        = "1.0.0"
+	ServerPort = 6806
+	UserAgent  = "LianDi/v" + Ver
 )
 
-var HomeDir, _ = gulu.OS.Home()
-var LianDiDir = filepath.Join(HomeDir, ".liandi")
+var (
+	logger     = gulu.Log.NewLogger(os.Stdout)
+	HomeDir, _ = gulu.OS.Home()
+	LianDiDir  = filepath.Join(HomeDir, ".liandi")
+)
+
+// AppConf 维护应用元数据，保存在 ~/.liandi/conf.json ，记录已经打开的文件夹、各种配置项等。
+type AppConf struct {
+}
+
+// DirConf 维护文件夹元数据，保存在打开文件夹下 .liandi/conf.json ，记录文件展开状态、编辑状态等。
+type DirConf struct {
+}

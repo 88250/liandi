@@ -16,7 +16,7 @@ type File struct {
 	Id     uint64 `json:"id"`
 	Path   string `json:"path"`
 	Name   string `json:"name"`
-	IsDir  int8   `json:"isdir"`
+	IsDir  int8   `json:"isDir"`
 	Size   uint64 `json:"size"`
 	HSize  string `json:"hSize"`
 	Mtime  int64  `json:"mtime"`
