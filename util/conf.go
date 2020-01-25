@@ -74,7 +74,7 @@ type AppConf struct {
 // Dir 维护了打开的 WebDAV 目录。
 type Dir struct {
 	URL      string `json:"url"`
-	auth     bool   `json:"auth"`
-	username string `json:"username"`
-	password string `json:"password"`
+	Auth     bool   `json:"auth"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
