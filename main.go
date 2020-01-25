@@ -63,7 +63,6 @@ func main() {
 			result.Msg = "Bad Request"
 			responseData, _ := json.Marshal(result)
 			util.Push(responseData)
-
 			return
 		}
 
@@ -75,7 +74,6 @@ func main() {
 			result.Msg = "Invalid Command"
 			responseData, _ := json.Marshal(result)
 			util.Push(responseData)
-
 			return
 		}
 

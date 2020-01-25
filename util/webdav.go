@@ -31,7 +31,7 @@ func InitMount() {
 			Mount(dir.Path)
 		}
 	}
-	RestartServeWebDAV()
+	StartServeWebDAV()
 }
 
 func Mount(path string) (ret string) {
@@ -48,7 +48,7 @@ func Mount(path string) (ret string) {
 	dir := &Dir{URL: ret}
 	Conf.Dirs = append(Conf.Dirs, dir)
 
-	StopServeWebDAV()
+	http.DefaultServeMux = http.NewServeMux()
 	for _, dir := range Conf.Dirs {
 		prefix := dir.URL[len("127.0.0.1:"+WebDAVPort):]
 		fs := &webdav.Handler{
@@ -64,7 +64,6 @@ func Mount(path string) (ret string) {
 			fs.ServeHTTP(w, req)
 		})
 	}
-	StartServeWebDAV()
 	return
 }
 
