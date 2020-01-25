@@ -15,10 +15,10 @@ package util
 import (
 	"context"
 	"fmt"
-	"github.com/88250/gulu"
 	"golang.org/x/net/webdav"
 	"net/http"
 	"os"
+	"path/filepath"
 )
 
 const WebDAVPort = "6807"
@@ -28,40 +28,40 @@ var server *http.Server
 func InitMount() {
 	for _, dir := range Conf.Dirs {
 		if "" != dir.Path {
-			Mount(dir.Path)
+			Mount(dir.URL, dir.Path)
 		}
 	}
 	StartServeWebDAV()
 }
 
-func Mount(path string) (ret string) {
-	id := gulu.Rand.String(7)
-	prefix := "/webdav/" + id + "/"
-
-	ret = "127.0.0.1:" + WebDAVPort + prefix
+func Mount(url, path string) {
 	for _, dir := range Conf.Dirs {
-		if dir.URL == ret {
-			return ret
+		if dir.URL == url {
+			return
 		}
 	}
 
-	dir := &Dir{URL: ret}
+	dir := &Dir{URL: url, Path: path}
 	Conf.Dirs = append(Conf.Dirs, dir)
 
 	http.DefaultServeMux = http.NewServeMux()
 	for _, dir := range Conf.Dirs {
-		prefix := dir.URL[len("127.0.0.1:"+WebDAVPort):]
-		fs := &webdav.Handler{
+		if "" == dir.Path {
+			continue
+		}
+
+		prefix := dir.URL[len("http://127.0.0.1:"+WebDAVPort):]
+		webdavHandler := &webdav.Handler{
 			Prefix:     prefix,
 			FileSystem: webdav.Dir(path),
 			LockSystem: webdav.NewMemLS(),
 		}
 		http.HandleFunc(prefix, func(w http.ResponseWriter, req *http.Request) {
-			if req.Method == "GET" && handleDirList(fs.FileSystem, w, req) {
+			if req.Method == "GET" && handleDirList(webdavHandler, w, req) {
 				return
 			}
 
-			fs.ServeHTTP(w, req)
+			webdavHandler.ServeHTTP(w, req)
 		})
 	}
 	return
@@ -95,12 +95,15 @@ func RestartServeWebDAV() {
 	server.ListenAndServe()
 }
 
-func handleDirList(fs webdav.FileSystem, w http.ResponseWriter, req *http.Request) bool {
+func handleDirList(handler *webdav.Handler, w http.ResponseWriter, req *http.Request) bool {
+	prefix := handler.Prefix
+	path := req.URL.Path[len(prefix):]
+	base := filepath.Base(path)
 	ctx := context.Background()
-	f, err := fs.OpenFile(ctx, req.URL.Path, os.O_RDONLY, 0)
+	f, err := handler.FileSystem.OpenFile(ctx, path, os.O_RDONLY, 0)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "读取目录 [%s] 失败：%s", req.URL.Path, err.Error())
+		fmt.Fprintf(w, "读取目录 [%s] 失败：%s", path, err.Error())
 		return false
 	}
 	defer f.Close()
@@ -110,15 +113,15 @@ func handleDirList(fs webdav.FileSystem, w http.ResponseWriter, req *http.Reques
 	dirs, err := f.Readdir(-1)
 	if nil != err {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "读取目录 [%s] 失败：%s", req.URL.Path, err.Error())
+		fmt.Fprintf(w, "读取目录 [%s] 失败：%s", path, err.Error())
 		return false
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Fprintf(w, "<pre>\n")
 	for _, d := range dirs {
-		name := d.Name()
+		name := filepath.Join(prefix, base, d.Name())
 		if d.IsDir() {
-			name += "/"
+			name += string(filepath.Separator)
 		}
 		fmt.Fprintf(w, "<a href=\"%s\">%s</a>\n", name, name)
 	}
