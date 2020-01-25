@@ -28,9 +28,9 @@ type Cmd interface {
 var Commands = map[string]Cmd{}
 
 var (
-	lsCmd = &ls{}
+	opendirCmd = &opendir{}
 )
 
 func init() {
-	Commands[lsCmd.Name()] = lsCmd
+	Commands[opendirCmd.Name()] = opendirCmd
 }

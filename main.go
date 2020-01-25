@@ -13,11 +13,8 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
-	"fmt"
 	"math/rand"
-	"net/http"
 	"os"
 	"time"
 
@@ -25,7 +22,6 @@ import (
 	"github.com/88250/liandi/command"
 	"github.com/88250/liandi/util"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/net/webdav"
 	"gopkg.in/olahol/melody.v1"
 )
 
@@ -38,6 +34,7 @@ func init() {
 	logger = gulu.Log.NewLogger(os.Stdout)
 
 	util.InitConf()
+	util.InitMount()
 
 	go util.ParentExited()
 }
@@ -86,61 +83,9 @@ func main() {
 		go cmd.Exec(param)
 	})
 
-	go serveWebDAV()
-
 	addr := "127.0.0.1:" + util.ServerPort
 	logger.Infof("链滴笔记内核进程 [v%s] 正在启动，监听端口 [%s]", util.Ver, "http://"+addr)
 	if err := r.Run(addr); nil != err {
 		logger.Errorf("启动链滴笔记内核失败 [%s]", err)
 	}
-}
-
-func serveWebDAV() {
-	fs := &webdav.Handler{
-		FileSystem: webdav.Dir("."),
-		LockSystem: webdav.NewMemLS(),
-	}
-
-	http.HandleFunc("/webdav/", func(w http.ResponseWriter, req *http.Request) {
-		req.URL.Path = req.URL.Path[len("/webdav"):]
-		if req.Method == "GET" && handleDirList(fs.FileSystem, w, req) {
-			return
-		}
-
-		fs.ServeHTTP(w, req)
-	})
-
-	addr := "127.0.0.1:" + util.WebDAVPort
-	logger.Infof("链滴笔记 WebDAV 服务器正在启动 [%s]", "http://"+addr+"/webdav/")
-	http.ListenAndServe(addr, nil)
-}
-func handleDirList(fs webdav.FileSystem, w http.ResponseWriter, req *http.Request) bool {
-	ctx := context.Background()
-	f, err := fs.OpenFile(ctx, req.URL.Path, os.O_RDONLY, 0)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "读取目录 [%s] 失败：%s", req.URL.Path, err.Error())
-		return false
-	}
-	defer f.Close()
-	if fi, _ := f.Stat(); fi != nil && !fi.IsDir() {
-		return false
-	}
-	dirs, err := f.Readdir(-1)
-	if nil != err {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintf(w, "读取目录 [%s] 失败：%s", req.URL.Path, err.Error())
-		return false
-	}
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprintf(w, "<pre>\n")
-	for _, d := range dirs {
-		name := d.Name()
-		if d.IsDir() {
-			name += "/"
-		}
-		fmt.Fprintf(w, "<a href=\"%s\">%s</a>\n", name, name)
-	}
-	fmt.Fprintf(w, "</pre>\n")
-	return true
 }

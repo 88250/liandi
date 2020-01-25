@@ -24,7 +24,6 @@ import (
 const (
 	Ver        = "1.0.0"
 	ServerPort = "6806"
-	WebDAVPort = "6807"
 	UserAgent  = "LianDi/v" + Ver
 )
 
@@ -90,6 +89,5 @@ type Dir struct {
 	Auth     bool   `json:"auth"`     // WebDAV 是否需要鉴权
 	Username string `json:"username"` // WebDAV 用户名
 	Password string `json:"password"` // WebDAV 密码
-	Local    bool   `json:"local"`    // 标识是否是本地文件系统的文件夹
-	Path     string `json:"path"`     // 本地文件系统文件夹路径
+	Path     string `json:"path"`     // 本地文件系统文件夹路径，远程 WebDAV 的话该字段为控制
 }

@@ -10,19 +10,22 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package util
+package command
 
-type File struct {
-	Id     uint64 `json:"id"`
-	Path   string `json:"path"`
-	Name   string `json:"name"`
-	IsDir  int8   `json:"isDir"`
-	Size   uint64 `json:"size"`
-	HSize  string `json:"hSize"`
-	Mtime  int64  `json:"mtime"`
-	HMtime string `json:"hMtime"`
+import (
+	"github.com/88250/liandi/util"
+)
+
+type opendir struct {
 }
 
-func Ls(path string) []*File {
-	return nil
+func (cmd *opendir) Exec(param map[string]interface{}) {
+	ret := util.NewCmdResult(cmd.Name())
+	path := param["path"].(string)
+	ret.Data = util.Mount(path)
+	util.Push(ret.Bytes())
+}
+
+func (cmd *opendir) Name() string {
+	return "opendir"
 }
