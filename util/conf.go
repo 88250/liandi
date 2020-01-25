@@ -42,7 +42,7 @@ func InitConf() {
 
 	if !gulu.File.IsExist(ConfPath) {
 		if err := os.Mkdir(LianDiDir, 0755); nil != err && !os.IsExist(err) {
-			logger.Fatalf("初始化配置目录 [%s] 失败：%s", LianDiDir, err)
+			logger.Fatalf("创建配置目录 [%s] 失败：%s", LianDiDir, err)
 		}
 
 		saveConf()
@@ -81,15 +81,15 @@ func saveConf() {
 // AppConf 维护应用元数据，保存在 ~/.liandi/conf.json ，记录已经打开的文件夹、各种配置项等。
 type AppConf struct {
 	LogLevel string `json:"logLevel"` // 日志级别：Off, Trace, Debug, Info, Warn, Error, Fatal
-	Dirs     []*Dir `json:"dirs"`
+	Dirs     []*Dir `json:"dirs"`     // 已经打开的文件夹
 }
 
-// Dir 维护了打开的 WebDAV 目录。
+// Dir 维护了打开的 WebDAV 文件夹。
 type Dir struct {
 	URL      string `json:"url"`      // WebDAV URL
 	Auth     bool   `json:"auth"`     // WebDAV 是否需要鉴权
 	Username string `json:"username"` // WebDAV 用户名
 	Password string `json:"password"` // WebDAV 密码
-	Local    bool   `json:"local"`    // 标识是否是本地文件系统的目录
-	Path     string `json:"path"`     // 本地文件系统目录路径
+	Local    bool   `json:"local"`    // 标识是否是本地文件系统的文件夹
+	Path     string `json:"path"`     // 本地文件系统文件夹路径
 }
