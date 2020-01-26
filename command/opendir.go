@@ -26,6 +26,9 @@ func (cmd *opendir) Exec(param map[string]interface{}) {
 	util.StopServeWebDAV()
 	util.Mount(url, path)
 	util.StartServeWebDAV()
+	ret.Data = map[string]interface{}{
+		"url": url,
+	}
 	util.Push(ret.Bytes())
 }
 
