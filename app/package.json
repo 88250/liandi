@@ -1,0 +1,32 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "链滴笔记前端应用",
+  "scripts": {
+    "lint": "tslint --fix -c tslint.json 'src/**/*.ts'",
+    "dev": "webpack",
+    "build": "webpack --mode production",
+    "start": "electron ./electron/main.js",
+    "pack": "electron-builder --dir"
+  },
+  "keywords": [
+    "markdown",
+    "note"
+  ],
+  "author": "Vanessa <v@b3log.org> (http://vanessa.b3log.org)",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^16.9.19",
+    "@types/react-dom": "^16.9.5",
+    "electron": "^7.1.10",
+    "ts-loader": "^6.2.1",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  }
+}
