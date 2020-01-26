@@ -15,7 +15,7 @@ package util
 import (
 	"context"
 	"net/http"
-	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/88250/gulu"
@@ -55,7 +55,7 @@ func Mount(url, localPath string) (ret string) {
 	}
 
 	id := strings.ToLower(gulu.Rand.String(7))
-	url = url + id + "/" + path.Base(localPath) + "/"
+	url = url + id + "/" + filepath.Base(localPath) + "/"
 
 	dir := &Dir{URL: url, Path: localPath}
 	Conf.Dirs = append(Conf.Dirs, dir)
