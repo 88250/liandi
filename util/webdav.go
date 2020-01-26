@@ -14,11 +14,11 @@ package util
 
 import (
 	"context"
-	"github.com/88250/gulu"
 	"net/http"
 	"path"
 	"strings"
 
+	"github.com/88250/gulu"
 	"golang.org/x/net/webdav"
 )
 
