@@ -1,9 +1,13 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import "./assets/base.scss"
+import {initWebSocket} from "./util/websocket";
+import {App} from "./App";
 
-import { Hello } from "./components/Hello";
-
-ReactDOM.render(
-    <Hello compiler="TypeScript" framework="React" />,
-    document.getElementById("app")
-);
+(async () => {
+    await initWebSocket()
+    ReactDOM.render(
+        <App/>,
+        document.getElementById("app")
+    );
+})()
