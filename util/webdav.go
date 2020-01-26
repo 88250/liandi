@@ -101,7 +101,7 @@ func StopServeWebDAV() {
 
 func NormalizeURL(url string) (ret string) {
 	ret = strings.ToLower(url)
-	if strings.HasSuffix(ret, "/") {
+	if !strings.HasSuffix(ret, "/") {
 		ret = ret + "/"
 	}
 	return
