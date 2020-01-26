@@ -15,6 +15,7 @@ package util
 import (
 	"context"
 	"fmt"
+	"github.com/88250/gulu"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -48,17 +49,21 @@ func Unmount(url string) {
 	routeWebDAV()
 }
 
-func Mount(url, path string) {
+func Mount(url, path string) (ret string) {
 	for _, dir := range Conf.Dirs {
-		if dir.URL == url {
+		if "" != path && dir.Path == path {
 			return
 		}
 	}
 
+	id := strings.ToLower(gulu.Rand.String(7))
+	url = url + id + "/"
+
 	dir := &Dir{URL: url, Path: path}
 	Conf.Dirs = append(Conf.Dirs, dir)
 	routeWebDAV()
-	return
+	logger.Debugf("挂载目录 [%s] 完毕", url)
+	return url
 }
 
 func routeWebDAV() {
@@ -75,11 +80,14 @@ func routeWebDAV() {
 			LockSystem: webdav.NewMemLS(),
 		}
 		http.HandleFunc(prefix, func(w http.ResponseWriter, req *http.Request) {
-			if req.Method == "GET" && handleDirList(webdavHandler, w, req) {
+			if IsRequestDir(req.RequestURI) {
+				if handleDirList(webdavHandler, w, req) {
+					return
+				}
+			} else if IsRequestMarkdown(req.RequestURI) {
+				webdavHandler.ServeHTTP(w, req)
 				return
 			}
-
-			webdavHandler.ServeHTTP(w, req)
 		})
 	}
 }
@@ -105,6 +113,14 @@ func NormalizeURL(url string) (ret string) {
 		ret = ret + "/"
 	}
 	return
+}
+
+func IsRequestDir(uri string) bool {
+	return strings.HasSuffix(uri, "/")
+}
+
+func IsRequestMarkdown(uri string) bool {
+	return strings.HasSuffix(strings.ToLower(uri), ".md")
 }
 
 func handleDirList(handler *webdav.Handler, w http.ResponseWriter, req *http.Request) bool {
