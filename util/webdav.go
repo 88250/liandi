@@ -52,7 +52,7 @@ func Unmount(url string) {
 func Mount(url, path string) (ret string) {
 	for _, dir := range Conf.Dirs {
 		if "" != path && dir.Path == path {
-			return
+			return dir.URL
 		}
 	}
 
