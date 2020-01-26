@@ -22,6 +22,7 @@ type closedir struct {
 func (cmd *closedir) Exec(param map[string]interface{}) {
 	ret := util.NewCmdResult(cmd.Name())
 	url := param["url"].(string)
+	url = util.NormalizeURL(url)
 	util.StopServeWebDAV()
 	util.Unmount(url)
 	util.StartServeWebDAV()

@@ -21,10 +21,11 @@ type opendir struct {
 
 func (cmd *opendir) Exec(param map[string]interface{}) {
 	ret := util.NewCmdResult(cmd.Name())
-	path := param["path"].(string)
+	p := param["path"].(string)
 	url := param["url"].(string)
+	url = util.NormalizeURL(url)
 	util.StopServeWebDAV()
-	util.Mount(url, path)
+	util.Mount(url, p)
 	util.StartServeWebDAV()
 	ret.Data = map[string]interface{}{
 		"url": url,

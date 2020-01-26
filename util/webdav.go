@@ -64,7 +64,7 @@ func Mount(url, path string) {
 func routeWebDAV() {
 	http.DefaultServeMux = http.NewServeMux()
 	for _, dir := range Conf.Dirs {
-		if "" == dir.Path {
+		if dir.IsRemote() {
 			continue
 		}
 
@@ -97,6 +97,14 @@ func StopServeWebDAV() {
 		return
 	}
 	server.Shutdown(context.Background())
+}
+
+func NormalizeURL(url string) (ret string) {
+	ret = strings.ToLower(url)
+	if strings.HasSuffix(ret, "/") {
+		ret = ret + "/"
+	}
+	return
 }
 
 func handleDirList(handler *webdav.Handler, w http.ResponseWriter, req *http.Request) bool {
