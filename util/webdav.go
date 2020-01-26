@@ -31,12 +31,21 @@ const (
 var server *http.Server
 
 func InitMount() {
-	for _, dir := range Conf.Dirs {
-		if "" != dir.Path {
-			Mount(dir.URL, dir.Path)
+	routeWebDAV()
+	StartServeWebDAV()
+}
+
+func Unmount(url string) {
+	var i int
+	var dir *Dir
+	for i, dir = range Conf.Dirs {
+		if dir.URL == url {
+			break
 		}
 	}
-	StartServeWebDAV()
+
+	Conf.Dirs = append(Conf.Dirs[:i], Conf.Dirs[i+1:]...)
+	routeWebDAV()
 }
 
 func Mount(url, path string) {
@@ -48,7 +57,11 @@ func Mount(url, path string) {
 
 	dir := &Dir{URL: url, Path: path}
 	Conf.Dirs = append(Conf.Dirs, dir)
+	routeWebDAV()
+	return
+}
 
+func routeWebDAV() {
 	http.DefaultServeMux = http.NewServeMux()
 	for _, dir := range Conf.Dirs {
 		if "" == dir.Path {
@@ -69,7 +82,6 @@ func Mount(url, path string) {
 			webdavHandler.ServeHTTP(w, req)
 		})
 	}
-	return
 }
 
 func StartServeWebDAV() {

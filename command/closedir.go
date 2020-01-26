@@ -13,26 +13,21 @@
 package command
 
 import (
-	"os"
-
-	"github.com/88250/gulu"
+	"github.com/88250/liandi/util"
 )
 
-var logger = gulu.Log.NewLogger(os.Stdout)
-
-type Cmd interface {
-	Name() string
-	Exec(map[string]interface{})
+type closedir struct {
 }
 
-var Commands = map[string]Cmd{}
+func (cmd *closedir) Exec(param map[string]interface{}) {
+	ret := util.NewCmdResult(cmd.Name())
+	url := param["url"].(string)
+	util.StopServeWebDAV()
+	util.Unmount(url)
+	util.StartServeWebDAV()
+	util.Push(ret.Bytes())
+}
 
-var (
-	opendirCmd  = &opendir{}
-	closedirCmd = &closedir{}
-)
-
-func init() {
-	Commands[opendirCmd.Name()] = opendirCmd
-	Commands[closedirCmd.Name()] = closedirCmd
+func (cmd *closedir) Name() string {
+	return "closedir"
 }
