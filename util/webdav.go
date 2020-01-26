@@ -15,13 +15,18 @@ package util
 import (
 	"context"
 	"fmt"
-	"golang.org/x/net/webdav"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
+
+	"golang.org/x/net/webdav"
 )
 
-const WebDAVPort = "6807"
+const (
+	WebDAVPort          = "6807"
+	WebDAVLocalhostAddr = "127.0.0.1:" + WebDAVPort
+)
 
 var server *http.Server
 
@@ -50,10 +55,10 @@ func Mount(url, path string) {
 			continue
 		}
 
-		prefix := dir.URL[len("http://127.0.0.1:"+WebDAVPort):]
+		prefix := dir.URL[strings.Index(dir.URL, "/webdav/"):]
 		webdavHandler := &webdav.Handler{
 			Prefix:     prefix,
-			FileSystem: webdav.Dir(path),
+			FileSystem: webdav.Dir(dir.Path),
 			LockSystem: webdav.NewMemLS(),
 		}
 		http.HandleFunc(prefix, func(w http.ResponseWriter, req *http.Request) {
@@ -71,10 +76,7 @@ func StartServeWebDAV() {
 	if nil != server {
 		StopServeWebDAV()
 	}
-
-	addr := "127.0.0.1:" + WebDAVPort
-	logger.Infof("WebDAV 服务器正在启动 [%s]", "http://"+addr+"/webdav/")
-	server = &http.Server{Addr: addr}
+	server = &http.Server{Addr: WebDAVLocalhostAddr}
 	go server.ListenAndServe()
 }
 
@@ -83,16 +85,6 @@ func StopServeWebDAV() {
 		return
 	}
 	server.Shutdown(context.Background())
-}
-
-func RestartServeWebDAV() {
-	if nil != server {
-		server.Shutdown(context.Background())
-	}
-	addr := "127.0.0.1:" + WebDAVPort
-	logger.Infof("WebDAV 服务器正在重新加载 [%s]", "http://"+addr+"/webdav/")
-	server = &http.Server{Addr: addr}
-	server.ListenAndServe()
 }
 
 func handleDirList(handler *webdav.Handler, w http.ResponseWriter, req *http.Request) bool {
