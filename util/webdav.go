@@ -80,14 +80,14 @@ func routeWebDAV() {
 			LockSystem: webdav.NewMemLS(),
 		}
 		http.HandleFunc(prefix, func(w http.ResponseWriter, req *http.Request) {
-			if IsRequestDir(req.RequestURI) {
-				if handleDirList(webdavHandler, w, req) {
-					return
-				}
-			} else if IsRequestMarkdown(req.RequestURI) {
-				webdavHandler.ServeHTTP(w, req)
-				return
-			}
+			//if IsRequestDir(req.RequestURI) {
+			//	if handleDirList(webdavHandler, w, req) {
+			//		return
+			//	}
+			//} else if IsRequestMarkdown(req.RequestURI) {
+			webdavHandler.ServeHTTP(w, req)
+			//return
+			//}
 		})
 	}
 }
