@@ -25,10 +25,12 @@ func (cmd *mount) Exec(param map[string]interface{}) {
 	url := param["url"].(string)
 	url = util.NormalizeURL(url)
 	util.StopServeWebDAV()
-	url = util.Mount(url, p)
+	url, alreadyMount := util.Mount(url, p)
 	util.StartServeWebDAV()
-	ret.Data = map[string]interface{}{
-		"url": url,
+	if !alreadyMount {
+		ret.Data = map[string]interface{}{
+			"url": url,
+		}
 	}
 	util.Push(ret.Bytes())
 }
