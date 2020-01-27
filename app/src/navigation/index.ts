@@ -1,8 +1,6 @@
 import {remote} from "electron";
 import {homedir} from "os";
 import {Constants} from "../constants";
-import {Connection} from "webdav-client";
-import {delegate} from "../util/delegate";
 
 export class Navigation {
     public element: HTMLElement;
@@ -13,26 +11,23 @@ export class Navigation {
         const btnElement = document.createElement('button')
         btnElement.innerHTML = '打开文件'
         btnElement.onclick = () => {
-            this.openWebDAVs(liandi)
+            this.mountWebDAVs(liandi)
         }
 
         this.listElement = document.createElement("div")
-        delegate(this.listElement, "click", "div",  (target)=>{
-            liandi.files.render(liandi, target.getAttribute('data-url'))
-        })
 
         this.element.appendChild(btnElement)
         this.element.appendChild(this.listElement)
     }
 
-    private async openWebDAVs(liandi: ILiandi) {
+    private async mountWebDAVs(liandi: ILiandi) {
         const filePath = await remote.dialog.showOpenDialog({
             defaultPath: homedir(),
-            properties: ['openDirectory'],
+            properties: ['openDirectory', 'openFile'],
         })
 
         liandi.ws.webSocket.send(JSON.stringify({
-            "cmd": "opendir",
+            "cmd": "mount",
             "param": {
                 "url": `${Constants.WEBDAV_ADDRESS}/`,
                 "path": filePath.filePaths[0]
@@ -40,14 +35,15 @@ export class Navigation {
         }))
     }
 
-    public onmessage(liandi: ILiandi, url: string) {
+    public onMount(liandi: ILiandi, url: string) {
+        const urls = url.split('/')
+        const name = urls[urls.length - 2]
         liandi.webDAVs.push({
             url,
-            connection: new Connection(url)
+            name
         })
-        const urls = url.split('/')
+
         this.listElement.insertAdjacentHTML('beforeend',
-            `<div data-url="${url}">${urls[urls.length - 2]}</div>`)
+            `<file-item dir="true" path="/" name="${name}" url="${url}"></file-item>`)
     }
 }
-
