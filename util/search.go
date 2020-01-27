@@ -16,6 +16,8 @@ import (
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
 	"github.com/blevesearch/bleve"
+
+	_ "github.com/blevesearch/bleve/analysis/lang/cjk"
 )
 
 var index bleve.Index
@@ -31,6 +33,7 @@ func InitSearch() {
 		}
 	} else {
 		mapping := bleve.NewIndexMapping()
+		mapping.DefaultAnalyzer = "cjk"
 		index, err = bleve.New(IndexPath, mapping)
 		if nil != err {
 			logger.Fatalf("创建搜索索引失败：%s", err)
