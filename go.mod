@@ -24,3 +24,4 @@ require (
 )
 
 //replace github.com/88250/gowebdav => D:\88250\gowebdav
+//replace github.com/88250/gulu => D:\88250\gulu

@@ -13,12 +13,14 @@
 package util
 
 import (
-	"github.com/88250/gowebdav"
 	"os"
+	"path/filepath"
+	"strings"
+
+	"github.com/88250/gowebdav"
 )
 
 type File struct {
-	URL    string `json:"url"`
 	Path   string `json:"path"`
 	Name   string `json:"name"`
 	IsDir  bool   `json:"isdir"`
@@ -51,6 +53,13 @@ func Ls(url, path string) (ret []*File) {
 	}
 
 	for _, f := range files {
+		if strings.HasPrefix(f.Name(), ".") {
+			continue
+		}
+		if !f.IsDir() && "md" != filepath.Ext(f.Name()) {
+			continue
+		}
+
 		file := fromFileInfo(f)
 		ret = append(ret, file)
 	}
