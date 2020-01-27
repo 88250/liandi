@@ -31,6 +31,7 @@ type File struct {
 func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 	ret = &File{}
 	f := fileInfo.(gowebdav.File)
+	ret.Path = f.Path()
 	ret.Name = f.Name()
 	ret.IsDir = f.IsDir()
 	ret.Size = f.Size()

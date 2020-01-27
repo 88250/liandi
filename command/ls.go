@@ -21,7 +21,8 @@ func (cmd *ls) Exec(param map[string]interface{}) {
 	ret := util.NewCmdResult(cmd.Name())
 	url := param["url"].(string)
 	url = util.NormalizeURL(url)
-	ret.Data = util.Conf.Ls(url)
+	path := param["path"].(string)
+	ret.Data = util.Conf.Ls(url, path)
 	util.Push(ret.Bytes())
 }
 

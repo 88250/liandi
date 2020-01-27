@@ -93,17 +93,13 @@ func (conf *AppConf) InitClient() {
 	}
 }
 
-func (conf *AppConf) Ls(url string) (ret []*File) {
+func (conf *AppConf) Ls(url, path string) (ret []*File) {
 	dir := conf.dir(url)
 	if nil == dir {
 		return nil
 	}
 
-	p := strings.ReplaceAll(url, dir.URL, "")
-	if "" == strings.TrimSpace(p) {
-		p = "/"
-	}
-	files, err := dir.client.ReadDir(p)
+	files, err := dir.client.ReadDir(path)
 	if nil != err {
 		logger.Errorf("读取目录 [%s] 失败：%s", url, err)
 		return nil

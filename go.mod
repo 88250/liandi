@@ -22,3 +22,5 @@ require (
 	gopkg.in/olahol/melody.v1 v1.0.0-20170518105555-d52139073376
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
+
+replace github.com/88250/gowebdav => D:\88250\gowebdav
