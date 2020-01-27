@@ -33,6 +33,7 @@ var (
 	lsCmd      = &ls{}
 	getCmd     = &get{}
 	searchCmd  = &search{}
+	dirsCmd    = &dirs{}
 )
 
 func init() {
@@ -41,4 +42,5 @@ func init() {
 	Commands[lsCmd.Name()] = lsCmd
 	Commands[getCmd.Name()] = getCmd
 	Commands[searchCmd.Name()] = searchCmd
+	Commands[dirsCmd.Name()] = dirsCmd
 }

@@ -11,3 +11,22 @@
 // See the Mulan PSL v1 for more details.
 
 package command
+
+import "github.com/88250/liandi/util"
+
+type dirs struct {
+}
+
+func (cmd *dirs) Exec(param map[string]interface{}) {
+	ret := util.NewCmdResult(cmd.Name())
+	var urls []string
+	for _, dir := range util.Conf.Dirs {
+		urls = append(urls, dir.URL)
+	}
+	ret.Data = urls
+	util.Push(ret.Bytes())
+}
+
+func (cmd *dirs) Name() string {
+	return "dirs"
+}
