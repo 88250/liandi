@@ -42,6 +42,8 @@ func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 }
 
 func Ls(url, path string) (ret []*File) {
+	ret = []*File{}
+
 	dir := Conf.dir(url)
 	if nil == dir {
 		return nil
