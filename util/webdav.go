@@ -36,12 +36,19 @@ func InitMount() {
 
 func Unmount(url string) {
 	var i int
-	var dir *Dir
+	var dir, found *Dir
 	for i, dir = range Conf.Dirs {
 		if dir.URL == url {
+			found = dir
 			break
 		}
 	}
+
+	if nil == found {
+		logger.Debugf("未找到待取消挂在的目录 [%s]", url)
+		return
+	}
+	found.CloseClient()
 
 	Conf.Dirs = append(Conf.Dirs[:i], Conf.Dirs[i+1:]...)
 	routeWebDAV()
@@ -56,13 +63,14 @@ func Mount(url, localPath string) (ret string) {
 		}
 	}
 
-	id := strings.ToLower(gulu.Rand.String(7))
+	id := gulu.Rand.String(7)
 	url = url + id + "/" + filepath.Base(localPath) + "/"
 
 	dir := &Dir{URL: url, Path: localPath}
 	Conf.Dirs = append(Conf.Dirs, dir)
 	routeWebDAV()
 	Conf.Save()
+	dir.InitClient()
 	logger.Debugf("挂载目录 [%s] 完毕", url)
 	return url
 }
@@ -103,7 +111,7 @@ func StopServeWebDAV() {
 }
 
 func NormalizeURL(url string) (ret string) {
-	ret = strings.ToLower(url)
+	ret = url
 	if !strings.HasSuffix(ret, "/") {
 		ret = ret + "/"
 	}

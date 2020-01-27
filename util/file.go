@@ -10,31 +10,31 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package command
+package util
 
 import (
+	"github.com/88250/gowebdav"
 	"os"
-
-	"github.com/88250/gulu"
 )
 
-var logger = gulu.Log.NewLogger(os.Stdout)
-
-type Cmd interface {
-	Name() string
-	Exec(map[string]interface{})
+type File struct {
+	URL    string `json:"url"`
+	Path   string `json:"path"`
+	Name   string `json:"name"`
+	IsDir  bool   `json:"isdir"`
+	Size   int64  `json:"size"`
+	HSize  string `json:"hSize"`
+	Mtime  int64  `json:"mtime"`
+	HMtime string `json:"hMtime"`
 }
 
-var Commands = map[string]Cmd{}
-
-var (
-	mountCmd   = &mount{}
-	unmountCmd = &unmount{}
-	lsCmd      = &ls{}
-)
-
-func init() {
-	Commands[mountCmd.Name()] = mountCmd
-	Commands[unmountCmd.Name()] = unmountCmd
-	Commands[lsCmd.Name()] = lsCmd
+func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
+	ret = &File{}
+	f := fileInfo.(gowebdav.File)
+	ret.Path = f.Path()
+	ret.Name = f.Name()
+	ret.IsDir = f.IsDir()
+	ret.Size = f.Size()
+	ret.Mtime = f.ModTime().Unix()
+	return
 }

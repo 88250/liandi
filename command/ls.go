@@ -12,29 +12,20 @@
 
 package command
 
-import (
-	"os"
+import "github.com/88250/liandi/util"
 
-	"github.com/88250/gulu"
-)
-
-var logger = gulu.Log.NewLogger(os.Stdout)
-
-type Cmd interface {
-	Name() string
-	Exec(map[string]interface{})
+type ls struct {
 }
 
-var Commands = map[string]Cmd{}
+func (cmd *ls) Exec(param map[string]interface{}) {
+	ret := util.NewCmdResult(cmd.Name())
+	url := param["url"].(string)
+	url = util.NormalizeURL(url)
+	path := param["path"].(string)
+	ret.Data = util.Conf.Ls(url, path)
+	util.Push(ret.Bytes())
+}
 
-var (
-	mountCmd   = &mount{}
-	unmountCmd = &unmount{}
-	lsCmd      = &ls{}
-)
-
-func init() {
-	Commands[mountCmd.Name()] = mountCmd
-	Commands[unmountCmd.Name()] = unmountCmd
-	Commands[lsCmd.Name()] = lsCmd
+func (cmd *ls) Name() string {
+	return "ls"
 }
