@@ -66,5 +66,5 @@ func Search(text string) {
 		logger.Warnf("搜索失败：%s", err)
 		return
 	}
-	logger.Infof("%v", searchResults)
+	logger.Infof("%+v", searchResults)
 }
