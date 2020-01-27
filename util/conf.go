@@ -43,8 +43,6 @@ func InitConf() {
 		if err := os.Mkdir(LianDiDir, 0755); nil != err && !os.IsExist(err) {
 			logger.Fatalf("创建配置目录 [%s] 失败：%s", LianDiDir, err)
 		}
-
-		saveConf()
 		logger.Infof("初始化配置文件 [%s] 完毕", ConfPath)
 	} else {
 		data, err := ioutil.ReadFile(ConfPath)
@@ -67,20 +65,22 @@ func InitConf() {
 		}
 	}
 
-	gulu.Log.SetLevel(Conf.LogLevel)
-}
+	Conf.Save()
 
-func saveConf() {
-	data, _ := json.Marshal(Conf)
-	if err := ioutil.WriteFile(ConfPath, data, 0644); nil != err {
-		logger.Fatalf("写入配置文件 [%s] 失败：", ConfPath, err)
-	}
+	gulu.Log.SetLevel(Conf.LogLevel)
 }
 
 // AppConf 维护应用元数据，保存在 ~/.liandi/conf.json ，记录已经打开的文件夹、各种配置项等。
 type AppConf struct {
 	LogLevel string `json:"logLevel"` // 日志级别：Off, Trace, Debug, Info, Warn, Error, Fatal
 	Dirs     []*Dir `json:"dirs"`     // 已经打开的文件夹
+}
+
+func (conf *AppConf) Save() {
+	data, _ := json.Marshal(Conf)
+	if err := ioutil.WriteFile(ConfPath, data, 0644); nil != err {
+		logger.Fatalf("写入配置文件 [%s] 失败：", ConfPath, err)
+	}
 }
 
 // Dir 维护了打开的 WebDAV 文件夹。

@@ -45,6 +45,8 @@ func Unmount(url string) {
 
 	Conf.Dirs = append(Conf.Dirs[:i], Conf.Dirs[i+1:]...)
 	routeWebDAV()
+	Conf.Save()
+	logger.Debug("取消挂载目录 [%s] 完毕", url)
 }
 
 func Mount(url, localPath string) (ret string) {
@@ -60,6 +62,7 @@ func Mount(url, localPath string) (ret string) {
 	dir := &Dir{URL: url, Path: localPath}
 	Conf.Dirs = append(Conf.Dirs, dir)
 	routeWebDAV()
+	Conf.Save()
 	logger.Debugf("挂载目录 [%s] 完毕", url)
 	return url
 }
