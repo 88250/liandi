@@ -13,6 +13,7 @@
 package util
 
 import (
+	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
 	"github.com/blevesearch/bleve"
 )
@@ -37,9 +38,17 @@ func InitSearch() {
 		}
 	}
 
-	//for _, dir := range Conf.Dirs {
-	//	dir.Get("")
-	//}
+	go func() {
+		for _, dir := range Conf.Dirs {
+			files := dir.Files("/")
+			for _, file := range files {
+				content, err := dir.Get(file.(gowebdav.File).Path())
+				if nil == err {
+					Index(content)
+				}
+			}
+		}
+	}()
 }
 
 func Index(content string) {

@@ -42,6 +42,11 @@ func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 	return
 }
 
+func isMarkdown(fileInfo os.FileInfo) bool {
+	fname := strings.ToLower(filepath.Ext(fileInfo.Name()))
+	return ".md" == fname || ".markdown" == fname || ".txt" == fname
+}
+
 func Ls(url, path string) (ret []*File, err error) {
 	ret = []*File{}
 
@@ -60,8 +65,7 @@ func Ls(url, path string) (ret []*File, err error) {
 			continue
 		}
 
-		fname := strings.ToLower(filepath.Ext(f.Name()))
-		if !f.IsDir() && ".md" != fname && ".markdown" != fname && ".txt" != fname {
+		if !f.IsDir() && !isMarkdown(f) {
 			continue
 		}
 

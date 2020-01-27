@@ -17,6 +17,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/88250/gowebdav"
@@ -153,14 +154,36 @@ func (dir *Dir) Put(path, content string) error {
 	return err
 }
 
-func (dir *Dir) Files(path string) (ret []*File) {
-	for depth := 0; 16 > depth; depth++ {
-		//files, err := dir.client.ReadDir(path)
-
+func (dir *Dir) Files(path string) (ret []os.FileInfo) {
+	fs, err := dir.Ls(path)
+	if nil != err {
+		return
 	}
+	dir.files(&fs, &ret)
 	return
 }
 
-func (dir *Dir) files(path string) (ret []*File) {
+func (dir *Dir) files(files, ret *[]os.FileInfo) {
+	for _, file := range *files {
+		f := file.(gowebdav.File)
+		if strings.HasPrefix(f.Name(), ".") {
+			continue
+		}
+
+		if "node_modules" == f.Name() {
+			continue
+		}
+
+		if f.IsDir() {
+			fs, err := dir.Ls(f.Path())
+			if nil == err {
+				dir.files(&fs, ret)
+			}
+		} else {
+			if isMarkdown(f) {
+				*ret = append(*ret, f)
+			}
+		}
+	}
 	return
 }
