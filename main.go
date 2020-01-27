@@ -35,6 +35,7 @@ func init() {
 
 	util.InitConf()
 	util.InitMount()
+	util.InitSearch()
 
 	go util.ParentExited()
 }

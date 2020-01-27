@@ -34,6 +34,7 @@ var (
 	HomeDir, _ = gulu.OS.Home()
 	LianDiDir  = filepath.Join(HomeDir, ".liandi")
 	ConfPath   = filepath.Join(LianDiDir, "conf.json")
+	IndexPath  = filepath.Join(LianDiDir, "index")
 )
 
 var Conf *AppConf

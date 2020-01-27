@@ -12,33 +12,18 @@
 
 package command
 
-import (
-	"os"
+import "github.com/88250/liandi/util"
 
-	"github.com/88250/gulu"
-)
-
-var logger = gulu.Log.NewLogger(os.Stdout)
-
-type Cmd interface {
-	Name() string
-	Exec(map[string]interface{})
+type search struct {
 }
 
-var Commands = map[string]Cmd{}
+func (cmd *search) Exec(param map[string]interface{}) {
+	ret := util.NewCmdResult(cmd.Name())
+	k := param["k"].(string)
+	util.Search(k)
+	util.Push(ret.Bytes())
+}
 
-var (
-	mountCmd   = &mount{}
-	unmountCmd = &unmount{}
-	lsCmd      = &ls{}
-	getCmd     = &get{}
-	searchCmd  = &search{}
-)
-
-func init() {
-	Commands[mountCmd.Name()] = mountCmd
-	Commands[unmountCmd.Name()] = unmountCmd
-	Commands[lsCmd.Name()] = lsCmd
-	Commands[getCmd.Name()] = getCmd
-	Commands[searchCmd.Name()] = searchCmd
+func (cmd *search) Name() string {
+	return "search"
 }
