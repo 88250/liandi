@@ -1,12 +1,18 @@
-declare interface IWebdav {
-    url: string,
-    connection: Connection
+interface Window {
+    liandi: {
+        liandi: ILiandi
+    };
 }
 
-declare class Connection {
-    get(path: string, callback: (error?: Error, body?: string) => void): void;
+declare interface IWebdav {
+    url: string,
+    name: string
+}
 
-    readdir(path: string, callback: (error: Error, files?: string[]) => void): void;
+declare interface IFile {
+    path: string,
+    name: string,
+    isdir: boolean
 }
 
 declare interface ILiandi {
@@ -16,11 +22,15 @@ declare interface ILiandi {
     };
     navigation?: {
         element: HTMLElement
-        onmessage: (liandi: ILiandi, url: string) => void
+        onMount: (liandi: ILiandi, url: string) => void
     }
     files?: {
         element: HTMLElement
-        render: (liandi:ILiandi, url:string) => void
+        onLs: (liandi: ILiandi, data: { files: IFile[], url: string }) => void
+    }
+    editors?: {
+        element: HTMLElement
+        onGet: (liandi: ILiandi, content: string) => void
     }
 }
 

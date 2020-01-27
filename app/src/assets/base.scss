@@ -5,3 +5,14 @@
 @import "navigation";
 @import "files";
 @import "main";
+
+.wrap {
+  height: 100%;
+}
+
+.resize {
+  width: 10px;
+  cursor: col-resize;
+  margin: 0 -5px;
+  position: relative;
+}

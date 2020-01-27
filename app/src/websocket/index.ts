@@ -11,8 +11,16 @@ export class WebSocketUtil {
     private message(liandi: ILiandi) {
         this.webSocket.onmessage = (event) => {
             const data = JSON.parse(event.data)
-            if (data.cmd === 'opendir') {
-                liandi.navigation.onmessage(liandi, data.data.url)
+            switch (data.cmd) {
+                case 'mount':
+                    liandi.navigation.onMount(liandi, data.data.url)
+                    break
+                case 'ls':
+                    liandi.files.onLs(liandi, data.data)
+                    break
+                case 'get':
+                    liandi.editors.onGet(liandi, data.data)
+                    break
             }
         }
     }

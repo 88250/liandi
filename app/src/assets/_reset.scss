@@ -11,6 +11,7 @@ body {
   color: $black-text;
   -webkit-font-smoothing: antialiased;
   -webkit-overflow-scrolling: touch;
+  height: 100%;
 }
 
 ::-moz-selection {
