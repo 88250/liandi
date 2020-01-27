@@ -3,7 +3,7 @@ module github.com/88250/liandi
 go 1.12
 
 require (
-	github.com/88250/gowebdav v0.0.0-20191214233108-321978fa735d
+	github.com/88250/gowebdav v0.0.0-20200127082254-5e65ad0e18e2
 	github.com/88250/gulu v1.0.0
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-playground/universal-translator v0.17.0 // indirect
@@ -23,4 +23,4 @@ require (
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
 
-replace github.com/88250/gowebdav => D:\88250\gowebdav
+//replace github.com/88250/gowebdav => D:\88250\gowebdav
