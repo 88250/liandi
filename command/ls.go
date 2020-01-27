@@ -19,8 +19,6 @@ type ls struct {
 
 func (cmd *ls) Exec(param map[string]interface{}) {
 	ret := util.NewCmdResult(cmd.Name())
-	defer util.Push(ret.Bytes())
-
 	url := param["url"].(string)
 	url = util.NormalizeURL(url)
 	path := param["path"].(string)
@@ -29,13 +27,13 @@ func (cmd *ls) Exec(param map[string]interface{}) {
 		ret.Code = -1
 		ret.Msg = err.Error()
 		return
+	} else {
+		ret.Data = map[string]interface{}{
+			"url":   url,
+			"files": files,
+		}
 	}
-
-	data := map[string]interface{}{
-		"url":   url,
-		"files": files,
-	}
-	ret.Data = data
+	util.Push(ret.Bytes())
 }
 
 func (cmd *ls) Name() string {
