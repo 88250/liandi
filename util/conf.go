@@ -17,7 +17,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
@@ -94,10 +93,8 @@ func (conf *AppConf) InitClient() {
 }
 
 func (conf *AppConf) dir(url string) *Dir {
-	// TODO: 子目录嵌套时应该返回最具体的子目录
-
 	for _, dir := range conf.Dirs {
-		if strings.HasPrefix(dir.URL, url) {
+		if dir.URL == url {
 			return dir
 		}
 	}
