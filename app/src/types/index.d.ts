@@ -23,6 +23,8 @@ declare interface ILiandi {
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string }) => void
     }
     editors?: {
+        url?: string
+        path?: string
         element: HTMLElement
         onGet: (liandi: ILiandi, content: string) => void
     }

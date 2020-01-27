@@ -13,6 +13,7 @@ customElements.define('file-item',
         if (!url) {
           return
         }
+
         if (dir === 'true') {
           window.liandi.liandi.ws.webSocket.send(JSON.stringify({
             cmd: 'ls',
@@ -38,6 +39,8 @@ customElements.define('file-item',
               path,
             },
           }))
+          window.liandi.liandi.editors.url = url
+          window.liandi.liandi.editors.path = path
         }
       })
 

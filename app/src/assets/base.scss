@@ -5,6 +5,11 @@
 @import "navigation";
 @import "files";
 @import "main";
+@import "~vditor/dist/index.classic.css";
+
+.vditor {
+  border-width: 0;
+}
 
 .wrap {
   height: 100%;

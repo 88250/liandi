@@ -5,6 +5,12 @@ export class WebSocketUtil {
 
     constructor(liandi: ILiandi) {
         this.webSocket = new WebSocket(Constants.WEBSOCKET_ADDREDD)
+        this.webSocket.onopen = () => {
+            liandi.ws.webSocket.send(JSON.stringify({
+                cmd: 'dirs',
+                param: {},
+            }))
+        }
         this.message(liandi)
     }
 
@@ -20,6 +26,11 @@ export class WebSocketUtil {
                     break
                 case 'get':
                     liandi.editors.onGet(liandi, data.data)
+                    break
+                case 'dirs':
+                    data.data.forEach((url: string) => {
+                        liandi.navigation.onMount(liandi, url)
+                    })
                     break
             }
         }
