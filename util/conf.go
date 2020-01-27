@@ -152,3 +152,14 @@ func (dir *Dir) Put(path, content string) error {
 	}
 	return err
 }
+
+func (dir *Dir) Files(path string) (ret []*File) {
+	for depth := 0; 16 > depth; depth++ {
+		files, err := dir.client.ReadDir(path)
+
+	}
+}
+
+func (dir *Dir) files(path string) (ret []*File) {
+
+}

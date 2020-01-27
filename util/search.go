@@ -36,6 +36,10 @@ func InitSearch() {
 			return
 		}
 	}
+
+	for _, dir := range Conf.Dirs {
+		dir.Get("")
+	}
 }
 
 func Index(content string) {

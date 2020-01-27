@@ -31,8 +31,8 @@ func (cmd *mount) Exec(param map[string]interface{}) {
 		ret.Data = map[string]interface{}{
 			"url": url,
 		}
+		util.Push(ret.Bytes())
 	}
-	util.Push(ret.Bytes())
 }
 
 func (cmd *mount) Name() string {
