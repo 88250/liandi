@@ -22,7 +22,11 @@ func (cmd *get) Exec(param map[string]interface{}) {
 	url := param["url"].(string)
 	url = util.NormalizeURL(url)
 	path := param["path"].(string)
-	ret.Data = util.Get(url, path)
+	content, err := util.Get(url, path)
+	if nil != err {
+		content = err.Error()
+	}
+	ret.Data = content
 	util.Push(ret.Bytes())
 }
 
