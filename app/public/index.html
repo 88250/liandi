@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <title>链滴笔记</title>
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"/>
+    <meta http-equiv="Content-Security-Policy" content="*"/>
 </head>
 <body>
-<div id="app"></div>
-<!-- Dependencies -->
-<script src="../node_modules/react/umd/react.development.js"></script>
-<script src="../node_modules/react-dom/umd/react-dom.development.js"></script>
-<!-- Main -->
+<div class="fn__flex">
+    <div class="navigation" id="navigation"></div>
+    <div class="file" id="files">file list</div>
+    <div class="fn__flex-1">editor</div>
+</div>
 <script src="../dist/main.js"></script>
 </body>
 </html>

@@ -16,8 +16,6 @@
   "author": "Vanessa <v@b3log.org> (http://vanessa.b3log.org)",
   "license": "MIT",
   "devDependencies": {
-    "@types/react": "^16.9.19",
-    "@types/react-dom": "^16.9.5",
     "autoprefixer": "^9.7.4",
     "css-loader": "^3.4.2",
     "electron": "^7.1.10",
@@ -32,7 +30,7 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "vditor": "^2.1.4",
+    "webdav-client": "^1.4.3"
   }
 }
