@@ -141,3 +141,11 @@ func (dir *Dir) Get(path string) string {
 	}
 	return gulu.Str.FromBytes(data)
 }
+
+func (dir *Dir) Put(path, content string) error {
+	err := dir.client.Write(path, []byte(content), 0644)
+	if nil != err {
+		logger.Errorf("读取目录 [%]s 下的文件 [%s] 失败：%s", dir.URL, path, err)
+	}
+	return err
+}

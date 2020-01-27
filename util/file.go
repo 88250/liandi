@@ -13,6 +13,7 @@
 package util
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
@@ -78,4 +79,12 @@ func Get(url, path string) (ret string) {
 
 	ret = dir.Get(path)
 	return
+}
+
+func Put(url, path, content string) error {
+	dir := Conf.dir(url)
+	if nil == dir {
+		return errors.New("file does not exist")
+	}
+	return dir.Put(path, content)
 }
