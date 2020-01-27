@@ -42,17 +42,17 @@ func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 	return
 }
 
-func Ls(url, path string) (ret []*File) {
+func Ls(url, path string) (ret []*File, err error) {
 	ret = []*File{}
 
 	dir := Conf.dir(url)
 	if nil == dir {
-		return nil
+		return nil, ErrDirNotExist
 	}
 
-	files := dir.Ls(path)
-	if nil == files {
-		return nil
+	files, err := dir.Ls(path)
+	if nil != err {
+		return nil, err
 	}
 
 	for _, f := range files {

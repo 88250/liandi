@@ -22,11 +22,17 @@ func (cmd *ls) Exec(param map[string]interface{}) {
 	url := param["url"].(string)
 	url = util.NormalizeURL(url)
 	path := param["path"].(string)
-	data := map[string]interface{}{
-		"url":   url,
-		"files": util.Ls(url, path),
+	files, err := util.Ls(url, path)
+	if nil != err {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	} else {
+		ret.Data = map[string]interface{}{
+			"url":   url,
+			"files": files,
+		}
 	}
-	ret.Data = data
 	util.Push(ret.Bytes())
 }
 

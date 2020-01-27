@@ -17,6 +17,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
@@ -118,17 +119,18 @@ func (dir *Dir) IsRemote() bool {
 
 func (dir *Dir) InitClient() {
 	dir.client = gowebdav.NewClient(dir.URL, dir.Username, dir.Password)
+	dir.client.SetTimeout(7 * time.Second)
 }
 
 func (dir *Dir) CloseClient() {
 	dir.client = nil
 }
 
-func (dir *Dir) Ls(path string) (ret []os.FileInfo) {
-	ret, err := dir.client.ReadDir(path)
+func (dir *Dir) Ls(path string) (ret []os.FileInfo, err error) {
+	ret, err = dir.client.ReadDir(path)
 	if nil != err {
 		logger.Errorf("列出目录 [%s] 下路径为 [%s] 的文件列表失败：%s", dir.URL, path, err)
-		return nil
+		return nil, err
 	}
 	return
 }

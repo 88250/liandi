@@ -24,9 +24,12 @@ func (cmd *get) Exec(param map[string]interface{}) {
 	path := param["path"].(string)
 	content, err := util.Get(url, path)
 	if nil != err {
-		content = err.Error()
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	} else {
+		ret.Data = content
 	}
-	ret.Data = content
 	util.Push(ret.Bytes())
 }
 

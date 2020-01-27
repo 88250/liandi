@@ -56,10 +56,10 @@ func Unmount(url string) {
 	logger.Debug("取消挂载目录 [%s] 完毕", url)
 }
 
-func Mount(url, localPath string) (ret string) {
+func Mount(url, localPath string) (ret string, alreadyMount bool) {
 	for _, dir := range Conf.Dirs {
 		if "" != localPath && dir.Path == localPath {
-			return dir.URL
+			return dir.URL, true
 		}
 	}
 
@@ -72,7 +72,7 @@ func Mount(url, localPath string) (ret string) {
 	Conf.Save()
 	dir.InitClient()
 	logger.Debugf("挂载目录 [%s] 完毕", url)
-	return url
+	return url, false
 }
 
 func routeWebDAV() {

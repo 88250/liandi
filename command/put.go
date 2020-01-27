@@ -25,7 +25,8 @@ func (cmd *put) Exec(param map[string]interface{}) {
 	content := param["content"].(string)
 	err := util.Put(url, path, content)
 	if nil != err {
-		ret.Data = err.Error()
+		ret.Code = -1
+		ret.Msg = err.Error()
 	}
 	util.Push(ret.Bytes())
 }
