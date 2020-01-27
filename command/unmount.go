@@ -16,10 +16,10 @@ import (
 	"github.com/88250/liandi/util"
 )
 
-type closedir struct {
+type unmount struct {
 }
 
-func (cmd *closedir) Exec(param map[string]interface{}) {
+func (cmd *unmount) Exec(param map[string]interface{}) {
 	ret := util.NewCmdResult(cmd.Name())
 	url := param["url"].(string)
 	url = util.NormalizeURL(url)
@@ -29,6 +29,6 @@ func (cmd *closedir) Exec(param map[string]interface{}) {
 	util.Push(ret.Bytes())
 }
 
-func (cmd *closedir) Name() string {
-	return "closedir"
+func (cmd *unmount) Name() string {
+	return "unmount"
 }

@@ -17,7 +17,9 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
+	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
 )
 
@@ -59,13 +61,15 @@ func InitConf() {
 	length := len(Conf.Dirs)
 	for i := 0; i < length; i++ {
 		dir := Conf.Dirs[i]
-		if !gulu.File.IsExist(dir.Path) {
+		if !dir.IsRemote() && !gulu.File.IsExist(dir.Path) {
 			Conf.Dirs = append(Conf.Dirs[:i], Conf.Dirs[i+1:]...)
 			logger.Debugf("目录 [%s] 不存在，已从配置中移除", dir.Path)
+			continue
 		}
 	}
 
 	Conf.Save()
+	Conf.InitClient()
 
 	gulu.Log.SetLevel(Conf.LogLevel)
 }
@@ -83,6 +87,46 @@ func (conf *AppConf) Save() {
 	}
 }
 
+func (conf *AppConf) InitClient() {
+	for _, dir := range conf.Dirs {
+		dir.InitClient()
+	}
+}
+
+func (conf *AppConf) Ls(url string) (ret []*File) {
+	dir := conf.dir(url)
+	if nil == dir {
+		return nil
+	}
+
+	p := strings.ReplaceAll(url, dir.URL, "")
+	if "" == strings.TrimSpace(p) {
+		p = "/"
+	}
+	files, err := dir.client.ReadDir(p)
+	if nil != err {
+		logger.Errorf("读取目录 [%s] 失败：%s", url, err)
+		return nil
+	}
+
+	for _, f := range files {
+		file := fromFileInfo(f)
+		ret = append(ret, file)
+	}
+	return
+}
+
+func (conf *AppConf) dir(url string) *Dir {
+	// TODO: 子目录嵌套时应该返回最具体的子目录
+
+	for _, dir := range conf.Dirs {
+		if strings.HasPrefix(dir.URL, url) {
+			return dir
+		}
+	}
+	return nil
+}
+
 // Dir 维护了打开的 WebDAV 文件夹。
 type Dir struct {
 	URL      string `json:"url"`      // WebDAV URL
@@ -90,8 +134,18 @@ type Dir struct {
 	Username string `json:"username"` // WebDAV 用户名
 	Password string `json:"password"` // WebDAV 密码
 	Path     string `json:"path"`     // 本地文件系统文件夹路径，远程 WebDAV 的话该字段为空
+
+	client *gowebdav.Client `json:"-"` // WebDAV 客户端
 }
 
 func (dir *Dir) IsRemote() bool {
 	return "" == dir.Path
+}
+
+func (dir *Dir) InitClient() {
+	dir.client = gowebdav.NewClient(dir.URL, dir.Username, dir.Password)
+}
+
+func (dir *Dir) CloseClient() {
+	dir.client = nil
 }

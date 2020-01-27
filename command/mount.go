@@ -16,10 +16,10 @@ import (
 	"github.com/88250/liandi/util"
 )
 
-type opendir struct {
+type mount struct {
 }
 
-func (cmd *opendir) Exec(param map[string]interface{}) {
+func (cmd *mount) Exec(param map[string]interface{}) {
 	ret := util.NewCmdResult(cmd.Name())
 	p := param["path"].(string)
 	url := param["url"].(string)
@@ -33,6 +33,6 @@ func (cmd *opendir) Exec(param map[string]interface{}) {
 	util.Push(ret.Bytes())
 }
 
-func (cmd *opendir) Name() string {
-	return "opendir"
+func (cmd *mount) Name() string {
+	return "mount"
 }

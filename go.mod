@@ -3,6 +3,7 @@ module github.com/88250/liandi
 go 1.12
 
 require (
+	github.com/88250/gowebdav v0.0.0-20191214233108-321978fa735d
 	github.com/88250/gulu v1.0.0
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-playground/universal-translator v0.17.0 // indirect

@@ -1,3 +1,5 @@
+github.com/88250/gowebdav v0.0.0-20191214233108-321978fa735d h1:A23wOQFhy4kvC+mSvHaTVz8b76wm0obKaxkG10RlT8w=
+github.com/88250/gowebdav v0.0.0-20191214233108-321978fa735d/go.mod h1:4QKo36H7HOsvRWDJCVUIPViUtEqQQm0rdc/Ag8N3E6w=
 github.com/88250/gulu v1.0.0 h1:aTUuoVlZhzN8M1bmqvySJBP7GxGwRiayaCCi94KualI=
 github.com/88250/gulu v1.0.0/go.mod h1:a2POIziN+QFeNT4Mj7FHH2lz1HEaFlMRF6wPE0NHM4U=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
