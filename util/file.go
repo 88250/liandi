@@ -71,20 +71,23 @@ func Ls(url, path string) (ret []*File) {
 	return
 }
 
-func Get(url, path string) (ret string) {
+var (
+	ErrDirNotExist = errors.New("查询目录失败")
+)
+
+func Get(url, path string) (ret string, err error) {
 	dir := Conf.dir(url)
 	if nil == dir {
-		return ""
+		return "", ErrDirNotExist
 	}
-
-	ret = dir.Get(path)
+	ret, err = dir.Get(path)
 	return
 }
 
 func Put(url, path, content string) error {
 	dir := Conf.dir(url)
 	if nil == dir {
-		return errors.New("file does not exist")
+		return ErrDirNotExist
 	}
 	return dir.Put(path, content)
 }

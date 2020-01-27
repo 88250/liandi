@@ -133,13 +133,13 @@ func (dir *Dir) Ls(path string) (ret []os.FileInfo) {
 	return
 }
 
-func (dir *Dir) Get(path string) string {
+func (dir *Dir) Get(path string) (ret string, err error) {
 	data, err := dir.client.Read(path)
 	if nil != err {
 		logger.Errorf("读取目录 [%]s 下的文件 [%s] 失败：%s", dir.URL, path, err)
-		return ""
+		return "", err
 	}
-	return gulu.Str.FromBytes(data)
+	return gulu.Str.FromBytes(data), nil
 }
 
 func (dir *Dir) Put(path, content string) error {
