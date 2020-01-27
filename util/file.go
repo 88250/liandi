@@ -58,7 +58,7 @@ func Ls(url, path string) (ret []*File) {
 		if strings.HasPrefix(f.Name(), ".") {
 			continue
 		}
-		if !f.IsDir() && "md" != filepath.Ext(f.Name()) {
+		if !f.IsDir() && ".md" != filepath.Ext(f.Name()) {
 			continue
 		}
 
