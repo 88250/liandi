@@ -77,7 +77,7 @@ type AppConf struct {
 }
 
 func (conf *AppConf) Save() {
-	data, _ := json.Marshal(Conf)
+	data, _ := json.MarshalIndent(Conf, "", "   ")
 	if err := ioutil.WriteFile(ConfPath, data, 0644); nil != err {
 		logger.Fatalf("写入配置文件 [%s] 失败：", ConfPath, err)
 	}
@@ -86,7 +86,7 @@ func (conf *AppConf) Save() {
 // Dir 维护了打开的 WebDAV 文件夹。
 type Dir struct {
 	URL      string `json:"url"`      // WebDAV URL
-	Auth     bool   `json:"auth"`     // WebDAV 是否需要鉴权
+	Auth     string `json:"auth"`     // WebDAV 鉴权方式，空值表示不需要鉴权
 	Username string `json:"username"` // WebDAV 用户名
 	Password string `json:"password"` // WebDAV 密码
 	Path     string `json:"path"`     // 本地文件系统文件夹路径，远程 WebDAV 的话该字段为空

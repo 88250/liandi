@@ -80,6 +80,7 @@ func routeWebDAV() {
 			FileSystem: webdav.Dir(dir.Path),
 			LockSystem: webdav.NewMemLS(),
 		}
+
 		http.HandleFunc(prefix, func(w http.ResponseWriter, req *http.Request) {
 			webdavHandler.ServeHTTP(w, req)
 		})

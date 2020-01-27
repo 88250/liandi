@@ -55,7 +55,7 @@ func main() {
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
-		logger.Infof("request [%s]", msg)
+		logger.Debugf("request [%s]", msg)
 		request := map[string]interface{}{}
 		if err := json.Unmarshal(msg, &request); nil != err {
 			result := util.NewResult()
