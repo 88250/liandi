@@ -38,11 +38,6 @@ export class Navigation {
     public onMount(liandi: ILiandi, url: string) {
         const urls = url.split('/')
         const name = urls[urls.length - 2]
-        liandi.webDAVs.push({
-            url,
-            name
-        })
-
         this.listElement.insertAdjacentHTML('beforeend',
             `<file-item dir="true" path="/" name="${name}" url="${url}"></file-item>`)
     }
