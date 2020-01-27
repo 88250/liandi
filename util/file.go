@@ -69,3 +69,13 @@ func Ls(url, path string) (ret []*File) {
 	}
 	return
 }
+
+func Get(url, path string) (ret string) {
+	dir := Conf.dir(url)
+	if nil == dir {
+		return ""
+	}
+
+	ret = dir.Get(path)
+	return
+}
