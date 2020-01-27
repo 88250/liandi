@@ -139,7 +139,7 @@ func (dir *Dir) Ls(path string) (ret []os.FileInfo, err error) {
 func (dir *Dir) Get(path string) (ret string, err error) {
 	data, err := dir.client.Read(path)
 	if nil != err {
-		logger.Errorf("读取目录 [%]s 下的文件 [%s] 失败：%s", dir.URL, path, err)
+		logger.Errorf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
 		return "", err
 	}
 	return gulu.Str.FromBytes(data), nil
@@ -148,18 +148,19 @@ func (dir *Dir) Get(path string) (ret string, err error) {
 func (dir *Dir) Put(path, content string) error {
 	err := dir.client.Write(path, []byte(content), 0644)
 	if nil != err {
-		logger.Errorf("读取目录 [%]s 下的文件 [%s] 失败：%s", dir.URL, path, err)
+		logger.Errorf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
 	}
 	return err
 }
 
 func (dir *Dir) Files(path string) (ret []*File) {
 	for depth := 0; 16 > depth; depth++ {
-		files, err := dir.client.ReadDir(path)
+		//files, err := dir.client.ReadDir(path)
 
 	}
+	return
 }
 
 func (dir *Dir) files(path string) (ret []*File) {
-
+	return
 }
