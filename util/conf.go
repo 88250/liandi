@@ -124,11 +124,11 @@ func (dir *Dir) CloseClient() {
 	dir.client = nil
 }
 
-func (dir *Dir) Ls(path string) (ret []os.FileInfo) {
-	ret, err := dir.client.ReadDir(path)
+func (dir *Dir) Ls(path string) (ret []os.FileInfo, err error) {
+	ret, err = dir.client.ReadDir(path)
 	if nil != err {
 		logger.Errorf("列出目录 [%s] 下路径为 [%s] 的文件列表失败：%s", dir.URL, path, err)
-		return nil
+		return nil, err
 	}
 	return
 }

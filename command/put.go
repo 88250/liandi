@@ -19,15 +19,18 @@ type put struct {
 
 func (cmd *put) Exec(param map[string]interface{}) {
 	ret := util.NewCmdResult(cmd.Name())
+	defer util.Push(ret.Bytes())
+
 	url := param["url"].(string)
 	url = util.NormalizeURL(url)
 	path := param["path"].(string)
 	content := param["content"].(string)
 	err := util.Put(url, path, content)
 	if nil != err {
-		ret.Data = err.Error()
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
 	}
-	util.Push(ret.Bytes())
 }
 
 func (cmd *put) Name() string {

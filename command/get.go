@@ -19,15 +19,18 @@ type get struct {
 
 func (cmd *get) Exec(param map[string]interface{}) {
 	ret := util.NewCmdResult(cmd.Name())
+	defer util.Push(ret.Bytes())
+
 	url := param["url"].(string)
 	url = util.NormalizeURL(url)
 	path := param["path"].(string)
 	content, err := util.Get(url, path)
 	if nil != err {
-		content = err.Error()
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
 	}
 	ret.Data = content
-	util.Push(ret.Bytes())
 }
 
 func (cmd *get) Name() string {
