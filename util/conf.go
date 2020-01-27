@@ -17,6 +17,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
@@ -118,6 +119,7 @@ func (dir *Dir) IsRemote() bool {
 
 func (dir *Dir) InitClient() {
 	dir.client = gowebdav.NewClient(dir.URL, dir.Username, dir.Password)
+	dir.client.SetTimeout(7 * time.Second)
 }
 
 func (dir *Dir) CloseClient() {
