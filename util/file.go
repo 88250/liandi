@@ -38,3 +38,21 @@ func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 	ret.Mtime = f.ModTime().Unix()
 	return
 }
+
+func Ls(url, path string) (ret []*File) {
+	dir := Conf.dir(url)
+	if nil == dir {
+		return nil
+	}
+
+	files := dir.Ls(path)
+	if nil == files {
+		return nil
+	}
+
+	for _, f := range files {
+		file := fromFileInfo(f)
+		ret = append(ret, file)
+	}
+	return
+}

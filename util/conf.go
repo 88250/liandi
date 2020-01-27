@@ -93,25 +93,6 @@ func (conf *AppConf) InitClient() {
 	}
 }
 
-func (conf *AppConf) Ls(url, path string) (ret []*File) {
-	dir := conf.dir(url)
-	if nil == dir {
-		return nil
-	}
-
-	files, err := dir.client.ReadDir(path)
-	if nil != err {
-		logger.Errorf("读取目录 [%s] 失败：%s", url, err)
-		return nil
-	}
-
-	for _, f := range files {
-		file := fromFileInfo(f)
-		ret = append(ret, file)
-	}
-	return
-}
-
 func (conf *AppConf) dir(url string) *Dir {
 	// TODO: 子目录嵌套时应该返回最具体的子目录
 
@@ -144,4 +125,13 @@ func (dir *Dir) InitClient() {
 
 func (dir *Dir) CloseClient() {
 	dir.client = nil
+}
+
+func (dir *Dir) Ls(path string) (ret []os.FileInfo) {
+	ret, err := dir.client.ReadDir(path)
+	if nil != err {
+		logger.Errorf("列出目录 [%s] 下路径为 [%s] 的文件列表失败：%s", dir.URL, path, err)
+		return nil
+	}
+	return
 }

@@ -22,7 +22,7 @@ func (cmd *ls) Exec(param map[string]interface{}) {
 	url := param["url"].(string)
 	url = util.NormalizeURL(url)
 	path := param["path"].(string)
-	ret.Data = util.Conf.Ls(url, path)
+	ret.Data = util.Ls(url, path)
 	util.Push(ret.Bytes())
 }
 
