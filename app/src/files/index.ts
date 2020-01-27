@@ -1,20 +1,14 @@
 export class Files {
     public element: HTMLElement
-    private filesElement: HTMLElement
-    private backElement: HTMLButtonElement
 
     constructor() {
         this.element = document.getElementById('files')
-        this.filesElement = document.createElement('div')
+        const filesElement = document.createElement('div')
 
-        this.backElement = document.createElement('button')
-        this.backElement.textContent = '返回上一层'
-        this.backElement.addEventListener('click', () => {
+        const backElement = document.createElement('div')
 
-        })
-
-        this.element.appendChild(this.backElement)
-        this.element.appendChild(this.filesElement)
+        this.element.appendChild(backElement)
+        this.element.appendChild(filesElement)
     }
 
     onLs(liandi: ILiandi, data: { files: IFile[], url: string }) {
@@ -22,6 +16,6 @@ export class Files {
         data.files.forEach((item: IFile) => {
             filesHTML += `<file-item dir="${item.isdir}" url="${data.url}" path="${item.path}" name="${item.name}"></file-item>`
         })
-        this.filesElement.innerHTML = filesHTML
+        this.element.lastElementChild.innerHTML = filesHTML
     }
 }

@@ -9,14 +9,11 @@ class App {
     public liandi: ILiandi
 
     constructor() {
-        this.liandi = {
-            webDAVs: [],
-        }
-
+        this.liandi = {}
         this.liandi.ws =  new WebSocketUtil(this.liandi)
         this.liandi.navigation =  new Navigation(this.liandi)
         this.liandi.files =  new Files()
-        this.liandi.editors =  new Editors(this.liandi)
+        this.liandi.editors =  new Editors()
     }
 }
 

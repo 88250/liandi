@@ -4,11 +4,6 @@ interface Window {
     };
 }
 
-declare interface IWebdav {
-    url: string,
-    name: string
-}
-
 declare interface IFile {
     path: string,
     name: string,
@@ -16,7 +11,6 @@ declare interface IFile {
 }
 
 declare interface ILiandi {
-    webDAVs: IWebdav[]
     ws?: {
         webSocket: WebSocket
     };

@@ -1,7 +1,7 @@
 export class Editors {
     public element: HTMLElement
 
-    constructor(liandi: ILiandi) {
+    constructor() {
         this.element = document.getElementById('editors')
     }
 
