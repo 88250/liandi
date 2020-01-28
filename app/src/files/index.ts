@@ -1,6 +1,6 @@
 export class Files {
     public element: HTMLElement;
-    private listElement: HTMLElement;
+    public listElement: HTMLElement;
 
     constructor() {
         this.element = document.getElementById('files');

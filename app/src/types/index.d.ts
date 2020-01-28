@@ -20,6 +20,7 @@ declare interface ILiandi {
         onMount: (liandi: ILiandi, url: string) => void
     };
     files?: {
+        listElement: HTMLElement
         element: HTMLElement
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string }) => void
     };

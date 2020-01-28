@@ -26,7 +26,9 @@ export class Navigation {
             defaultPath: homedir(),
             properties: ['openDirectory', 'openFile'],
         });
-
+        if (filePath.filePaths.length === 0) {
+            return
+        }
         liandi.ws.webSocket.send(JSON.stringify({
             'cmd': 'mount',
             'param': {
