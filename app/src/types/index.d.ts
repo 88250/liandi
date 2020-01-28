@@ -27,10 +27,8 @@ declare interface ILiandi {
     editors?: {
         url?: string
         path?: string
-        save: (liandi: ILiandi) => void
-        refresh: () => void
-        remove: () => void
-        onGet: (liandi: ILiandi, content: string) => void
+        remove: (liandi: ILiandi) => void
+        onGet: (liandi: ILiandi, file: {name: string, content: string}) => void
     };
 }
 

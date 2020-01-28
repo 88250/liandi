@@ -15,7 +15,7 @@ class App {
         this.liandi.ws =  new WebSocketUtil(this.liandi);
         this.liandi.navigation =  new Navigation(this.liandi);
         this.liandi.files =  new Files();
-        this.liandi.editors =  new Editors();
+        this.liandi.editors =  new Editors(this.liandi);
         const menus = new Menus(this.liandi);
 
         resize('resize')

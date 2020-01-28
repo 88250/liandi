@@ -26,7 +26,7 @@ customElements.define('file-item',
             },
           }))
 
-          window.liandi.liandi.editors.remove()
+          window.liandi.liandi.editors.remove(window.liandi.liandi)
 
           if (path === '/') {
             window.liandi.liandi.files.element.firstElementChild.innerHTML = ''

@@ -1,6 +1,7 @@
 import {remote} from 'electron';
 import {homedir} from 'os';
 import {Constants} from '../constants';
+import {getLastPath} from "../util/getLastPath";
 
 export class Navigation {
     public element: HTMLElement;
@@ -39,9 +40,7 @@ export class Navigation {
     }
 
     public onMount(liandi: ILiandi, url: string) {
-        const urls = url.split('/');
-        const name = urls[urls.length - 2];
         this.listElement.insertAdjacentHTML('beforeend',
-            `<file-item dir="true" path="/" name="${name}" url="${url}"></file-item>`);
+            `<file-item dir="true" path="/" name="${getLastPath(url)}" url="${url}"></file-item>`);
     }
 }

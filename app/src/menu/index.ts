@@ -29,7 +29,7 @@ export class Menus {
                     && filesFileItemElement.getAttribute("url") === this.fileItemMenu.data.url) {
                     liandi.files.listElement.innerHTML = "";
                     liandi.files.element.firstElementChild.innerHTML = "";
-                    liandi.editors.remove()
+                    liandi.editors.remove(liandi)
                 }
             }
         }));
@@ -43,6 +43,13 @@ export class Menus {
 
         this.fileItemMenu.menu.append(new remote.MenuItem({
             label: 'rename',
+            click: () => {
+
+            }
+        }));
+
+        this.fileItemMenu.menu.append(new remote.MenuItem({
+            label: 'delete',
             click: () => {
 
             }

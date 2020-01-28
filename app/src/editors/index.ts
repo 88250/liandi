@@ -1,48 +1,75 @@
+import {showMessage} from "../util/message";
+
 const Vditor = require('vditor');
 
 export class Editors {
     private element: HTMLElement;
     private editorElement: HTMLElement;
-    private inputElement: HTMLInputElement;
+    private inputWrapElement: HTMLElement;
     private vditor: any
 
-    constructor() {
+    constructor(liandi: ILiandi) {
         this.element = document.getElementById('editors');
-        this.inputElement = document.createElement('input')
-        this.inputElement.className = 'editors__input'
+        this.inputWrapElement = document.createElement("div")
+        this.inputWrapElement.className = "fn__flex"
+        this.inputWrapElement.innerHTML = '<input class="editors__input fn__flex-1"><button>Save</button>';
+        this.inputWrapElement.querySelector('button').addEventListener('click', () => {
+            this.saveContent(liandi)
+        })
+
+        this.inputWrapElement.querySelector('input').addEventListener('input', () => {
+            const oldName = liandi.editors.path.split('/').pop()
+            const name = this.inputWrapElement.querySelector('input').value
+            if (name === oldName) {
+                return
+            }
+
+            window.liandi.liandi.ws.webSocket.send(JSON.stringify({
+                cmd: 'rename',
+                param: {
+                    url: liandi.editors.url,
+                    oldPath: liandi.editors.path,
+                    newPath: liandi.editors.path.replace(oldName, '') + name
+                },
+            }))
+        })
+
         this.editorElement = document.createElement('div')
         this.editorElement.id = 'liandiVditor'
         this.editorElement.className = 'fn__flex-1'
     }
 
-    refresh() {
-        this.element.appendChild(this.inputElement)
-        this.element.appendChild(this.editorElement)
-    }
 
-    remove() {
+    remove(liandi: ILiandi) {
+        this.saveContent(liandi);
         this.element.innerHTML = ''
         this.editorElement.innerHTML = ''
     }
 
-    save(liandi: ILiandi) {
+    private saveContent(liandi: ILiandi) {
+        if (!this.vditor) {
+            return
+        }
         liandi.ws.webSocket.send(JSON.stringify({
             cmd: 'put',
             param: {
                 url: liandi.editors.url,
                 path: liandi.editors.path,
-                content: this.vditor.getText()
+                content: this.vditor.getValue()
             },
         }));
+        showMessage("save success")
     }
 
-    onGet(liandi: ILiandi, context: string) {
+    onGet(liandi: ILiandi, file: { content: string, name: string }) {
         if (this.element.innerHTML === "") {
-            this.refresh()
+            this.element.appendChild(this.inputWrapElement)
+            this.element.appendChild(this.editorElement)
         }
 
+        this.inputWrapElement.querySelector('input').value = file.name
         if (this.editorElement.innerHTML !== "") {
-            this.vditor.setValue(context);
+            this.vditor.setValue(file.content);
         } else {
             let timeoutId: number;
             const vditor = new Vditor('liandiVditor', {
@@ -50,11 +77,11 @@ export class Editors {
                 input: () => {
                     clearTimeout(timeoutId);
                     timeoutId = window.setTimeout(() => {
-                        this.save(liandi);
+                        this.saveContent(liandi);
                     }, 5000);
                 },
                 after() {
-                    vditor.setValue(context);
+                    vditor.setValue(file.content);
                 }
             });
 
