@@ -14,6 +14,8 @@ package util
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -141,10 +143,10 @@ func (dir *Dir) CloseClient() {
 }
 
 func (dir *Dir) Ls(path string) (ret []os.FileInfo, err error) {
-	ret, err = dir.client.ReadDir(path)
-	if nil != err {
-		Logger.Errorf("列出目录 [%s] 下路径为 [%s] 的文件列表失败：%s", dir.URL, path, err)
-		return nil, err
+	if ret, err = dir.client.ReadDir(path); nil != err {
+		msg := fmt.Sprintf("列出目录 [%s] 下路径为 [%s] 的文件列表失败：%s", dir.URL, path, err)
+		Logger.Errorf(msg)
+		return nil, errors.New(msg)
 	}
 	return
 }
@@ -152,34 +154,38 @@ func (dir *Dir) Ls(path string) (ret []os.FileInfo, err error) {
 func (dir *Dir) Get(path string) (ret string, err error) {
 	data, err := dir.client.Read(path)
 	if nil != err {
-		Logger.Errorf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
-		return "", err
+		msg := fmt.Sprintf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
+		Logger.Errorf(msg)
+		return "", errors.New(msg)
 	}
 	return gulu.Str.FromBytes(data), nil
 }
 
 func (dir *Dir) Put(path, content string) error {
-	err := dir.client.Write(path, []byte(content), 0644)
-	if nil != err {
-		Logger.Errorf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
+	if err := dir.client.Write(path, []byte(content), 0644); nil != err {
+		msg := fmt.Sprintf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
+		Logger.Errorf(msg)
+		return errors.New(msg)
 	}
-	return err
+	return nil
 }
 
 func (dir *Dir) Rename(oldPath, newPath string) error {
-	err := dir.client.Rename(oldPath, newPath, false)
-	if nil != err {
-		Logger.Errorf("重命名目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, oldPath, err)
+	if err := dir.client.Rename(oldPath, newPath, false); nil != err {
+		msg := fmt.Sprintf("重命名目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, oldPath, err)
+		Logger.Errorf(msg)
+		return errors.New(msg)
 	}
-	return err
+	return nil
 }
 
 func (dir *Dir) Mkdir(path string) error {
-	err := dir.client.Mkdir(path, 0755)
-	if nil != err {
-		Logger.Errorf("在目录 [%s] 下创建新目录 [%s] 失败：%s", dir.URL, path, err)
+	if err := dir.client.Mkdir(path, 0755); nil != err {
+		msg := fmt.Sprintf("在目录 [%s] 下创建新目录 [%s] 失败：%s", dir.URL, path, err)
+		Logger.Errorf(msg)
+		return errors.New(msg)
 	}
-	return err
+	return nil
 }
 
 func (dir *Dir) Index() {
