@@ -12,7 +12,9 @@
 
 package command
 
-import "github.com/88250/gulu"
+import (
+	"github.com/88250/liandi/util"
+)
 
 type Cmd interface {
 	Name() string
@@ -32,8 +34,7 @@ var Commands = map[string]Cmd{}
 
 func Exec(cmd Cmd) {
 	go func() {
-		var err error
-		defer gulu.Panic.Recover(&err)
+		defer util.Recover()
 		cmd.Exec()
 	}()
 }
