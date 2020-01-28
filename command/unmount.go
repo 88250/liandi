@@ -17,11 +17,12 @@ import (
 )
 
 type unmount struct {
+	*BaseCmd
 }
 
-func (cmd *unmount) Exec(param map[string]interface{}) {
+func (cmd *unmount) Exec() {
 	ret := util.NewCmdResult(cmd.Name())
-	url := param["url"].(string)
+	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
 	util.StopServeWebDAV()
 	util.Unmount(url)

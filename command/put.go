@@ -15,14 +15,15 @@ package command
 import "github.com/88250/liandi/util"
 
 type put struct {
+	*BaseCmd
 }
 
-func (cmd *put) Exec(param map[string]interface{}) {
+func (cmd *put) Exec() {
 	ret := util.NewCmdResult(cmd.Name())
-	url := param["url"].(string)
+	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
-	path := param["path"].(string)
-	content := param["content"].(string)
+	path := cmd.param["path"].(string)
+	content := cmd.param["content"].(string)
 	err := util.Put(url, path, content)
 	if nil != err {
 		ret.Code = -1

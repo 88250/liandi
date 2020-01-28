@@ -15,11 +15,12 @@ package command
 import "github.com/88250/liandi/util"
 
 type search struct {
+	*BaseCmd
 }
 
-func (cmd *search) Exec(param map[string]interface{}) {
+func (cmd *search) Exec() {
 	ret := util.NewCmdResult(cmd.Name())
-	k := param["k"].(string)
+	k := cmd.param["k"].(string)
 	util.Search(k)
 	util.Push(ret.Bytes())
 }

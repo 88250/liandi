@@ -17,12 +17,13 @@ import (
 )
 
 type mount struct {
+	*BaseCmd
 }
 
-func (cmd *mount) Exec(param map[string]interface{}) {
+func (cmd *mount) Exec() {
 	ret := util.NewCmdResult(cmd.Name())
-	p := param["path"].(string)
-	url := param["url"].(string)
+	p := cmd.param["path"].(string)
+	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
 	util.StopServeWebDAV()
 	url, alreadyMount := util.Mount(url, p)

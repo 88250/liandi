@@ -15,9 +15,10 @@ package command
 import "github.com/88250/liandi/util"
 
 type dirs struct {
+	*BaseCmd
 }
 
-func (cmd *dirs) Exec(param map[string]interface{}) {
+func (cmd *dirs) Exec() {
 	ret := util.NewCmdResult(cmd.Name())
 	urls := []string{}
 	for _, dir := range util.Conf.Dirs {

@@ -12,21 +12,40 @@
 
 package command
 
+import "github.com/88250/gulu"
+
 type Cmd interface {
 	Name() string
-	Exec(map[string]interface{})
+	Param(map[string]interface{})
+	Exec()
+}
+
+type BaseCmd struct {
+	param map[string]interface{}
+}
+
+func (cmd *BaseCmd) Param(param map[string]interface{}) {
+	cmd.param = param
 }
 
 var Commands = map[string]Cmd{}
 
+func Exec(cmd Cmd) {
+	go func() {
+		var err error
+		defer gulu.Panic.Recover(&err)
+		cmd.Exec()
+	}()
+}
+
 func init() {
-	registerCommand(&mount{})
-	registerCommand(&unmount{})
-	registerCommand(&ls{})
-	registerCommand(&get{})
-	registerCommand(&put{})
-	registerCommand(&search{})
-	registerCommand(&dirs{})
+	registerCommand(&mount{&BaseCmd{}})
+	registerCommand(&unmount{&BaseCmd{}})
+	registerCommand(&ls{&BaseCmd{}})
+	registerCommand(&get{&BaseCmd{}})
+	registerCommand(&put{&BaseCmd{}})
+	registerCommand(&search{&BaseCmd{}})
+	registerCommand(&dirs{&BaseCmd{}})
 }
 
 func registerCommand(cmd Cmd) {

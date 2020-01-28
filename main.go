@@ -76,7 +76,8 @@ func main() {
 		}
 
 		param := request["param"].(map[string]interface{})
-		go cmd.Exec(param)
+		cmd.Param(param)
+		command.Exec(cmd)
 	})
 
 	handleSignal()
