@@ -80,16 +80,15 @@ func BatchIndex(docs []*Doc) {
 	}
 }
 
-func BatchUnindex(docs []*Doc) {
-	length := len(docs)
+func BatchUnindex(docIds []string) {
+	length := len(docIds)
 	if 1 > length {
 		return
 	}
 
 	batch := index.NewBatch()
 	for i := 0; i < length; i++ {
-		doc := docs[i]
-		batch.Delete(doc.Id)
+		batch.Delete(docIds[i])
 	}
 
 	if err := index.Batch(batch); nil != err {

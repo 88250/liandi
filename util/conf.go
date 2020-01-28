@@ -173,7 +173,7 @@ func (dir *Dir) Index() {
 	for _, file := range files {
 		content, err := dir.Get(file.(gowebdav.File).Path())
 		if nil == err {
-			doc := newDoc("", content, dir.URL, dir.Path)
+			doc := newDoc(file.Name(), content, dir.URL, dir.Path)
 			docs = append(docs, doc)
 		}
 	}
@@ -184,15 +184,15 @@ func (dir *Dir) Index() {
 func (dir *Dir) Unindex() {
 	Logger.Debugf("开始删除索引 [%s] 目录", dir.URL)
 	files := dir.Files("/")
-	var docs []*Doc
+	var docIds []string
 	for _, file := range files {
 		content, err := dir.Get(file.(gowebdav.File).Path())
 		if nil == err {
 			doc := newDoc("", content, dir.URL, dir.Path)
-			docs = append(docs, doc)
+			docIds = append(docIds, doc.Id)
 		}
 	}
-	BatchUnindex(docs)
+	BatchUnindex(docIds)
 	Logger.Debugf("删除索引目录 [%s] 完毕", dir.URL)
 }
 
