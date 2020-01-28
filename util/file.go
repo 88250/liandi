@@ -61,7 +61,7 @@ func Ls(url, path string) (ret []*File, err error) {
 	}
 
 	for _, f := range files {
-		if strings.HasPrefix(f.Name(), ".") {
+		if strings.HasPrefix(f.Name(), ".") || dir.isSkipDir(f.Name()) {
 			continue
 		}
 

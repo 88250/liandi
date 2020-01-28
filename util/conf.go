@@ -200,7 +200,7 @@ func (dir *Dir) files(files, ret *[]os.FileInfo) {
 			continue
 		}
 
-		if "node_modules" == f.Name() {
+		if dir.isSkipDir(f.Name()) {
 			continue
 		}
 
@@ -216,4 +216,8 @@ func (dir *Dir) files(files, ret *[]os.FileInfo) {
 		}
 	}
 	return
+}
+
+func (dir *Dir) isSkipDir(filename string) bool {
+	return "node_modules" == filename || "dist" == filename || "target" == filename
 }
