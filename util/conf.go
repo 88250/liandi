@@ -174,6 +174,14 @@ func (dir *Dir) Rename(oldPath, newPath string) error {
 	return err
 }
 
+func (dir *Dir) Mkdir(path string) error {
+	err := dir.client.Mkdir(path, 0755)
+	if nil != err {
+		Logger.Errorf("在目录 [%s] 下创建新目录 [%s] 失败：%s", dir.URL, path, err)
+	}
+	return err
+}
+
 func (dir *Dir) Index() {
 	Logger.Debugf("开始索引 [%s] 目录", dir.URL)
 	files := dir.Files("/")

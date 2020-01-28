@@ -65,7 +65,8 @@ func main() {
 		}
 
 		cmdStr := request["cmd"].(string)
-		cmd := command.Commands[cmdStr]
+		param := request["param"].(map[string]interface{})
+		cmd := command.NewCommand(cmdStr, param)
 		if nil == cmd {
 			result := util.NewResult()
 			result.Code = -1
@@ -74,9 +75,6 @@ func main() {
 			util.Push(responseData)
 			return
 		}
-
-		param := request["param"].(map[string]interface{})
-		cmd.Param(param)
 		command.Exec(cmd)
 	})
 

@@ -102,3 +102,11 @@ func Rename(url, oldPath, newPath string) error {
 	}
 	return dir.Rename(oldPath, newPath)
 }
+
+func Mkdir(url, path string) error {
+	dir := Conf.dir(url)
+	if nil == dir {
+		return ErrDirNotExist
+	}
+	return dir.Mkdir(path)
+}

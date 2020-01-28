@@ -18,7 +18,6 @@ import (
 
 type Cmd interface {
 	Name() string
-	Param(map[string]interface{})
 	Exec()
 }
 
@@ -26,30 +25,33 @@ type BaseCmd struct {
 	param map[string]interface{}
 }
 
-func (cmd *BaseCmd) Param(param map[string]interface{}) {
-	cmd.param = param
+func NewCommand(cmdStr string, param map[string]interface{}) Cmd {
+	switch cmdStr {
+	case "dirs":
+		return &dirs{&BaseCmd{param: param}}
+	case "mount":
+		return &mount{&BaseCmd{param: param}}
+	case "unmount":
+		return &unmount{&BaseCmd{param: param}}
+	case "ls":
+		return &ls{&BaseCmd{param: param}}
+	case "get":
+		return &get{&BaseCmd{param: param}}
+	case "put":
+		return &put{&BaseCmd{param: param}}
+	case "search":
+		return &search{&BaseCmd{param: param}}
+	case "rename":
+		return &rename{&BaseCmd{param: param}}
+	case "mkdir":
+		return &mkdir{&BaseCmd{param: param}}
+	}
+	return nil
 }
-
-var Commands = map[string]Cmd{}
 
 func Exec(cmd Cmd) {
 	go func() {
 		defer util.Recover()
 		cmd.Exec()
 	}()
-}
-
-func init() {
-	registerCommand(&mount{&BaseCmd{}})
-	registerCommand(&unmount{&BaseCmd{}})
-	registerCommand(&ls{&BaseCmd{}})
-	registerCommand(&get{&BaseCmd{}})
-	registerCommand(&put{&BaseCmd{}})
-	registerCommand(&search{&BaseCmd{}})
-	registerCommand(&dirs{&BaseCmd{}})
-	registerCommand(&rename{&BaseCmd{}})
-}
-
-func registerCommand(cmd Cmd) {
-	Commands[cmd.Name()] = cmd
 }
