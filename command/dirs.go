@@ -19,7 +19,7 @@ type dirs struct {
 
 func (cmd *dirs) Exec(param map[string]interface{}) {
 	ret := util.NewCmdResult(cmd.Name())
-	var urls []string
+	urls := []string{}
 	for _, dir := range util.Conf.Dirs {
 		urls = append(urls, dir.URL)
 	}
