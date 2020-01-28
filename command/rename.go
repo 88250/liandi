@@ -12,35 +12,26 @@
 
 package command
 
-import (
-	"path/filepath"
+import "github.com/88250/liandi/util"
 
-	"github.com/88250/liandi/util"
-)
-
-type get struct {
+type rename struct {
 	*BaseCmd
 }
 
-func (cmd *get) Exec() {
+func (cmd *rename) Exec() {
 	ret := util.NewCmdResult(cmd.Name())
 	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
-	path := cmd.param["path"].(string)
-	content, err := util.Get(url, path)
+	oldPath := cmd.param["oldPath"].(string)
+	newPath := cmd.param["newPath"].(string)
+	err := util.Rename(url, oldPath, newPath)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		return
-	} else {
-		ret.Data = map[string]interface{}{
-			"name":    filepath.Base(path),
-			"content": content,
-		}
 	}
 	util.Push(ret.Bytes())
 }
 
-func (cmd *get) Name() string {
-	return "get"
+func (cmd *rename) Name() string {
+	return "rename"
 }
