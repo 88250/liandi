@@ -1,16 +1,3 @@
-/*
- * Symphony - A modern community (forum/BBS/SNS/blog) platform written in Java.
- * Copyright (C) 2012-present, b3log.org
- *
- * 本文件属于 Sym 商业版的一部分，请仔细阅读项目根文件夹的 LICENSE 并严格遵守相关约定
- */
-/**
- * mixin.
- *
- * @author <a href="http://vanessa.b3log.org">Liyuan Li</a>
- * @version 0.2.0.0, Aug 3, 2018
- */
-
 @mixin image-bg($image: $img-bg) {
   background: {
     image: url($image);

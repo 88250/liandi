@@ -25,6 +25,9 @@ customElements.define('file-item',
               path,
             },
           }))
+
+          window.liandi.liandi.editors.remove()
+
           if (path === '/') {
             window.liandi.liandi.files.element.firstElementChild.innerHTML = ''
           } else {
