@@ -29,20 +29,38 @@ export class Menus {
                     && filesFileItemElement.getAttribute("url") === this.fileItemMenu.data.url) {
                     liandi.files.listElement.innerHTML = "";
                     liandi.files.element.firstElementChild.innerHTML = "";
-                    liandi.editors.element.innerHTML = "";
-                    liandi.editors.vditor = undefined;
+                    liandi.editors.remove()
                 }
+            }
+        }));
+
+        this.fileItemMenu.menu.append(new remote.MenuItem({
+            label: 'new md',
+            click: () => {
+
+            }
+        }));
+
+        this.fileItemMenu.menu.append(new remote.MenuItem({
+            label: 'rename',
+            click: () => {
+
             }
         }));
 
         window.addEventListener('contextmenu', (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
-                if (target.tagName === 'FILE-ITEM' && target.parentElement.classList.contains('navigation__list')) {
+                if (target.tagName === 'FILE-ITEM') {
                     this.fileItemMenu.data = {
                         url: target.getAttribute('url'),
                         target
                     };
+                    if (target.parentElement.classList.contains('navigation__list')) {
+                        this.fileItemMenu.menu.items[0].enabled = true
+                    } else {
+                        this.fileItemMenu.menu.items[0].enabled = false
+                    }
                     this.fileItemMenu.menu.popup();
                     event.preventDefault();
                     break;
