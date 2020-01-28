@@ -14,11 +14,10 @@ package util
 
 import (
 	"errors"
+	"github.com/88250/gowebdav"
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/88250/gowebdav"
 )
 
 type File struct {
@@ -94,4 +93,12 @@ func Put(url, path, content string) error {
 		return ErrDirNotExist
 	}
 	return dir.Put(path, content)
+}
+
+func Rename(url, oldPath, newPath string) error {
+	dir := Conf.dir(url)
+	if nil == dir {
+		return ErrDirNotExist
+	}
+	return dir.Rename(oldPath, newPath)
 }

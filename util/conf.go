@@ -166,6 +166,14 @@ func (dir *Dir) Put(path, content string) error {
 	return err
 }
 
+func (dir *Dir) Rename(oldPath, newPath string) error {
+	err := dir.client.Rename(oldPath, newPath, false)
+	if nil != err {
+		Logger.Errorf("重命名目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, oldPath, err)
+	}
+	return err
+}
+
 func (dir *Dir) Index() {
 	Logger.Debugf("开始索引 [%s] 目录", dir.URL)
 	files := dir.Files("/")

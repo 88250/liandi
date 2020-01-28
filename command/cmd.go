@@ -47,6 +47,7 @@ func init() {
 	registerCommand(&put{&BaseCmd{}})
 	registerCommand(&search{&BaseCmd{}})
 	registerCommand(&dirs{&BaseCmd{}})
+	registerCommand(&rename{&BaseCmd{}})
 }
 
 func registerCommand(cmd Cmd) {
