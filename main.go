@@ -20,21 +20,16 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/88250/gulu"
 	"github.com/88250/liandi/command"
 	"github.com/88250/liandi/util"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/olahol/melody.v1"
 )
 
-var logger *gulu.Logger
-
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	gulu.Log.SetLevel("debug")
-	logger = gulu.Log.NewLogger(os.Stdout)
-
+	util.InitLog()
 	util.InitConf()
 	util.InitMount()
 	util.InitSearch()
@@ -54,11 +49,11 @@ func main() {
 
 	m.HandleConnect(func(s *melody.Session) {
 		util.SetPushChan(s)
-		logger.Debug("websocket connected")
+		util.Logger.Debug("websocket connected")
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
-		logger.Debugf("request [%s]", msg)
+		util.Logger.Debugf("request [%s]", msg)
 		request := map[string]interface{}{}
 		if err := json.Unmarshal(msg, &request); nil != err {
 			result := util.NewResult()
@@ -87,9 +82,9 @@ func main() {
 	handleSignal()
 
 	addr := "127.0.0.1:" + util.ServerPort
-	logger.Infof("内核进程 [v%s] 正在启动，监听端口 [%s]", util.Ver, "http://"+addr)
+	util.Logger.Infof("内核进程 [v%s] 正在启动，监听端口 [%s]", util.Ver, "http://"+addr)
 	if err := r.Run(addr); nil != err {
-		logger.Errorf("启动链滴笔记内核失败 [%s]", err)
+		util.Logger.Errorf("启动链滴笔记内核失败 [%s]", err)
 	}
 }
 
@@ -99,7 +94,7 @@ func handleSignal() {
 
 	go func() {
 		s := <-c
-		logger.Infof("收到系统信号 [%s]，退出内核进程", s)
+		util.Logger.Infof("收到系统信号 [%s]，退出内核进程", s)
 
 		util.Close()
 		os.Exit(0)

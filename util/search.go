@@ -30,7 +30,7 @@ func InitSearch() {
 	if gulu.File.IsExist(IndexPath) {
 		index, err = bleve.Open(IndexPath)
 		if nil != err {
-			logger.Fatalf("加载搜索索引失败：%s", err)
+			Logger.Fatalf("加载搜索索引失败：%s", err)
 			return
 		}
 	} else {
@@ -38,7 +38,7 @@ func InitSearch() {
 		mapping.DefaultAnalyzer = "cjk"
 		index, err = bleve.New(IndexPath, mapping)
 		if nil != err {
-			logger.Fatalf("创建搜索索引失败：%s", err)
+			Logger.Fatalf("创建搜索索引失败：%s", err)
 			return
 		}
 	}
@@ -71,12 +71,12 @@ func BatchIndex(docs []*Doc) {
 	for i := 0; i < length; i++ {
 		doc := docs[i]
 		if err := batch.Index(doc.Id, doc); nil != err {
-			logger.Errorf("索引失败：%s", err)
+			Logger.Errorf("索引失败：%s", err)
 		}
 	}
 
 	if err := index.Batch(batch); nil != err {
-		logger.Errorf("批量索引失败：%s", err)
+		Logger.Errorf("批量索引失败：%s", err)
 	}
 }
 
@@ -93,7 +93,7 @@ func BatchUnindex(docs []*Doc) {
 	}
 
 	if err := index.Batch(batch); nil != err {
-		logger.Errorf("批量删除索引失败：%s", err)
+		Logger.Errorf("批量删除索引失败：%s", err)
 	}
 }
 
@@ -105,8 +105,8 @@ func Search(text string) {
 	searchRequest.Fields = []string{"*"}
 	searchResults, err := index.Search(searchRequest)
 	if nil != err {
-		logger.Warnf("搜索失败：%s", err)
+		Logger.Warnf("搜索失败：%s", err)
 		return
 	}
-	logger.Infof("%s", searchResults)
+	Logger.Infof("%s", searchResults)
 }

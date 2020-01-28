@@ -25,7 +25,7 @@ func ParentExited() {
 	for range time.Tick(2 * time.Second) {
 		process, e := ps.FindProcess(ppid)
 		if nil == process || nil != e {
-			logger.Info("UI 进程已经退出，现在退出内核进程")
+			Logger.Info("UI 进程已经退出，现在退出内核进程")
 			Close()
 			os.Exit(0)
 		}

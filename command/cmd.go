@@ -12,14 +12,6 @@
 
 package command
 
-import (
-	"os"
-
-	"github.com/88250/gulu"
-)
-
-var logger = gulu.Log.NewLogger(os.Stdout)
-
 type Cmd interface {
 	Name() string
 	Exec(map[string]interface{})

@@ -13,32 +13,30 @@
 package util
 
 import (
-	"encoding/json"
-
+	"fmt"
 	"github.com/88250/gulu"
+	"io"
+	"os"
 )
 
-type Result struct {
-	Cmd string `json:"cmd"`
-	*gulu.Result
-}
+var (
+	Logger  *gulu.Logger
+	logFile *os.File
+)
 
-func NewResult() *Result {
-	return &Result{"", &gulu.Result{Code: 0, Msg: "", Data: nil}}
-}
-
-func NewCmdResult(cmd string) *Result {
-	ret := NewResult()
-	ret.Cmd = cmd
-
-	return ret
-}
-
-func (r *Result) Bytes() []byte {
-	ret, err := json.Marshal(r)
+func InitLog() {
+	var err error
+	logFile, err = os.Create(LogPath)
 	if nil != err {
-		Logger.Errorf("marshal result [%#v] failed [%s]", r, err)
+		fmt.Errorf("创建日志文件 [%s] 失败", LogPath)
+		os.Exit(-2)
 	}
 
-	return ret
+	gulu.Log.SetLevel("trace")
+	Logger = gulu.Log.NewLogger(io.MultiWriter(logFile, os.Stdout))
+}
+
+func CloseLog() {
+	logFile.Close()
+	os.Stdout.Close()
 }

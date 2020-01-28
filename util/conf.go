@@ -31,11 +31,11 @@ const (
 )
 
 var (
-	logger     = gulu.Log.NewLogger(os.Stdout)
 	HomeDir, _ = gulu.OS.Home()
 	LianDiDir  = filepath.Join(HomeDir, ".liandi")
 	ConfPath   = filepath.Join(LianDiDir, "conf.json")
 	IndexPath  = filepath.Join(LianDiDir, "index")
+	LogPath    = filepath.Join(LianDiDir, "liandi.log")
 )
 
 var Conf *AppConf
@@ -43,26 +43,26 @@ var Conf *AppConf
 func Close() {
 	index.Close()
 	Conf.Close()
+	CloseLog()
 }
 
 func InitConf() {
 	Conf = &AppConf{LogLevel: "debug"}
-
 	if !gulu.File.IsExist(ConfPath) {
 		if err := os.Mkdir(LianDiDir, 0755); nil != err && !os.IsExist(err) {
-			logger.Fatalf("创建配置目录 [%s] 失败：%s", LianDiDir, err)
+			Logger.Fatalf("创建配置目录 [%s] 失败：%s", LianDiDir, err)
 		}
-		logger.Infof("初始化配置文件 [%s] 完毕", ConfPath)
+		Logger.Infof("初始化配置文件 [%s] 完毕", ConfPath)
 	} else {
 		data, err := ioutil.ReadFile(ConfPath)
 		if nil != err {
-			logger.Fatalf("加载配置文件 [%s] 失败：%s", ConfPath, err)
+			Logger.Fatalf("加载配置文件 [%s] 失败：%s", ConfPath, err)
 		}
 		err = json.Unmarshal(data, Conf)
 		if err != nil {
-			logger.Fatalf("解析配置文件 [%s] 失败：%s", ConfPath, err)
+			Logger.Fatalf("解析配置文件 [%s] 失败：%s", ConfPath, err)
 		}
-		logger.Debugf("加载配置文件 [%s] 完毕", ConfPath)
+		Logger.Debugf("加载配置文件 [%s] 完毕", ConfPath)
 	}
 
 	length := len(Conf.Dirs)
@@ -70,7 +70,7 @@ func InitConf() {
 		dir := Conf.Dirs[i]
 		if !dir.IsRemote() && !gulu.File.IsExist(dir.Path) {
 			Conf.Dirs = append(Conf.Dirs[:i], Conf.Dirs[i+1:]...)
-			logger.Debugf("目录 [%s] 不存在，已从配置中移除", dir.Path)
+			Logger.Debugf("目录 [%s] 不存在，已从配置中移除", dir.Path)
 			continue
 		}
 	}
@@ -90,7 +90,7 @@ type AppConf struct {
 func (conf *AppConf) Save() {
 	data, _ := json.MarshalIndent(Conf, "", "   ")
 	if err := ioutil.WriteFile(ConfPath, data, 0644); nil != err {
-		logger.Fatalf("写入配置文件 [%s] 失败：", ConfPath, err)
+		Logger.Fatalf("写入配置文件 [%s] 失败：", ConfPath, err)
 	}
 }
 
@@ -143,7 +143,7 @@ func (dir *Dir) CloseClient() {
 func (dir *Dir) Ls(path string) (ret []os.FileInfo, err error) {
 	ret, err = dir.client.ReadDir(path)
 	if nil != err {
-		logger.Errorf("列出目录 [%s] 下路径为 [%s] 的文件列表失败：%s", dir.URL, path, err)
+		Logger.Errorf("列出目录 [%s] 下路径为 [%s] 的文件列表失败：%s", dir.URL, path, err)
 		return nil, err
 	}
 	return
@@ -152,7 +152,7 @@ func (dir *Dir) Ls(path string) (ret []os.FileInfo, err error) {
 func (dir *Dir) Get(path string) (ret string, err error) {
 	data, err := dir.client.Read(path)
 	if nil != err {
-		logger.Errorf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
+		Logger.Errorf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
 		return "", err
 	}
 	return gulu.Str.FromBytes(data), nil
@@ -161,13 +161,13 @@ func (dir *Dir) Get(path string) (ret string, err error) {
 func (dir *Dir) Put(path, content string) error {
 	err := dir.client.Write(path, []byte(content), 0644)
 	if nil != err {
-		logger.Errorf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
+		Logger.Errorf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
 	}
 	return err
 }
 
 func (dir *Dir) Index() {
-	logger.Debugf("开始索引 [%s] 目录", dir.URL)
+	Logger.Debugf("开始索引 [%s] 目录", dir.URL)
 	files := dir.Files("/")
 	var docs []*Doc
 	for _, file := range files {
@@ -178,11 +178,11 @@ func (dir *Dir) Index() {
 		}
 	}
 	BatchIndex(docs)
-	logger.Debugf("索引目录 [%s] 完毕", dir.URL)
+	Logger.Debugf("索引目录 [%s] 完毕", dir.URL)
 }
 
 func (dir *Dir) Unindex() {
-	logger.Debugf("开始删除索引 [%s] 目录", dir.URL)
+	Logger.Debugf("开始删除索引 [%s] 目录", dir.URL)
 	files := dir.Files("/")
 	var docs []*Doc
 	for _, file := range files {
@@ -193,7 +193,7 @@ func (dir *Dir) Unindex() {
 		}
 	}
 	BatchUnindex(docs)
-	logger.Debugf("删除索引目录 [%s] 完毕", dir.URL)
+	Logger.Debugf("删除索引目录 [%s] 完毕", dir.URL)
 }
 
 func (dir *Dir) Files(path string) (ret []os.FileInfo) {
