@@ -16,6 +16,7 @@ declare interface ILiandi {
     };
     navigation?: {
         element: HTMLElement
+        listElement: HTMLElement
         onMount: (liandi: ILiandi, url: string) => void
     };
     files?: {

@@ -4,7 +4,7 @@ import {Constants} from '../constants';
 
 export class Navigation {
     public element: HTMLElement;
-    private listElement: HTMLElement;
+    public listElement: HTMLElement;
 
     constructor(liandi: ILiandi) {
         this.element = document.getElementById('navigation');
@@ -15,6 +15,7 @@ export class Navigation {
         };
 
         this.listElement = document.createElement('div');
+        this.listElement.className = 'navigation__list'
 
         this.element.appendChild(btnElement);
         this.element.appendChild(this.listElement);

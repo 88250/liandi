@@ -43,7 +43,7 @@ export class WebSocketUtil {
                     liandi.editors.onGet(liandi, response.data);
                     break;
                 case 'dirs':
-                    liandi.navigation.element.lastElementChild.innerHTML = '';
+                    liandi.navigation.listElement.innerHTML = '';
                     response.data.forEach((url: string) => {
                         liandi.navigation.onMount(liandi, url);
                     });

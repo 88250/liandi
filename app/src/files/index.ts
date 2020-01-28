@@ -1,14 +1,16 @@
 export class Files {
     public element: HTMLElement;
+    private listElement: HTMLElement;
 
     constructor() {
         this.element = document.getElementById('files');
-        const filesElement = document.createElement('div');
+        this.listElement = document.createElement('div');
+        this.listElement.className = 'files__list'
 
         const backElement = document.createElement('div');
 
         this.element.appendChild(backElement);
-        this.element.appendChild(filesElement);
+        this.element.appendChild(this.listElement);
     }
 
     onLs(liandi: ILiandi, data: { files: IFile[], url: string }) {
@@ -16,6 +18,6 @@ export class Files {
         data.files.forEach((item: IFile) => {
             filesHTML += `<file-item dir="${item.isdir}" url="${data.url}" path="${item.path}" name="${item.name}"></file-item>`;
         });
-        this.element.lastElementChild.innerHTML = filesHTML;
+        this.listElement.innerHTML = filesHTML;
     }
 }

@@ -2,4 +2,9 @@
   max-width: 350px;
   min-width: 200px;
   border-right: 1px solid $border;
+
+  &__list {
+    flex: 1;
+    overflow: auto;
+  }
 }
