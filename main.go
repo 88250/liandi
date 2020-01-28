@@ -16,6 +16,8 @@ import (
 	"encoding/json"
 	"math/rand"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/88250/gulu"
@@ -82,9 +84,24 @@ func main() {
 		go cmd.Exec(param)
 	})
 
+	handleSignal()
+
 	addr := "127.0.0.1:" + util.ServerPort
-	logger.Infof("链滴笔记内核进程 [v%s] 正在启动，监听端口 [%s]", util.Ver, "http://"+addr)
+	logger.Infof("内核进程 [v%s] 正在启动，监听端口 [%s]", util.Ver, "http://"+addr)
 	if err := r.Run(addr); nil != err {
 		logger.Errorf("启动链滴笔记内核失败 [%s]", err)
 	}
+}
+
+func handleSignal() {
+	c := make(chan os.Signal)
+	signal.Notify(c, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGTERM)
+
+	go func() {
+		s := <-c
+		logger.Infof("收到系统信号 [%s]，退出内核进程", s)
+
+		util.Close()
+		os.Exit(0)
+	}()
 }

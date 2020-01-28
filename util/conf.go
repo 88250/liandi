@@ -40,6 +40,11 @@ var (
 
 var Conf *AppConf
 
+func Close() {
+	index.Close()
+	Conf.Close()
+}
+
 func InitConf() {
 	Conf = &AppConf{LogLevel: "debug"}
 
@@ -93,6 +98,13 @@ func (conf *AppConf) InitClient() {
 	for _, dir := range conf.Dirs {
 		dir.InitClient()
 	}
+}
+
+func (conf *AppConf) Close() {
+	for _, dir := range conf.Dirs {
+		dir.CloseClient()
+	}
+	conf.Save()
 }
 
 func (conf *AppConf) dir(url string) *Dir {
