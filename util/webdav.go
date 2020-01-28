@@ -45,15 +45,16 @@ func Unmount(url string) {
 	}
 
 	if nil == found {
-		logger.Debugf("未找到待取消挂在的目录 [%s]", url)
+		logger.Debugf("未找到待取消挂载的目录 [%s]", url)
 		return
 	}
-	found.CloseClient()
 
+	dir.Unindex()
 	Conf.Dirs = append(Conf.Dirs[:i], Conf.Dirs[i+1:]...)
+	found.CloseClient()
 	routeWebDAV()
 	Conf.Save()
-	logger.Debug("取消挂载目录 [%s] 完毕", url)
+	logger.Debugf("取消挂载目录 [%s] 完毕", url)
 }
 
 func Mount(url, localPath string) (ret string, alreadyMount bool) {
@@ -71,6 +72,7 @@ func Mount(url, localPath string) (ret string, alreadyMount bool) {
 	routeWebDAV()
 	Conf.Save()
 	dir.InitClient()
+	go dir.Index()
 	logger.Debugf("挂载目录 [%s] 完毕", url)
 	return url, false
 }

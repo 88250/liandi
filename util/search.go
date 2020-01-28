@@ -16,7 +16,6 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 
-	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
 	"github.com/blevesearch/bleve"
 
@@ -44,20 +43,9 @@ func InitSearch() {
 		}
 	}
 
-	go func() {
-		for _, dir := range Conf.Dirs {
-			files := dir.Files("/")
-			var docs []*Doc
-			for _, file := range files {
-				content, err := dir.Get(file.(gowebdav.File).Path())
-				if nil == err {
-					doc := newDoc("", content, dir.URL, dir.Path)
-					docs = append(docs, doc)
-				}
-			}
-			BatchIndex(docs)
-		}
-	}()
+	for _, dir := range Conf.Dirs {
+		go dir.Index()
+	}
 }
 
 type Doc struct {
@@ -71,11 +59,6 @@ type Doc struct {
 func newDoc(title, content, url, path string) (doc *Doc) {
 	hash := sha256.Sum256(gulu.Str.ToBytes(content))
 	return &Doc{Id: hex.EncodeToString(hash[:]), Title: title, Content: content, URL: url, Path: path}
-}
-func Index(doc *Doc) {
-	if err := index.Index(doc.Id, doc); nil != err {
-		logger.Errorf("索引失败：%s", err)
-	}
 }
 
 func BatchIndex(docs []*Doc) {
@@ -93,7 +76,24 @@ func BatchIndex(docs []*Doc) {
 	}
 
 	if err := index.Batch(batch); nil != err {
-		logger.Errorf("索引失败：%s", err)
+		logger.Errorf("批量索引失败：%s", err)
+	}
+}
+
+func BatchUnindex(docs []*Doc) {
+	length := len(docs)
+	if 1 > length {
+		return
+	}
+
+	batch := index.NewBatch()
+	for i := 0; i < length; i++ {
+		doc := docs[i]
+		batch.Delete(doc.Id)
+	}
+
+	if err := index.Batch(batch); nil != err {
+		logger.Errorf("批量删除索引失败：%s", err)
 	}
 }
 

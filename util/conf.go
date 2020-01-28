@@ -154,6 +154,36 @@ func (dir *Dir) Put(path, content string) error {
 	return err
 }
 
+func (dir *Dir) Index() {
+	logger.Debugf("开始索引 [%s] 目录", dir.URL)
+	files := dir.Files("/")
+	var docs []*Doc
+	for _, file := range files {
+		content, err := dir.Get(file.(gowebdav.File).Path())
+		if nil == err {
+			doc := newDoc("", content, dir.URL, dir.Path)
+			docs = append(docs, doc)
+		}
+	}
+	BatchIndex(docs)
+	logger.Debugf("索引目录 [%s] 完毕", dir.URL)
+}
+
+func (dir *Dir) Unindex() {
+	logger.Debugf("开始删除索引 [%s] 目录", dir.URL)
+	files := dir.Files("/")
+	var docs []*Doc
+	for _, file := range files {
+		content, err := dir.Get(file.(gowebdav.File).Path())
+		if nil == err {
+			doc := newDoc("", content, dir.URL, dir.Path)
+			docs = append(docs, doc)
+		}
+	}
+	BatchUnindex(docs)
+	logger.Debugf("删除索引目录 [%s] 完毕", dir.URL)
+}
+
 func (dir *Dir) Files(path string) (ret []os.FileInfo) {
 	fs, err := dir.Ls(path)
 	if nil != err {
