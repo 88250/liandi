@@ -29,7 +29,7 @@ export class Menus {
         window.addEventListener('contextmenu', (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
-                if (target.tagName === 'FILE-ITEM') {
+                if (target.tagName === 'FILE-ITEM' && target.parentElement.classList.contains('navigation__list')) {
                     this.fileItemMenu.data = {
                         url: target.getAttribute('url'),
                         target

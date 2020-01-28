@@ -6,10 +6,9 @@ export const resize = (id: string) => {
         const previousElement = resizeElement.previousElementSibling as HTMLElement
         const x = event.clientX;
         const width = previousElement.clientWidth;
+        document.body.style.userSelect = 'none'
 
-        documentSelf.ondragstart = () => {
-            document.body.style.userSelect = 'none'
-        };
+        documentSelf.ondragstart = () => false;
 
         documentSelf.onmousemove = (moveEvent: MouseEvent) => {
             previousElement.style.width = (width + (moveEvent.clientX - x)) + "px";
