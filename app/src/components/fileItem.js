@@ -13,7 +13,10 @@ customElements.define('file-item',
         if (!url) {
           return
         }
-
+        this.parentElement.querySelectorAll('file-item').forEach((item) => {
+          item.classList.remove('current')
+        })
+        this.className = 'current'
         if (dir === 'true') {
           window.liandi.liandi.ws.webSocket.send(JSON.stringify({
             cmd: 'ls',

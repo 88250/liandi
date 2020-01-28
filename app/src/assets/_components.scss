@@ -1,0 +1,13 @@
+file-item {
+  border-top: 1px solid $border;
+  padding: 5px 10px;
+  cursor: pointer;
+  display: block;
+  &:hover{
+    background-color: rgb(246, 248, 250);
+  }
+  &.current {
+    background-color: $blue;
+    color: #fff;
+  }
+}
