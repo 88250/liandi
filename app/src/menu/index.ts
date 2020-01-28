@@ -30,6 +30,7 @@ export class Menus {
                     liandi.files.listElement.innerHTML = "";
                     liandi.files.element.firstElementChild.innerHTML = "";
                     liandi.editors.element.innerHTML = "";
+                    liandi.editors.vditor = undefined;
                 }
             }
         }));

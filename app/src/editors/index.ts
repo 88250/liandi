@@ -2,7 +2,7 @@ const Vditor = require('vditor');
 
 export class Editors {
     public element: HTMLElement;
-    private vditor: any;
+    public vditor: any;
 
     constructor() {
         this.element = document.getElementById('editors');
