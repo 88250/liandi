@@ -1,23 +1,23 @@
-const Vditor = require("vditor")
+const Vditor = require('vditor');
 
 export class Editors {
-    public element: HTMLElement
-    private vditor: any
+    public element: HTMLElement;
+    private vditor: any;
 
     constructor() {
-        this.element = document.getElementById('editors')
-        this.vditor = undefined
+        this.element = document.getElementById('editors');
+        this.vditor = undefined;
     }
 
     onGet(liandi: ILiandi, context: string) {
         if (this.vditor) {
-            this.vditor.setValue(context)
+            this.vditor.setValue(context);
         } else {
-            let timeoutId: number
+            let timeoutId: number;
             const vditor = new Vditor('editors', {
                 cache: false,
                 input(text: string) {
-                    clearTimeout(timeoutId)
+                    clearTimeout(timeoutId);
                     timeoutId = window.setTimeout(() => {
                         liandi.ws.webSocket.send(JSON.stringify({
                             cmd: 'put',
@@ -26,15 +26,15 @@ export class Editors {
                                 path: liandi.editors.path,
                                 content: text
                             },
-                        }))
-                    }, 5000)
+                        }));
+                    }, 5000);
                 },
                 after() {
-                    vditor.setValue(context)
+                    vditor.setValue(context);
                 }
-            })
+            });
 
-            this.vditor = vditor
+            this.vditor = vditor;
         }
     }
 }
