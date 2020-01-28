@@ -13,8 +13,9 @@
 package command
 
 import (
-	"github.com/88250/liandi/util"
 	"path/filepath"
+
+	"github.com/88250/liandi/util"
 )
 
 type get struct {
