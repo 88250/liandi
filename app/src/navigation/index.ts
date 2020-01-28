@@ -1,7 +1,7 @@
 import {remote} from 'electron';
 import {homedir} from 'os';
 import {Constants} from '../constants';
-import {getLastPath} from "../util/getLastPath";
+import {getLastPath} from '../util/getLastPath';
 
 export class Navigation {
     public element: HTMLElement;
@@ -16,7 +16,7 @@ export class Navigation {
         };
 
         this.listElement = document.createElement('div');
-        this.listElement.className = 'navigation__list'
+        this.listElement.className = 'navigation__list';
 
         this.element.appendChild(btnElement);
         this.element.appendChild(this.listElement);
@@ -28,7 +28,7 @@ export class Navigation {
             properties: ['openDirectory', 'openFile'],
         });
         if (filePath.filePaths.length === 0) {
-            return
+            return;
         }
         liandi.ws.webSocket.send(JSON.stringify({
             'cmd': 'mount',

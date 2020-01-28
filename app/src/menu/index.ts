@@ -1,5 +1,5 @@
 import {remote} from 'electron';
-import {url} from "inspector";
+import {url} from 'inspector';
 
 export class Menus {
     public fileItemMenu: {
@@ -24,12 +24,12 @@ export class Menus {
                     }
                 }));
                 this.fileItemMenu.data.target.remove();
-                const filesFileItemElement = liandi.files.listElement.firstElementChild
+                const filesFileItemElement = liandi.files.listElement.firstElementChild;
                 if (filesFileItemElement && filesFileItemElement.tagName === 'FILE-ITEM'
-                    && filesFileItemElement.getAttribute("url") === this.fileItemMenu.data.url) {
-                    liandi.files.listElement.innerHTML = "";
-                    liandi.files.element.firstElementChild.innerHTML = "";
-                    liandi.editors.remove(liandi)
+                    && filesFileItemElement.getAttribute('url') === this.fileItemMenu.data.url) {
+                    liandi.files.listElement.innerHTML = '';
+                    liandi.files.element.firstElementChild.innerHTML = '';
+                    liandi.editors.remove(liandi);
                 }
             }
         }));
@@ -64,9 +64,9 @@ export class Menus {
                         target
                     };
                     if (target.parentElement.classList.contains('navigation__list')) {
-                        this.fileItemMenu.menu.items[0].enabled = true
+                        this.fileItemMenu.menu.items[0].enabled = true;
                     } else {
-                        this.fileItemMenu.menu.items[0].enabled = false
+                        this.fileItemMenu.menu.items[0].enabled = false;
                     }
                     this.fileItemMenu.menu.popup();
                     event.preventDefault();

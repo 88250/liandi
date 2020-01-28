@@ -5,7 +5,7 @@ import {WebSocketUtil} from './websocket';
 import './components/fileItem';
 import {Editors} from './editors';
 import {Menus} from './menu';
-import {resize} from "./util/resize";
+import {resize} from './util/resize';
 
 class App {
     public liandi: ILiandi;
@@ -18,8 +18,8 @@ class App {
         this.liandi.editors =  new Editors(this.liandi);
         const menus = new Menus(this.liandi);
 
-        resize('resize')
-        resize('resize2')
+        resize('resize');
+        resize('resize2');
     }
 }
 

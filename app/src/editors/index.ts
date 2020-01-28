@@ -1,4 +1,4 @@
-import {showMessage} from "../util/message";
+import {showMessage} from '../util/message';
 
 const Vditor = require('vditor');
 
@@ -6,49 +6,52 @@ export class Editors {
     private element: HTMLElement;
     private editorElement: HTMLElement;
     private inputWrapElement: HTMLElement;
-    private vditor: any
+    private vditor: any;
 
     constructor(liandi: ILiandi) {
         this.element = document.getElementById('editors');
-        this.inputWrapElement = document.createElement("div")
-        this.inputWrapElement.className = "fn__flex"
+        this.inputWrapElement = document.createElement('div');
+        this.inputWrapElement.className = 'fn__flex';
         this.inputWrapElement.innerHTML = '<input class="editors__input fn__flex-1"><button>Save</button>';
         this.inputWrapElement.querySelector('button').addEventListener('click', () => {
-            this.saveContent(liandi)
-        })
+            this.saveContent(liandi);
+        });
 
         this.inputWrapElement.querySelector('input').addEventListener('input', () => {
-            const oldName = liandi.editors.path.split('/').pop()
-            const name = this.inputWrapElement.querySelector('input').value
+            const oldName = liandi.editors.path.split('/').pop();
+            const name = this.inputWrapElement.querySelector('input').value;
             if (name === oldName) {
-                return
+                return;
             }
 
+            const newPath = liandi.editors.path.replace(oldName, '') + name;
             window.liandi.liandi.ws.webSocket.send(JSON.stringify({
                 cmd: 'rename',
                 param: {
                     url: liandi.editors.url,
                     oldPath: liandi.editors.path,
-                    newPath: liandi.editors.path.replace(oldName, '') + name
+                    newPath
                 },
-            }))
-        })
+            }));
+            liandi.editors.path = newPath;
 
-        this.editorElement = document.createElement('div')
-        this.editorElement.id = 'liandiVditor'
-        this.editorElement.className = 'fn__flex-1'
+        });
+
+        this.editorElement = document.createElement('div');
+        this.editorElement.id = 'liandiVditor';
+        this.editorElement.className = 'fn__flex-1';
     }
 
 
     remove(liandi: ILiandi) {
         this.saveContent(liandi);
-        this.element.innerHTML = ''
-        this.editorElement.innerHTML = ''
+        this.element.innerHTML = '';
+        this.editorElement.innerHTML = '';
     }
 
     private saveContent(liandi: ILiandi) {
         if (!this.vditor) {
-            return
+            return;
         }
         liandi.ws.webSocket.send(JSON.stringify({
             cmd: 'put',
@@ -58,17 +61,17 @@ export class Editors {
                 content: this.vditor.getValue()
             },
         }));
-        showMessage("save success")
+        showMessage('save success');
     }
 
     onGet(liandi: ILiandi, file: { content: string, name: string }) {
-        if (this.element.innerHTML === "") {
-            this.element.appendChild(this.inputWrapElement)
-            this.element.appendChild(this.editorElement)
+        if (this.element.innerHTML === '') {
+            this.element.appendChild(this.inputWrapElement);
+            this.element.appendChild(this.editorElement);
         }
 
-        this.inputWrapElement.querySelector('input').value = file.name
-        if (this.editorElement.innerHTML !== "") {
+        this.inputWrapElement.querySelector('input').value = file.name;
+        if (this.editorElement.innerHTML !== '') {
             this.vditor.setValue(file.content);
         } else {
             let timeoutId: number;

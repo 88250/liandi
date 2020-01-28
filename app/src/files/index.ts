@@ -5,7 +5,7 @@ export class Files {
     constructor() {
         this.element = document.getElementById('files');
         this.listElement = document.createElement('div');
-        this.listElement.className = 'files__list'
+        this.listElement.className = 'files__list';
 
         const backElement = document.createElement('div');
 
