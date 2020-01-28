@@ -27,20 +27,15 @@ type Cmd interface {
 
 var Commands = map[string]Cmd{}
 
-var (
-	mountCmd   = &mount{}
-	unmountCmd = &unmount{}
-	lsCmd      = &ls{}
-	getCmd     = &get{}
-	searchCmd  = &search{}
-	dirsCmd    = &dirs{}
-)
-
 func init() {
-	Commands[mountCmd.Name()] = mountCmd
-	Commands[unmountCmd.Name()] = unmountCmd
-	Commands[lsCmd.Name()] = lsCmd
-	Commands[getCmd.Name()] = getCmd
-	Commands[searchCmd.Name()] = searchCmd
-	Commands[dirsCmd.Name()] = dirsCmd
+	registerCommand(&mount{})
+	registerCommand(&unmount{})
+	registerCommand(&ls{})
+	registerCommand(&get{})
+	registerCommand(&search{})
+	registerCommand(&dirs{})
+}
+
+func registerCommand(cmd Cmd) {
+	Commands[cmd.Name()] = cmd
 }
