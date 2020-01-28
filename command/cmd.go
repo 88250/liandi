@@ -32,6 +32,7 @@ func init() {
 	registerCommand(&unmount{})
 	registerCommand(&ls{})
 	registerCommand(&get{})
+	registerCommand(&put{})
 	registerCommand(&search{})
 	registerCommand(&dirs{})
 }
