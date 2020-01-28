@@ -70,9 +70,8 @@ func main() {
 		if nil == cmd {
 			result := util.NewResult()
 			result.Code = -1
-			result.Msg = "Invalid Command"
-			responseData, _ := json.Marshal(result)
-			util.Push(responseData)
+			result.Msg = "查找指令 [" + cmdStr + "] 失败"
+			util.Push(result.Bytes())
 			return
 		}
 		command.Exec(cmd)

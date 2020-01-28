@@ -37,7 +37,7 @@ func NewCmdResult(cmd string) *Result {
 func (r *Result) Bytes() []byte {
 	ret, err := json.Marshal(r)
 	if nil != err {
-		Logger.Errorf("marshal result [%#v] failed [%s]", r, err)
+		Logger.Errorf("marshal result [%+v] failed [%s]", r, err)
 	}
 
 	return ret
