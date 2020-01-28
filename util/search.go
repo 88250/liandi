@@ -50,15 +50,15 @@ func InitSearch() {
 
 type Doc struct {
 	Id      string
-	Title   string
+	Name    string
 	Content string
 	URL     string
 	Path    string
 }
 
-func newDoc(title, content, url, path string) (doc *Doc) {
+func newDoc(name, content, url, path string) (doc *Doc) {
 	hash := sha256.Sum256(gulu.Str.ToBytes(content))
-	return &Doc{Id: hex.EncodeToString(hash[:]), Title: title, Content: content, URL: url, Path: path}
+	return &Doc{Id: hex.EncodeToString(hash[:]), Name: name, Content: content, URL: url, Path: path}
 }
 
 func BatchIndex(docs []*Doc) {
