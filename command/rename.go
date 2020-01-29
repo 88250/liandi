@@ -28,6 +28,13 @@ func (cmd *rename) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+		util.Push(ret.Bytes())
+		return
+	}
+
+	ret.Data = map[string]interface{}{
+		"url":  url,
+		"path": newPath,
 	}
 	util.Push(ret.Bytes())
 }
