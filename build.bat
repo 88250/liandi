@@ -1,6 +1,6 @@
 set GO111MODULE=on
 set GOPROXY=https://goproxy.io
-echo Building Kernel
+echo 构建内核
 set GOOS=windows
 set GOARCH=amd64
 go version
@@ -12,7 +12,7 @@ set GOARCH=amd64
 go build -v -o app/kernel -ldflags "-s -w"
 if "%errorlevel%" == "1" goto :errorend
 
-echo Building UI
+echo 构建界面
 cd app
 node -v
 call npm -v

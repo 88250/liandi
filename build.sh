@@ -2,7 +2,7 @@
 
 export GO111MODULE=on
 export GOPROXY=https://goproxy.io
-echo Building Kernel
+echo 构建内核
 export GOOS=windows
 export GOARCH=amd64
 go version
@@ -12,7 +12,7 @@ export GOOS=darwin
 export GOARCH=amd64
 go build -v -o app/kernel -ldflags "-s -w"
 
-echo Building UI
+echo 构建界面
 cd app
 node -v
 npm -v
