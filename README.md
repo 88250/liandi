@@ -48,7 +48,7 @@ Logo(TBD)
 
 * [讨论区](https://hacpai.com/tag/liandibiji)
 * [报告问题](https://github.com/88250/liandi/issues/new)
-* 欢迎关注 B3log 开源社区微信公众号 `B3log开源`
+* 欢迎关注 B3log 开源社区微信公众号 `B3log开源`  
   ![image-d3c00d78](https://user-images.githubusercontent.com/873584/71566370-0d312c00-2af2-11ea-8ea1-0d45d6f0db20.png)
 
 ### 📄 开源协议
