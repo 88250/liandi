@@ -1,5 +1,7 @@
 import {remote} from 'electron';
 import {url} from 'inspector';
+import {i18n} from "../i18n";
+import {Constants} from "../constants";
 
 export class Menus {
     public fileItemMenu: {
@@ -18,7 +20,7 @@ export class Menus {
             label: 'unmount',
             click: () => {
                 liandi.ws.webSocket.send(JSON.stringify({
-                    'cmd': 'unmount',
+                    'cmd': i18n[Constants.LANG].remove,
                     'param': {
                         'url': this.fileItemMenu.data.url,
                     }
@@ -35,21 +37,21 @@ export class Menus {
         }));
 
         this.fileItemMenu.menu.append(new remote.MenuItem({
-            label: 'new md',
+            label: i18n[Constants.LANG].newFile,
             click: () => {
 
             }
         }));
 
         this.fileItemMenu.menu.append(new remote.MenuItem({
-            label: 'rename',
+            label:i18n[Constants.LANG].newFolder,
             click: () => {
 
             }
         }));
 
         this.fileItemMenu.menu.append(new remote.MenuItem({
-            label: 'delete',
+            label: i18n[Constants.LANG].delete,
             click: () => {
 
             }

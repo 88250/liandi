@@ -2,6 +2,7 @@ import {remote} from 'electron';
 import {homedir} from 'os';
 import {Constants} from '../constants';
 import {getLastPath} from '../util/getLastPath';
+import {i18n} from "../i18n";
 
 export class Navigation {
     public element: HTMLElement;
@@ -10,7 +11,7 @@ export class Navigation {
     constructor(liandi: ILiandi) {
         this.element = document.getElementById('navigation');
         const btnElement = document.createElement('button');
-        btnElement.innerHTML = '打开文件';
+        btnElement.innerHTML = i18n[Constants.LANG].open;
         btnElement.onclick = () => {
             this.mountWebDAVs(liandi);
         };
