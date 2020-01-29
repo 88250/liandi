@@ -46,7 +46,7 @@ Logo(TBD)
 
 ## 🏘️ 社区
 
-* [讨论区](https://hacpai.com/tag/liandi)
+* [讨论区](https://hacpai.com/tag/liandibiji)
 * [报告问题](https://github.com/88250/liandi/issues/new)
 
 ### 📄 开源协议
