@@ -23,11 +23,13 @@ Logo(TBD)
 <a title="Author GitHub Followers" target="_blank" href="https://github.com/88250"><img src="https://img.shields.io/github/followers/88250.svg?label=Followers&style=social"></a>
 </p>
 
+## 💡 简介
+
 链滴笔记是一款开源的桌面端笔记应用，支持 Windows、Mac 和 Linux。
 
 **当前项目还处于初始开发阶段，欢迎反馈建议和参与代码贡献**
 
-### 特性
+### ✨  特性
 
 * [x] 通过 WebDAV 挂载本地或远程目录
 * 为 Markdown 而生
@@ -38,6 +40,26 @@ Logo(TBD)
 * [ ] 支持全文搜索
 * [ ] 简洁的界面，所有功能通过“快速导航”（Double Shift）直达
 
-### 文档
+### 📜 文档
 
 * [链滴笔记路线图](https://hacpai.com/article/1579786655216)
+
+## 🏘️ 社区
+
+* [讨论区](https://hacpai.com/tag/liandi)
+* [报告问题](https://github.com/88250/liandi/issues/new)
+
+### 📄 开源协议
+
+链滴笔记使用 [木兰宽松许可证, 第1版](http://license.coscl.org.cn/MulanPSL) 开源协议。
+
+### 🛠️ 鸣谢
+
+* [浏览器端的编辑器 Vditor](https://github.com/Vanessa219/vditor)
+* [Go/JS Markdown 引擎 Lute](https://github.com/88250/lute)
+* [Go WebDAV 客户端库](https://github.com/88250/gowebdav)
+* [Go 常用工具库](https://github.com/88250/gulu)
+* [Go 文本索引库](https://github.com/blevesearch/bleve)
+* [Go Web 框架 Gin](https://github.com/gin-gonic/gin)
+* [Go WebSocket 框架](https://github.com/olahol/melody)
+* [跨平台桌面应用框架 Electron](https://github.com/electron/electron)

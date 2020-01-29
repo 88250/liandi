@@ -92,7 +92,7 @@ type AppConf struct {
 func (conf *AppConf) Save() {
 	data, _ := json.MarshalIndent(Conf, "", "   ")
 	if err := ioutil.WriteFile(ConfPath, data, 0644); nil != err {
-		Logger.Fatalf("写入配置文件 [%s] 失败：", ConfPath, err)
+		Logger.Fatalf("写入配置文件 [%s] 失败：%s", ConfPath, err)
 	}
 }
 
