@@ -1,4 +1,4 @@
-<p align = "center">
+<p align="center">
 Logo(TBD)
 <br><br>
 <em>
@@ -49,6 +49,8 @@ Logo(TBD)
     * 数学公式引擎切换 MathJax、Ketax
 * 支持全文搜索
 * 简洁的界面，所有功能通过“快速导航”（Double Shift）直达
+* 界面支持多主题
+* 支持导出静态站点，内置多套主题模板
 
 ### 📜 文档
 
