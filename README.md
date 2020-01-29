@@ -56,7 +56,7 @@ Logo(TBD)
 ### 🛠️ 鸣谢
 
 * [浏览器端的编辑器 Vditor](https://github.com/Vanessa219/vditor)
-* [Go/JS Markdown 引擎 Lute](https://github.com/88250/lute)
+* [对中文语境优化的 Markdown 引擎 Lute](https://github.com/88250/lute)
 * [Go WebDAV 客户端库](https://github.com/88250/gowebdav)
 * [Go 常用工具库](https://github.com/88250/gulu)
 * [Go 文本索引库](https://github.com/blevesearch/bleve)
