@@ -20,6 +20,7 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
 )
 
@@ -38,6 +39,8 @@ func InitLog() {
 
 	gulu.Log.SetLevel("trace")
 	Logger = gulu.Log.NewLogger(io.MultiWriter(logFile, os.Stdout))
+
+	gowebdav.Logger = Logger
 }
 
 func CloseLog() {
