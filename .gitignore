@@ -8,6 +8,8 @@ app/dist
 header
 liandi
 liandi.exe
+kernel
+kernel.exe
 
 # Test binary, build with `go test -c`
 *.test
