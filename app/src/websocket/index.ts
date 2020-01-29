@@ -53,6 +53,9 @@ export class WebSocketUtil {
                         liandi.navigation.onMount(liandi, url);
                     });
                     break;
+                case 'rename':
+                    liandi.files.onRename(response.data)
+                    break;
             }
         };
     }

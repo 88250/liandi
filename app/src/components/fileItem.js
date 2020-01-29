@@ -1,5 +1,10 @@
 customElements.define('file-item',
   class extends HTMLElement {
+
+    static get observedAttributes() {
+      return ['name'];
+    }
+
     constructor () {
       super()
 
@@ -46,6 +51,12 @@ customElements.define('file-item',
 
       const shadowRoot = this.attachShadow({mode: 'open'})
       shadowRoot.appendChild(divElement)
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+      if (name === "name" && oldValue) {
+        this.shadowRoot.querySelector('div').textContent = newValue
+      }
     }
   },
 )

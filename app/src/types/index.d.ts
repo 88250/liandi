@@ -24,6 +24,7 @@ declare interface ILiandi {
         listElement: HTMLElement
         element: HTMLElement
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string }) => void
+        onRename: (data: { newPath: string, oldPath: string, newName: string }) => void
     };
     editors?: {
         url?: string

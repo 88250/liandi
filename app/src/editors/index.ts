@@ -20,8 +20,13 @@ export class Editors {
         });
 
         this.inputWrapElement.querySelector('input').addEventListener('input', () => {
-            const oldName = liandi.editors.path.split('/').pop();
             const name = this.inputWrapElement.querySelector('input').value;
+
+            if (/\\|\/|\:|\*|\?|\"|<|>|\|/.test(name)) {
+                showMessage(i18n[Constants.LANG].fileNameRule)
+                return
+            }
+            const oldName = liandi.editors.path.split('/').pop();
             if (name === oldName) {
                 return;
             }

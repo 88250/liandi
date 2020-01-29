@@ -11,5 +11,6 @@ export const i18n: II18n = {
         "back": "返回上一层",
         "open": "打开",
         "openWebDAV": "打开 WebDAV",
+        "fileNameRule": "不能包含 \\/:*?\"<>| 字符"
     },
 };

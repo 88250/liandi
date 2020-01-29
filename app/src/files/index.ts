@@ -34,4 +34,10 @@ export class Files {
         });
         this.listElement.innerHTML = filesHTML;
     }
+
+    public onRename(data: { newPath: string, oldPath: string, newName: string }) {
+        const fileItemElement = this.listElement.querySelector(`file-item[path="${data.oldPath}"]`)
+        fileItemElement.setAttribute("path", data.newPath)
+        fileItemElement.setAttribute("name", data.newName)
+    }
 }

@@ -2,6 +2,7 @@ import {remote} from 'electron';
 import {url} from 'inspector';
 import {i18n} from "../i18n";
 import {Constants} from "../constants";
+import {showMessage} from "../util/message";
 
 export class Menus {
     public fileItemMenu: {
@@ -17,10 +18,10 @@ export class Menus {
             menu: new remote.Menu()
         };
         this.fileItemMenu.menu.append(new remote.MenuItem({
-            label: 'unmount',
+            label: i18n[Constants.LANG].remove,
             click: () => {
                 liandi.ws.webSocket.send(JSON.stringify({
-                    'cmd': i18n[Constants.LANG].remove,
+                    'cmd': 'unmount',
                     'param': {
                         'url': this.fileItemMenu.data.url,
                     }
@@ -39,21 +40,28 @@ export class Menus {
         this.fileItemMenu.menu.append(new remote.MenuItem({
             label: i18n[Constants.LANG].newFile,
             click: () => {
-
+                showMessage('TODO')
             }
         }));
 
         this.fileItemMenu.menu.append(new remote.MenuItem({
-            label:i18n[Constants.LANG].newFolder,
+            label: i18n[Constants.LANG].newFolder,
             click: () => {
-
+                showMessage('TODO')
             }
         }));
 
         this.fileItemMenu.menu.append(new remote.MenuItem({
             label: i18n[Constants.LANG].delete,
             click: () => {
+                showMessage('TODO')
+            }
+        }));
 
+        this.fileItemMenu.menu.append(new remote.MenuItem({
+            label: i18n[Constants.LANG].rename,
+            click: () => {
+                showMessage('TODO')
             }
         }));
 
@@ -67,8 +75,12 @@ export class Menus {
                     };
                     if (target.parentElement.classList.contains('navigation__list')) {
                         this.fileItemMenu.menu.items[0].enabled = true;
+                        this.fileItemMenu.menu.items[3].enabled = false;
+                        this.fileItemMenu.menu.items[4].enabled = false;
                     } else {
                         this.fileItemMenu.menu.items[0].enabled = false;
+                        this.fileItemMenu.menu.items[3].enabled = true;
+                        this.fileItemMenu.menu.items[4].enabled = true;
                     }
                     this.fileItemMenu.menu.popup();
                     event.preventDefault();
