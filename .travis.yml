@@ -1,8 +1,9 @@
-matrix:
-  include:
-    - os: windows
-      script: bash ./build.bat
-    - os: linux
-      script: bash ./build.sh
-    - os: osx
-      script: bash ./build.sh
+language: node_js
+node_js: 12
+
+os:
+  - windows
+  - linux
+  - osx
+
+script: bash ./build.sh
