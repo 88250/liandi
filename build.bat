@@ -9,7 +9,7 @@ if "%errorlevel%" == "1" goto :errorend
 
 set GOOS=darwin
 set GOARCH=amd64
-go build -v -o electron/kernel -ldflags "-s -w"
+go build -v -o app/kernel -ldflags "-s -w"
 if "%errorlevel%" == "1" goto :errorend
 
 echo Building UI

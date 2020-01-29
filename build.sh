@@ -6,14 +6,14 @@ echo Building Kernel
 export GOOS=windows
 export GOARCH=amd64
 go version
-go build -v -o electron/kernel.exe -ldflags "-s -w -H=windowsgui"
+go build -v -o app/kernel.exe -ldflags "-s -w -H=windowsgui"
 
 export GOOS=darwin
 export GOARCH=amd64
-go build -v -o electron/kernel -ldflags "-s -w"
+go build -v -o app/kernel -ldflags "-s -w"
 
 echo Building UI
-cd electron
+cd app
 node -v
 npm -v
 npm install && npm run build

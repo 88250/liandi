@@ -2,9 +2,9 @@ language: go
 
 go:
   - 1.12.x
-
+node_js: "12.14.1"
 install:
-  - go get ./...
+  - go build -v
 
 script:
-  - go test -v ./...
+  - build.sh
