@@ -48,11 +48,10 @@ export class Editors {
     remove(liandi: ILiandi) {
         this.saveContent(liandi);
         this.element.innerHTML = '';
-        this.editorElement.innerHTML = '';
     }
 
     private saveContent(liandi: ILiandi) {
-        if (!this.vditor) {
+        if (this.element.innerHTML === "") {
             return;
         }
         liandi.ws.webSocket.send(JSON.stringify({
@@ -73,24 +72,21 @@ export class Editors {
         }
 
         this.inputWrapElement.querySelector('input').value = file.name;
+
         if (this.editorElement.innerHTML !== '') {
             this.vditor.setValue(file.content);
         } else {
             let timeoutId: number;
-            const vditor = new Vditor('liandiVditor', {
+            this.vditor = new Vditor('liandiVditor', {
                 cache: false,
+                value: file.content,
                 input: () => {
                     clearTimeout(timeoutId);
                     timeoutId = window.setTimeout(() => {
                         this.saveContent(liandi);
                     }, 5000);
-                },
-                after() {
-                    vditor.setValue(file.content);
                 }
             });
-
-            this.vditor = vditor;
         }
     }
 }

@@ -10,6 +10,9 @@ customElements.define('file-item',
       const path = this.getAttribute('path')
       const dir = this.getAttribute('dir')
       divElement.addEventListener('click', () => {
+        if (this.classList.contains('current')) {
+          return
+        }
         if (!url) {
           return
         }
