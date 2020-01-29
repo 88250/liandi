@@ -43,13 +43,29 @@ func main() {
 	r.Use(gin.Recovery())
 
 	m := melody.New()
+	m.Config.MaxMessageSize = 1024 * 1024 * 2
 	r.GET("/ws", func(c *gin.Context) {
-		m.HandleRequest(c.Writer, c.Request)
+		if err := m.HandleRequest(c.Writer, c.Request); nil != err {
+			util.Logger.Errorf("处理命令失败：%s", err)
+		}
 	})
 
 	m.HandleConnect(func(s *melody.Session) {
 		util.SetPushChan(s)
 		util.Logger.Debug("websocket connected")
+	})
+
+	m.HandleDisconnect(func(s *melody.Session) {
+		util.Logger.Debugf("websocket disconnected")
+	})
+
+	m.HandleError(func(s *melody.Session, err error) {
+		util.Logger.Debugf("websocket on error: %s", err)
+	})
+
+	m.HandleClose(func(s *melody.Session, i int, str string) error {
+		util.Logger.Debugf("websocket on close: %v, %v", i, str)
+		return nil
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
@@ -70,7 +86,7 @@ func main() {
 		if nil == cmd {
 			result := util.NewResult()
 			result.Code = -1
-			result.Msg = "查找指令 [" + cmdStr + "] 失败"
+			result.Msg = "查找命令 [" + cmdStr + "] 失败"
 			util.Push(result.Bytes())
 			return
 		}
