@@ -27,16 +27,7 @@ customElements.define('file-item',
           }))
 
           window.liandi.liandi.editors.remove(window.liandi.liandi)
-
-          if (path === '/') {
-            window.liandi.liandi.files.element.firstElementChild.innerHTML = ''
-          } else {
-            const lastPaths = path.substr(0, path.lastIndexOf('/')).
-              lastIndexOf('/') + 1
-            window.liandi.liandi.files.element.firstElementChild.innerHTML =
-              `<file-item dir="true" name="返回上一层" url="${url}" path="${path.substring(
-                0, lastPaths)}"></file-item>`
-          }
+          window.liandi.liandi.files.renderBack(url, path)
         } else {
           window.liandi.liandi.ws.webSocket.send(JSON.stringify({
             cmd: 'get',

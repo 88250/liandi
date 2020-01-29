@@ -3,21 +3,26 @@ import {showMessage} from '../util/message';
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
+    private isFirst: boolean
 
     constructor(liandi: ILiandi) {
+        this.isFirst = true
         this.connect(liandi);
     }
 
     private connect(liandi: ILiandi) {
         this.webSocket = new WebSocket(Constants.WEBSOCKET_ADDREDD);
         this.webSocket.onopen = () => {
-            liandi.ws.webSocket.send(JSON.stringify({
-                cmd: 'dirs',
-                param: {},
-            }));
+            if (this.isFirst) {
+                liandi.ws.webSocket.send(JSON.stringify({
+                    cmd: 'dirs',
+                    param: {},
+                }));
+            }
+            this.isFirst = false
         };
         this.webSocket.onclose = (e) => {
-            console.warn('WebSocket is closed. Reconnect will be attempted in 1 second.', e.reason);
+            console.warn('WebSocket is closed. Reconnect will be attempted in 1 second.', e);
             setTimeout(() => {
                 this.connect(liandi);
             }, 1000);

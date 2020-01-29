@@ -1,3 +1,6 @@
+import {i18n} from "../i18n";
+import {Constants} from "../constants";
+
 export class Files {
     public element: HTMLElement;
     public listElement: HTMLElement;
@@ -11,6 +14,17 @@ export class Files {
 
         this.element.appendChild(backElement);
         this.element.appendChild(this.listElement);
+    }
+
+    renderBack(url: string, path: string) {
+        if (path === '/') {
+            window.liandi.liandi.files.element.firstElementChild.innerHTML = ''
+        } else {
+            const lastPaths = path.substr(0, path.lastIndexOf('/')).lastIndexOf('/') + 1
+            window.liandi.liandi.files.element.firstElementChild.innerHTML =
+                `<file-item dir="true" name="${i18n[Constants.LANG].back}" url="${url}" path="${path.substring(
+                    0, lastPaths)}"></file-item>`
+        }
     }
 
     onLs(liandi: ILiandi, data: { files: IFile[], url: string }) {

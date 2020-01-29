@@ -1,4 +1,6 @@
 import {showMessage} from '../util/message';
+import {i18n} from "../i18n";
+import {Constants} from "../constants";
 
 const Vditor = require('vditor');
 
@@ -12,7 +14,7 @@ export class Editors {
         this.element = document.getElementById('editors');
         this.inputWrapElement = document.createElement('div');
         this.inputWrapElement.className = 'fn__flex';
-        this.inputWrapElement.innerHTML = '<input class="editors__input fn__flex-1"><button>Save</button>';
+        this.inputWrapElement.innerHTML = `<input class="editors__input fn__flex-1"><button>${i18n[Constants.LANG].save}</button>`;
         this.inputWrapElement.querySelector('button').addEventListener('click', () => {
             this.saveContent(liandi);
         });
@@ -61,7 +63,7 @@ export class Editors {
                 content: this.vditor.getValue()
             },
         }));
-        showMessage('save success');
+        showMessage(i18n[Constants.LANG].saveSuccess);
     }
 
     onGet(liandi: ILiandi, file: { content: string, name: string }) {

@@ -20,6 +20,7 @@ declare interface ILiandi {
         onMount: (liandi: ILiandi, url: string) => void
     };
     files?: {
+        renderBack: (url: string, path: string) => void
         listElement: HTMLElement
         element: HTMLElement
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string }) => void
@@ -28,10 +29,11 @@ declare interface ILiandi {
         url?: string
         path?: string
         remove: (liandi: ILiandi) => void
-        onGet: (liandi: ILiandi, file: {name: string, content: string}) => void
+        onGet: (liandi: ILiandi, file: { name: string, content: string }) => void
     };
 }
 
-interface IEvent extends Event {
-    target: HTMLElement & EventTarget;
+interface II18n {
+    en_US: { [key: string]: string };
+    zh_CN: { [key: string]: string };
 }
