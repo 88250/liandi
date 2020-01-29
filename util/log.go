@@ -30,10 +30,18 @@ var (
 )
 
 func InitLog() {
+	if size := gulu.File.GetFileSize(LogPath); 1024*1024*8 <= size {
+		// 日志文件大于 8M 的话删了重建
+		if err := os.Remove(LogPath); nil != err {
+			fmt.Errorf("删除日志文件 [%s] 失败：%s", LogPath, err)
+			os.Exit(-2)
+		}
+	}
+
 	var err error
 	logFile, err = os.Create(LogPath)
 	if nil != err {
-		fmt.Errorf("创建日志文件 [%s] 失败", LogPath)
+		fmt.Errorf("创建日志文件 [%s] 失败：%s", LogPath, err)
 		os.Exit(-2)
 	}
 
