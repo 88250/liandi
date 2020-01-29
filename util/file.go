@@ -92,7 +92,14 @@ func Put(url, path, content string) error {
 	if nil == dir {
 		return ErrDirNotExist
 	}
-	return dir.Put(path, content)
+	if err := dir.Put(path, content); nil != err {
+		return err
+	}
+
+	fname := filepath.Base(path)
+	doc := newDoc(fname, content, url, path)
+	Index(doc)
+	return nil
 }
 
 func Rename(url, oldPath, newPath string) error {
@@ -100,7 +107,13 @@ func Rename(url, oldPath, newPath string) error {
 	if nil == dir {
 		return ErrDirNotExist
 	}
-	return dir.Rename(oldPath, newPath)
+	if err := dir.Rename(oldPath, newPath); nil != err {
+		return err
+	}
+
+	oldId := genDocId(url, oldPath)
+	RemoveIndex(oldId)
+	return nil
 }
 
 func Mkdir(url, path string) error {

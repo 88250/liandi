@@ -15,9 +15,9 @@ package util
 import (
 	"crypto/sha256"
 	"encoding/hex"
-
 	"github.com/88250/gulu"
 	"github.com/blevesearch/bleve"
+	stdpath "path"
 
 	_ "github.com/blevesearch/bleve/analysis/lang/cjk"
 )
@@ -56,9 +56,14 @@ type Doc struct {
 	Path    string
 }
 
+func genDocId(url, path string) string {
+	hash := sha256.Sum256(gulu.Str.ToBytes(stdpath.Join(url, path)))
+	return hex.EncodeToString(hash[:])
+}
+
 func newDoc(name, content, url, path string) (doc *Doc) {
-	hash := sha256.Sum256(gulu.Str.ToBytes(content))
-	return &Doc{Id: hex.EncodeToString(hash[:]), Name: name, Content: content, URL: url, Path: path}
+	id := genDocId(url, path)
+	return &Doc{Id: id, Name: name, Content: content, URL: url, Path: path}
 }
 
 func BatchIndex(docs []*Doc) {
@@ -71,7 +76,7 @@ func BatchIndex(docs []*Doc) {
 	for i := 0; i < length; i++ {
 		doc := docs[i]
 		if err := batch.Index(doc.Id, doc); nil != err {
-			Logger.Errorf("索引失败：%s", err)
+			Logger.Errorf("加入批量索引失败：%s", err)
 		}
 	}
 
@@ -93,6 +98,18 @@ func BatchUnindex(docIds []string) {
 
 	if err := index.Batch(batch); nil != err {
 		Logger.Errorf("批量删除索引失败：%s", err)
+	}
+}
+
+func RemoveIndex(docId string) {
+	if err := index.Delete(docId); nil != err {
+		Logger.Errorf("删除索引失败：%s", err)
+	}
+}
+
+func Index(doc *Doc) {
+	if err := index.Index(doc.Id, doc); nil != err {
+		Logger.Errorf("索引失败：%s", err)
 	}
 }
 

@@ -210,7 +210,7 @@ func (dir *Dir) Unindex() {
 	for _, file := range files {
 		content, err := dir.Get(file.(gowebdav.File).Path())
 		if nil == err {
-			doc := newDoc("", content, dir.URL, dir.Path)
+			doc := newDoc(file.Name(), content, dir.URL, dir.Path)
 			docIds = append(docIds, doc.Id)
 		}
 	}
