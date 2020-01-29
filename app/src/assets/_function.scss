@@ -20,22 +20,16 @@
   }
 }
 
-@keyframes slideInUp {
-  from {
-    transform: translate3d(0, 30%, 0);
-    visibility: visible;
-  }
-
-  to {
-    transform: translate3d(0, 0, 0);
-  }
-}
-
 
 .fn {
-  &__space5 {
-    width: 5px;
+  &__space {
+    width: 10px;
     display: inline-block;
+  }
+
+  &__hr {
+    height: 10px;
+    display: block;
   }
 
   &__flex {
@@ -109,50 +103,10 @@
     border-radius: 3px;
     min-width: 180px;
     right: 0;
-    z-index: 100;
-
-    &--static {
-      animation: none;
-    }
+    z-index: 201;
 
     &::-webkit-scrollbar {
       display: none;
-    }
-
-    hr {
-      margin: 5px 0;
-      border: 0;
-      background-color: $border;
-      height: 1px;
-    }
-
-    .item {
-      display: block;
-      text-shadow: 0 1px 0 #fff;
-      position: relative;
-      padding: 5px 10px;
-      color: $popItemColor;
-      font-weight: normal;
-      width: 100%;
-      box-sizing: border-box;
-      word-break: break-all;
-
-      &:hover,
-      &--current {
-        text-decoration: none;
-        background-color: $popItemHoverBg;
-        color: $popItemHoverColor !important;
-        text-shadow: none;
-      }
-
-      &--warn.item {
-        color: $red;
-
-        &:hover {
-          background-color: $red;
-          color: $popItemWarnHoverColor !important;
-        }
-      }
     }
   }
 }

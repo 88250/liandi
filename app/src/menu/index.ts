@@ -3,6 +3,8 @@ import {url} from 'inspector';
 import {i18n} from "../i18n";
 import {Constants} from "../constants";
 import {showMessage} from "../util/message";
+import {destroyDialog, dialog} from "../util/dialog";
+import {rename} from "../util/rename";
 
 export class Menus {
     public fileItemMenu: {
@@ -40,7 +42,7 @@ export class Menus {
         this.fileItemMenu.menu.append(new remote.MenuItem({
             label: i18n[Constants.LANG].newFile,
             click: () => {
-                showMessage('TODO')
+                showMessage('TODO', 0)
             }
         }));
 
@@ -61,14 +63,37 @@ export class Menus {
         this.fileItemMenu.menu.append(new remote.MenuItem({
             label: i18n[Constants.LANG].rename,
             click: () => {
-                showMessage('TODO')
+                const target = this.fileItemMenu.data.target;
+                dialog({
+                    title: i18n[Constants.LANG].rename,
+                    content: `<input class="input" value="${target.getAttribute('name')}">
+<div class="fn__hr"></div>
+<div class="fn__flex"><div class="fn__flex-1"></div>
+<button class="button button--confirm">${i18n[Constants.LANG].save}</button><div class="fn__space"></div>
+<button class="button button--cancel">${i18n[Constants.LANG].cancel}</button></div>`,
+                    width: 400
+                })
+                const dialogElement = document.querySelector('#dialog')
+                dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
+                    destroyDialog()
+                })
+                dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
+                    const newPath = rename((dialogElement.querySelector('.input') as HTMLInputElement).value,
+                        target.getAttribute('url'), target.getAttribute('path'))
+
+                    if (newPath) {
+                        destroyDialog()
+                    }
+                })
             }
         }));
 
         window.addEventListener('contextmenu', (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
-                if (target.tagName === 'FILE-ITEM') {
+                if (target.tagName === 'FILE-ITEM' &&
+                    (!target.parentElement.classList.contains('files__back') ||
+                        target.parentElement.classList.contains('navigation__list'))) {
                     this.fileItemMenu.data = {
                         url: target.getAttribute('url'),
                         target

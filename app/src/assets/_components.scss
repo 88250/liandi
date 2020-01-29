@@ -3,6 +3,7 @@ file-item {
   padding: 5px 10px;
   cursor: pointer;
   display: block;
+  user-select: none;
   &:hover{
     background-color: rgb(246, 248, 250);
   }

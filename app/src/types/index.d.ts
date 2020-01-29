@@ -24,11 +24,12 @@ declare interface ILiandi {
         listElement: HTMLElement
         element: HTMLElement
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string }) => void
-        onRename: (data: { newPath: string, oldPath: string, newName: string }) => void
+        onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
     };
     editors?: {
         url?: string
         path?: string
+        inputWrapElement: HTMLElement
         remove: (liandi: ILiandi) => void
         onGet: (liandi: ILiandi, file: { name: string, content: string }) => void
     };

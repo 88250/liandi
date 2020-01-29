@@ -10,9 +10,10 @@ export class Navigation {
 
     constructor(liandi: ILiandi) {
         this.element = document.getElementById('navigation');
-        const btnElement = document.createElement('button');
-        btnElement.innerHTML = i18n[Constants.LANG].open;
-        btnElement.onclick = () => {
+        const btnElement = document.createElement('div');
+        btnElement.className = 'navigation__action'
+        btnElement.innerHTML = `<button class="button button--confirm">${i18n[Constants.LANG].open}</button>`
+        btnElement.querySelector('button').onclick = () => {
             this.mountWebDAVs(liandi);
         };
 

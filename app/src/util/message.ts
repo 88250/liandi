@@ -1,8 +1,12 @@
+let timeoutId: number
 export const showMessage = (message: string, timeout = 6000) => {
+    clearTimeout(timeoutId)
+
     const messageElement = document.getElementById('message');
     messageElement.classList.add('vditor-tip--show');
     if (timeout === 0) {
-        messageElement.innerHTML = `<div class="vditor-tip__content">${message}<div class="vditor-tip__close">X</div></div>`;
+        messageElement.innerHTML = `<div class="vditor-tip__content">${message}
+<svg class="vditor-tip__close"><use xlink:href="#iconClose"></use></svg></div>`;
         messageElement.querySelector('.vditor-tip__close').addEventListener('click', () => {
             hideMessage();
         });
@@ -10,7 +14,7 @@ export const showMessage = (message: string, timeout = 6000) => {
     }
 
     messageElement.innerHTML = `<div class="vditor-tip__content">${message}</div>`;
-    setTimeout(() => {
+    timeoutId = window.setTimeout(() => {
         hideMessage();
     }, timeout);
 };

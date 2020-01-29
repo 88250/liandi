@@ -3,6 +3,7 @@ import {Navigation} from './navigation';
 import {Files} from './files';
 import {WebSocketUtil} from './websocket';
 import './components/fileItem';
+import './icons/index';
 import {Editors} from './editors';
 import {Menus} from './menu';
 import {resize} from './util/resize';

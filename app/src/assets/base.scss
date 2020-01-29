@@ -2,6 +2,9 @@
 @import "mixin";
 @import "reset";
 @import "function";
+@import "button";
+@import "input";
+@import "dialog";
 @import "navigation";
 @import "files";
 @import "editors";
@@ -10,6 +13,11 @@
 
 .vditor {
   border-width: 0;
+
+  &-tip__content {
+    box-sizing: border-box;
+    max-width: 520px;
+  }
 }
 
 .wrap {

@@ -1,13 +1,16 @@
-import {showMessage} from '../util/message';
+import {hideMessage, showMessage} from '../util/message';
 import {i18n} from "../i18n";
 import {Constants} from "../constants";
+import {rename} from "../util/rename";
 
 const Vditor = require('vditor');
 
 export class Editors {
+    public path: string
+    public url: string;
+    public inputWrapElement: HTMLElement;
     private element: HTMLElement;
     private editorElement: HTMLElement;
-    private inputWrapElement: HTMLElement;
     private vditor: any;
 
     constructor(liandi: ILiandi) {
@@ -20,35 +23,13 @@ export class Editors {
         });
 
         this.inputWrapElement.querySelector('input').addEventListener('input', () => {
-            const name = this.inputWrapElement.querySelector('input').value;
-
-            if (/\\|\/|\:|\*|\?|\"|<|>|\|/.test(name)) {
-                showMessage(i18n[Constants.LANG].fileNameRule)
-                return
-            }
-            const oldName = liandi.editors.path.split('/').pop();
-            if (name === oldName) {
-                return;
-            }
-
-            const newPath = liandi.editors.path.replace(oldName, '') + name;
-            window.liandi.liandi.ws.webSocket.send(JSON.stringify({
-                cmd: 'rename',
-                param: {
-                    url: liandi.editors.url,
-                    oldPath: liandi.editors.path,
-                    newPath
-                },
-            }));
-            liandi.editors.path = newPath;
-
+            rename(this.inputWrapElement.querySelector('input').value, this.url, this.path)
         });
 
         this.editorElement = document.createElement('div');
         this.editorElement.id = 'liandiVditor';
         this.editorElement.className = 'fn__flex-1';
     }
-
 
     remove(liandi: ILiandi) {
         this.saveContent(liandi);
@@ -62,8 +43,8 @@ export class Editors {
         liandi.ws.webSocket.send(JSON.stringify({
             cmd: 'put',
             param: {
-                url: liandi.editors.url,
-                path: liandi.editors.path,
+                url: this.url,
+                path: this.path,
                 content: this.vditor.getValue()
             },
         }));

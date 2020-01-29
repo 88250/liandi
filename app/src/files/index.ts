@@ -11,6 +11,7 @@ export class Files {
         this.listElement.className = 'files__list';
 
         const backElement = document.createElement('div');
+        backElement.className = 'files__back'
 
         this.element.appendChild(backElement);
         this.element.appendChild(this.listElement);
@@ -35,9 +36,14 @@ export class Files {
         this.listElement.innerHTML = filesHTML;
     }
 
-    public onRename(data: { newPath: string, oldPath: string, newName: string }) {
+    public onRename(liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) {
         const fileItemElement = this.listElement.querySelector(`file-item[path="${data.oldPath}"]`)
         fileItemElement.setAttribute("path", data.newPath)
         fileItemElement.setAttribute("name", data.newName)
+
+        if (fileItemElement.getAttribute('dir') === 'false') {
+            liandi.editors.path = data.newPath;
+            liandi.editors.inputWrapElement.querySelector('input').value = data.newName
+        }
     }
 }

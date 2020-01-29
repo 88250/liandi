@@ -1,0 +1,47 @@
+.dialog {
+  &__bg {
+    background-color: #000;
+    height: 100%;
+    opacity: 0.48;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 200;
+    animation-duration: .38s;
+    animation-name: fadeIn;
+    animation-timing-function: ease-in;
+  }
+
+  &__header {
+    cursor: move;
+    user-select: none;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+
+    svg {
+      position: absolute;
+      cursor: pointer;
+      top: 15px;
+      right: -30px;
+      color: #fff;
+
+      &:hover {
+        color: #eee;
+      }
+    }
+
+    h2 {
+      text-align: center;
+      line-height: 24px;
+      font-size: 16px;
+    }
+  }
+
+  &__content {
+    padding: 10px;
+    box-sizing: border-box;
+    overflow: auto;
+  }
+}

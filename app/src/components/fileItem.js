@@ -10,11 +10,11 @@ customElements.define('file-item',
 
       const divElement = document.createElement('div')
       divElement.textContent = this.getAttribute('name')
-
-      const url = this.getAttribute('url')
-      const path = this.getAttribute('path')
-      const dir = this.getAttribute('dir')
       divElement.addEventListener('click', () => {
+        const url = this.getAttribute('url')
+        const path = this.getAttribute('path')
+        const dir = this.getAttribute('dir')
+
         if (this.classList.contains('current')) {
           return
         }
