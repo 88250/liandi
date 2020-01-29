@@ -12,7 +12,11 @@
 
 package command
 
-import "github.com/88250/liandi/util"
+import (
+	"path"
+
+	"github.com/88250/liandi/util"
+)
 
 type rename struct {
 	*BaseCmd
@@ -33,8 +37,10 @@ func (cmd *rename) Exec() {
 	}
 
 	ret.Data = map[string]interface{}{
-		"url":  url,
-		"path": newPath,
+		"url":     url,
+		"oldPath": oldPath,
+		"newPath": newPath,
+		"newName": path.Base(newPath),
 	}
 	util.Push(ret.Bytes())
 }
