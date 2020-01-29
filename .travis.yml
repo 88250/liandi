@@ -1,6 +1,10 @@
 matrix:
   include:
+    - env:
+        - GO111MODULE=on
     - language: go
+    - go: 1.13.x
     - language: node_js
+    - node_js: 12
 
 script: bash ./build.sh
