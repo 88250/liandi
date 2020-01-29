@@ -1,1 +1,8 @@
-script: bash ./build.sh
+matrix:
+  include:
+    - os: windows
+      script: bash ./build.bat
+    - os: linux
+      script: bash ./build.sh
+    - os: osx
+      script: bash ./build.sh
