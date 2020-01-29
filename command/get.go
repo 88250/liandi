@@ -13,7 +13,7 @@
 package command
 
 import (
-	"path/filepath"
+	"path"
 
 	"github.com/88250/liandi/util"
 )
@@ -26,15 +26,15 @@ func (cmd *get) Exec() {
 	ret := util.NewCmdResult(cmd.Name())
 	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
-	path := cmd.param["path"].(string)
-	content, err := util.Get(url, path)
+	p := cmd.param["path"].(string)
+	content, err := util.Get(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
 		return
 	} else {
 		ret.Data = map[string]interface{}{
-			"name":    filepath.Base(path),
+			"name":    path.Base(p),
 			"content": content,
 		}
 	}
