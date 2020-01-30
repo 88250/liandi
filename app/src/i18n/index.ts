@@ -8,6 +8,7 @@ export const i18n: II18n = {
         "rename": "重命名",
         "save": "保存",
         "cancel": "取消",
+        "confirm": "确定",
         "saveSuccess": "保存成功",
         "back": "返回上一层",
         "open": "打开",

@@ -56,6 +56,15 @@ export class WebSocketUtil {
                 case 'rename':
                     liandi.files.onRename(liandi, response.data)
                     break;
+                case 'mkdir':
+                    window.liandi.liandi.ws.webSocket.send(JSON.stringify({
+                        cmd: 'ls',
+                        param: {
+                            url: response.data.url,
+                            path: response.data.path,
+                        },
+                    }))
+                    break;
             }
         };
     }

@@ -2,13 +2,21 @@ import {hideMessage, showMessage} from "./message";
 import {i18n} from "../i18n";
 import {Constants} from "../constants";
 
-export const rename = (name: string, url: string, oldPath: string) => {
+export const validateName = (name: string) => {
     hideMessage();
 
     if (/\\|\/|\:|\*|\?|\"|<|>|\|/.test(name)) {
         showMessage(i18n[Constants.LANG].fileNameRule)
         return false;
     }
+    return true
+}
+
+export const rename = (name: string, url: string, oldPath: string) => {
+    if (!validateName(name)) {
+        return false;
+    }
+
     let oldPathList = oldPath.split('/')
     let oldName = ''
     if (oldPath.endsWith('/')) {
