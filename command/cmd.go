@@ -18,11 +18,17 @@ import (
 
 type Cmd interface {
 	Name() string
+	Id() float64
 	Exec()
 }
 
 type BaseCmd struct {
+	id    float64
 	param map[string]interface{}
+}
+
+func (cmd *BaseCmd) Id() float64 {
+	return cmd.id
 }
 
 func NewCommand(cmdStr string, param map[string]interface{}) Cmd {

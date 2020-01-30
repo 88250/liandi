@@ -23,7 +23,7 @@ type rename struct {
 }
 
 func (cmd *rename) Exec() {
-	ret := util.NewCmdResult(cmd.Name())
+	ret := util.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
 	oldPath := cmd.param["oldPath"].(string)

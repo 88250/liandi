@@ -23,7 +23,7 @@ type mkdir struct {
 }
 
 func (cmd *mkdir) Exec() {
-	ret := util.NewCmdResult(cmd.Name())
+	ret := util.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
 	p := cmd.param["path"].(string)

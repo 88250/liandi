@@ -19,7 +19,7 @@ type dirs struct {
 }
 
 func (cmd *dirs) Exec() {
-	ret := util.NewCmdResult(cmd.Name())
+	ret := util.NewCmdResult(cmd.Name(), cmd.id)
 
 	data := []map[string]interface{}{}
 	for _, dir := range util.Conf.Dirs {

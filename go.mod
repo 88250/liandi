@@ -42,5 +42,6 @@ require (
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
 
-//replace github.com/88250/gowebdav => D:\88250\gowebdav
+replace github.com/88250/gowebdav => D:\88250\gowebdav
+
 //replace github.com/88250/gulu => D:\88250\gulu
