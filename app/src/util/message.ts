@@ -25,5 +25,7 @@ export const showMessage = (message: string, timeout = 6000) => {
 
 export const hideMessage = () => {
     const messageElement = document.getElementById('message');
-    messageElement.innerHTML = '';
+    if (messageElement) {
+        messageElement.innerHTML = '';
+    }
 };

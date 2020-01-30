@@ -1,5 +1,8 @@
 export const destroyDialog = () => {
-    document.querySelector('#dialog').remove();
+    const dialogElement =   document.getElementById('#dialog')
+    if (dialogElement) {
+        dialogElement.remove();
+    }
 };
 
 export const dialog = (options: {
