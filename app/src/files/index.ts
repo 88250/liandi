@@ -31,7 +31,11 @@ export class Files {
     onLs(liandi: ILiandi, data: { files: IFile[], url: string }) {
         let filesHTML = '';
         data.files.forEach((item: IFile) => {
-            filesHTML += `<file-item dir="${item.isdir}" url="${data.url}" path="${item.path}" name="${item.name}"></file-item>`;
+            let className = ''
+            if (data.url === liandi.current.url && item.name === liandi.current.name && item.path === liandi.current.path) {
+                className = ' class="current"'
+            }
+            filesHTML += `<file-item${className} dir="${item.isdir}" url="${data.url}" path="${item.path}" name="${item.name}"></file-item>`;
         });
         this.listElement.innerHTML = filesHTML;
     }
@@ -41,9 +45,13 @@ export class Files {
         fileItemElement.setAttribute("path", data.newPath)
         fileItemElement.setAttribute("name", data.newName)
 
-        if (fileItemElement.getAttribute('dir') === 'false') {
-            liandi.editors.path = data.newPath;
-            liandi.editors.inputWrapElement.querySelector('input').value = data.newName
+        if (fileItemElement.classList.contains('current')) {
+            liandi.current.path = data.newPath;
+            liandi.current.name = data.newName;
+
+            if (fileItemElement.getAttribute('dir') === 'false') {
+                liandi.editors.inputWrapElement.querySelector('input').value = data.newName
+            }
         }
     }
 }

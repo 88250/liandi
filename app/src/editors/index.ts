@@ -6,12 +6,11 @@ import {rename} from "../util/rename";
 const Vditor = require('vditor');
 
 export class Editors {
-    public path: string
-    public url: string;
     public inputWrapElement: HTMLElement;
-    private element: HTMLElement;
+    public element: HTMLElement;
     private editorElement: HTMLElement;
     private vditor: any;
+    private timeoutId: number;
 
     constructor(liandi: ILiandi) {
         this.element = document.getElementById('editors');
@@ -23,7 +22,7 @@ export class Editors {
         });
 
         this.inputWrapElement.querySelector('input').addEventListener('input', () => {
-            rename(this.inputWrapElement.querySelector('input').value, this.url, this.path)
+            rename(this.inputWrapElement.querySelector('input').value, liandi.current.url, liandi.current.path)
         });
 
         this.editorElement = document.createElement('div');
@@ -32,6 +31,7 @@ export class Editors {
     }
 
     remove(liandi: ILiandi) {
+        clearTimeout(this.timeoutId);
         this.saveContent(liandi);
         this.element.innerHTML = '';
     }
@@ -43,8 +43,8 @@ export class Editors {
         liandi.ws.webSocket.send(JSON.stringify({
             cmd: 'put',
             param: {
-                url: this.url,
-                path: this.path,
+                url: liandi.current.url,
+                path: liandi.current.path,
                 content: this.vditor.getValue()
             },
         }));
@@ -62,13 +62,13 @@ export class Editors {
         if (this.editorElement.innerHTML !== '') {
             this.vditor.setValue(file.content);
         } else {
-            let timeoutId: number;
+
             this.vditor = new Vditor('liandiVditor', {
                 cache: false,
                 value: file.content,
                 input: () => {
-                    clearTimeout(timeoutId);
-                    timeoutId = window.setTimeout(() => {
+                    clearTimeout(this.timeoutId);
+                    this.timeoutId = window.setTimeout(() => {
                         this.saveContent(liandi);
                     }, 5000);
                 }

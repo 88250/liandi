@@ -10,21 +10,23 @@ customElements.define('file-item',
 
       const divElement = document.createElement('div')
       divElement.textContent = this.getAttribute('name')
-      divElement.addEventListener('click', () => {
-        const url = this.getAttribute('url')
-        const path = this.getAttribute('path')
-        const dir = this.getAttribute('dir')
 
+      divElement.addEventListener('click', () => {
         if (this.classList.contains('current')) {
           return
         }
-        if (!url) {
-          return
-        }
+
+        const url = this.getAttribute('url')
+        const path = this.getAttribute('path')
+        const dir = this.getAttribute('dir')
+        const name = this.getAttribute('name')
+
         this.parentElement.querySelectorAll('file-item').forEach((item) => {
           item.classList.remove('current')
         })
+
         this.className = 'current'
+
         if (dir === 'true') {
           window.liandi.liandi.ws.webSocket.send(JSON.stringify({
             cmd: 'ls',
@@ -44,8 +46,10 @@ customElements.define('file-item',
               path,
             },
           }))
-          window.liandi.liandi.editors.url = url
-          window.liandi.liandi.editors.path = path
+        }
+
+        window.liandi.liandi.current = {
+          url, name, path
         }
       })
 

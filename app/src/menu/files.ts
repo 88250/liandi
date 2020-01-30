@@ -3,7 +3,7 @@ import {i18n} from "../i18n";
 import {Constants} from "../constants";
 import {destroyDialog, dialog} from "../util/dialog";
 import {rename, validateName} from "../util/rename";
-import {removeLastPath} from "../util/path";
+import {getPath, removeLastPath} from "../util/path";
 
 export const initFilesMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu()
@@ -11,7 +11,7 @@ export const initFilesMenu = (liandi: ILiandi) => {
     menu.append(new remote.MenuItem({
         label: i18n[Constants.LANG].newFile,
         click: () => {
-            const target = liandi.menus.itemData.target;
+            const itemData = liandi.menus.itemData;
             dialog({
                 title: i18n[Constants.LANG].newFile,
                 content: `<input class="input" value="">
@@ -31,11 +31,16 @@ export const initFilesMenu = (liandi: ILiandi) => {
                 if (!validateName(name)) {
                     return false
                 }
+
+                let path = removeLastPath(itemData.path) + name
+                if (!itemData.target) {
+                    path = getPath(itemData.path) + name
+                }
                 liandi.ws.webSocket.send(JSON.stringify({
                     cmd: 'create',
                     param: {
-                        url: target.getAttribute('url'),
-                        path: removeLastPath(target.getAttribute('path')) + name
+                        url: itemData.url,
+                        path
 
                     },
                 }));
@@ -47,7 +52,7 @@ export const initFilesMenu = (liandi: ILiandi) => {
     menu.append(new remote.MenuItem({
         label: i18n[Constants.LANG].newFolder,
         click: () => {
-            const target = liandi.menus.itemData.target;
+            const itemData = liandi.menus.itemData;
             dialog({
                 title: i18n[Constants.LANG].newFolder,
                 content: `<input class="input" value="">
@@ -67,12 +72,16 @@ export const initFilesMenu = (liandi: ILiandi) => {
                 if (!validateName(name)) {
                     return false
                 }
+
+                let path = removeLastPath(itemData.path) + name + '/'
+                if (!itemData.target) {
+                    path = getPath(itemData.path) + name + '/'
+                }
                 liandi.ws.webSocket.send(JSON.stringify({
                     cmd: 'mkdir',
                     param: {
-                        url: target.getAttribute('url'),
-                        path: removeLastPath(target.getAttribute('path')) + name + '/'
-
+                        url: itemData.url,
+                        path
                     },
                 }));
                 destroyDialog()
@@ -83,10 +92,10 @@ export const initFilesMenu = (liandi: ILiandi) => {
     menu.append(new remote.MenuItem({
         label: i18n[Constants.LANG].delete,
         click: () => {
-            const target = liandi.menus.itemData.target;
+            const itemData = liandi.menus.itemData;
             dialog({
                 title: i18n[Constants.LANG].delete,
-                content: `${i18n[Constants.LANG].confirmDelete} <b>${target.getAttribute('name')}</b>?
+                content: `${i18n[Constants.LANG].confirmDelete} <b>${itemData.name}</b>?
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
 <button class="button button--confirm">${i18n[Constants.LANG].confirm}</button><div class="fn__space"></div>
@@ -102,11 +111,14 @@ export const initFilesMenu = (liandi: ILiandi) => {
                 liandi.ws.webSocket.send(JSON.stringify({
                     cmd: 'remove',
                     param: {
-                        url: target.getAttribute('url'),
-                        path: target.getAttribute('path')
+                        url: itemData.url,
+                        path: itemData.path
 
                     },
                 }));
+                if (itemData.target && itemData.target.classList.contains('current')) {
+                    liandi.editors.element.innerHTML = ''
+                }
                 destroyDialog()
             })
         }
@@ -115,10 +127,10 @@ export const initFilesMenu = (liandi: ILiandi) => {
     menu.append(new remote.MenuItem({
         label: i18n[Constants.LANG].rename,
         click: () => {
-            const target = liandi.menus.itemData.target;
+            const itemData = liandi.menus.itemData;
             dialog({
                 title: i18n[Constants.LANG].rename,
-                content: `<input class="input" value="${target.getAttribute('name')}">
+                content: `<input class="input" value="${itemData.name}">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
 <button class="button button--confirm">${i18n[Constants.LANG].save}</button><div class="fn__space"></div>
@@ -131,7 +143,7 @@ export const initFilesMenu = (liandi: ILiandi) => {
             })
             dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
                 const newPath = rename((dialogElement.querySelector('.input') as HTMLInputElement).value,
-                    target.getAttribute('url'), target.getAttribute('path'))
+                    itemData.url, itemData.path)
 
                 if (newPath) {
                     destroyDialog()

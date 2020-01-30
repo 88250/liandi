@@ -3,7 +3,10 @@ import {initNavigationMenu} from "./navigation";
 
 export class Menus {
     public itemData: {
-        target: HTMLElement
+        target?: HTMLElement
+        name?: string
+        url: string
+        path: string
     }
 
     constructor(liandi: ILiandi) {
@@ -17,6 +20,8 @@ export class Menus {
                     let isTarget = false
                     if (target.parentElement.classList.contains('files__list')) {
                         isTarget = true
+                        filesMenu.items[2].enabled = true
+                        filesMenu.items[3].enabled = true
                         filesMenu.popup({
                             callback: () => {
                                 target.parentElement.querySelectorAll('file-item').forEach(item => {
@@ -36,7 +41,12 @@ export class Menus {
                     }
 
                     if (isTarget) {
-                        this.itemData = {target};
+                        this.itemData = {
+                            target,
+                            name: target.getAttribute('name'),
+                            url: target.getAttribute('url'),
+                            path: target.getAttribute('path'),
+                        };
                         if (!target.classList.contains('current')) {
                             target.parentElement.querySelectorAll('file-item').forEach(item => {
                                 item.classList.remove('focus')
@@ -46,6 +56,18 @@ export class Menus {
                         event.preventDefault();
                         break;
                     }
+                }
+
+                if (target.classList.contains('files__list') && liandi.current) {
+                    this.itemData = {
+                        url: liandi.current.url,
+                        path: liandi.current.path
+                    };
+                    filesMenu.items[2].enabled = false
+                    filesMenu.items[3].enabled = false
+                    filesMenu.popup();
+                    event.preventDefault();
+                    break;
                 }
 
                 target = target.parentElement;

@@ -27,14 +27,23 @@ declare interface ILiandi {
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
     };
     editors?: {
-        url?: string
-        path?: string
+        element: HTMLElement
         inputWrapElement: HTMLElement
         remove: (liandi: ILiandi) => void
         onGet: (liandi: ILiandi, file: { name: string, content: string }) => void
     };
     menus?: {
-        itemData: {target: HTMLElement}
+        itemData: {
+            target?: HTMLElement
+            name?: string
+            url: string
+            path: string
+        }
+    },
+    current?: {
+        url: string
+        path: string
+        name: string
     }
 }
 
