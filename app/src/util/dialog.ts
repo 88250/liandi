@@ -1,5 +1,5 @@
 export const destroyDialog = () => {
-    const dialogElement =   document.getElementById('#dialog')
+    const dialogElement =   document.getElementById('dialog')
     if (dialogElement) {
         dialogElement.remove();
     }
