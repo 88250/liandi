@@ -4,7 +4,7 @@ import {Constants} from "../constants";
 import {destroyDialog, dialog} from "./dialog";
 import {i18n} from "../i18n";
 
-export const mountFile = async (webSocket: WebSocket) => {
+export const mountFile = async (liandi: ILiandi) => {
     const filePath = await remote.dialog.showOpenDialog({
         defaultPath: homedir(),
         properties: ['openDirectory', 'openFile'],
@@ -12,17 +12,14 @@ export const mountFile = async (webSocket: WebSocket) => {
     if (filePath.filePaths.length === 0) {
         return;
     }
-    webSocket.send(JSON.stringify({
-        cmd: 'mount',
-        param: {
-            url: `${Constants.WEBDAV_ADDRESS}/`,
-            path: filePath.filePaths[0]
-        }
-    }));
+    liandi.ws.send('mount', {
+        url: `${Constants.WEBDAV_ADDRESS}/`,
+        path: filePath.filePaths[0]
+    });
 }
 
 
-export const mountWebDAV = (webSocket: WebSocket) => {
+export const mountWebDAV = (liandi: ILiandi) => {
     dialog({
         title: i18n[Constants.LANG].mountWebDAV,
         content: `<input placeholder="https://dav.jianguoyun.com/dav/" class="input">
@@ -43,14 +40,11 @@ export const mountWebDAV = (webSocket: WebSocket) => {
     });
     dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
         const inputs = dialogElement.querySelectorAll("input")
-        webSocket.send(JSON.stringify({
-            cmd: 'mountremote',
-            param: {
-                url: inputs[0].value,
-                user: inputs[1].value,
-                password: inputs[2].value,
-            }
-        }));
+        liandi.ws.send('mountremote', {
+            url: inputs[0].value,
+            user: inputs[1].value,
+            password: inputs[2].value,
+        });
     });
 
 }

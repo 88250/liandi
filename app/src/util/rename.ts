@@ -31,13 +31,10 @@ export const rename = (name: string, url: string, oldPath: string) => {
 
     const newPath = oldPath.replace(oldName + (oldPath.endsWith('/') ? '/' : ''), '') + name
         + (oldPath.endsWith('/') ? '/' : '');
-    window.liandi.liandi.ws.webSocket.send(JSON.stringify({
-        cmd: 'rename',
-        param: {
+    window.liandi.liandi.ws.send('rename', {
             url,
             oldPath,
             newPath
-        },
-    }));
+        });
     return newPath;
 };

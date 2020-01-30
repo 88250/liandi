@@ -75,10 +75,10 @@ export class WebSocketUtil {
 
                         const listElement = document.querySelectorAll('#dialog .list__item');
                         listElement[0].addEventListener('click', () => {
-                            mountFile(liandi.ws.webSocket);
+                            mountFile(liandi);
                         });
                         listElement[1].addEventListener('click', () => {
-                            mountWebDAV(liandi.ws.webSocket);
+                            mountWebDAV(liandi);
                         });
                         return;
                     }
@@ -93,13 +93,10 @@ export class WebSocketUtil {
                 case 'create':
                 case 'remove':
                 case 'mkdir':
-                    window.liandi.liandi.ws.webSocket.send(JSON.stringify({
-                        cmd: 'ls',
-                        param: {
+                    window.liandi.liandi.ws.send('ls',  {
                             url: response.data.url,
                             path: response.data.path,
-                        },
-                    }));
+                        });
                     break;
             }
         };

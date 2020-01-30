@@ -40,14 +40,11 @@ export class Editors {
         if (this.element.innerHTML === '') {
             return;
         }
-        liandi.ws.webSocket.send(JSON.stringify({
-            cmd: 'put',
-            param: {
+        liandi.ws.send( 'put',  {
                 url: liandi.current.url,
                 path: liandi.current.path,
                 content: this.vditor.getValue()
-            },
-        }));
+            });
         showMessage(i18n[Constants.LANG].saveSuccess);
     }
 

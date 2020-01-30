@@ -23,7 +23,7 @@ export class Files {
         } else {
             const lastPaths = path.substr(0, path.lastIndexOf('/')).lastIndexOf('/') + 1;
             window.liandi.liandi.files.element.firstElementChild.innerHTML =
-                `<file-item class="list__item" dir="true" name="${i18n[Constants.LANG].back}" url="${url}" path="${path.substring(
+                `<file-item class="list__item" name="${i18n[Constants.LANG].back}" path="${path.substring(
                     0, lastPaths)}"></file-item>`;
         }
     }
@@ -35,7 +35,7 @@ export class Files {
             if (data.url === liandi.current.url && item.name === liandi.current.name && item.path === liandi.current.path) {
                 className = ' current';
             }
-            filesHTML += `<file-item class="list__item${className}" dir="${item.isdir}" url="${data.url}" path="${item.path}" name="${item.name}"></file-item>`;
+            filesHTML += `<file-item class="list__item${className}" path="${item.path}" name="${item.name}"></file-item>`;
         });
         this.listElement.innerHTML = filesHTML;
     }

@@ -8,14 +8,14 @@ export const initMountMenu = (liandi: ILiandi) => {
     menu.append(new remote.MenuItem({
         label: i18n[Constants.LANG].mount,
         click: async () => {
-            mountFile(liandi.ws.webSocket)
+            mountFile(liandi)
         }
     }));
 
     menu.append(new remote.MenuItem({
         label: i18n[Constants.LANG].mountWebDAV,
         click: async () => {
-            mountWebDAV(liandi.ws.webSocket)
+            mountWebDAV(liandi)
         }
     }));
     return menu;

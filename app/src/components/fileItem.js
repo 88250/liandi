@@ -17,35 +17,30 @@ customElements.define('file-item',
         }
 
         const path = this.getAttribute('path')
+        const url = window.liandi.liandi.current.url
 
         this.parentElement.querySelectorAll('file-item').forEach((item) => {
           item.classList.remove('current')
         })
 
         this.classList.add('current')
-        if (dir === 'true') {
-          window.liandi.liandi.ws.webSocket.send(JSON.stringify({
-            cmd: 'ls',
-            param: {
+        if (path.endsWith('/')) {
+          window.liandi.liandi.ws.send('ls',  {
               url,
               path,
-            },
-          }))
+            })
 
           window.liandi.liandi.editors.remove(window.liandi.liandi)
           window.liandi.liandi.files.renderBack(url, path)
         } else {
-          window.liandi.liandi.ws.webSocket.send(JSON.stringify({
-            cmd: 'get',
-            param: {
+          window.liandi.liandi.ws.send('get', {
               url,
               path,
-            },
-          }))
+            })
         }
 
         window.liandi.liandi.current = {
-           name, path
+           path
         }
       })
 

@@ -36,14 +36,11 @@ export const initFilesMenu = (liandi: ILiandi) => {
                 if (!itemData.target) {
                     path = getPath(itemData.path) + name;
                 }
-                liandi.ws.webSocket.send(JSON.stringify({
-                    cmd: 'create',
-                    param: {
-                        url: itemData.url,
-                        path
+                liandi.ws.send('create', {
+                    url: itemData.url,
+                    path
 
-                    },
-                }));
+                });
                 destroyDialog();
             });
         }
@@ -77,13 +74,10 @@ export const initFilesMenu = (liandi: ILiandi) => {
                 if (!itemData.target) {
                     path = getPath(itemData.path) + name + '/';
                 }
-                liandi.ws.webSocket.send(JSON.stringify({
-                    cmd: 'mkdir',
-                    param: {
-                        url: itemData.url,
-                        path
-                    },
-                }));
+                liandi.ws.send('mkdir', {
+                    url: itemData.url,
+                    path
+                });
                 destroyDialog();
             });
         }
@@ -108,14 +102,10 @@ export const initFilesMenu = (liandi: ILiandi) => {
                 destroyDialog();
             });
             dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
-                liandi.ws.webSocket.send(JSON.stringify({
-                    cmd: 'remove',
-                    param: {
+                liandi.ws.send('remove',{
                         url: itemData.url,
                         path: itemData.path
-
-                    },
-                }));
+                    });
                 if (itemData.target && itemData.target.classList.contains('current')) {
                     liandi.editors.element.innerHTML = '';
                 }

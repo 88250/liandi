@@ -9,12 +9,9 @@ export const initNavigationMenu = (liandi: ILiandi) => {
         label: i18n[Constants.LANG].unMount,
         click: () => {
             const itemData = liandi.menus.itemData;
-            liandi.ws.webSocket.send(JSON.stringify({
-                cmd: 'unmount',
-                param: {
-                    url:itemData.url
-                }
-            }));
+            liandi.ws.send('unmount', {
+                url: itemData.url
+            });
             liandi.menus.itemData.target.remove();
             const filesFileItemElement = liandi.files.listElement.firstElementChild;
             if (filesFileItemElement && filesFileItemElement.tagName === 'FILE-ITEM'
