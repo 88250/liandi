@@ -21,7 +21,7 @@ export class Editors {
             this.saveContent(liandi);
         });
 
-        this.inputWrapElement.querySelector('input').addEventListener('input', () => {
+        this.inputWrapElement.querySelector('input').addEventListener('blur', () => {
             rename(this.inputWrapElement.querySelector('input').value, liandi.current.url, liandi.current.path);
         });
 
