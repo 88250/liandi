@@ -48,7 +48,7 @@ export class Files {
         if (fileItemElement.classList.contains('current')) {
             liandi.current.path = data.newPath;
 
-            if (fileItemElement.getAttribute('dir') === 'false') {
+            if (!data.newPath.endsWith('/')) {
                 liandi.editors.inputWrapElement.querySelector('input').value = data.newName;
             }
         }
