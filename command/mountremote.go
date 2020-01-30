@@ -31,7 +31,8 @@ func (cmd *mountremote) Exec() {
 	util.StartServeWebDAV()
 	if !alreadyMount {
 		ret.Data = map[string]interface{}{
-			"url": url,
+			"url":    url,
+			"remote": true,
 		}
 		util.Push(ret.Bytes())
 	}
