@@ -37,6 +37,8 @@ func NewCommand(cmdStr string, param map[string]interface{}) Cmd {
 		return &unmount{&BaseCmd{param: param}}
 	case "ls":
 		return &ls{&BaseCmd{param: param}}
+	case "lsd":
+		return &lsd{&BaseCmd{param: param}}
 	case "get":
 		return &get{&BaseCmd{param: param}}
 	case "put":

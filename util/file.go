@@ -74,6 +74,34 @@ func Ls(url, path string) (ret []*File, err error) {
 	return
 }
 
+func Lsd(url, path string) (ret []*File, err error) {
+	ret = []*File{}
+
+	dir := Conf.dir(url)
+	if nil == dir {
+		return nil, ErrDirNotExist
+	}
+
+	files, err := dir.Ls(path)
+	if nil != err {
+		return nil, err
+	}
+
+	for _, f := range files {
+		if strings.HasPrefix(f.Name(), ".") || dir.isSkipDir(f.Name()) {
+			continue
+		}
+
+		if !f.IsDir() {
+			continue
+		}
+
+		file := fromFileInfo(f)
+		ret = append(ret, file)
+	}
+	return
+}
+
 var (
 	ErrDirNotExist = errors.New("查询目录失败")
 )
