@@ -17,7 +17,7 @@ class App {
         this.liandi.navigation =  new Navigation(this.liandi);
         this.liandi.files =  new Files();
         this.liandi.editors =  new Editors(this.liandi);
-        const menus = new Menus(this.liandi);
+        this.liandi.menus = new Menus(this.liandi);
 
         resize('resize');
         resize('resize2');

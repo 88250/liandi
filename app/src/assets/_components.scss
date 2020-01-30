@@ -11,4 +11,8 @@ file-item {
     background-color: $blue;
     color: #fff;
   }
+
+  &.focus {
+    background-color: #ebeef1;
+  }
 }

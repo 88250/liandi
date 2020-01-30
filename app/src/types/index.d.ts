@@ -33,6 +33,9 @@ declare interface ILiandi {
         remove: (liandi: ILiandi) => void
         onGet: (liandi: ILiandi, file: { name: string, content: string }) => void
     };
+    menus?: {
+        itemData: {target: HTMLElement}
+    }
 }
 
 interface II18n {
