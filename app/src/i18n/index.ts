@@ -9,6 +9,7 @@ export const i18n: II18n = {
         "save": "保存",
         "cancel": "取消",
         "confirm": "确定",
+        "confirmDelete": "确定删除",
         "saveSuccess": "保存成功",
         "back": "返回上一层",
         "open": "打开",
