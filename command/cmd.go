@@ -45,6 +45,8 @@ func NewCommand(cmdStr string, param map[string]interface{}) Cmd {
 		return &rename{&BaseCmd{param: param}}
 	case "mkdir":
 		return &mkdir{&BaseCmd{param: param}}
+	case "remove":
+		return &remove{&BaseCmd{param: param}}
 	}
 	return nil
 }

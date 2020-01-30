@@ -123,3 +123,11 @@ func Mkdir(url, path string) error {
 	}
 	return dir.Mkdir(path)
 }
+
+func Remove(url, path string) error {
+	dir := Conf.dir(url)
+	if nil == dir {
+		return ErrDirNotExist
+	}
+	return dir.Remove(path)
+}

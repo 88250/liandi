@@ -188,6 +188,15 @@ func (dir *Dir) Mkdir(path string) error {
 	return nil
 }
 
+func (dir *Dir) Remove(path string) error {
+	if err := dir.client.Remove(path); nil != err {
+		msg := fmt.Sprintf("在目录 [%s] 下删除 [%s] 失败：%s", dir.URL, path, err)
+		Logger.Errorf(msg)
+		return errors.New(msg)
+	}
+	return nil
+}
+
 func (dir *Dir) Index() {
 	Logger.Debugf("开始索引 [%s] 目录", dir.URL)
 	files := dir.Files("/")
