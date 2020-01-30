@@ -86,7 +86,32 @@ export class Menus {
         this.fileItemMenu.menu.append(new remote.MenuItem({
             label: i18n[Constants.LANG].delete,
             click: () => {
-                showMessage('TODO')
+                const target = this.fileItemMenu.data.target;
+                dialog({
+                    title: i18n[Constants.LANG].delete,
+                    content: `${i18n[Constants.LANG].confirmDelete} <b>${target.getAttribute('name')}</b>?
+<div class="fn__hr"></div>
+<div class="fn__flex"><div class="fn__flex-1"></div>
+<button class="button button--confirm">${i18n[Constants.LANG].confirm}</button><div class="fn__space"></div>
+<button class="button button--cancel">${i18n[Constants.LANG].cancel}</button></div>`,
+                    width: 400
+                })
+
+                const dialogElement = document.querySelector('#dialog')
+                dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
+                    destroyDialog()
+                })
+                dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
+                    liandi.ws.webSocket.send(JSON.stringify({
+                        cmd: 'remove',
+                        param: {
+                            url: target.getAttribute('url'),
+                            path: target.getAttribute('path')
+
+                        },
+                    }));
+                    destroyDialog()
+                })
             }
         }));
 
