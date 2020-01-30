@@ -29,6 +29,7 @@ declare interface ILiandi {
     editors?: {
         element: HTMLElement
         inputWrapElement: HTMLElement
+        saveContent: (liandi: ILiandi) => void
         remove: (liandi: ILiandi) => void
         onGet: (liandi: ILiandi, file: { name: string, content: string }) => void
     };

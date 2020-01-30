@@ -36,7 +36,7 @@ export class Editors {
         this.element.innerHTML = '';
     }
 
-    private saveContent(liandi: ILiandi) {
+    public saveContent(liandi: ILiandi) {
         if (this.element.innerHTML === '') {
             return;
         }
@@ -45,7 +45,6 @@ export class Editors {
                 path: liandi.current.path,
                 content: this.vditor.getValue()
             });
-        showMessage(i18n[Constants.LANG].saveSuccess);
     }
 
     onGet(liandi: ILiandi, file: { content: string, name: string }) {

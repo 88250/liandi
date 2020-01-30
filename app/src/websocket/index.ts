@@ -52,6 +52,9 @@ export class WebSocketUtil {
                 return;
             }
             switch (response.cmd) {
+                case 'put':
+                    showMessage(i18n[Constants.LANG].saveSuccess);
+                    break
                 case 'mount':
                 case 'mountremote':
                     liandi.navigation.onMount(response.data);
