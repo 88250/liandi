@@ -37,7 +37,7 @@ declare interface ILiandi {
             target?: HTMLElement
             name?: string
             url: string
-            path: string
+            path?: string
         }
     };
     current?: {

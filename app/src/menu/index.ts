@@ -7,7 +7,7 @@ export class Menus {
         target?: HTMLElement
         name?: string
         url: string
-        path: string
+        path?: string
     };
 
     constructor(liandi: ILiandi) {
@@ -18,50 +18,64 @@ export class Menus {
         window.addEventListener('contextmenu', (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
-                if (target.tagName === 'FILE-ITEM') {
-                    let isTarget = false;
-                    if (target.parentElement.classList.contains('files__list')) {
-                        isTarget = true;
-                        filesMenu.items[2].enabled = true;
-                        filesMenu.items[3].enabled = true;
-                        filesMenu.popup({
-                            callback: () => {
-                                if (target.parentElement) {
-                                    target.parentElement.querySelectorAll('file-item').forEach(item => {
-                                        item.classList.remove('focus');
-                                    });
-                                }
-                            }
-                        });
-                    } else if (target.parentElement.classList.contains('navigation')) {
-                        isTarget = true;
-                        navigationMenu.popup({
-                            callback: () => {
-                                if (target.parentElement) {
-                                    target.parentElement.querySelectorAll('file-item').forEach(item => {
-                                        item.classList.remove('focus');
-                                    });
-                                }
-                            }
-                        });
-                    }
+                if (target.classList.contains('navigation')) {
+                    mountMenu.popup();
+                    event.preventDefault();
+                    break;
+                }
 
-                    if (isTarget) {
-                        this.itemData = {
-                            target,
-                            name: target.getAttribute('name'),
-                            url: target.getAttribute('url'),
-                            path: target.getAttribute('path'),
-                        };
-                        if (!target.classList.contains('current')) {
-                            target.parentElement.querySelectorAll('file-item').forEach(item => {
-                                item.classList.remove('focus');
-                            });
-                            target.classList.add('focus');
+                if (target.tagName === 'TREE-ITEM') {
+                    this.itemData = {
+                        target,
+                        url: target.getAttribute('url'),
+                    };
+                    navigationMenu.popup({
+                        callback: () => {
+                            if (target.parentElement) {
+                                target.parentElement.querySelectorAll('tree-item').forEach(item => {
+                                    item.classList.remove('focus');
+                                });
+                            }
                         }
-                        event.preventDefault();
-                        break;
+                    });
+                    if (!target.classList.contains('current')) {
+                        target.parentElement.querySelectorAll('file-item').forEach(item => {
+                            item.classList.remove('focus');
+                        });
+                        target.classList.add('focus');
                     }
+                    event.preventDefault();
+                    break;
+                }
+
+                if (target.tagName === 'FILE-ITEM') {
+                    this.itemData = {
+                        target,
+                        name: target.getAttribute('name'),
+                        url: liandi.current.url,
+                        path: target.getAttribute('path'),
+                    };
+
+                    filesMenu.items[2].enabled = true;
+                    filesMenu.items[3].enabled = true;
+                    filesMenu.popup({
+                        callback: () => {
+                            if (target.parentElement) {
+                                target.parentElement.querySelectorAll('file-item').forEach(item => {
+                                    item.classList.remove('focus');
+                                });
+                            }
+                        }
+                    });
+
+                    if (!target.classList.contains('current')) {
+                        target.parentElement.querySelectorAll('file-item').forEach(item => {
+                            item.classList.remove('focus');
+                        });
+                        target.classList.add('focus');
+                    }
+                    event.preventDefault();
+                    break;
                 }
 
                 if (target.classList.contains('files__list') && liandi.current) {
@@ -72,12 +86,6 @@ export class Menus {
                     filesMenu.items[2].enabled = false;
                     filesMenu.items[3].enabled = false;
                     filesMenu.popup();
-                    event.preventDefault();
-                    break;
-                }
-
-                if (target.classList.contains('navigation')) {
-                    mountMenu.popup();
                     event.preventDefault();
                     break;
                 }

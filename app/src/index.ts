@@ -13,7 +13,13 @@ class App {
     public liandi: ILiandi;
 
     constructor() {
-        this.liandi = {};
+        this.liandi = {
+            current: {
+                url: '',
+                path: '',
+                name: ''
+            }
+        };
         this.liandi.ws =  new WebSocketUtil(this.liandi);
         this.liandi.navigation =  new Navigation();
         this.liandi.files =  new Files();

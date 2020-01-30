@@ -42,9 +42,7 @@ ${getName(url)}`
         })
         window.liandi.liandi.editors.remove(window.liandi.liandi)
         window.liandi.liandi.files.renderBack(url, '/')
-        window.liandi.liandi.current = {
-          url,
-        }
+        window.liandi.liandi.current.url = url
       })
 
       const shadowRoot = this.attachShadow({mode: 'closed'})
