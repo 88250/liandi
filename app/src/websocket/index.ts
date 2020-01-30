@@ -45,6 +45,7 @@ export class WebSocketUtil {
                 case 'mountremote':
                     liandi.navigation.onMount(liandi, response.data.url);
                     hideMessage()
+                    destroyDialog()
                     break;
                 case 'ls':
                     liandi.files.onLs(liandi, response.data);
