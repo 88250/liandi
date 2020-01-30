@@ -52,6 +52,16 @@ Logo(TBD)
 * 界面支持多主题
 * 支持导出静态站点，内置多套主题模板
 
+### 🏗️ 技术架构
+
+![链滴笔记架构图](https://user-images.githubusercontent.com/873584/73417483-2e847280-4353-11ea-9e4c-2594c4b08b35.png)
+
+* 整体通过 Electron 打包运行主进程，实现自动更新机制
+* golang 实现 WebSocket 服务端，通过命令模式和主进程交互
+* golang 实现后端 WebDAV 服务端和客户端
+* 文件存取（包括操作本地文件）通过 WebDAV 客户端进行
+* 使用 Vditor 编辑器，默认所见即所得模式
+
 ### 📜 文档
 
 * [链滴笔记路线图](https://hacpai.com/article/1579786655216)
