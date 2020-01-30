@@ -1,5 +1,5 @@
-github.com/88250/gowebdav v0.0.0-20200130090842-2cbbdb8f322d h1:QDy+ea/N4DlOCIENkx165lttT71R067B91B1wsLLISs=
-github.com/88250/gowebdav v0.0.0-20200130090842-2cbbdb8f322d/go.mod h1:RwOJcas/Iq8Luo0ilF9yPiyegDBjPUV1ldMT6gC2k00=
+github.com/88250/gowebdav v0.0.0-20200130135746-8e14949ee2ed h1:UxjcodBP+YHaLUSdOZNeKt8oOLU24g8eAYLUlxARk80=
+github.com/88250/gowebdav v0.0.0-20200130135746-8e14949ee2ed/go.mod h1:RwOJcas/Iq8Luo0ilF9yPiyegDBjPUV1ldMT6gC2k00=
 github.com/88250/gulu v1.0.0 h1:aTUuoVlZhzN8M1bmqvySJBP7GxGwRiayaCCi94KualI=
 github.com/88250/gulu v1.0.0/go.mod h1:a2POIziN+QFeNT4Mj7FHH2lz1HEaFlMRF6wPE0NHM4U=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
