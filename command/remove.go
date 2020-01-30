@@ -12,7 +12,11 @@
 
 package command
 
-import "github.com/88250/liandi/util"
+import (
+	"path"
+
+	"github.com/88250/liandi/util"
+)
 
 type remove struct {
 	*BaseCmd
@@ -22,11 +26,15 @@ func (cmd *remove) Exec() {
 	ret := util.NewCmdResult(cmd.Name())
 	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
-	path := cmd.param["path"].(string)
-	err := util.Remove(url, path)
+	p := cmd.param["path"].(string)
+	err := util.Remove(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+	}
+	ret.Data = map[string]interface{}{
+		"url":  url,
+		"path": path.Dir(path.Clean(p)),
 	}
 	util.Push(ret.Bytes())
 }
