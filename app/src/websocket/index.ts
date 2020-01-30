@@ -27,10 +27,7 @@ export class WebSocketUtil {
         this.webSocket = new WebSocket(Constants.WEBSOCKET_ADDREDD);
         this.webSocket.onopen = () => {
             if (this.isFirst) {
-                liandi.ws.webSocket.send(JSON.stringify({
-                    cmd: 'dirs',
-                    param: {},
-                }));
+                this.send('dirs', {})
             }
             this.isFirst = false;
         };
