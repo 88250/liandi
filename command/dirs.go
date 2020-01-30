@@ -20,11 +20,7 @@ type dirs struct {
 
 func (cmd *dirs) Exec() {
 	ret := util.NewCmdResult(cmd.Name())
-	urls := []string{}
-	for _, dir := range util.Conf.Dirs {
-		urls = append(urls, dir.URL)
-	}
-	ret.Data = urls
+	ret.Data = util.Conf.Dirs
 	util.Push(ret.Bytes())
 }
 
