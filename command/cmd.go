@@ -31,34 +31,34 @@ func (cmd *BaseCmd) Id() float64 {
 	return cmd.id
 }
 
-func NewCommand(cmdStr string, param map[string]interface{}) Cmd {
+func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) Cmd {
 	switch cmdStr {
 	case "dirs":
-		return &dirs{&BaseCmd{param: param}}
+		return &dirs{&BaseCmd{id: cmdId, param: param}}
 	case "mount":
-		return &mount{&BaseCmd{param: param}}
+		return &mount{&BaseCmd{id: cmdId, param: param}}
 	case "mountremote":
-		return &mountremote{&BaseCmd{param: param}}
+		return &mountremote{&BaseCmd{id: cmdId, param: param}}
 	case "unmount":
-		return &unmount{&BaseCmd{param: param}}
+		return &unmount{&BaseCmd{id: cmdId, param: param}}
 	case "ls":
-		return &ls{&BaseCmd{param: param}}
+		return &ls{&BaseCmd{id: cmdId, param: param}}
 	case "lsd":
-		return &lsd{&BaseCmd{param: param}}
+		return &lsd{&BaseCmd{id: cmdId, param: param}}
 	case "get":
-		return &get{&BaseCmd{param: param}}
+		return &get{&BaseCmd{id: cmdId, param: param}}
 	case "put":
-		return &put{&BaseCmd{param: param}}
+		return &put{&BaseCmd{id: cmdId, param: param}}
 	case "create":
-		return &create{&BaseCmd{param: param}}
+		return &create{&BaseCmd{id: cmdId, param: param}}
 	case "search":
-		return &search{&BaseCmd{param: param}}
+		return &search{&BaseCmd{id: cmdId, param: param}}
 	case "rename":
-		return &rename{&BaseCmd{param: param}}
+		return &rename{&BaseCmd{id: cmdId, param: param}}
 	case "mkdir":
-		return &mkdir{&BaseCmd{param: param}}
+		return &mkdir{&BaseCmd{id: cmdId, param: param}}
 	case "remove":
-		return &remove{&BaseCmd{param: param}}
+		return &remove{&BaseCmd{id: cmdId, param: param}}
 	}
 	return nil
 }
