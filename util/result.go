@@ -19,18 +19,19 @@ import (
 )
 
 type Result struct {
-	Cmd string `json:"cmd"`
+	Cmd   string  `json:"cmd"`
+	ReqId float64 `json:"reqId"`
 	*gulu.Result
 }
 
 func NewResult() *Result {
-	return &Result{"", &gulu.Result{Code: 0, Msg: "", Data: nil}}
+	return &Result{"", 0, &gulu.Result{Code: 0, Msg: "", Data: nil}}
 }
 
-func NewCmdResult(cmd string) *Result {
+func NewCmdResult(cmdName string, cmdId float64) *Result {
 	ret := NewResult()
-	ret.Cmd = cmd
-
+	ret.Cmd = cmdName
+	ret.ReqId = cmdId
 	return ret
 }
 

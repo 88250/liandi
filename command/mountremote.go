@@ -21,7 +21,7 @@ type mountremote struct {
 }
 
 func (cmd *mountremote) Exec() {
-	ret := util.NewCmdResult(cmd.Name())
+	ret := util.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
 	user := cmd.param["user"].(string)

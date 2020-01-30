@@ -19,7 +19,7 @@ type ls struct {
 }
 
 func (cmd *ls) Exec() {
-	ret := util.NewCmdResult(cmd.Name())
+	ret := util.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
 	path := cmd.param["path"].(string)

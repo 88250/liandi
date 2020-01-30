@@ -12,38 +12,31 @@
 
 package command
 
-import (
-	"path"
+import "github.com/88250/liandi/util"
 
-	"github.com/88250/liandi/util"
-)
-
-type remove struct {
+type lsd struct {
 	*BaseCmd
 }
 
-func (cmd *remove) Exec() {
+func (cmd *lsd) Exec() {
 	ret := util.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
-	p := cmd.param["path"].(string)
-	err := util.Remove(url, p)
+	path := cmd.param["path"].(string)
+	files, err := util.Lsd(url, path)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-	}
-
-	p = path.Dir(path.Clean(p))
-	if "." == p {
-		p = "/"
-	}
-	ret.Data = map[string]interface{}{
-		"url":  url,
-		"path": p,
+		return
+	} else {
+		ret.Data = map[string]interface{}{
+			"url":   url,
+			"files": files,
+		}
 	}
 	util.Push(ret.Bytes())
 }
 
-func (cmd *remove) Name() string {
-	return "remove"
+func (cmd *lsd) Name() string {
+	return "lsd"
 }

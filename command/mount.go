@@ -21,7 +21,7 @@ type mount struct {
 }
 
 func (cmd *mount) Exec() {
-	ret := util.NewCmdResult(cmd.Name())
+	ret := util.NewCmdResult(cmd.Name(), cmd.id)
 	p := cmd.param["path"].(string)
 	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)

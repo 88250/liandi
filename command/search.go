@@ -19,7 +19,7 @@ type search struct {
 }
 
 func (cmd *search) Exec() {
-	ret := util.NewCmdResult(cmd.Name())
+	ret := util.NewCmdResult(cmd.Name(), cmd.id)
 	k := cmd.param["k"].(string)
 	util.Search(k)
 	util.Push(ret.Bytes())

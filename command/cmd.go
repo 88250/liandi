@@ -18,11 +18,17 @@ import (
 
 type Cmd interface {
 	Name() string
+	Id() float64
 	Exec()
 }
 
 type BaseCmd struct {
+	id    float64
 	param map[string]interface{}
+}
+
+func (cmd *BaseCmd) Id() float64 {
+	return cmd.id
 }
 
 func NewCommand(cmdStr string, param map[string]interface{}) Cmd {
@@ -37,6 +43,8 @@ func NewCommand(cmdStr string, param map[string]interface{}) Cmd {
 		return &unmount{&BaseCmd{param: param}}
 	case "ls":
 		return &ls{&BaseCmd{param: param}}
+	case "lsd":
+		return &lsd{&BaseCmd{param: param}}
 	case "get":
 		return &get{&BaseCmd{param: param}}
 	case "put":
