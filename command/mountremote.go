@@ -13,44 +13,30 @@
 package command
 
 import (
-	"path"
-	"strings"
-
 	"github.com/88250/liandi/util"
 )
 
-type create struct {
+type mountremote struct {
 	*BaseCmd
 }
 
-func (cmd *create) Exec() {
+func (cmd *mountremote) Exec() {
 	ret := util.NewCmdResult(cmd.Name())
 	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
-	p := cmd.param["path"].(string)
-	if !strings.HasSuffix(p, ".md") {
-		p += ".md"
-	}
-
-	err := util.Create(url, p)
-	if nil != err {
-		ret.Code = -1
-		ret.Msg = err.Error()
+	user := cmd.param["user"].(string)
+	password := cmd.param["password"].(string)
+	util.StopServeWebDAV()
+	url, alreadyMount := util.MountRemote(url, user, password)
+	util.StartServeWebDAV()
+	if !alreadyMount {
+		ret.Data = map[string]interface{}{
+			"url": url,
+		}
 		util.Push(ret.Bytes())
-		return
 	}
-
-	p = path.Dir(path.Clean(p))
-	if "." == p {
-		p = "/"
-	}
-	ret.Data = map[string]interface{}{
-		"url":  url,
-		"path": p,
-	}
-	util.Push(ret.Bytes())
 }
 
-func (cmd *create) Name() string {
-	return "create"
+func (cmd *mountremote) Name() string {
+	return "mountremote"
 }

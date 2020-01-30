@@ -122,7 +122,7 @@ func (conf *AppConf) dir(url string) *Dir {
 type Dir struct {
 	URL      string `json:"url"`      // WebDAV URL
 	Auth     string `json:"auth"`     // WebDAV 鉴权方式，空值表示不需要鉴权
-	Username string `json:"username"` // WebDAV 用户名
+	User     string `json:"username"` // WebDAV 用户名
 	Password string `json:"password"` // WebDAV 密码
 	Path     string `json:"path"`     // 本地文件系统文件夹路径，远程 WebDAV 的话该字段为空
 
@@ -134,7 +134,7 @@ func (dir *Dir) IsRemote() bool {
 }
 
 func (dir *Dir) InitClient() {
-	dir.client = gowebdav.NewClient(dir.URL, dir.Username, dir.Password)
+	dir.client = gowebdav.NewClient(dir.URL, dir.User, dir.Password)
 	dir.client.SetTimeout(7 * time.Second)
 }
 
@@ -170,6 +170,25 @@ func (dir *Dir) Put(path, content string) error {
 	return nil
 }
 
+func (dir *Dir) Stat(path string) (ret os.FileInfo, err error) {
+	if ret, err = dir.client.Stat(path); nil != err {
+		msg := fmt.Sprintf("查看目录 [%s] 下 [%s] 的元信息失败：%s", dir.URL, path, err)
+		Logger.Errorf(msg)
+		return nil, errors.New(msg)
+	}
+	return
+}
+
+func (dir *Dir) Exist(path string) (ret bool, err error) {
+	if _, err = dir.client.Stat(path); nil != err {
+		if _, ok := err.(*os.PathError); ok {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
+}
+
 func (dir *Dir) Rename(oldPath, newPath string) error {
 	if err := dir.client.Rename(oldPath, newPath, false); nil != err {
 		msg := fmt.Sprintf("重命名目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, oldPath, err)
@@ -202,7 +221,7 @@ func (dir *Dir) Index() {
 	files := dir.Files("/")
 	var docs []*Doc
 	for _, file := range files {
-		content, err := dir.Get(file.(gowebdav.File).Path())
+		content, err := dir.Get(file.(*gowebdav.File).Path())
 		if nil == err {
 			doc := newDoc(file.Name(), content, dir.URL, dir.Path)
 			docs = append(docs, doc)
@@ -217,7 +236,7 @@ func (dir *Dir) Unindex() {
 	files := dir.Files("/")
 	var docIds []string
 	for _, file := range files {
-		content, err := dir.Get(file.(gowebdav.File).Path())
+		content, err := dir.Get(file.(*gowebdav.File).Path())
 		if nil == err {
 			doc := newDoc(file.Name(), content, dir.URL, dir.Path)
 			docIds = append(docIds, doc.Id)
@@ -238,7 +257,7 @@ func (dir *Dir) Files(path string) (ret []os.FileInfo) {
 
 func (dir *Dir) files(files, ret *[]os.FileInfo) {
 	for _, file := range *files {
-		f := file.(gowebdav.File)
+		f := file.(*gowebdav.File)
 		if strings.HasPrefix(f.Name(), ".") {
 			continue
 		}

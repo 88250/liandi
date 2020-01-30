@@ -31,6 +31,8 @@ func NewCommand(cmdStr string, param map[string]interface{}) Cmd {
 		return &dirs{&BaseCmd{param: param}}
 	case "mount":
 		return &mount{&BaseCmd{param: param}}
+	case "mountremote":
+		return &mountremote{&BaseCmd{param: param}}
 	case "unmount":
 		return &unmount{&BaseCmd{param: param}}
 	case "ls":

@@ -32,7 +32,7 @@ type File struct {
 
 func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 	ret = &File{}
-	f := fileInfo.(gowebdav.File)
+	f := fileInfo.(*gowebdav.File)
 	ret.Path = f.Path()
 	ret.Name = f.Name()
 	ret.IsDir = f.IsDir()
@@ -100,6 +100,40 @@ func Put(url, path, content string) error {
 	doc := newDoc(fname, content, url, path)
 	Index(doc)
 	return nil
+}
+
+func Create(url, path string) error {
+	exist, err := Exist(url, path)
+	if nil != err {
+		return err
+	}
+	if exist {
+		return errors.New("文件名重复")
+	}
+	return Put(url, path, "")
+}
+
+func Exist(url, path string) (bool, error) {
+	dir := Conf.dir(url)
+	if nil == dir {
+		return false, ErrDirNotExist
+	}
+
+	return dir.Exist(path)
+}
+
+func Stat(url, path string) (ret *File, err error) {
+	dir := Conf.dir(url)
+	if nil == dir {
+		return nil, ErrDirNotExist
+	}
+
+	var f os.FileInfo
+	if f, err = dir.Stat(path); nil != err {
+		return nil, err
+	}
+	ret = fromFileInfo(f)
+	return
 }
 
 func Rename(url, oldPath, newPath string) error {
