@@ -1,19 +1,23 @@
-let timeoutId: number
+let timeoutId: number;
 export const showMessage = (message: string, timeout = 6000) => {
-    clearTimeout(timeoutId)
+    clearTimeout(timeoutId);
 
-    const messageElement = document.getElementById('message');
-    messageElement.classList.add('vditor-tip--show');
+    let messageElement = document.getElementById('message');
+    if (!messageElement) {
+        document.body.insertAdjacentHTML('beforeend', '<div class="message" id="message"></div>');
+        messageElement = document.getElementById('message');
+    }
+
     if (timeout === 0) {
-        messageElement.innerHTML = `<div class="vditor-tip__content">${message}
-<svg class="vditor-tip__close"><use xlink:href="#iconClose"></use></svg></div>`;
-        messageElement.querySelector('.vditor-tip__close').addEventListener('click', () => {
+        messageElement.innerHTML = `<div class="message__content">${message}
+<svg class="message__close"><use xlink:href="#iconClose"></use></svg></div>`;
+        messageElement.querySelector('.message__close').addEventListener('click', () => {
             hideMessage();
         });
         return;
     }
 
-    messageElement.innerHTML = `<div class="vditor-tip__content">${message}</div>`;
+    messageElement.innerHTML = `<div class="message__content">${message}</div>`;
     timeoutId = window.setTimeout(() => {
         hideMessage();
     }, timeout);
@@ -21,6 +25,5 @@ export const showMessage = (message: string, timeout = 6000) => {
 
 export const hideMessage = () => {
     const messageElement = document.getElementById('message');
-    messageElement.classList.remove('vditor-tip--show');
     messageElement.innerHTML = '';
 };

@@ -1,12 +1,15 @@
 import {Constants} from '../constants';
-import {showMessage} from '../util/message';
+import {hideMessage, showMessage} from '../util/message';
+import {destroyDialog, dialog} from '../util/dialog';
+import {i18n} from '../i18n';
+import {mountFile} from "../util/mount";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
-    private isFirst: boolean
+    private isFirst: boolean;
 
     constructor(liandi: ILiandi) {
-        this.isFirst = true
+        this.isFirst = true;
         this.connect(liandi);
     }
 
@@ -19,7 +22,7 @@ export class WebSocketUtil {
                     param: {},
                 }));
             }
-            this.isFirst = false
+            this.isFirst = false;
         };
         this.webSocket.onclose = (e) => {
             console.warn('WebSocket is closed. Reconnect will be attempted in 1 second.', e);
@@ -41,6 +44,9 @@ export class WebSocketUtil {
                 case 'mount':
                     liandi.navigation.onMount(liandi, response.data.url);
                     break;
+                case 'mountremote':
+                    hideMessage()
+                    break;
                 case 'ls':
                     liandi.files.onLs(liandi, response.data);
                     break;
@@ -48,13 +54,27 @@ export class WebSocketUtil {
                     liandi.editors.onGet(liandi, response.data);
                     break;
                 case 'dirs':
-                    liandi.navigation.listElement.innerHTML = '';
+                    if (response.data.length === 0) {
+                        dialog({
+                            title: i18n[Constants.LANG].slogan,
+                            content: `<div class="ft__center"><button class="button button--confirm">${i18n[Constants.LANG].mount}</button></div>`,
+                            width: 400
+                        });
+
+                        const dialogElement = document.querySelector('#dialog');
+                        dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
+                            mountFile(liandi.ws.webSocket);
+                            destroyDialog();
+                        });
+                        return;
+                    }
+                    liandi.navigation.element.innerHTML = '';
                     response.data.forEach((url: string) => {
                         liandi.navigation.onMount(liandi, url);
                     });
                     break;
                 case 'rename':
-                    liandi.files.onRename(liandi, response.data)
+                    liandi.files.onRename(liandi, response.data);
                     break;
                 case 'create':
                 case 'remove':
@@ -65,7 +85,7 @@ export class WebSocketUtil {
                             url: response.data.url,
                             path: response.data.path,
                         },
-                    }))
+                    }));
                     break;
             }
         };

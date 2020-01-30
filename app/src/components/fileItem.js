@@ -25,8 +25,7 @@ customElements.define('file-item',
           item.classList.remove('current')
         })
 
-        this.className = 'current'
-
+        this.classList.add('current')
         if (dir === 'true') {
           window.liandi.liandi.ws.webSocket.send(JSON.stringify({
             cmd: 'ls',

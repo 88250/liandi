@@ -1,12 +1,12 @@
-import {remote} from "electron";
-import {i18n} from "../i18n";
-import {Constants} from "../constants";
-import {destroyDialog, dialog} from "../util/dialog";
-import {rename, validateName} from "../util/rename";
-import {getPath, removeLastPath} from "../util/path";
+import {remote} from 'electron';
+import {i18n} from '../i18n';
+import {Constants} from '../constants';
+import {destroyDialog, dialog} from '../util/dialog';
+import {rename, validateName} from '../util/rename';
+import {getPath, removeLastPath} from '../util/path';
 
 export const initFilesMenu = (liandi: ILiandi) => {
-    const menu = new remote.Menu()
+    const menu = new remote.Menu();
 
     menu.append(new remote.MenuItem({
         label: i18n[Constants.LANG].newFile,
@@ -20,21 +20,21 @@ export const initFilesMenu = (liandi: ILiandi) => {
 <button class="button button--confirm">${i18n[Constants.LANG].confirm}</button><div class="fn__space"></div>
 <button class="button button--cancel">${i18n[Constants.LANG].cancel}</button></div>`,
                 width: 400
-            })
+            });
 
-            const dialogElement = document.querySelector('#dialog')
+            const dialogElement = document.querySelector('#dialog');
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
-                destroyDialog()
-            })
+                destroyDialog();
+            });
             dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
-                const name = (dialogElement.querySelector('.input') as HTMLInputElement).value
+                const name = (dialogElement.querySelector('.input') as HTMLInputElement).value;
                 if (!validateName(name)) {
-                    return false
+                    return false;
                 }
 
-                let path = removeLastPath(itemData.path) + name
+                let path = removeLastPath(itemData.path) + name;
                 if (!itemData.target) {
-                    path = getPath(itemData.path) + name
+                    path = getPath(itemData.path) + name;
                 }
                 liandi.ws.webSocket.send(JSON.stringify({
                     cmd: 'create',
@@ -44,8 +44,8 @@ export const initFilesMenu = (liandi: ILiandi) => {
 
                     },
                 }));
-                destroyDialog()
-            })
+                destroyDialog();
+            });
         }
     }));
 
@@ -61,21 +61,21 @@ export const initFilesMenu = (liandi: ILiandi) => {
 <button class="button button--confirm">${i18n[Constants.LANG].confirm}</button><div class="fn__space"></div>
 <button class="button button--cancel">${i18n[Constants.LANG].cancel}</button></div>`,
                 width: 400
-            })
+            });
 
-            const dialogElement = document.querySelector('#dialog')
+            const dialogElement = document.querySelector('#dialog');
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
-                destroyDialog()
-            })
+                destroyDialog();
+            });
             dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
-                const name = (dialogElement.querySelector('.input') as HTMLInputElement).value
+                const name = (dialogElement.querySelector('.input') as HTMLInputElement).value;
                 if (!validateName(name)) {
-                    return false
+                    return false;
                 }
 
-                let path = removeLastPath(itemData.path) + name + '/'
+                let path = removeLastPath(itemData.path) + name + '/';
                 if (!itemData.target) {
-                    path = getPath(itemData.path) + name + '/'
+                    path = getPath(itemData.path) + name + '/';
                 }
                 liandi.ws.webSocket.send(JSON.stringify({
                     cmd: 'mkdir',
@@ -84,8 +84,8 @@ export const initFilesMenu = (liandi: ILiandi) => {
                         path
                     },
                 }));
-                destroyDialog()
-            })
+                destroyDialog();
+            });
         }
     }));
 
@@ -101,12 +101,12 @@ export const initFilesMenu = (liandi: ILiandi) => {
 <button class="button button--confirm">${i18n[Constants.LANG].confirm}</button><div class="fn__space"></div>
 <button class="button button--cancel">${i18n[Constants.LANG].cancel}</button></div>`,
                 width: 400
-            })
+            });
 
-            const dialogElement = document.querySelector('#dialog')
+            const dialogElement = document.querySelector('#dialog');
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
-                destroyDialog()
-            })
+                destroyDialog();
+            });
             dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
                 liandi.ws.webSocket.send(JSON.stringify({
                     cmd: 'remove',
@@ -117,10 +117,10 @@ export const initFilesMenu = (liandi: ILiandi) => {
                     },
                 }));
                 if (itemData.target && itemData.target.classList.contains('current')) {
-                    liandi.editors.element.innerHTML = ''
+                    liandi.editors.element.innerHTML = '';
                 }
-                destroyDialog()
-            })
+                destroyDialog();
+            });
         }
     }));
 
@@ -136,20 +136,20 @@ export const initFilesMenu = (liandi: ILiandi) => {
 <button class="button button--confirm">${i18n[Constants.LANG].save}</button><div class="fn__space"></div>
 <button class="button button--cancel">${i18n[Constants.LANG].cancel}</button></div>`,
                 width: 400
-            })
-            const dialogElement = document.querySelector('#dialog')
+            });
+            const dialogElement = document.querySelector('#dialog');
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
-                destroyDialog()
-            })
+                destroyDialog();
+            });
             dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
                 const newPath = rename((dialogElement.querySelector('.input') as HTMLInputElement).value,
-                    itemData.url, itemData.path)
+                    itemData.url, itemData.path);
 
                 if (newPath) {
-                    destroyDialog()
+                    destroyDialog();
                 }
-            })
+            });
         }
     }));
-    return menu
-}
+    return menu;
+};

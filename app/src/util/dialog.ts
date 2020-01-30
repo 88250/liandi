@@ -1,6 +1,6 @@
 export const destroyDialog = () => {
-    document.querySelector('#dialog').remove()
-}
+    document.querySelector('#dialog').remove();
+};
 
 export const dialog = (options: {
     title: string,
@@ -8,7 +8,7 @@ export const dialog = (options: {
     width: number
     height?: number,
 }) => {
-    let dialogElement = document.querySelector('#dialog') as HTMLElement
+    let dialogElement = document.querySelector('#dialog') as HTMLElement;
     if (!dialogElement) {
         document.body.insertAdjacentHTML('beforeend', `
 <div class="dialog" id="dialog">
@@ -20,31 +20,31 @@ export const dialog = (options: {
       </div>
       <div class="dialog__content"></div>
     </div>
-</div>`)
+</div>`);
         document.querySelector('#dialog .dialog__header svg').addEventListener('click', () => {
-            destroyDialog()
-        })
+            destroyDialog();
+        });
 
         document.querySelector('#dialog .dialog__bg').addEventListener('click', () => {
-            destroyDialog()
-        })
-        dialogElement = document.querySelector('#dialog') as HTMLElement
+            destroyDialog();
+        });
+        dialogElement = document.querySelector('#dialog') as HTMLElement;
     }
 
-    dialogElement.querySelector('.dialog__header h2').innerHTML = options.title
-    dialogElement.querySelector('.dialog__content').innerHTML = options.content
-    const dialogMainElement = dialogElement.querySelector('.dialog__main') as HTMLElement
-    const dialogContentElement = dialogElement.querySelector('.dialog__content') as HTMLElement
+    dialogElement.querySelector('.dialog__header h2').innerHTML = options.title;
+    dialogElement.querySelector('.dialog__content').innerHTML = options.content;
+    const dialogMainElement = dialogElement.querySelector('.dialog__main') as HTMLElement;
+    const dialogContentElement = dialogElement.querySelector('.dialog__content') as HTMLElement;
     if (options.height) {
-        dialogMainElement.style.height = options.height + 'px'
-        dialogContentElement.style.height = (options.height - 85) + 'px'
+        dialogMainElement.style.height = options.height + 'px';
+        dialogContentElement.style.height = (options.height - 85) + 'px';
     } else {
-        dialogMainElement.style.height = 'auto'
-        dialogContentElement.style.height = 'auto'
+        dialogMainElement.style.height = 'auto';
+        dialogContentElement.style.height = 'auto';
     }
     dialogMainElement.style.top = `${Math.max(0,
-        (document.body.clientHeight - dialogMainElement.clientHeight) / 2)}px`
-    dialogMainElement.style.left = `${(document.body.clientWidth - options.width) / 2}px`
-    dialogMainElement.style.width = `${options.width}px`
-    dialogElement.style.display = 'block'
-}
+        (document.body.clientHeight - dialogMainElement.clientHeight) / 2)}px`;
+    dialogMainElement.style.left = `${(document.body.clientWidth - options.width) / 2}px`;
+    dialogMainElement.style.width = `${options.width}px`;
+    dialogElement.style.display = 'block';
+};

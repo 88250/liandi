@@ -2,13 +2,5 @@
   max-width: 495px;
   min-width: 200px;
   border-right: 1px solid $border;
-
-  &__action {
-    padding: 10px;
-  }
-
-  &__list {
-    flex: 1;
-    overflow: auto;
-  }
+  overflow: auto;
 }

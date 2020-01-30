@@ -1,28 +1,28 @@
-import {hideMessage, showMessage} from "./message";
-import {i18n} from "../i18n";
-import {Constants} from "../constants";
+import {hideMessage, showMessage} from './message';
+import {i18n} from '../i18n';
+import {Constants} from '../constants';
 
 export const validateName = (name: string) => {
     hideMessage();
 
     if (/\\|\/|\:|\*|\?|\"|<|>|\|/.test(name)) {
-        showMessage(i18n[Constants.LANG].fileNameRule)
+        showMessage(i18n[Constants.LANG].fileNameRule);
         return false;
     }
-    return true
-}
+    return true;
+};
 
 export const rename = (name: string, url: string, oldPath: string) => {
     if (!validateName(name)) {
         return false;
     }
 
-    let oldPathList = oldPath.split('/')
-    let oldName = ''
+    const oldPathList = oldPath.split('/');
+    let oldName = '';
     if (oldPath.endsWith('/')) {
-        oldName = oldPathList[oldPathList.length - 2]
+        oldName = oldPathList[oldPathList.length - 2];
     } else {
-        oldName = oldPathList[oldPathList.length - 1]
+        oldName = oldPathList[oldPathList.length - 1];
     }
 
     if (name === oldName) {
@@ -30,7 +30,7 @@ export const rename = (name: string, url: string, oldPath: string) => {
     }
 
     const newPath = oldPath.replace(oldName + (oldPath.endsWith('/') ? '/' : ''), '') + name
-        + (oldPath.endsWith('/') ? '/' : '')
+        + (oldPath.endsWith('/') ? '/' : '');
     window.liandi.liandi.ws.webSocket.send(JSON.stringify({
         cmd: 'rename',
         param: {
@@ -39,5 +39,5 @@ export const rename = (name: string, url: string, oldPath: string) => {
             newPath
         },
     }));
-    return newPath
-}
+    return newPath;
+};

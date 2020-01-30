@@ -1,7 +1,7 @@
 import {hideMessage, showMessage} from '../util/message';
-import {i18n} from "../i18n";
-import {Constants} from "../constants";
-import {rename} from "../util/rename";
+import {i18n} from '../i18n';
+import {Constants} from '../constants';
+import {rename} from '../util/rename';
 
 const Vditor = require('vditor');
 
@@ -22,7 +22,7 @@ export class Editors {
         });
 
         this.inputWrapElement.querySelector('input').addEventListener('input', () => {
-            rename(this.inputWrapElement.querySelector('input').value, liandi.current.url, liandi.current.path)
+            rename(this.inputWrapElement.querySelector('input').value, liandi.current.url, liandi.current.path);
         });
 
         this.editorElement = document.createElement('div');
@@ -37,7 +37,7 @@ export class Editors {
     }
 
     private saveContent(liandi: ILiandi) {
-        if (this.element.innerHTML === "") {
+        if (this.element.innerHTML === '') {
             return;
         }
         liandi.ws.webSocket.send(JSON.stringify({

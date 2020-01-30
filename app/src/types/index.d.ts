@@ -16,7 +16,6 @@ declare interface ILiandi {
     };
     navigation?: {
         element: HTMLElement
-        listElement: HTMLElement
         onMount: (liandi: ILiandi, url: string) => void
     };
     files?: {
@@ -39,12 +38,12 @@ declare interface ILiandi {
             url: string
             path: string
         }
-    },
+    };
     current?: {
         url: string
         path: string
         name: string
-    }
+    };
 }
 
 interface II18n {
