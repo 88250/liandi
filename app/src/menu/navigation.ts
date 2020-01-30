@@ -1,25 +1,9 @@
 import {remote} from 'electron';
 import {i18n} from '../i18n';
 import {Constants} from '../constants';
-import {homedir} from 'os';
-import {mountFile, mountWebDAV} from "../util/mount";
 
 export const initNavigationMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
-
-    menu.append(new remote.MenuItem({
-        label: i18n[Constants.LANG].mount,
-        click: async () => {
-            mountFile(liandi.ws.webSocket)
-        }
-    }));
-
-    menu.append(new remote.MenuItem({
-        label: i18n[Constants.LANG].mountWebDAV,
-        click: async () => {
-            mountWebDAV(liandi.ws.webSocket)
-        }
-    }));
 
     menu.append(new remote.MenuItem({
         label: i18n[Constants.LANG].unMount,

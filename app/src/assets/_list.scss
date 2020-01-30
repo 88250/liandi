@@ -1,10 +1,14 @@
 .list {
   &__item {
-    border-top: 1px solid $border;
+    border-bottom: 1px solid $border;
     padding: 5px 10px;
     cursor: pointer;
     display: block;
     user-select: none;
+
+    &:last-child {
+      border-bottom: 0;
+    }
 
     &:hover {
       background-color: rgb(246, 248, 250);

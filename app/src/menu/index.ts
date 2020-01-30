@@ -1,5 +1,6 @@
 import {initFilesMenu} from './files';
 import {initNavigationMenu} from './navigation';
+import {initMountMenu} from "./mount";
 
 export class Menus {
     public itemData: {
@@ -13,6 +14,7 @@ export class Menus {
 
         const filesMenu = initFilesMenu(liandi);
         const navigationMenu = initNavigationMenu(liandi);
+        const mountMenu = initMountMenu(liandi);
         window.addEventListener('contextmenu', (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
@@ -33,7 +35,6 @@ export class Menus {
                         });
                     } else if (target.parentElement.classList.contains('navigation')) {
                         isTarget = true;
-                        navigationMenu.items[2].enabled = true;
                         navigationMenu.popup({
                             callback: () => {
                                 if (target.parentElement) {
@@ -76,8 +77,7 @@ export class Menus {
                 }
 
                 if (target.classList.contains('navigation')) {
-                    navigationMenu.items[2].enabled = false;
-                    navigationMenu.popup();
+                    mountMenu.popup();
                     event.preventDefault();
                     break;
                 }

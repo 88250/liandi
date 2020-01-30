@@ -2,7 +2,7 @@ import {Constants} from '../constants';
 import {hideMessage, showMessage} from '../util/message';
 import {destroyDialog, dialog} from '../util/dialog';
 import {i18n} from '../i18n';
-import {mountFile} from "../util/mount";
+import {mountFile, mountWebDAV} from "../util/mount";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -42,9 +42,8 @@ export class WebSocketUtil {
             }
             switch (response.cmd) {
                 case 'mount':
-                    liandi.navigation.onMount(liandi, response.data.url);
-                    break;
                 case 'mountremote':
+                    liandi.navigation.onMount(liandi, response.data.url);
                     hideMessage()
                     break;
                 case 'ls':
@@ -57,14 +56,17 @@ export class WebSocketUtil {
                     if (response.data.length === 0) {
                         dialog({
                             title: i18n[Constants.LANG].slogan,
-                            content: `<div class="ft__center"><button class="button button--confirm">${i18n[Constants.LANG].mount}</button></div>`,
+                            content: `<div class="list__item">${i18n[Constants.LANG].mount}</div>
+<div class="list__item">${i18n[Constants.LANG].mountWebDAV}</div>`,
                             width: 400
                         });
 
-                        const dialogElement = document.querySelector('#dialog');
-                        dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
+                        const listElement = document.querySelectorAll('#dialog .list__item');
+                        listElement[0].addEventListener('click', () => {
                             mountFile(liandi.ws.webSocket);
-                            destroyDialog();
+                        });
+                        listElement[1].addEventListener('click', () => {
+                            mountWebDAV(liandi.ws.webSocket);
                         });
                         return;
                     }
