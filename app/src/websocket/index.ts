@@ -6,11 +6,21 @@ import {mountFile, mountWebDAV} from "../util/mount";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
+    private reqId: number
     private isFirst: boolean;
 
     constructor(liandi: ILiandi) {
         this.isFirst = true;
         this.connect(liandi);
+    }
+
+    public send(cmd: string, param: any) {
+        this.reqId = new Date().getTime()
+        this.webSocket.send(JSON.stringify({
+            cmd,
+            reqId: this.reqId,
+            param,
+        }))
     }
 
     private connect(liandi: ILiandi) {
@@ -36,6 +46,10 @@ export class WebSocketUtil {
         };
         this.webSocket.onmessage = (event) => {
             const response = JSON.parse(event.data);
+            if (response.reqId !== this.reqId) {
+                return
+            }
+
             if (response.code !== 0) {
                 showMessage(response.msg, 0);
                 return;
@@ -43,7 +57,7 @@ export class WebSocketUtil {
             switch (response.cmd) {
                 case 'mount':
                 case 'mountremote':
-                    liandi.navigation.onMount(liandi, response.data);
+                    liandi.navigation.onMount(response.data);
                     hideMessage()
                     destroyDialog()
                     break;
@@ -73,7 +87,7 @@ export class WebSocketUtil {
                     }
                     liandi.navigation.element.innerHTML = '';
                     response.data.forEach((item: { url: string, remote: boolean }) => {
-                        liandi.navigation.onMount(liandi, item);
+                        liandi.navigation.onMount(item);
                     });
                     break;
                 case 'rename':

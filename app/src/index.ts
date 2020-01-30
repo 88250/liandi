@@ -3,6 +3,7 @@ import {Navigation} from './navigation';
 import {Files} from './files';
 import {WebSocketUtil} from './websocket';
 import './components/fileItem';
+import './components/treeItem';
 import './icons/index';
 import {Editors} from './editors';
 import {Menus} from './menu';
@@ -14,7 +15,7 @@ class App {
     constructor() {
         this.liandi = {};
         this.liandi.ws =  new WebSocketUtil(this.liandi);
-        this.liandi.navigation =  new Navigation(this.liandi);
+        this.liandi.navigation =  new Navigation();
         this.liandi.files =  new Files();
         this.liandi.editors =  new Editors(this.liandi);
         this.liandi.menus = new Menus(this.liandi);
