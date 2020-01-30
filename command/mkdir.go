@@ -34,7 +34,7 @@ func (cmd *mkdir) Exec() {
 	}
 	ret.Data = map[string]interface{}{
 		"url":  url,
-		"path": path.Dir(p),
+		"path": path.Dir(path.Clean(p)),
 	}
 	util.Push(ret.Bytes())
 }
