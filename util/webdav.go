@@ -107,6 +107,8 @@ func routeWebDAV() {
 			continue
 		}
 
+		// 本地目录伺服
+
 		prefix := dir.URL[strings.Index(dir.URL, "/webdav/"):]
 		webdavHandler := &webdav.Handler{
 			Prefix:     prefix,
