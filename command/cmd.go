@@ -39,6 +39,8 @@ func NewCommand(cmdStr string, param map[string]interface{}) Cmd {
 		return &get{&BaseCmd{param: param}}
 	case "put":
 		return &put{&BaseCmd{param: param}}
+	case "create":
+		return &create{&BaseCmd{param: param}}
 	case "search":
 		return &search{&BaseCmd{param: param}}
 	case "rename":
