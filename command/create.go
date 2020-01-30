@@ -13,6 +13,7 @@
 package command
 
 import (
+	"path"
 	"strings"
 
 	"github.com/88250/liandi/util"
@@ -34,6 +35,15 @@ func (cmd *create) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+	}
+
+	p = path.Dir(path.Clean(p))
+	if "." == p {
+		p = "/"
+	}
+	ret.Data = map[string]interface{}{
+		"url":  url,
+		"path": p,
 	}
 	util.Push(ret.Bytes())
 }
