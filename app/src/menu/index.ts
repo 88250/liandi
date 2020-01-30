@@ -78,7 +78,7 @@ export class Menus {
                     break;
                 }
 
-                if (target.classList.contains('files__list') && liandi.current) {
+                if (target.classList.contains('files__list') && liandi.current.url) {
                     this.itemData = {
                         url: liandi.current.url,
                         path: liandi.current.path

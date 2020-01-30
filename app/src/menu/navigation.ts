@@ -13,6 +13,11 @@ export const initNavigationMenu = (liandi: ILiandi) => {
                 liandi.files.listElement.innerHTML = '';
                 liandi.files.element.firstElementChild.innerHTML = '';
                 liandi.editors.remove(liandi);
+                liandi.current = {
+                    url: '',
+                    path: '',
+                    name: ''
+                }
             }
             liandi.ws.send('unmount', {
                 url: itemData.url
