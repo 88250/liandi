@@ -32,9 +32,14 @@ func (cmd *remove) Exec() {
 		ret.Code = -1
 		ret.Msg = err.Error()
 	}
+
+	p = path.Dir(path.Clean(p))
+	if "." == p {
+		p = "/"
+	}
 	ret.Data = map[string]interface{}{
 		"url":  url,
-		"path": path.Dir(path.Clean(p)),
+		"path": p,
 	}
 	util.Push(ret.Bytes())
 }
