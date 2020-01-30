@@ -3,7 +3,7 @@ module github.com/88250/liandi
 go 1.12
 
 require (
-	github.com/88250/gowebdav v0.0.0-20200130135746-8e14949ee2ed
+	github.com/88250/gowebdav v0.0.0-20200130141223-09487aa5b19f
 	github.com/88250/gulu v1.0.0
 	github.com/RoaringBitmap/roaring v0.4.21 // indirect
 	github.com/blevesearch/bleve v0.8.1
