@@ -31,10 +31,13 @@ func (cmd *create) Exec() {
 	if !strings.HasSuffix(p, ".md") {
 		p += ".md"
 	}
-	err := util.Put(url, p, "")
+
+	err := util.Create(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+		util.Push(ret.Bytes())
+		return
 	}
 
 	p = path.Dir(path.Clean(p))

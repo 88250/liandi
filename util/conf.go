@@ -170,6 +170,25 @@ func (dir *Dir) Put(path, content string) error {
 	return nil
 }
 
+func (dir *Dir) Stat(path string) (ret os.FileInfo, err error) {
+	if ret, err = dir.client.Stat(path); nil != err {
+		msg := fmt.Sprintf("查看目录 [%s] 下 [%s] 的元信息失败：%s", dir.URL, path, err)
+		Logger.Errorf(msg)
+		return nil, errors.New(msg)
+	}
+	return
+}
+
+func (dir *Dir) Exist(path string) (ret bool, err error) {
+	if _, err = dir.client.Stat(path); nil != err {
+		if _, ok := err.(*os.PathError); ok {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
+}
+
 func (dir *Dir) Rename(oldPath, newPath string) error {
 	if err := dir.client.Rename(oldPath, newPath, false); nil != err {
 		msg := fmt.Sprintf("重命名目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, oldPath, err)
@@ -202,7 +221,7 @@ func (dir *Dir) Index() {
 	files := dir.Files("/")
 	var docs []*Doc
 	for _, file := range files {
-		content, err := dir.Get(file.(gowebdav.File).Path())
+		content, err := dir.Get(file.(*gowebdav.File).Path())
 		if nil == err {
 			doc := newDoc(file.Name(), content, dir.URL, dir.Path)
 			docs = append(docs, doc)
@@ -217,7 +236,7 @@ func (dir *Dir) Unindex() {
 	files := dir.Files("/")
 	var docIds []string
 	for _, file := range files {
-		content, err := dir.Get(file.(gowebdav.File).Path())
+		content, err := dir.Get(file.(*gowebdav.File).Path())
 		if nil == err {
 			doc := newDoc(file.Name(), content, dir.URL, dir.Path)
 			docIds = append(docIds, doc.Id)
@@ -238,7 +257,7 @@ func (dir *Dir) Files(path string) (ret []os.FileInfo) {
 
 func (dir *Dir) files(files, ret *[]os.FileInfo) {
 	for _, file := range *files {
-		f := file.(gowebdav.File)
+		f := file.(*gowebdav.File)
 		if strings.HasPrefix(f.Name(), ".") {
 			continue
 		}
