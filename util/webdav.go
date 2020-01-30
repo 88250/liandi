@@ -57,6 +57,29 @@ func Unmount(url string) {
 	Logger.Debugf("取消挂载目录 [%s] 完毕", url)
 }
 
+func MountRemote(url, user, password string) (ret string, alreadyMount bool) {
+	for _, dir := range Conf.Dirs {
+		if dir.URL == url {
+			return dir.URL, true
+		}
+	}
+
+	dir := &Dir{URL: url, Path: ""}
+	if "" != user || "" != password {
+		dir.User = user
+		dir.Password = password
+		dir.Auth = "basic"
+	}
+
+	Conf.Dirs = append(Conf.Dirs, dir)
+	routeWebDAV()
+	Conf.Save()
+	dir.InitClient()
+	go dir.Index()
+	Logger.Debugf("挂载远程目录 [%s] 完毕", url)
+	return url, false
+}
+
 func Mount(url, localPath string) (ret string, alreadyMount bool) {
 	for _, dir := range Conf.Dirs {
 		if "" != localPath && dir.Path == localPath {
