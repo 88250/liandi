@@ -43,7 +43,7 @@ export class WebSocketUtil {
             switch (response.cmd) {
                 case 'mount':
                 case 'mountremote':
-                    liandi.navigation.onMount(liandi, response.data.url);
+                    liandi.navigation.onMount(liandi, response.data);
                     hideMessage()
                     destroyDialog()
                     break;
@@ -72,8 +72,8 @@ export class WebSocketUtil {
                         return;
                     }
                     liandi.navigation.element.innerHTML = '';
-                    response.data.forEach((url: string) => {
-                        liandi.navigation.onMount(liandi, url);
+                    response.data.forEach((item: { url: string, remote: boolean }) => {
+                        liandi.navigation.onMount(liandi, item);
                     });
                     break;
                 case 'rename':

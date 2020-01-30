@@ -25,7 +25,7 @@ export const mountFile = async (webSocket: WebSocket) => {
 export const mountWebDAV = (webSocket: WebSocket) => {
     dialog({
         title: i18n[Constants.LANG].mountWebDAV,
-        content: `<input placeholder="path" class="input">
+        content: `<input placeholder="https://dav.jianguoyun.com/dav/" class="input">
 <div class="fn__hr"></div>
 <input placeholder="user name" class="input">
 <div class="fn__hr"></div>
