@@ -12,7 +12,11 @@
 
 package command
 
-import "github.com/88250/liandi/util"
+import (
+	"strings"
+
+	"github.com/88250/liandi/util"
+)
 
 type create struct {
 	*BaseCmd
@@ -22,8 +26,11 @@ func (cmd *create) Exec() {
 	ret := util.NewCmdResult(cmd.Name())
 	url := cmd.param["url"].(string)
 	url = util.NormalizeURL(url)
-	path := cmd.param["path"].(string)
-	err := util.Put(url, path, "")
+	p := cmd.param["path"].(string)
+	if !strings.HasSuffix(p, ".md") {
+		p += ".md"
+	}
+	err := util.Put(url, p, "")
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
