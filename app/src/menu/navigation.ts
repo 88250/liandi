@@ -14,7 +14,7 @@ export const initNavigationMenu = (liandi: ILiandi) => {
             });
             liandi.menus.itemData.target.remove();
             const filesFileItemElement = liandi.files.listElement.firstElementChild;
-            if (filesFileItemElement && filesFileItemElement.tagName === 'FILE-ITEM'
+            if (filesFileItemElement && filesFileItemElement.tagName === 'TREE-ITEM'
                 && filesFileItemElement.getAttribute('url') === itemData.url) {
                 liandi.files.listElement.innerHTML = '';
                 liandi.files.element.firstElementChild.innerHTML = '';

@@ -32,7 +32,7 @@ export class Files {
         let filesHTML = '';
         data.files.forEach((item: IFile) => {
             let className = '';
-            if (data.url === liandi.current.url && item.name === liandi.current.name && item.path === liandi.current.path) {
+            if (data.url === liandi.current.url && item.path === liandi.current.path) {
                 className = ' current';
             }
             filesHTML += `<file-item class="list__item${className}" path="${item.path}" name="${item.name}"></file-item>`;
@@ -47,7 +47,6 @@ export class Files {
 
         if (fileItemElement.classList.contains('current')) {
             liandi.current.path = data.newPath;
-            liandi.current.name = data.newName;
 
             if (fileItemElement.getAttribute('dir') === 'false') {
                 liandi.editors.inputWrapElement.querySelector('input').value = data.newName;

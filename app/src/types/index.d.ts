@@ -20,9 +20,9 @@ declare interface ILiandi {
         onMount: (data: {url: string, remote: boolean}) => void
     };
     files?: {
-        renderBack: (url: string, path: string) => void
         listElement: HTMLElement
         element: HTMLElement
+        renderBack: (url: string, path: string) => void
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string }) => void
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
     };
