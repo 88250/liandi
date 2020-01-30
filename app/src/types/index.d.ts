@@ -12,11 +12,12 @@ declare interface IFile {
 
 declare interface ILiandi {
     ws?: {
-        webSocket: WebSocket
+        webSocket: WebSocket,
+        send: (cmd: string, param: any) => void
     };
     navigation?: {
         element: HTMLElement
-        onMount: (liandi: ILiandi, data: {url: string, remote: boolean}) => void
+        onMount: (data: {url: string, remote: boolean}) => void
     };
     files?: {
         renderBack: (url: string, path: string) => void

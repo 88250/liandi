@@ -16,10 +16,7 @@ customElements.define('file-item',
           return
         }
 
-        const url = this.getAttribute('url')
         const path = this.getAttribute('path')
-        const dir = this.getAttribute('dir')
-        const name = this.getAttribute('name')
 
         this.parentElement.querySelectorAll('file-item').forEach((item) => {
           item.classList.remove('current')
@@ -48,11 +45,11 @@ customElements.define('file-item',
         }
 
         window.liandi.liandi.current = {
-          url, name, path
+           name, path
         }
       })
 
-      const shadowRoot = this.attachShadow({mode: 'open'})
+      const shadowRoot = this.attachShadow({mode: 'closed'})
       shadowRoot.appendChild(divElement)
     }
 
