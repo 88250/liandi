@@ -21,7 +21,7 @@ type dirs struct {
 func (cmd *dirs) Exec() {
 	ret := util.NewCmdResult(cmd.Name())
 
-	var data []map[string]interface{}
+	data := []map[string]interface{}{}
 	for _, dir := range util.Conf.Dirs {
 		data = append(data, map[string]interface{}{
 			"url":    dir.URL,
