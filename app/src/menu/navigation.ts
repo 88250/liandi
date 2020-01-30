@@ -9,17 +9,15 @@ export const initNavigationMenu = (liandi: ILiandi) => {
         label: i18n[Constants.LANG].unMount,
         click: () => {
             const itemData = liandi.menus.itemData;
-            liandi.ws.send('unmount', {
-                url: itemData.url
-            });
-            liandi.menus.itemData.target.remove();
-            const filesFileItemElement = liandi.files.listElement.firstElementChild;
-            if (filesFileItemElement && filesFileItemElement.tagName === 'TREE-ITEM'
-                && filesFileItemElement.getAttribute('url') === itemData.url) {
+            if (itemData.target.classList.contains('current')) {
                 liandi.files.listElement.innerHTML = '';
                 liandi.files.element.firstElementChild.innerHTML = '';
                 liandi.editors.remove(liandi);
             }
+            liandi.ws.send('unmount', {
+                url: itemData.url
+            });
+            itemData.target.remove();
         }
     }));
     return menu;

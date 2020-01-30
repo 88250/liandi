@@ -59,7 +59,6 @@ export class Editors {
         if (this.editorElement.innerHTML !== '') {
             this.vditor.setValue(file.content);
         } else {
-
             this.vditor = new Vditor('liandiVditor', {
                 cache: false,
                 value: file.content,
