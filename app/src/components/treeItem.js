@@ -36,13 +36,12 @@ ${getName(url)}`
         this.classList.add('current')
         const url = this.getAttribute('url')
 
+        window.liandi.liandi.editors.remove(window.liandi.liandi)
+        window.liandi.liandi.files.renderBack(url, '/')
         window.liandi.liandi.ws.send('ls', {
           url,
           path: '/',
         })
-        window.liandi.liandi.editors.remove(window.liandi.liandi)
-        window.liandi.liandi.files.renderBack(url, '/')
-        window.liandi.liandi.current.url = url
       })
 
       const shadowRoot = this.attachShadow({mode: 'closed'})

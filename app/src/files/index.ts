@@ -38,6 +38,7 @@ export class Files {
             filesHTML += `<file-item class="list__item${className}" path="${item.path}" name="${item.name}"></file-item>`;
         });
         this.listElement.innerHTML = filesHTML;
+        liandi.current.url = data.url
     }
 
     public onRename(liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) {

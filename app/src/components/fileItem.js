@@ -40,6 +40,9 @@ svg {
         })
 
         this.classList.add('current')
+
+        window.liandi.liandi.editors.saveContent(window.liandi.liandi)
+
         if (path.endsWith('/')) {
           window.liandi.liandi.editors.remove(window.liandi.liandi)
           window.liandi.liandi.ws.send('ls', {
