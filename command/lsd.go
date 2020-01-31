@@ -31,6 +31,7 @@ func (cmd *lsd) Exec() {
 	} else {
 		ret.Data = map[string]interface{}{
 			"url":   url,
+			"path":  path,
 			"files": files,
 		}
 	}
