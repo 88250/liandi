@@ -14,10 +14,12 @@ package util
 
 import (
 	"errors"
-	"github.com/88250/gowebdav"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
+
+	"github.com/88250/gowebdav"
 )
 
 type File struct {
@@ -59,18 +61,28 @@ func Ls(url, path string) (ret []*File, err error) {
 		return nil, err
 	}
 
+	var dirs, docs []*File
+
 	for _, f := range files {
 		if strings.HasPrefix(f.Name(), ".") || dir.isSkipDir(f.Name()) {
 			continue
 		}
 
-		if !f.IsDir() && !isMarkdown(f) {
+		if f.IsDir() {
+			dirs = append(dirs, fromFileInfo(f))
 			continue
 		}
 
-		file := fromFileInfo(f)
-		ret = append(ret, file)
+		if isMarkdown(f) {
+			docs = append(docs, fromFileInfo(f))
+			continue
+		}
 	}
+
+	sort.Slice(dirs, func(i, j int) bool { return dirs[i].Name < dirs[j].Name })
+	ret = append(ret, dirs...)
+	sort.Slice(docs, func(i, j int) bool { return docs[i].Name < docs[j].Name })
+	ret = append(ret, docs...)
 	return
 }
 
@@ -99,6 +111,9 @@ func Lsd(url, path string) (ret []*File, err error) {
 		file := fromFileInfo(f)
 		ret = append(ret, file)
 	}
+
+	sort.Slice(ret, func(i, j int) bool { return ret[i].Name < ret[j].Name })
+
 	return
 }
 
