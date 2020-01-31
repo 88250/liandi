@@ -5,6 +5,8 @@
     cursor: pointer;
     display: block;
     user-select: none;
+    color: $black;
+    transition: $transition;
 
     &:last-child {
       border-bottom: 0;
@@ -12,6 +14,7 @@
 
     &:hover {
       background-color: rgb(246, 248, 250);
+      color: $black-text;
     }
 
     &.current {

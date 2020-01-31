@@ -15,16 +15,7 @@ customElements.define('file-item',
         pathHTML = '<path d="M28 10.231v11.846c0 2.070-1.7 3.769-3.769 3.769h-20.462c-2.070 0-3.769-1.7-3.769-3.769v-16.154c0-2.070 1.7-3.769 3.769-3.769h5.385c2.070 0 3.769 1.7 3.769 3.769v0.538h11.308c2.070 0 3.769 1.7 3.769 3.769z"></path>'
       }
       const divElement = document.createElement('div')
-      divElement.innerHTML = `<style>
-svg {
-    height: 14px;
-    width: 14px;
-    float: left;
-    margin: 2px 5px 0 0;
-    fill: currentColor;
-    color: rgba(0, 0, 0, .54);
-}
-</style><svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
+      divElement.innerHTML = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
 <span>${this.getAttribute('name')}</span>`
 
       divElement.addEventListener('click', () => {
@@ -59,8 +50,23 @@ svg {
         window.liandi.liandi.current.path = path
       })
 
+      const style = document.createElement('style')
+      style.innerText = `
+svg {
+    height: 14px;
+    width: 14px;
+    float: left;
+    margin: 2px 5px 0 0;
+    fill: currentColor;
+    color: rgba(0, 0, 0, .38);
+    transition: all .15s ease-in-out;
+}
+div:hover svg  {
+    color: rgba(0, 0, 0, .58);
+}`
       const shadowRoot = this.attachShadow({mode: 'open'})
       shadowRoot.appendChild(divElement)
+      shadowRoot.appendChild(style)
     }
 
     attributeChangedCallback (name, oldValue, newValue) {

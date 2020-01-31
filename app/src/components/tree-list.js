@@ -52,6 +52,7 @@ svg {
     fill: currentColor;
     color: rgba(0, 0, 0, .38);
     transition: all .15s ease-in-out;
+    flex-shrink: 0;
 }
 .arrow {
     height: 8px;
@@ -70,6 +71,10 @@ svg {
 .folder {
     cursor: pointer;
     flex: 1;
+    white-space: nowrap;
+    word-break: keep-all;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }`
 
       window.liandi.liandi.ws.send('lsd', {
