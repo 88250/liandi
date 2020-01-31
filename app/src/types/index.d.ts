@@ -17,7 +17,8 @@ declare interface ILiandi {
     };
     navigation?: {
         element: HTMLElement
-        onMount: (data: {url: string, remote: boolean}) => void
+        onLsd: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
+        onMount: (data: { url: string, remote: boolean }) => void
     };
     files?: {
         listElement: HTMLElement

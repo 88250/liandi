@@ -33,7 +33,7 @@ export const mountWebDAV = (liandi: ILiandi) => {
 <button class="button button--cancel">${i18n[Constants.LANG].cancel}</button></div>`,
         width: 400,
         destroyDialogCallback: () => {
-            if (liandi.navigation.element.querySelectorAll('tree-item').length === 0) {
+            if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {
                 showMountDialog(liandi)
             }
         }
@@ -41,7 +41,7 @@ export const mountWebDAV = (liandi: ILiandi) => {
 
     const dialogElement = document.querySelector('#dialog');
     dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
-        if (liandi.navigation.element.querySelectorAll('tree-item').length === 0) {
+        if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {
             showMountDialog(liandi)
         } else {
             destroyDialog();
@@ -64,7 +64,7 @@ export const showMountDialog = (liandi: ILiandi) => {
 <div class="list__item">${i18n[Constants.LANG].mountWebDAV}</div>`,
         width: 400,
         destroyDialogCallback: () => {
-            if (liandi.navigation.element.querySelectorAll('tree-item').length === 0) {
+            if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {
                 showMountDialog(liandi)
             }
         }

@@ -14,8 +14,8 @@ export class WebSocketUtil {
         this.connect(liandi);
     }
 
-    public send(cmd: string, param: any) {
-        this.reqId = new Date().getTime()
+    public send(cmd: string, param: any, process = false) {
+        this.reqId = process ? 0 : new Date().getTime()
         this.webSocket.send(JSON.stringify({
             cmd,
             reqId: this.reqId,
@@ -55,8 +55,11 @@ export class WebSocketUtil {
                 case 'put':
                     showMessage(i18n[Constants.LANG].saveSuccess);
                     break
+                case 'lsd':
+                    liandi.navigation.onLsd(liandi, response.data);
+                    break
                 case 'unmount':
-                    if (liandi.navigation.element.querySelectorAll('tree-item').length === 0) {
+                    if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {
                         showMountDialog(liandi)
                     }
                     break
@@ -78,7 +81,7 @@ export class WebSocketUtil {
                         return;
                     }
                     liandi.navigation.element.innerHTML = '';
-                    response.data.forEach((item: { url: string, remote: boolean }) => {
+                    response.data.map((item: { url: string, remote: boolean }) => {
                         liandi.navigation.onMount(item);
                     });
                     break;
@@ -88,10 +91,10 @@ export class WebSocketUtil {
                 case 'create':
                 case 'remove':
                 case 'mkdir':
-                    window.liandi.liandi.ws.send('ls',  {
-                            url: response.data.url,
-                            path: response.data.path,
-                        });
+                    window.liandi.liandi.ws.send('ls', {
+                        url: response.data.url,
+                        path: response.data.path,
+                    });
                     break;
             }
         };
