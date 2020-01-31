@@ -16,7 +16,7 @@ export class Editors {
         this.element = document.getElementById('editors');
         this.inputWrapElement = document.createElement('div');
         this.inputWrapElement.className = 'fn__flex';
-        this.inputWrapElement.innerHTML = `<input class="editors__input fn__flex-1"><button>${i18n[Constants.LANG].save}</button>`;
+        this.inputWrapElement.innerHTML = `<input class="editors__input fn__flex-1"><button class="button">${i18n[Constants.LANG].save}</button>`;
         this.inputWrapElement.querySelector('button').addEventListener('click', () => {
             this.saveContent(liandi);
         });

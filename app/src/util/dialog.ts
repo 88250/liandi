@@ -1,7 +1,10 @@
-export const destroyDialog = () => {
+export const destroyDialog = (destroyDialogCallback?: () => void) => {
     const dialogElement =   document.getElementById('dialog')
     if (dialogElement) {
         dialogElement.remove();
+    }
+    if (destroyDialogCallback) {
+        destroyDialogCallback()
     }
 };
 
@@ -10,6 +13,7 @@ export const dialog = (options: {
     content: string,
     width: number
     height?: number,
+    destroyDialogCallback?: () => void
 }) => {
     let dialogElement = document.querySelector('#dialog') as HTMLElement;
     if (!dialogElement) {
@@ -25,11 +29,11 @@ export const dialog = (options: {
     </div>
 </div>`);
         document.querySelector('#dialog .dialog__header svg').addEventListener('click', () => {
-            destroyDialog();
+            destroyDialog(options.destroyDialogCallback);
         });
 
         document.querySelector('#dialog .dialog__bg').addEventListener('click', () => {
-            destroyDialog();
+            destroyDialog(options.destroyDialogCallback);
         });
         dialogElement = document.querySelector('#dialog') as HTMLElement;
     }

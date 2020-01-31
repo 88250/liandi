@@ -2,7 +2,7 @@ import {Constants} from '../constants';
 import {hideMessage, showMessage} from '../util/message';
 import {destroyDialog, dialog} from '../util/dialog';
 import {i18n} from '../i18n';
-import {mountFile, mountWebDAV} from "../util/mount";
+import {mountFile, mountWebDAV, showMountDialog} from "../util/mount";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -55,6 +55,11 @@ export class WebSocketUtil {
                 case 'put':
                     showMessage(i18n[Constants.LANG].saveSuccess);
                     break
+                case 'unmount':
+                    if (liandi.navigation.element.querySelectorAll('tree-item').length === 0) {
+                        showMountDialog(liandi)
+                    }
+                    break
                 case 'mount':
                 case 'mountremote':
                     liandi.navigation.onMount(response.data);
@@ -69,20 +74,7 @@ export class WebSocketUtil {
                     break;
                 case 'dirs':
                     if (response.data.length === 0) {
-                        dialog({
-                            title: i18n[Constants.LANG].slogan,
-                            content: `<div class="list__item">${i18n[Constants.LANG].mount}</div>
-<div class="list__item">${i18n[Constants.LANG].mountWebDAV}</div>`,
-                            width: 400
-                        });
-
-                        const listElement = document.querySelectorAll('#dialog .list__item');
-                        listElement[0].addEventListener('click', () => {
-                            mountFile(liandi);
-                        });
-                        listElement[1].addEventListener('click', () => {
-                            mountWebDAV(liandi);
-                        });
+                        showMountDialog(liandi)
                         return;
                     }
                     liandi.navigation.element.innerHTML = '';

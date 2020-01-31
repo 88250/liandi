@@ -22,8 +22,13 @@ svg {
     fill: currentColor;
     color: rgba(0, 0, 0, .54);
 }
-</style><svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
+</style><svg></svg><svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
 ${getName(url)}`
+
+      window.liandi.liandi.ws.send('lsd', {
+        url,
+        path: '/',
+      })
 
       divElement.addEventListener('click', () => {
         if (this.classList.contains('current')) {
