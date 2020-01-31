@@ -1,5 +1,6 @@
 import {i18n} from '../i18n';
 import {Constants} from '../constants';
+import {removeLastPath} from "../util/path";
 
 export class Files {
     public element: HTMLElement;
@@ -17,18 +18,7 @@ export class Files {
         this.element.appendChild(this.listElement);
     }
 
-    renderBack(url: string, path: string) {
-        if (path === '/') {
-            window.liandi.liandi.files.element.firstElementChild.innerHTML = '';
-        } else {
-            const lastPaths = path.substr(0, path.lastIndexOf('/')).lastIndexOf('/') + 1;
-            window.liandi.liandi.files.element.firstElementChild.innerHTML =
-                `<file-item class="list__item" name="${i18n[Constants.LANG].back}" path="${path.substring(
-                    0, lastPaths)}"></file-item>`;
-        }
-    }
-
-    onLs(liandi: ILiandi, data: { files: IFile[], url: string }) {
+    onLs(liandi: ILiandi, data: { files: IFile[], url: string, path: string }) {
         let filesHTML = '';
         data.files.forEach((item: IFile) => {
             let className = '';
@@ -39,6 +29,13 @@ export class Files {
         });
         this.listElement.innerHTML = filesHTML;
         liandi.current.url = data.url
+
+        if (data.path === '/') {
+            this.element.firstElementChild.innerHTML = '';
+        } else {
+            this.element.firstElementChild.innerHTML =
+                `<file-item class="list__item" name="${i18n[Constants.LANG].back}" path="${removeLastPath(data.path)}"></file-item>`;
+        }
     }
 
     public onRename(liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) {

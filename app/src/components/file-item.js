@@ -38,7 +38,6 @@ customElements.define('file-item',
             url,
             path,
           })
-          window.liandi.liandi.files.renderBack(url, path)
         } else {
           window.liandi.liandi.editors.saveContent(window.liandi.liandi)
           window.liandi.liandi.ws.send('get', {

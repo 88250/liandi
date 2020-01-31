@@ -98,7 +98,6 @@ svg {
 
             target.parentElement.classList.add('current')
             window.liandi.liandi.editors.remove(window.liandi.liandi)
-            window.liandi.liandi.files.renderBack(url, '/')
             window.liandi.liandi.ws.send('ls', {
               url,
               path: target.getAttribute('path'),
