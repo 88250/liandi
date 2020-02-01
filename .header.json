@@ -2,7 +2,7 @@
   "Dir": ".",
   "Template": ".header.txt",
   "Includes": [
-    "*.go"
+    "kernel/*.go"
   ],
   "Excludes": ["html/**"],
   "UseDefaultExcludes": true,
