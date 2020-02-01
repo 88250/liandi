@@ -79,7 +79,7 @@ func Upload(c *gin.Context) {
 			break
 		}
 
-		succMap[file.Filename] = writePath
+		succMap[file.Filename] = fname
 	}
 
 	ret.Data = map[string]interface{}{
