@@ -45,20 +45,23 @@ func Upload(c *gin.Context) {
 		f, err := file.Open()
 		if nil != err {
 			errFiles = append(errFiles, fname)
-			continue
+			ret.Msg = err.Error()
+			break
 		}
 
 		data, err := ioutil.ReadAll(f)
 		if nil != err {
 			errFiles = append(errFiles, fname)
-			continue
+			ret.Msg = err.Error()
+			break
 		}
 
 		writePath := path.Join(p, fname)
 		exist, err := Exist(u, writePath)
 		if nil != err {
 			errFiles = append(errFiles, fname)
-			continue
+			ret.Msg = err.Error()
+			break
 		}
 
 		if exist {
@@ -70,10 +73,11 @@ func Upload(c *gin.Context) {
 
 		if err := Put(u, writePath, data); nil != err {
 			errFiles = append(errFiles, fname)
-			continue
+			ret.Msg = err.Error()
+			break
 		}
 
-		succMap[file.Filename] = fname
+		succMap[file.Filename] = writePath
 	}
 
 	ret.Data = map[string]interface{}{
