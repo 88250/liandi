@@ -50,6 +50,8 @@ func main() {
 		}
 	})
 
+	r.POST("/upload", util.Upload)
+
 	m.HandleConnect(func(s *melody.Session) {
 		util.SetPushChan(s)
 		util.Logger.Debug("websocket connected")
