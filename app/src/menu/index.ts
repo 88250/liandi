@@ -1,6 +1,6 @@
 import {initFilesMenu} from './files';
 import {initNavigationMenu} from './navigation';
-import {initMountMenu} from "./mount";
+import {initMountMenu} from './mount';
 
 export class Menus {
     public itemData: {
@@ -31,13 +31,13 @@ export class Menus {
                     };
                     navigationMenu.popup({
                         callback: () => {
-                            target.classList.remove('focus');
+                            target.classList.remove('list__item--focus');
                         }
                     });
                     target.parentElement.querySelectorAll('tree-list').forEach(item => {
-                        item.classList.remove('focus');
+                        item.classList.remove('list__item--focus');
                     });
-                    target.classList.add('focus');
+                    target.classList.add('list__item--focus');
                     event.preventDefault();
                     break;
                 }
@@ -54,15 +54,15 @@ export class Menus {
                     filesMenu.items[3].enabled = true;
                     filesMenu.popup({
                         callback: () => {
-                            target.classList.remove('focus');
+                            target.shadowRoot.querySelector('.list__item').classList.remove('list__item--focus');
                         }
                     });
 
-                    if (!target.classList.contains('current')) {
-                        target.parentElement.querySelectorAll('file-item').forEach(item => {
-                            item.classList.remove('focus');
+                    if (!target.shadowRoot.querySelector('.list__item').classList.contains('list__item--current')) {
+                        liandi.files.listElement.querySelectorAll('file-item').forEach(item => {
+                            item.shadowRoot.querySelector('.list__item').classList.remove('list__item--focus');
                         });
-                        target.classList.add('focus');
+                        target.shadowRoot.querySelector('.list__item').classList.add('list__item--focus');
                     }
                     event.preventDefault();
                     break;

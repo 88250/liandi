@@ -1,0 +1,40 @@
+.list {
+  &--signal {
+    .list__item {
+      cursor: pointer;
+      padding: 5px 10px;
+
+      &:hover {
+        background-color: rgb(246, 248, 250);
+      }
+    }
+  }
+
+  &__item {
+    border-bottom: 1px solid $border;
+    color: $black;
+    line-height: 21px;
+
+    svg {
+      color: $fade;
+      transition: $transition;
+    }
+
+    &:hover {
+      color: $black-text;
+
+      svg {
+        color: $gray;
+      }
+    }
+
+    &--current {
+      background-color: $blue !important;
+      color: #fff !important;
+    }
+
+    &--focus {
+      background-color: #ebeef1;
+    }
+  }
+}

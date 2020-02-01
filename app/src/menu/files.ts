@@ -106,8 +106,9 @@ export const initFilesMenu = (liandi: ILiandi) => {
                         url: itemData.url,
                         path: itemData.path
                     });
-                if (itemData.target && itemData.target.classList.contains('current')) {
+                if (liandi.current.url === itemData.url && itemData.path === liandi.current.path) {
                     liandi.editors.element.innerHTML = '';
+                    liandi.current.path = '';
                 }
                 destroyDialog();
             });

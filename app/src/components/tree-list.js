@@ -13,69 +13,14 @@ customElements.define('tree-list',
         pathHTML = '<path d="M28 10.231v11.846c0 2.070-1.7 3.769-3.769 3.769h-20.462c-2.070 0-3.769-1.7-3.769-3.769v-16.154c0-2.070 1.7-3.769 3.769-3.769h5.385c2.070 0 3.769 1.7 3.769 3.769v0.538h11.308c2.070 0 3.769 1.7 3.769 3.769z"></path>'
       }
       const ulElement = document.createElement('ul')
-      ulElement.innerHTML = `<li>
-<svg path="/" class="arrow" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"></svg>
-<span class="folder" path="/">
-  <svg class="fold" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
+      ulElement.className = 'tree-list'
+      ulElement.innerHTML = `<li class="list__item fn__flex">
+<svg class="fn__flex-shrink0 tree-list__arrow" path="/" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"></svg>
+<span class="tree-list__folder fn__ellipsis" path="/">
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
   <span>${getName(url)}</span>
 </span>
 </li>`
-
-      const style = document.createElement('style');
-      style.innerText =`
-ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-}
-li {
-    padding: 5px 10px;
-    line-height: 18px;
-    user-select: none;
-    display: flex;
-    align-items: center;
-    color: #3b3e43;
-    transition: all .15s ease-in-out;
-}
-li:hover {
-   color: #000;
-}
-li:hover svg {
-  color: rgba(0, 0, 0, .54);
-}
-li.current {
-  background-color: #4285f4;
-  color: #fff;
-}
-svg {
-    margin-right: 5px;
-    fill: currentColor;
-    color: rgba(0, 0, 0, .38);
-    transition: all .15s ease-in-out;
-    flex-shrink: 0;
-}
-.arrow {
-    height: 8px;
-    width: 8px;
-    cursor: pointer;
-}
-.arrow--open {
-   transform: rotate(90deg);
-}
-.fold {
-    height: 14px;
-    width: 14px;
-    float: left;
-    margin: 2px 5px 0 0;
-}
-.folder {
-    cursor: pointer;
-    flex: 1;
-    white-space: nowrap;
-    word-break: keep-all;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}`
 
       window.liandi.liandi.ws.send('lsd', {
         url,
@@ -85,18 +30,18 @@ svg {
       ulElement.addEventListener('click',  (event) => {
         let target = event.target
         while (target && !target.parentElement.isEqualNode(ulElement)) {
-          if (target.classList.contains('folder')) {
-            if (target.parentElement.classList.contains('current')) {
+          if (target.classList.contains('tree-list__folder')) {
+            if (target.parentElement.classList.contains('list__item--current')) {
               return
             }
 
             window.liandi.liandi.navigation.element.querySelectorAll('tree-list').forEach(item => {
               item.shadowRoot.querySelectorAll('li').forEach((liItem) => {
-                liItem.classList.remove('current')
+                liItem.classList.remove('list__item--current')
               })
             })
 
-            target.parentElement.classList.add('current')
+            target.parentElement.classList.add('list__item--current')
             window.liandi.liandi.editors.remove(window.liandi.liandi)
             window.liandi.liandi.ws.send('ls', {
               url,
@@ -106,28 +51,27 @@ svg {
             break
           }
 
-          if (target.classList.contains('arrow')) {
+          if (target.classList.contains('tree-list__arrow')) {
             const filesString = target.getAttribute('files')
             if (!filesString) {
               return
             }
-            if (target.classList.contains('arrow--open')) {
-              target.classList.remove('arrow--open')
+            if (target.classList.contains('tree-list__arrow--open')) {
+              target.classList.remove('tree-list__arrow--open')
               target.parentElement.nextElementSibling.style.display = 'none'
               return
             }
 
-            target.classList.add('arrow--open')
+            target.classList.add('tree-list__arrow--open')
 
             const files = JSON.parse(filesString)
             let fileHTML = ''
             files.forEach((item) => {
-              fileHTML += `<li style="padding-left: ${(item.path.split(
-                '/').length - 2) * 13 + 10}px">
-<svg class="arrow" path="${item.path}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"></svg>
-<span class="folder" path="${item.path}">
-  <svg class="fold" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
-  ${item.name}
+              fileHTML += `<li class="list__item fn__flex" style="padding-left: ${(item.path.split('/').length - 2) * 13}px">
+<svg class="fn__flex-shrink0 tree-list__arrow" path="${item.path}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"></svg>
+<span class="tree-list__folder fn__ellipsis" path="${item.path}">
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
+  <span>${item.name}</span>
 </span>
 </li>`
               window.liandi.liandi.ws.send('lsd', {
@@ -135,8 +79,7 @@ svg {
                 path: item.path,
               }, true)
             })
-            target.parentElement.insertAdjacentHTML('afterend',
-              `<ul>${fileHTML}</ul>`)
+            target.parentElement.insertAdjacentHTML('afterend', `<ul>${fileHTML}</ul>`)
             event.preventDefault()
             break
           }
@@ -145,8 +88,11 @@ svg {
         }
       }, false)
 
+      const styleElement = document.createElement('style')
+      styleElement.innerText = window.liandi.liandi.componentCSS;
+
       const shadowRoot = this.attachShadow({mode: 'open'})
-      shadowRoot.appendChild(style)
+      shadowRoot.appendChild(styleElement)
       shadowRoot.appendChild(ulElement)
     }
   })

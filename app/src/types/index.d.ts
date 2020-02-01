@@ -11,6 +11,7 @@ declare interface IFile {
 }
 
 declare interface ILiandi {
+    componentCSS: string;
     ws?: {
         webSocket: WebSocket,
         send: (cmd: string, param: any) => void
@@ -44,7 +45,6 @@ declare interface ILiandi {
     current?: {
         url: string
         path: string
-        name: string
     };
 }
 

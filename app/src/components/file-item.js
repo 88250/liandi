@@ -15,22 +15,30 @@ customElements.define('file-item',
         pathHTML = '<path d="M28 10.231v11.846c0 2.070-1.7 3.769-3.769 3.769h-20.462c-2.070 0-3.769-1.7-3.769-3.769v-16.154c0-2.070 1.7-3.769 3.769-3.769h5.385c2.070 0 3.769 1.7 3.769 3.769v0.538h11.308c2.070 0 3.769 1.7 3.769 3.769z"></path>'
       }
       const divElement = document.createElement('div')
+      divElement.className = 'list__item file-item'
+      if (this.getAttribute('current') === 'true') {
+        divElement.classList.add('list__item--current')
+      }
       divElement.innerHTML = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
 <span>${this.getAttribute('name')}</span>`
 
-      divElement.addEventListener('click', () => {
-        if (this.classList.contains('current')) {
+      const that = this
+      divElement.addEventListener('click', function () {
+        if (this.classList.contains('list__item--current')) {
           return
         }
 
-        const path = this.getAttribute('path')
+        const path = that.getAttribute('path')
         const url = window.liandi.liandi.current.url
 
-        this.parentElement.querySelectorAll('file-item').forEach((item) => {
-          item.classList.remove('current')
-        })
+        window.liandi.liandi.files.listElement.querySelectorAll('file-item').
+          forEach((item) => {
+            item.shadowRoot.querySelector('.list__item').
+              classList.
+              remove('list__item--current')
+          })
 
-        this.classList.add('current')
+        this.classList.add('list__item--current')
 
         if (path.endsWith('/')) {
           window.liandi.liandi.editors.remove(window.liandi.liandi)
@@ -49,23 +57,12 @@ customElements.define('file-item',
         window.liandi.liandi.current.path = path
       })
 
-      const style = document.createElement('style')
-      style.innerText = `
-svg {
-    height: 14px;
-    width: 14px;
-    float: left;
-    margin: 2px 5px 0 0;
-    fill: currentColor;
-    color: rgba(0, 0, 0, .38);
-    transition: all .15s ease-in-out;
-}
-div:hover svg  {
-    color: rgba(0, 0, 0, .58);
-}`
+      const styleElement = document.createElement('style')
+      styleElement.innerText = window.liandi.liandi.componentCSS;
+
       const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.appendChild(styleElement)
       shadowRoot.appendChild(divElement)
-      shadowRoot.appendChild(style)
     }
 
     attributeChangedCallback (name, oldValue, newValue) {

@@ -1,10 +1,10 @@
 export const destroyDialog = (destroyDialogCallback?: () => void) => {
-    const dialogElement =   document.getElementById('dialog')
+    const dialogElement =   document.getElementById('dialog');
     if (dialogElement) {
         dialogElement.remove();
     }
     if (destroyDialogCallback) {
-        destroyDialogCallback()
+        destroyDialogCallback();
     }
 };
 

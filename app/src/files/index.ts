@@ -1,6 +1,6 @@
 import {i18n} from '../i18n';
 import {Constants} from '../constants';
-import {removeLastPath} from "../util/path";
+import {removeLastPath} from '../util/path';
 
 export class Files {
     public element: HTMLElement;
@@ -21,20 +21,20 @@ export class Files {
     onLs(liandi: ILiandi, data: { files: IFile[], url: string, path: string }) {
         let filesHTML = '';
         data.files.forEach((item: IFile) => {
-            let className = '';
+            let current = 'false';
             if (data.url === liandi.current.url && item.path === liandi.current.path) {
-                className = ' current';
+                current = 'true';
             }
-            filesHTML += `<file-item class="list__item${className}" path="${item.path}" name="${item.name}"></file-item>`;
+            filesHTML += `<file-item current="${current}" path="${item.path}" name="${item.name}"></file-item>`;
         });
         this.listElement.innerHTML = filesHTML;
-        liandi.current.url = data.url
+        liandi.current.url = data.url;
 
         if (data.path === '/') {
             this.element.firstElementChild.innerHTML = '';
         } else {
             this.element.firstElementChild.innerHTML =
-                `<file-item class="list__item" name="${i18n[Constants.LANG].back}" path="${removeLastPath(data.path)}"></file-item>`;
+                `<file-item name="${i18n[Constants.LANG].back}" path="${removeLastPath(data.path)}"></file-item>`;
         }
     }
 
@@ -43,7 +43,7 @@ export class Files {
         fileItemElement.setAttribute('path', data.newPath);
         fileItemElement.setAttribute('name', data.newName);
 
-        if (fileItemElement.classList.contains('current')) {
+        if (fileItemElement.classList.contains('list__item--current')) {
             liandi.current.path = data.newPath;
 
             if (!data.newPath.endsWith('/')) {

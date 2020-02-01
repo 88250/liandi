@@ -9,15 +9,14 @@ export const initNavigationMenu = (liandi: ILiandi) => {
         label: i18n[Constants.LANG].unMount,
         click: () => {
             const itemData = liandi.menus.itemData;
-            if (itemData.target.classList.contains('current')) {
+            if (itemData.target.shadowRoot.querySelector('.list__item').classList.contains('list__item--current')) {
                 liandi.files.listElement.innerHTML = '';
                 liandi.files.element.firstElementChild.innerHTML = '';
                 liandi.editors.remove(liandi);
                 liandi.current = {
                     url: '',
                     path: '',
-                    name: ''
-                }
+                };
             }
             liandi.ws.send('unmount', {
                 url: itemData.url

@@ -2,11 +2,11 @@ import {Constants} from '../constants';
 import {hideMessage, showMessage} from '../util/message';
 import {destroyDialog, dialog} from '../util/dialog';
 import {i18n} from '../i18n';
-import {mountFile, mountWebDAV, showMountDialog} from "../util/mount";
+import {mountFile, mountWebDAV, showMountDialog} from '../util/mount';
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
-    private reqId: number
+    private reqId: number;
     private isFirst: boolean;
 
     constructor(liandi: ILiandi) {
@@ -15,19 +15,19 @@ export class WebSocketUtil {
     }
 
     public send(cmd: string, param: any, process = false) {
-        this.reqId = process ? 0 : new Date().getTime()
+        this.reqId = process ? 0 : new Date().getTime();
         this.webSocket.send(JSON.stringify({
             cmd,
             reqId: this.reqId,
             param,
-        }))
+        }));
     }
 
     private connect(liandi: ILiandi) {
         this.webSocket = new WebSocket(Constants.WEBSOCKET_ADDREDD);
         this.webSocket.onopen = () => {
             if (this.isFirst) {
-                this.send('dirs', {})
+                this.send('dirs', {});
             }
             this.isFirst = false;
         };
@@ -44,7 +44,7 @@ export class WebSocketUtil {
         this.webSocket.onmessage = (event) => {
             const response = JSON.parse(event.data);
             if (response.reqId !== this.reqId) {
-                return
+                return;
             }
 
             if (response.code !== 0) {
@@ -54,20 +54,20 @@ export class WebSocketUtil {
             switch (response.cmd) {
                 case 'put':
                     showMessage(i18n[Constants.LANG].saveSuccess);
-                    break
+                    break;
                 case 'lsd':
                     liandi.navigation.onLsd(liandi, response.data);
-                    break
+                    break;
                 case 'unmount':
                     if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {
-                        showMountDialog(liandi)
+                        showMountDialog(liandi);
                     }
-                    break
+                    break;
                 case 'mount':
                 case 'mountremote':
                     liandi.navigation.onMount(response.data);
-                    hideMessage()
-                    destroyDialog()
+                    hideMessage();
+                    destroyDialog();
                     break;
                 case 'ls':
                     liandi.files.onLs(liandi, response.data);
@@ -77,7 +77,7 @@ export class WebSocketUtil {
                     break;
                 case 'dirs':
                     if (response.data.length === 0) {
-                        showMountDialog(liandi)
+                        showMountDialog(liandi);
                         return;
                     }
                     liandi.navigation.element.innerHTML = '';

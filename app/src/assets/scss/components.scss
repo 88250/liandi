@@ -1,0 +1,43 @@
+@import "variables";
+@import "mixin";
+@import "reset";
+@import "function";
+@import "list";
+
+.tree-list {
+  &__arrow {
+    height: 8px;
+    width: 8px;
+    cursor: pointer;
+    align-self: center;
+    padding: 5px;
+    margin-left: 5px;
+
+    &--open {
+      transform: rotate(90deg);
+    }
+  }
+
+  &__folder {
+    cursor: pointer;
+    padding: 5px 10px 5px 0;
+    user-select: none;
+    flex: 1;
+
+    svg {
+      float: left;
+      margin: 4px 5px 4px 0;
+    }
+  }
+}
+
+.file-item {
+  cursor: pointer;
+  padding: 5px 10px;
+  user-select: none;
+
+  svg {
+    float: left;
+    margin: 4px 5px 4px 0;
+  }
+}

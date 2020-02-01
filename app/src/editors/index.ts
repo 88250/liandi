@@ -61,6 +61,14 @@ export class Editors {
             this.vditor = new Vditor('liandiVditor', {
                 cache: false,
                 value: file.content,
+                cdn: '../dist/vditor',
+                upload: {
+                    url: Constants.UPLOAD_ADDRESS,
+                    headers: {
+                        'X-URL': encodeURIComponent(liandi.current.url),
+                        'X-PATH': encodeURIComponent(liandi.current.path)
+                    }
+                },
                 input: () => {
                     clearTimeout(this.timeoutId);
                     this.timeoutId = window.setTimeout(() => {
