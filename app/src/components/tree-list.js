@@ -31,7 +31,8 @@ customElements.define('tree-list',
         let target = event.target
         while (target && !target.parentElement.isEqualNode(ulElement)) {
           if (target.classList.contains('tree-list__folder')) {
-            if (target.parentElement.classList.contains('list__item--current')) {
+            if (target.parentElement.classList.contains(
+              'list__item--current')) {
               return
             }
 
@@ -45,13 +46,15 @@ customElements.define('tree-list',
             target.parentElement.classList.add('list__item--current')
             window.liandi.liandi.editors.remove(window.liandi.liandi)
 
-            if (target.parentElement.parentElement.classList.contains('tree-list')) {
-              window.liandi.liandi.current.dir = dir
-            }
             window.liandi.liandi.ws.send('ls', {
               url: dir.url,
               path: target.getAttribute('path'),
             })
+
+            window.liandi.liandi.current = {
+              dir,
+              path: target.getAttribute('path'),
+            }
             event.preventDefault()
             break
           }
@@ -72,7 +75,10 @@ customElements.define('tree-list',
             const files = JSON.parse(filesString)
             let fileHTML = ''
             files.forEach((item) => {
-              fileHTML += `<li class="list__item fn__flex" style="padding-left: ${(item.path.split(
+              fileHTML += `<li class="list__item fn__flex${item.path ===
+              window.liandi.liandi.current.path
+                ? ' list__item--current'
+                : ''}" style="padding-left: ${(item.path.split(
                 '/').length - 2) * 13}px">
 <svg class="fn__flex-shrink0 tree-list__arrow" path="${item.path}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"></svg>
 <span class="tree-list__folder fn__ellipsis" path="${item.path}">
@@ -81,7 +87,7 @@ customElements.define('tree-list',
 </span>
 </li>`
               window.liandi.liandi.ws.send('lsd', {
-                url:dir.url,
+                url: dir.url,
                 path: item.path,
               }, true)
             })
@@ -93,7 +99,7 @@ customElements.define('tree-list',
 
           target = target.parentElement
         }
-      }, false)
+      })
 
       const styleElement = document.createElement('style')
       styleElement.innerText = window.liandi.liandi.componentCSS
