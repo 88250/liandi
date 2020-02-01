@@ -1,7 +1,7 @@
-import {hideMessage, showMessage} from '../util/message';
 import {i18n} from '../i18n';
 import {Constants} from '../constants';
 import {rename} from '../util/rename';
+import { getPath} from "../util/path";
 
 const Vditor = require('vditor');
 
@@ -55,19 +55,24 @@ export class Editors {
 
         this.inputWrapElement.querySelector('input').value = file.name;
 
+        const linkBase = liandi.current.url + getPath(liandi.current.path).substr(1)
         if (this.editorElement.innerHTML !== '') {
+            this.vditor.vditor.lute.SetLinkBase(linkBase)
             this.vditor.setValue(file.content);
         } else {
             this.vditor = new Vditor('liandiVditor', {
                 cache: false,
-                value: file.content,
-                cdn: '../dist/vditor',
+                cdn: '../node_modules/vditor',
                 upload: {
                     url: Constants.UPLOAD_ADDRESS,
                     headers: {
                         'X-URL': encodeURIComponent(liandi.current.url),
                         'X-PATH': encodeURIComponent(liandi.current.path)
                     }
+                },
+                after() {
+                    this.vditor.vditor.lute.SetLinkBase(linkBase)
+                    this.vditor.setValue(file.content);
                 },
                 input: () => {
                     clearTimeout(this.timeoutId);
@@ -77,5 +82,6 @@ export class Editors {
                 }
             });
         }
+
     }
 }
