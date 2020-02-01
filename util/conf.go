@@ -160,8 +160,8 @@ func (dir *Dir) Get(path string) (ret string, err error) {
 	return gulu.Str.FromBytes(data), nil
 }
 
-func (dir *Dir) Put(path, content string) error {
-	if err := dir.client.Write(path, []byte(content), 0644); nil != err {
+func (dir *Dir) Put(path string, content []byte) error {
+	if err := dir.client.Write(path, content, 0644); nil != err {
 		msg := fmt.Sprintf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
 		Logger.Errorf(msg)
 		return errors.New(msg)

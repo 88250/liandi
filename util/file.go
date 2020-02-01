@@ -20,6 +20,7 @@ import (
 	"strings"
 
 	"github.com/88250/gowebdav"
+	"github.com/88250/gulu"
 )
 
 type File struct {
@@ -130,7 +131,7 @@ func Get(url, path string) (ret string, err error) {
 	return
 }
 
-func Put(url, path, content string) error {
+func Put(url, path string, content []byte) error {
 	dir := Conf.dir(url)
 	if nil == dir {
 		return ErrDirNotExist
@@ -140,7 +141,7 @@ func Put(url, path, content string) error {
 	}
 
 	fname := filepath.Base(path)
-	doc := newDoc(fname, content, url, path)
+	doc := newDoc(fname, gulu.Str.FromBytes(content), url, path)
 	Index(doc)
 	return nil
 }
@@ -153,7 +154,7 @@ func Create(url, path string) error {
 	if exist {
 		return errors.New("文件名重复")
 	}
-	return Put(url, path, "")
+	return Put(url, path, []byte(""))
 }
 
 func Exist(url, path string) (bool, error) {

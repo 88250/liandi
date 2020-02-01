@@ -12,7 +12,10 @@
 
 package command
 
-import "github.com/88250/liandi/util"
+import (
+	"github.com/88250/gulu"
+	"github.com/88250/liandi/util"
+)
 
 type put struct {
 	*BaseCmd
@@ -24,7 +27,7 @@ func (cmd *put) Exec() {
 	url = util.NormalizeURL(url)
 	path := cmd.param["path"].(string)
 	content := cmd.param["content"].(string)
-	err := util.Put(url, path, content)
+	err := util.Put(url, path, gulu.Str.ToBytes(content))
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
