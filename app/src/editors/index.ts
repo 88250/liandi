@@ -70,7 +70,7 @@ export class Editors {
                         'X-PATH': encodeURIComponent(liandi.current.path)
                     }
                 },
-                after() {
+                after: () => {
                     this.vditor.vditor.lute.SetLinkBase(linkBase)
                     this.vditor.setValue(file.content);
                 },
