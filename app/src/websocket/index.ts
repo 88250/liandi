@@ -54,6 +54,7 @@ export class WebSocketUtil {
             switch (response.cmd) {
                 case 'put':
                     showMessage(i18n[Constants.LANG].saveSuccess);
+                    liandi.editors.saved = true
                     break;
                 case 'lsd':
                     liandi.navigation.onLsd(liandi, response.data);

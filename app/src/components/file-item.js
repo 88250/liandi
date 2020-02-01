@@ -36,9 +36,11 @@ customElements.define('file-item',
             item.shadowRoot.querySelector('.list__item').
               classList.
               remove('list__item--current')
+            item.setAttribute('current', 'false')
           })
 
         this.classList.add('list__item--current')
+        that.setAttribute('current', 'true')
 
         if (path.endsWith('/')) {
           window.liandi.liandi.editors.remove(window.liandi.liandi)

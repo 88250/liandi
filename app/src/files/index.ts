@@ -43,7 +43,7 @@ export class Files {
         fileItemElement.setAttribute('path', data.newPath);
         fileItemElement.setAttribute('name', data.newName);
 
-        if (fileItemElement.classList.contains('list__item--current')) {
+        if (fileItemElement.getAttribute('current') === 'true') {
             liandi.current.path = data.newPath;
 
             if (!data.newPath.endsWith('/')) {

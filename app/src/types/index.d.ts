@@ -14,7 +14,7 @@ declare interface ILiandi {
     componentCSS: string;
     ws?: {
         webSocket: WebSocket,
-        send: (cmd: string, param: any) => void
+        send: (cmd: string, param: any, process?: boolean) => void
     };
     navigation?: {
         element: HTMLElement
@@ -30,6 +30,7 @@ declare interface ILiandi {
     editors?: {
         element: HTMLElement
         inputWrapElement: HTMLElement
+        saved: boolean
         saveContent: (liandi: ILiandi) => void
         remove: (liandi: ILiandi) => void
         onGet: (liandi: ILiandi, file: { name: string, content: string }) => void

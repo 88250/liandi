@@ -35,6 +35,6 @@ export const rename = (name: string, url: string, oldPath: string) => {
             url,
             oldPath,
             newPath
-        });
+        }, true);
     return newPath;
 };

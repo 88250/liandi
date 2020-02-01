@@ -11,8 +11,10 @@ export class Editors {
     private editorElement: HTMLElement;
     private vditor: any;
     private timeoutId: number;
+    public saved: boolean
 
     constructor(liandi: ILiandi) {
+        this.saved = true;
         this.element = document.getElementById('editors');
         this.inputWrapElement = document.createElement('div');
         this.inputWrapElement.className = 'fn__flex';
@@ -37,6 +39,9 @@ export class Editors {
     }
 
     public saveContent(liandi: ILiandi) {
+        if (this.saved) {
+            return;
+        }
         if (this.element.innerHTML === '') {
             return;
         }
@@ -75,6 +80,7 @@ export class Editors {
                     this.vditor.setValue(file.content);
                 },
                 input: () => {
+                    this.saved = false
                     clearTimeout(this.timeoutId);
                     this.timeoutId = window.setTimeout(() => {
                         this.saveContent(liandi);
