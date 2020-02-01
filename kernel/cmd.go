@@ -10,11 +10,7 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package command
-
-import (
-	"github.com/88250/liandi/util"
-)
+package main
 
 type Cmd interface {
 	Name() string
@@ -65,7 +61,7 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) Cmd 
 
 func Exec(cmd Cmd) {
 	go func() {
-		defer util.Recover()
+		defer Recover()
 		cmd.Exec()
 	}()
 }

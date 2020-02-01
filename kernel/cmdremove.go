@@ -10,41 +10,38 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package command
+package main
 
 import (
 	"path"
-
-	"github.com/88250/liandi/util"
 )
 
-type rename struct {
+type remove struct {
 	*BaseCmd
 }
 
-func (cmd *rename) Exec() {
-	ret := util.NewCmdResult(cmd.Name(), cmd.id)
+func (cmd *remove) Exec() {
+	ret := NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = util.NormalizeURL(url)
-	oldPath := cmd.param["oldPath"].(string)
-	newPath := cmd.param["newPath"].(string)
-	err := util.Rename(url, oldPath, newPath)
+	url = NormalizeURL(url)
+	p := cmd.param["path"].(string)
+	err := Remove(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		util.Push(ret.Bytes())
-		return
 	}
 
-	ret.Data = map[string]interface{}{
-		"url":     url,
-		"oldPath": oldPath,
-		"newPath": newPath,
-		"newName": path.Base(newPath),
+	p = path.Dir(path.Clean(p))
+	if "." == p {
+		p = "/"
 	}
-	util.Push(ret.Bytes())
+	ret.Data = map[string]interface{}{
+		"url":  url,
+		"path": p,
+	}
+	Push(ret.Bytes())
 }
 
-func (cmd *rename) Name() string {
-	return "rename"
+func (cmd *remove) Name() string {
+	return "remove"
 }

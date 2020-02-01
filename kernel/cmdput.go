@@ -10,37 +10,30 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package command
+package main
 
 import (
-	"path"
-
-	"github.com/88250/liandi/util"
+	"github.com/88250/gulu"
 )
 
-type get struct {
+type put struct {
 	*BaseCmd
 }
 
-func (cmd *get) Exec() {
-	ret := util.NewCmdResult(cmd.Name(), cmd.id)
+func (cmd *put) Exec() {
+	ret := NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = util.NormalizeURL(url)
-	p := cmd.param["path"].(string)
-	content, err := util.Get(url, p)
+	url = NormalizeURL(url)
+	path := cmd.param["path"].(string)
+	content := cmd.param["content"].(string)
+	err := Put(url, path, gulu.Str.ToBytes(content))
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		return
-	} else {
-		ret.Data = map[string]interface{}{
-			"name":    path.Base(p),
-			"content": content,
-		}
 	}
-	util.Push(ret.Bytes())
+	Push(ret.Bytes())
 }
 
-func (cmd *get) Name() string {
-	return "get"
+func (cmd *put) Name() string {
+	return "put"
 }

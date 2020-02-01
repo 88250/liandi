@@ -10,26 +10,24 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package command
-
-import "github.com/88250/liandi/util"
+package main
 
 type dirs struct {
 	*BaseCmd
 }
 
 func (cmd *dirs) Exec() {
-	ret := util.NewCmdResult(cmd.Name(), cmd.id)
+	ret := NewCmdResult(cmd.Name(), cmd.id)
 
 	data := []map[string]interface{}{}
-	for _, dir := range util.Conf.Dirs {
+	for _, dir := range Conf.Dirs {
 		data = append(data, map[string]interface{}{
 			"url":    dir.URL,
 			"remote": dir.IsRemote(),
 		})
 	}
 	ret.Data = data
-	util.Push(ret.Bytes())
+	Push(ret.Bytes())
 }
 
 func (cmd *dirs) Name() string {

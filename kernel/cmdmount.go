@@ -10,26 +10,29 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package command
+package main
 
-import (
-	"github.com/88250/liandi/util"
-)
-
-type unmount struct {
+type mount struct {
 	*BaseCmd
 }
 
-func (cmd *unmount) Exec() {
-	ret := util.NewCmdResult(cmd.Name(), cmd.id)
+func (cmd *mount) Exec() {
+	ret := NewCmdResult(cmd.Name(), cmd.id)
+	p := cmd.param["path"].(string)
 	url := cmd.param["url"].(string)
-	url = util.NormalizeURL(url)
-	util.StopServeWebDAV()
-	util.Unmount(url)
-	util.StartServeWebDAV()
-	util.Push(ret.Bytes())
+	url = NormalizeURL(url)
+	StopServeWebDAV()
+	url, alreadyMount := Mount(url, p)
+	StartServeWebDAV()
+	if !alreadyMount {
+		ret.Data = map[string]interface{}{
+			"url":    url,
+			"remote": false,
+		}
+		Push(ret.Bytes())
+	}
 }
 
-func (cmd *unmount) Name() string {
-	return "unmount"
+func (cmd *mount) Name() string {
+	return "mount"
 }

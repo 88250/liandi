@@ -10,18 +10,32 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package util
+package main
 
-import (
-	"gopkg.in/olahol/melody.v1"
-)
-
-var s *melody.Session
-
-func SetPushChan(session *melody.Session) {
-	s = session
+type ls struct {
+	*BaseCmd
 }
 
-func Push(msg []byte) {
-	s.Write(msg)
+func (cmd *ls) Exec() {
+	ret := NewCmdResult(cmd.Name(), cmd.id)
+	url := cmd.param["url"].(string)
+	url = NormalizeURL(url)
+	path := cmd.param["path"].(string)
+	files, err := Ls(url, path)
+	if nil != err {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	} else {
+		ret.Data = map[string]interface{}{
+			"url":   url,
+			"path":  path,
+			"files": files,
+		}
+	}
+	Push(ret.Bytes())
+}
+
+func (cmd *ls) Name() string {
+	return "ls"
 }

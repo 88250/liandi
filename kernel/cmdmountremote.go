@@ -10,24 +10,30 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package util
+package main
 
-import (
-	"os"
-	"time"
+type mountremote struct {
+	*BaseCmd
+}
 
-	"github.com/mitchellh/go-ps"
-)
-
-var ppid = os.Getppid()
-
-func ParentExited() {
-	for range time.Tick(2 * time.Second) {
-		process, e := ps.FindProcess(ppid)
-		if nil == process || nil != e {
-			Logger.Info("UI 进程已经退出，现在退出内核进程")
-			Close()
-			os.Exit(0)
+func (cmd *mountremote) Exec() {
+	ret := NewCmdResult(cmd.Name(), cmd.id)
+	url := cmd.param["url"].(string)
+	url = NormalizeURL(url)
+	user := cmd.param["user"].(string)
+	password := cmd.param["password"].(string)
+	StopServeWebDAV()
+	url, alreadyMount := MountRemote(url, user, password)
+	StartServeWebDAV()
+	if !alreadyMount {
+		ret.Data = map[string]interface{}{
+			"url":    url,
+			"remote": true,
 		}
+		Push(ret.Bytes())
 	}
+}
+
+func (cmd *mountremote) Name() string {
+	return "mountremote"
 }

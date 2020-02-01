@@ -10,7 +10,7 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package util
+package main
 
 import (
 	"crypto/sha256"

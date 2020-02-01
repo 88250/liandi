@@ -10,7 +10,7 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package util
+package main
 
 import (
 	"io/ioutil"
@@ -31,6 +31,7 @@ func Upload(c *gin.Context) {
 	u, _ = url.PathUnescape(u)
 	p := c.GetHeader("X-Path")
 	p, _ = url.PathUnescape(p)
+	p = path.Dir(p)
 	p = p[1:] // 去掉开头的 /
 	dir := Conf.dir(u)
 	if nil == dir {

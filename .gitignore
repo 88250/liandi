@@ -6,17 +6,16 @@
 app/node_modules
 app/dist
 header
-liandi
-liandi.exe
-kernel
-kernel.exe
+kernel/kernel
+kernel/kernel.exe
+kernel/kernel-darwin
+kernel/kernel-linux
 
 # Test binary, build with `go test -c`
 *.test
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
-react/build
 electron/dist
 
 # IDE

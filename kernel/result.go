@@ -10,31 +10,36 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package command
+package main
 
 import (
+	"encoding/json"
+
 	"github.com/88250/gulu"
-	"github.com/88250/liandi/util"
 )
 
-type put struct {
-	*BaseCmd
+type Result struct {
+	Cmd   string  `json:"cmd"`
+	ReqId float64 `json:"reqId"`
+	*gulu.Result
 }
 
-func (cmd *put) Exec() {
-	ret := util.NewCmdResult(cmd.Name(), cmd.id)
-	url := cmd.param["url"].(string)
-	url = util.NormalizeURL(url)
-	path := cmd.param["path"].(string)
-	content := cmd.param["content"].(string)
-	err := util.Put(url, path, gulu.Str.ToBytes(content))
+func NewResult() *Result {
+	return &Result{"", 0, &gulu.Result{Code: 0, Msg: "", Data: nil}}
+}
+
+func NewCmdResult(cmdName string, cmdId float64) *Result {
+	ret := NewResult()
+	ret.Cmd = cmdName
+	ret.ReqId = cmdId
+	return ret
+}
+
+func (r *Result) Bytes() []byte {
+	ret, err := json.Marshal(r)
 	if nil != err {
-		ret.Code = -1
-		ret.Msg = err.Error()
+		Logger.Errorf("marshal result [%+v] failed [%s]", r, err)
 	}
-	util.Push(ret.Bytes())
-}
 
-func (cmd *put) Name() string {
-	return "put"
+	return ret
 }

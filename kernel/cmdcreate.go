@@ -10,27 +10,32 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package command
+package main
 
 import (
 	"path"
-
-	"github.com/88250/liandi/util"
+	"strings"
 )
 
-type mkdir struct {
+type create struct {
 	*BaseCmd
 }
 
-func (cmd *mkdir) Exec() {
-	ret := util.NewCmdResult(cmd.Name(), cmd.id)
+func (cmd *create) Exec() {
+	ret := NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = util.NormalizeURL(url)
+	url = NormalizeURL(url)
 	p := cmd.param["path"].(string)
-	err := util.Mkdir(url, p)
+	if !strings.HasSuffix(p, ".md") {
+		p += ".md"
+	}
+
+	err := Create(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+		Push(ret.Bytes())
+		return
 	}
 
 	p = path.Dir(path.Clean(p))
@@ -41,9 +46,9 @@ func (cmd *mkdir) Exec() {
 		"url":  url,
 		"path": p,
 	}
-	util.Push(ret.Bytes())
+	Push(ret.Bytes())
 }
 
-func (cmd *mkdir) Name() string {
-	return "mkdir"
+func (cmd *create) Name() string {
+	return "create"
 }

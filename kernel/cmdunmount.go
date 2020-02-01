@@ -10,21 +10,22 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package command
+package main
 
-import "github.com/88250/liandi/util"
-
-type search struct {
+type unmount struct {
 	*BaseCmd
 }
 
-func (cmd *search) Exec() {
-	ret := util.NewCmdResult(cmd.Name(), cmd.id)
-	k := cmd.param["k"].(string)
-	util.Search(k)
-	util.Push(ret.Bytes())
+func (cmd *unmount) Exec() {
+	ret := NewCmdResult(cmd.Name(), cmd.id)
+	url := cmd.param["url"].(string)
+	url = NormalizeURL(url)
+	StopServeWebDAV()
+	Unmount(url)
+	StartServeWebDAV()
+	Push(ret.Bytes())
 }
 
-func (cmd *search) Name() string {
-	return "search"
+func (cmd *unmount) Name() string {
+	return "unmount"
 }

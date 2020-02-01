@@ -10,47 +10,32 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package command
+package main
 
-import (
-	"path"
-	"strings"
-
-	"github.com/88250/liandi/util"
-)
-
-type create struct {
+type lsd struct {
 	*BaseCmd
 }
 
-func (cmd *create) Exec() {
-	ret := util.NewCmdResult(cmd.Name(), cmd.id)
+func (cmd *lsd) Exec() {
+	ret := NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = util.NormalizeURL(url)
-	p := cmd.param["path"].(string)
-	if !strings.HasSuffix(p, ".md") {
-		p += ".md"
-	}
-
-	err := util.Create(url, p)
+	url = NormalizeURL(url)
+	path := cmd.param["path"].(string)
+	files, err := Lsd(url, path)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		util.Push(ret.Bytes())
 		return
+	} else {
+		ret.Data = map[string]interface{}{
+			"url":   url,
+			"path":  path,
+			"files": files,
+		}
 	}
-
-	p = path.Dir(path.Clean(p))
-	if "." == p {
-		p = "/"
-	}
-	ret.Data = map[string]interface{}{
-		"url":  url,
-		"path": p,
-	}
-	util.Push(ret.Bytes())
+	Push(ret.Bytes())
 }
 
-func (cmd *create) Name() string {
-	return "create"
+func (cmd *lsd) Name() string {
+	return "lsd"
 }

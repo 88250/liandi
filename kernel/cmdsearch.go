@@ -10,34 +10,19 @@
 // PURPOSE.
 // See the Mulan PSL v1 for more details.
 
-package command
+package main
 
-import "github.com/88250/liandi/util"
-
-type lsd struct {
+type search struct {
 	*BaseCmd
 }
 
-func (cmd *lsd) Exec() {
-	ret := util.NewCmdResult(cmd.Name(), cmd.id)
-	url := cmd.param["url"].(string)
-	url = util.NormalizeURL(url)
-	path := cmd.param["path"].(string)
-	files, err := util.Lsd(url, path)
-	if nil != err {
-		ret.Code = -1
-		ret.Msg = err.Error()
-		return
-	} else {
-		ret.Data = map[string]interface{}{
-			"url":   url,
-			"path":  path,
-			"files": files,
-		}
-	}
-	util.Push(ret.Bytes())
+func (cmd *search) Exec() {
+	ret := NewCmdResult(cmd.Name(), cmd.id)
+	k := cmd.param["k"].(string)
+	Search(k)
+	Push(ret.Bytes())
 }
 
-func (cmd *lsd) Name() string {
-	return "lsd"
+func (cmd *search) Name() string {
+	return "search"
 }
