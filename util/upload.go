@@ -31,6 +31,7 @@ func Upload(c *gin.Context) {
 	u, _ = url.PathUnescape(u)
 	p := c.GetHeader("X-Path")
 	p, _ = url.PathUnescape(p)
+	p = p[1:] // 去掉开头的 /
 	dir := Conf.dir(u)
 	if nil == dir {
 		ret.Code = -1
