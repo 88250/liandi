@@ -67,8 +67,7 @@ func InitConf() {
 		Logger.Debugf("加载配置文件 [%s] 完毕", ConfPath)
 	}
 
-	length := len(Conf.Dirs)
-	for i := 0; i < length; i++ {
+	for i := 0; i < len(Conf.Dirs); i++ {
 		dir := Conf.Dirs[i]
 		if !dir.IsRemote() && !gulu.File.IsExist(dir.Path) {
 			Conf.Dirs = append(Conf.Dirs[:i], Conf.Dirs[i+1:]...)
