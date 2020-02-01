@@ -63,6 +63,10 @@ export class Editors {
         const linkBase = liandi.current.url + getPath(liandi.current.path).substr(1)
         if (this.editorElement.innerHTML !== '') {
             this.vditor.vditor.lute.SetLinkBase(linkBase)
+            this.vditor.vditor.options.upload.headers =  {
+                'X-URL': encodeURIComponent(liandi.current.url),
+                'X-PATH': encodeURIComponent(liandi.current.path)
+            }
             this.vditor.setValue(file.content);
         } else {
             this.vditor = new Vditor('liandiVditor', {
@@ -77,6 +81,10 @@ export class Editors {
                 },
                 after: () => {
                     this.vditor.vditor.lute.SetLinkBase(linkBase)
+                    this.vditor.vditor.options.upload.headers =  {
+                        'X-URL': encodeURIComponent(liandi.current.url),
+                        'X-PATH': encodeURIComponent(liandi.current.path)
+                    }
                     this.vditor.setValue(file.content);
                 },
                 input: () => {
