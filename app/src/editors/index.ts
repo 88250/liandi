@@ -73,6 +73,7 @@ export class Editors {
                 cache: false,
                 cdn: '../node_modules/vditor',
                 upload: {
+                    filename: (name: string) => name.replace(/[^\w\s]/g, ""),
                     url: Constants.UPLOAD_ADDRESS,
                     headers: {
                         'X-URL': encodeURIComponent(liandi.current.url),
