@@ -82,7 +82,7 @@ export class WebSocketUtil {
                         return;
                     }
                     liandi.navigation.element.innerHTML = '';
-                    response.data.map((item: { url: string, remote: boolean }) => {
+                    response.data.map((item: { dir : IDir}) => {
                         liandi.navigation.onMount(item);
                     });
                     break;

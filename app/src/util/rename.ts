@@ -1,6 +1,7 @@
 import {hideMessage, showMessage} from './message';
 import {i18n} from '../i18n';
 import {Constants} from '../constants';
+import {destroyDialog} from "./dialog";
 
 export const validateName = (name: string) => {
     hideMessage();
@@ -26,6 +27,7 @@ export const rename = (name: string, url: string, oldPath: string) => {
     }
 
     if (name === oldName) {
+        destroyDialog()
         return false;
     }
 

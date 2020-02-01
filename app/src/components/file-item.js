@@ -29,7 +29,7 @@ customElements.define('file-item',
         }
 
         const path = that.getAttribute('path')
-        const url = window.liandi.liandi.current.url
+        const url = window.liandi.liandi.current.dir.url
 
         window.liandi.liandi.files.listElement.querySelectorAll('file-item').
           forEach((item) => {

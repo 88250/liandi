@@ -1,88 +1,16 @@
-import {remote, shell} from 'electron';
+import {remote} from 'electron';
 import {i18n} from '../i18n';
 import {Constants} from '../constants';
 import {destroyDialog, dialog} from '../util/dialog';
-import {rename, validateName} from '../util/rename';
-import {getPath, removeLastPath} from '../util/path';
-import * as path from "path";
+import {rename} from '../util/rename';
+import {newFile, newFolder, showInFolder} from "./commonMenuItem";
 
 export const initFilesMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
 
-    menu.append(new remote.MenuItem({
-        label: i18n[Constants.LANG].newFile,
-        click: () => {
-            const itemData = liandi.menus.itemData;
-            dialog({
-                title: i18n[Constants.LANG].newFile,
-                content: `<input class="input" value="">
-<div class="fn__hr"></div>
-<div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button button--confirm">${i18n[Constants.LANG].confirm}</button><div class="fn__space"></div>
-<button class="button button--cancel">${i18n[Constants.LANG].cancel}</button></div>`,
-                width: 400
-            });
+    menu.append(newFile(liandi));
 
-            const dialogElement = document.querySelector('#dialog');
-            dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
-                destroyDialog();
-            });
-            dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
-                const name = (dialogElement.querySelector('.input') as HTMLInputElement).value;
-                if (!validateName(name)) {
-                    return false;
-                }
-
-                let path = removeLastPath(itemData.path) + name;
-                if (!itemData.target) {
-                    path = getPath(itemData.path) + name;
-                }
-                liandi.ws.send('create', {
-                    url: itemData.url,
-                    path
-
-                });
-                destroyDialog();
-            });
-        }
-    }));
-
-    menu.append(new remote.MenuItem({
-        label: i18n[Constants.LANG].newFolder,
-        click: () => {
-            const itemData = liandi.menus.itemData;
-            dialog({
-                title: i18n[Constants.LANG].newFolder,
-                content: `<input class="input" value="">
-<div class="fn__hr"></div>
-<div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button button--confirm">${i18n[Constants.LANG].confirm}</button><div class="fn__space"></div>
-<button class="button button--cancel">${i18n[Constants.LANG].cancel}</button></div>`,
-                width: 400
-            });
-
-            const dialogElement = document.querySelector('#dialog');
-            dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
-                destroyDialog();
-            });
-            dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
-                const name = (dialogElement.querySelector('.input') as HTMLInputElement).value;
-                if (!validateName(name)) {
-                    return false;
-                }
-
-                let path = removeLastPath(itemData.path) + name + '/';
-                if (!itemData.target) {
-                    path = getPath(itemData.path) + name + '/';
-                }
-                liandi.ws.send('mkdir', {
-                    url: itemData.url,
-                    path
-                });
-                destroyDialog();
-            });
-        }
-    }));
+    menu.append(newFolder(liandi));
 
     menu.append(new remote.MenuItem({
         label: i18n[Constants.LANG].delete,
@@ -107,7 +35,7 @@ export const initFilesMenu = (liandi: ILiandi) => {
                         url: itemData.url,
                         path: itemData.path
                     });
-                if (liandi.current.url === itemData.url && itemData.path === liandi.current.path) {
+                if (liandi.current.dir.url === itemData.url && itemData.path === liandi.current.path) {
                     liandi.editors.element.innerHTML = '';
                     liandi.current.path = '';
                 }
@@ -144,12 +72,16 @@ export const initFilesMenu = (liandi: ILiandi) => {
         }
     }));
 
-    menu.append(new remote.MenuItem({
-        label: i18n[Constants.LANG].showInFolder,
-        click: () => {
-            const itemData = liandi.menus.itemData;
-            shell.showItemInFolder(path.join(itemData.url, itemData.path))
-        }
-    }));
+    menu.append(showInFolder(liandi));
     return menu;
 };
+
+
+export const initFilesSpaceMenu = (liandi: ILiandi) => {
+    const menu = new remote.Menu();
+
+    menu.append(newFile(liandi));
+
+    menu.append(newFolder(liandi));
+    return menu;
+}

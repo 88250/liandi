@@ -15,8 +15,8 @@ export class Navigation {
         }
     }
 
-    public onMount(data: { url: string, remote: boolean }) {
+    public onMount(data: { dir: IDir }) {
         this.element.insertAdjacentHTML('beforeend',
-            `<tree-list remote="${data.remote.toString()}" url="${data.url}"></tree-list>`);
+            `<tree-list url="${data.dir.url}" dir="${encodeURIComponent(JSON.stringify(data.dir))}"></tree-list>`);
     }
 }
