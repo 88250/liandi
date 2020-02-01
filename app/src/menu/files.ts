@@ -1,9 +1,10 @@
-import {remote} from 'electron';
+import {remote, shell} from 'electron';
 import {i18n} from '../i18n';
 import {Constants} from '../constants';
 import {destroyDialog, dialog} from '../util/dialog';
 import {rename, validateName} from '../util/rename';
 import {getPath, removeLastPath} from '../util/path';
+import * as path from "path";
 
 export const initFilesMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
@@ -140,6 +141,14 @@ export const initFilesMenu = (liandi: ILiandi) => {
                     destroyDialog();
                 }
             });
+        }
+    }));
+
+    menu.append(new remote.MenuItem({
+        label: i18n[Constants.LANG].showInFolder,
+        click: () => {
+            const itemData = liandi.menus.itemData;
+            shell.showItemInFolder(path.join(itemData.url, itemData.path))
         }
     }));
     return menu;

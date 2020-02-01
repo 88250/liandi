@@ -1,7 +1,8 @@
 import {i18n} from '../i18n';
 import {Constants} from '../constants';
 import {rename} from '../util/rename';
-import { getPath} from "../util/path";
+import {getPath} from "../util/path";
+import * as path from "path";
 
 const Vditor = require('vditor');
 
@@ -45,11 +46,11 @@ export class Editors {
         if (this.element.innerHTML === '') {
             return;
         }
-        liandi.ws.send( 'put',  {
-                url: liandi.current.url,
-                path: liandi.current.path,
-                content: this.vditor.getValue()
-            });
+        liandi.ws.send('put', {
+            url: liandi.current.url,
+            path: liandi.current.path,
+            content: this.vditor.getValue()
+        });
     }
 
     onGet(liandi: ILiandi, file: { content: string, name: string }) {
@@ -60,10 +61,10 @@ export class Editors {
 
         this.inputWrapElement.querySelector('input').value = file.name;
 
-        const linkBase = liandi.current.url + getPath(liandi.current.path).substr(1)
+        const linkBase = path.join(liandi.current.url, getPath(liandi.current.path))
         if (this.editorElement.innerHTML !== '') {
             this.vditor.vditor.lute.SetLinkBase(linkBase)
-            this.vditor.vditor.options.upload.headers =  {
+            this.vditor.vditor.options.upload.headers = {
                 'X-URL': encodeURIComponent(liandi.current.url),
                 'X-PATH': encodeURIComponent(liandi.current.path)
             }
@@ -73,6 +74,7 @@ export class Editors {
                 cache: false,
                 cdn: '../node_modules/vditor',
                 upload: {
+                    filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
                     url: Constants.UPLOAD_ADDRESS,
                     headers: {
                         'X-URL': encodeURIComponent(liandi.current.url),
@@ -81,7 +83,7 @@ export class Editors {
                 },
                 after: () => {
                     this.vditor.vditor.lute.SetLinkBase(linkBase)
-                    this.vditor.vditor.options.upload.headers =  {
+                    this.vditor.vditor.options.upload.headers = {
                         'X-URL': encodeURIComponent(liandi.current.url),
                         'X-PATH': encodeURIComponent(liandi.current.path)
                     }
