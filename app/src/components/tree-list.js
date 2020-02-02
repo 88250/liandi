@@ -5,8 +5,8 @@ customElements.define('tree-list',
     constructor () {
       super()
 
-      const remote = this.getAttribute('remote')
-      const url = this.getAttribute('url')
+      const dir = JSON.parse(decodeURIComponent(this.getAttribute('dir')))
+      const remote = dir.path === '' ? 'true' : 'false'
 
       let pathHTML = '<path d="M28 18.667c0 3.092-2.508 5.6-5.6 5.6h-15.867c-3.602 0-6.533-2.931-6.533-6.533 0-2.61 1.546-4.871 3.762-5.906-0.015-0.204-0.029-0.423-0.029-0.627 0-4.127 3.34-7.467 7.467-7.467 3.121 0 5.79 1.91 6.913 4.637 0.642-0.569 1.487-0.904 2.421-0.904 2.056 0 3.733 1.677 3.733 3.733 0 0.744-0.219 1.429-0.598 2.013 2.479 0.583 4.331 2.8 4.331 5.454z"></path>'
       if (remote === 'false') {
@@ -18,24 +18,26 @@ customElements.define('tree-list',
 <svg class="fn__flex-shrink0 tree-list__arrow" path="/" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"></svg>
 <span class="tree-list__folder fn__ellipsis" path="/">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
-  <span>${getName(url)}</span>
+  <span>${getName(dir.url)}</span>
 </span>
 </li>`
 
       window.liandi.liandi.ws.send('lsd', {
-        url,
+        url: dir.url,
         path: '/',
       }, true)
 
-      ulElement.addEventListener('click',  (event) => {
+      ulElement.addEventListener('click', (event) => {
         let target = event.target
         while (target && !target.parentElement.isEqualNode(ulElement)) {
           if (target.classList.contains('tree-list__folder')) {
-            if (target.parentElement.classList.contains('list__item--current')) {
+            if (target.parentElement.classList.contains(
+              'list__item--current')) {
               return
             }
 
-            window.liandi.liandi.navigation.element.querySelectorAll('tree-list').forEach(item => {
+            window.liandi.liandi.navigation.element.querySelectorAll(
+              'tree-list').forEach(item => {
               item.shadowRoot.querySelectorAll('li').forEach((liItem) => {
                 liItem.classList.remove('list__item--current')
               })
@@ -43,10 +45,16 @@ customElements.define('tree-list',
 
             target.parentElement.classList.add('list__item--current')
             window.liandi.liandi.editors.remove(window.liandi.liandi)
+
             window.liandi.liandi.ws.send('ls', {
-              url,
+              url: dir.url,
               path: target.getAttribute('path'),
             })
+
+            window.liandi.liandi.current = {
+              dir,
+              path: target.getAttribute('path'),
+            }
             event.preventDefault()
             break
           }
@@ -67,7 +75,11 @@ customElements.define('tree-list',
             const files = JSON.parse(filesString)
             let fileHTML = ''
             files.forEach((item) => {
-              fileHTML += `<li class="list__item fn__flex" style="padding-left: ${(item.path.split('/').length - 2) * 13}px">
+              fileHTML += `<li class="list__item fn__flex${item.path ===
+              window.liandi.liandi.current.path
+                ? ' list__item--current'
+                : ''}" style="padding-left: ${(item.path.split(
+                '/').length - 2) * 13}px">
 <svg class="fn__flex-shrink0 tree-list__arrow" path="${item.path}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"></svg>
 <span class="tree-list__folder fn__ellipsis" path="${item.path}">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
@@ -75,21 +87,22 @@ customElements.define('tree-list',
 </span>
 </li>`
               window.liandi.liandi.ws.send('lsd', {
-                url,
+                url: dir.url,
                 path: item.path,
               }, true)
             })
-            target.parentElement.insertAdjacentHTML('afterend', `<ul>${fileHTML}</ul>`)
+            target.parentElement.insertAdjacentHTML('afterend',
+              `<ul>${fileHTML}</ul>`)
             event.preventDefault()
             break
           }
 
           target = target.parentElement
         }
-      }, false)
+      })
 
       const styleElement = document.createElement('style')
-      styleElement.innerText = window.liandi.liandi.componentCSS;
+      styleElement.innerText = window.liandi.liandi.componentCSS
 
       const shadowRoot = this.attachShadow({mode: 'open'})
       shadowRoot.appendChild(styleElement)

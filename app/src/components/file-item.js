@@ -29,7 +29,7 @@ customElements.define('file-item',
         }
 
         const path = that.getAttribute('path')
-        const url = window.liandi.liandi.current.url
+        const url = window.liandi.liandi.current.dir.url
 
         window.liandi.liandi.files.listElement.querySelectorAll('file-item').
           forEach((item) => {
@@ -43,6 +43,18 @@ customElements.define('file-item',
         that.setAttribute('current', 'true')
 
         if (path.endsWith('/')) {
+          // 同步导航目录
+          const treeListElement = window.liandi.liandi.navigation.element.querySelector(
+            `tree-list[url="${window.liandi.liandi.current.dir.url}"]`).shadowRoot
+          treeListElement.querySelector('.list__item--current').
+            classList.
+            remove('list__item--current')
+          const treePathElement = treeListElement.querySelector(
+            `.tree-list__folder[path="${path}"]`)
+          if (treePathElement) {
+            treePathElement.parentElement.classList.add('list__item--current')
+          }
+
           window.liandi.liandi.editors.remove(window.liandi.liandi)
           window.liandi.liandi.ws.send('ls', {
             url,
@@ -60,7 +72,7 @@ customElements.define('file-item',
       })
 
       const styleElement = document.createElement('style')
-      styleElement.innerText = window.liandi.liandi.componentCSS;
+      styleElement.innerText = window.liandi.liandi.componentCSS
 
       const shadowRoot = this.attachShadow({mode: 'open'})
       shadowRoot.appendChild(styleElement)

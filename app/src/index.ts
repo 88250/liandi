@@ -15,7 +15,6 @@ class App {
     constructor() {
         this.liandi = {
             current: {
-                url: '',
                 path: '',
             },
             componentCSS: require('../dist/components.css')[0][1]

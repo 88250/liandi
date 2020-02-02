@@ -22,19 +22,19 @@ export class Files {
         let filesHTML = '';
         data.files.forEach((item: IFile) => {
             let current = 'false';
-            if (data.url === liandi.current.url && item.path === liandi.current.path) {
+            if (data.url === liandi.current.dir.url && item.path === liandi.current.path) {
                 current = 'true';
             }
             filesHTML += `<file-item current="${current}" path="${item.path}" name="${item.name}"></file-item>`;
         });
         this.listElement.innerHTML = filesHTML;
-        liandi.current.url = data.url;
 
         if (data.path === '/') {
             this.element.firstElementChild.innerHTML = '';
         } else {
             this.element.firstElementChild.innerHTML =
-                `<file-item name="${i18n[Constants.LANG].back}" path="${removeLastPath(data.path)}"></file-item>`;
+                `<file-item name="${i18n[Constants.LANG].back}" path="${removeLastPath(data.path)}"></file-item>
+<div class="files__path">${liandi.current.path}</div>`;
         }
     }
 

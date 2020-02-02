@@ -1,4 +1,4 @@
-import {initFilesMenu} from './files';
+import {initFilesMenu, initFilesSpaceMenu} from './files';
 import {initNavigationMenu} from './navigation';
 import {initMountMenu} from './mount';
 
@@ -13,6 +13,7 @@ export class Menus {
     constructor(liandi: ILiandi) {
 
         const filesMenu = initFilesMenu(liandi);
+        const filesSpaceMenu = initFilesSpaceMenu(liandi);
         const navigationMenu = initNavigationMenu(liandi);
         const mountMenu = initMountMenu(liandi);
         window.addEventListener('contextmenu', (event) => {
@@ -46,12 +47,10 @@ export class Menus {
                     this.itemData = {
                         target,
                         name: target.getAttribute('name'),
-                        url: liandi.current.url,
+                        url: liandi.current.dir.url,
                         path: target.getAttribute('path'),
                     };
 
-                    filesMenu.items[2].enabled = true;
-                    filesMenu.items[3].enabled = true;
                     filesMenu.popup({
                         callback: () => {
                             target.shadowRoot.querySelector('.list__item').classList.remove('list__item--focus');
@@ -68,14 +67,12 @@ export class Menus {
                     break;
                 }
 
-                if (target.classList.contains('files__list') && liandi.current.url) {
+                if (target.classList.contains('files__list') && liandi.current.dir.url) {
                     this.itemData = {
-                        url: liandi.current.url,
+                        url: liandi.current.dir.url,
                         path: liandi.current.path
                     };
-                    filesMenu.items[2].enabled = false;
-                    filesMenu.items[3].enabled = false;
-                    filesMenu.popup();
+                    filesSpaceMenu.popup();
                     event.preventDefault();
                     break;
                 }

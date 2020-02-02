@@ -3,6 +3,15 @@
   min-width: 200px;
   border-right: 1px solid $border;
 
+  &__path {
+    color: $fade;
+    font-size: 12px;
+    margin-top: -1px;
+    background: #fff;
+    padding: 0 10px 10px 10px;
+    border-bottom: 1px solid $border;
+  }
+
   &__list {
     flex: 1;
     overflow: auto;

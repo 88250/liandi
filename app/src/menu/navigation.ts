@@ -1,6 +1,7 @@
 import {remote} from 'electron';
 import {i18n} from '../i18n';
 import {Constants} from '../constants';
+import {showInFolder} from "./commonMenuItem";
 
 export const initNavigationMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
@@ -14,7 +15,6 @@ export const initNavigationMenu = (liandi: ILiandi) => {
                 liandi.files.element.firstElementChild.innerHTML = '';
                 liandi.editors.remove(liandi);
                 liandi.current = {
-                    url: '',
                     path: '',
                 };
             }
@@ -24,5 +24,7 @@ export const initNavigationMenu = (liandi: ILiandi) => {
             itemData.target.remove();
         }
     }));
+
+    menu.append(showInFolder(liandi))
     return menu;
 };

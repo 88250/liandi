@@ -10,6 +10,14 @@ declare interface IFile {
     isdir: boolean;
 }
 
+declare interface IDir {
+    auth: string
+    password: string
+    path: string
+    url: string
+    user: string
+}
+
 declare interface ILiandi {
     componentCSS: string;
     ws?: {
@@ -19,7 +27,7 @@ declare interface ILiandi {
     navigation?: {
         element: HTMLElement
         onLsd: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
-        onMount: (data: { url: string, remote: boolean }) => void
+        onMount: (data: { dir: object }) => void
     };
     files?: {
         listElement: HTMLElement
@@ -44,8 +52,8 @@ declare interface ILiandi {
         }
     };
     current?: {
-        url: string
-        path: string
+        dir?: IDir
+        path?: string
     };
 }
 
