@@ -73,8 +73,7 @@ func BatchIndex(docs []*Doc) {
 	}
 
 	batch := index.NewBatch()
-	for i := 0; i < length; i++ {
-		doc := docs[i]
+	for _, doc := range docs {
 		if err := batch.Index(doc.Id, doc); nil != err {
 			Logger.Errorf("加入批量索引失败：%s", err)
 		}
@@ -113,16 +112,17 @@ func Index(doc *Doc) {
 	}
 }
 
-func Search(text string) {
+func Search(text string) (ret *bleve.SearchResult) {
 	query := bleve.NewMatchQuery(text)
 	query.Analyzer = "cjk"
 	searchRequest := bleve.NewSearchRequest(query)
 	searchRequest.Highlight = bleve.NewHighlightWithStyle("html")
 	searchRequest.Fields = []string{"*"}
-	searchResults, err := index.Search(searchRequest)
+	ret, err := index.Search(searchRequest)
 	if nil != err {
 		Logger.Warnf("搜索失败：%s", err)
-		return
+		return nil
 	}
-	Logger.Infof("%s", searchResults)
+	Logger.Infof("%s", ret)
+	return
 }
