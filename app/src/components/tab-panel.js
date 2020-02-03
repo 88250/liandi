@@ -1,47 +1,36 @@
 customElements.define('tab-panel',
   class extends HTMLElement {
-    constructor() {
-      super();
+    constructor () {
+      super()
 
-      const template = document.getElementById('tabPanelTemplate');
-      const templateContent = template.content;
+      const shadowRoot = this.attachShadow({mode: 'open'})
+      shadowRoot.innerHTML = `<style>${window.liandi.liandi.componentCSS}</style>
+<slot name="tab"></slot><slot name="ext"></slot><slot name="panel"></slot>`
 
-      const shadowRoot = this.attachShadow({mode: 'open'});
-      shadowRoot.appendChild(templateContent.cloneNode(true));
+      const tabs = Array.from(this.firstElementChild.children).filter(item => {
+        return item.getAttribute('data-name')
+      })
+      const panels = Array.from(this.children).filter(item => {
+        return item.getAttribute('data-name')
+      })
+      
+      tabs.forEach(item => {
+        item.addEventListener('click', () => {
+          tabs.forEach(item => {
+            item.classList.remove('tab--current')
+          })
 
-      const items = Array.from(this.querySelectorAll('li'));
-      const descriptions = Array.from(this.querySelectorAll('p'));
+          panels.forEach(description => {
+            description.removeAttribute('slot')
 
-      items.forEach(item => {
-        handleClick(item);
-      });
-
-      function handleClick(item) {
-        item.addEventListener('click', function() {
-          items.forEach(item => {
-            item.style.backgroundColor = 'white';
-          });
-
-          descriptions.forEach(description => {
-            updateDisplay(description, item);
-          });
-        });
-      }
-
-      function updateDisplay(description, item) {
-        description.removeAttribute('slot');
-
-        if(description.getAttribute('data-name') === item.textContent) {
-          description.setAttribute('slot', 'choice');
-          item.style.backgroundColor = '#bad0e4';
-        }
-      }
-
-      const slots = this.shadowRoot.querySelectorAll('slot');
-      slots[1].addEventListener('slotchange', function(e) {
-        const nodes = slots[1].assignedNodes();
-        console.log(`Element in Slot "${slots[1].name}" changed to "${nodes[0].outerHTML}".`);
-      });
+            if (description.getAttribute('data-name') ===
+              item.getAttribute('data-name')) {
+              description.setAttribute('slot', 'panel')
+              item.classList.add('tab--current')
+            }
+          })
+        })
+      })
     }
-  }
-);
+  },
+)

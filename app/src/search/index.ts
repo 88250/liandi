@@ -1,20 +1,34 @@
-export class Search {
-    constructor() {
-        const element = document.createElement('div')
-        element.innerHTML = ` <tab-panel>
-      <ul slot="master-list">
-        <li>Apples</li>
-        <li>Pears</li>
-        <li>Bananas</li>
-        <li>Oranges</li>
-        <li>Peaches</li>
-        <li>Strawberries</li>
-        <li>Blueberries</li>
-      </ul>
+import {i18n} from "../i18n";
+import {Constants} from "../constants";
+import {dialog} from "../util/dialog";
 
-      <p data-name="Apples">A common, sweet, crunchy fruit, usually green or yellow in color.</p>
-      <p data-name="Pears">A fairly common, sweet, usually green fruit, usually softer than Apples.</p>
-    </tab-panel>`
-    }
+export const initSearch = (liandi: ILiandi) => {
+    dialog({
+        content: `<tab-panel>
+  <ul slot="tab" class="tab fn__flex">
+    <li data-name="search" class="tab--current fn__pointer">${i18n[Constants.LANG].search}</li>
+    <li data-name="config" class="fn__pointer">${i18n[Constants.LANG].config}</li>
+    <li class="fn__flex-1"></li>
+  </ul>
+  <div slot="ext">
+     <div class="fn__hr"></div>
+     <input class="input">
+     <div class="fn__hr"></div>
+  </div>
+  <div data-name="search" slot="panel">searchPanel</div>
+  <div data-name="config">Config panel.</div>
+</tab-panel>`,
+        width: 600
+    })
 
+    const dialogElement = document.querySelector('#dialog')
+    dialogElement.querySelector('.input').addEventListener('input', function (event: InputEvent) {
+        if (event.isComposing) {
+            return
+        }
+
+        liandi.ws.send('search', {
+            k: this.value
+        })
+    })
 }

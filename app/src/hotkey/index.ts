@@ -1,7 +1,7 @@
 import {Constants} from "../constants";
-import {dialog} from "../util/dialog";
+import {initSearch} from "../search";
 
-export const initGlobalKeyPress = () => {
+export const initGlobalKeyPress = (liandi: ILiandi) => {
     let lastKeypressTime = 0;
 
     window.addEventListener('keyup', (event) => {
@@ -9,12 +9,7 @@ export const initGlobalKeyPress = () => {
             let thisKeypressTime = new Date().getTime();
             if (thisKeypressTime - lastKeypressTime <= Constants.DOUBLE_DELTA) {
                 thisKeypressTime = 0;
-                dialog({
-                    content: `<input class="input" value="">
-<div class="fn__hr"></div>
-<div class="fn__flex"><div class="fn__flex-1"></div>`,
-                    width: 600
-                })
+                initSearch(liandi)
             }
             lastKeypressTime = thisKeypressTime;
         }

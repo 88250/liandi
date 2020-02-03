@@ -35,3 +35,22 @@
 tree-list.focus {
   background-color: #ebeef1 !important;
 }
+
+
+tab-panel {
+  .tab {
+    border-bottom: 1px solid $black;
+    li {
+      list-style: none;
+      color: $gray;
+      padding: 0 10px;
+      line-height: 36px;
+      user-select: none;
+
+      &.tab--current {
+        color: #fff;
+        background-color: $black;
+      }
+    }
+  }
+}

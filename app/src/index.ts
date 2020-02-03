@@ -30,7 +30,7 @@ class App {
         resize('resize');
         resize('resize2');
 
-        initGlobalKeyPress()
+        initGlobalKeyPress(this.liandi)
     }
 }
 
