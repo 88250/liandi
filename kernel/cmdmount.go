@@ -24,13 +24,6 @@ func (cmd *mount) Exec() {
 	StopServeWebDAV()
 	Mount(url, p)
 	StartServeWebDAV()
-	data := []map[string]interface{}{}
-	for _, dir := range Conf.Dirs {
-		data = append(data, map[string]interface{}{
-			"dir": dir,
-		})
-	}
-	ret.Data = data
 	Push(ret.Bytes())
 }
 

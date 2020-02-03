@@ -25,13 +25,6 @@ func (cmd *mountremote) Exec() {
 	StopServeWebDAV()
 	MountRemote(url, user, password)
 	StartServeWebDAV()
-	data := []map[string]interface{}{}
-	for _, dir := range Conf.Dirs {
-		data = append(data, map[string]interface{}{
-			"dir": dir,
-		})
-	}
-	ret.Data = data
 	Push(ret.Bytes())
 }
 
