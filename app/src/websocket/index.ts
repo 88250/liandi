@@ -1,8 +1,8 @@
 import {Constants} from '../constants';
 import {hideMessage, showMessage} from '../util/message';
-import {destroyDialog, dialog} from '../util/dialog';
+import {destroyDialog} from '../util/dialog';
 import {i18n} from '../i18n';
-import {mountFile, mountWebDAV, showMountDialog} from '../util/mount';
+import {showMountDialog} from '../util/mount';
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -66,7 +66,7 @@ export class WebSocketUtil {
                     break;
                 case 'mount':
                 case 'mountremote':
-                    liandi.navigation.onMount(response.data);
+                    this.send('dirs', {});
                     hideMessage();
                     destroyDialog();
                     break;
