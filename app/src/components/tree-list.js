@@ -27,77 +27,105 @@ customElements.define('tree-list',
         path: '/',
       }, true)
 
-      ulElement.addEventListener('click', (event) => {
-        let target = event.target
-        while (target && !target.parentElement.isEqualNode(ulElement)) {
-          if (target.classList.contains('tree-list__folder')) {
-            if (target.parentElement.classList.contains(
-              'list__item--current')) {
-              return
-            }
+      const getLeaf = (target) => {
+        const filesString = target.getAttribute('files')
+        if (!filesString) {
+          return
+        }
+        if (target.classList.contains('tree-list__arrow--open')) {
+          target.classList.remove('tree-list__arrow--open')
+          target.parentElement.nextElementSibling.style.display = 'none'
+          return
+        }
 
-            window.liandi.liandi.navigation.element.querySelectorAll(
-              'tree-list').forEach(item => {
-              item.shadowRoot.querySelectorAll('li').forEach((liItem) => {
-                liItem.classList.remove('list__item--current')
-              })
-            })
+        target.classList.add('tree-list__arrow--open')
 
-            target.parentElement.classList.add('list__item--current')
-            window.liandi.liandi.editors.remove(window.liandi.liandi)
-
-            window.liandi.liandi.ws.send('ls', {
-              url: dir.url,
-              path: target.getAttribute('path'),
-            })
-
-            window.liandi.liandi.current = {
-              dir,
-              path: target.getAttribute('path'),
-            }
-            event.preventDefault()
-            break
-          }
-
-          if (target.classList.contains('tree-list__arrow')) {
-            const filesString = target.getAttribute('files')
-            if (!filesString) {
-              return
-            }
-            if (target.classList.contains('tree-list__arrow--open')) {
-              target.classList.remove('tree-list__arrow--open')
-              target.parentElement.nextElementSibling.style.display = 'none'
-              return
-            }
-
-            target.classList.add('tree-list__arrow--open')
-
-            const files = JSON.parse(filesString)
-            let fileHTML = ''
-            files.forEach((item) => {
-              fileHTML += `<li class="list__item fn__flex${item.path ===
-              window.liandi.liandi.current.path
-                ? ' list__item--current'
-                : ''}" style="padding-left: ${(item.path.split(
-                '/').length - 2) * 13}px">
+        const files = JSON.parse(filesString)
+        let fileHTML = ''
+        files.forEach((item) => {
+          fileHTML += `<li class="list__item fn__flex${item.path ===
+          window.liandi.liandi.current.path
+            ? ' list__item--current'
+            : ''}" style="padding-left: ${(item.path.split(
+            '/').length - 2) * 13}px">
 <svg class="fn__flex-shrink0 tree-list__arrow" path="${item.path}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"></svg>
 <span class="tree-list__folder fn__ellipsis" path="${item.path}">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
   <span>${item.name}</span>
 </span>
 </li>`
-              window.liandi.liandi.ws.send('lsd', {
-                url: dir.url,
-                path: item.path,
-              }, true)
-            })
-            target.parentElement.insertAdjacentHTML('afterend',
-              `<ul>${fileHTML}</ul>`)
-            event.preventDefault()
-            break
-          }
+          window.liandi.liandi.ws.send('lsd', {
+            url: dir.url,
+            path: item.path,
+          }, true)
+        })
+        target.parentElement.insertAdjacentHTML('afterend',
+          `<ul>${fileHTML}</ul>`)
+      }
 
-          target = target.parentElement
+      ulElement.addEventListener('dblclick', (event) => {
+        let target = event.target
+
+
+      })
+
+      let timeoutId
+      ulElement.addEventListener('click', (event) => {
+        let target = event.target
+        if (event.detail === 1) {
+          timeoutId = setTimeout(()=> {
+            while (target && !target.parentElement.isEqualNode(ulElement)) {
+              if (target.classList.contains('tree-list__folder')) {
+                if (target.parentElement.classList.contains(
+                  'list__item--current')) {
+                  return
+                }
+
+                window.liandi.liandi.navigation.element.querySelectorAll(
+                  'tree-list').forEach(item => {
+                  item.shadowRoot.querySelectorAll('li').forEach((liItem) => {
+                    liItem.classList.remove('list__item--current')
+                  })
+                })
+
+                target.parentElement.classList.add('list__item--current')
+                window.liandi.liandi.editors.remove(window.liandi.liandi)
+
+                window.liandi.liandi.ws.send('ls', {
+                  url: dir.url,
+                  path: target.getAttribute('path'),
+                })
+
+                window.liandi.liandi.current = {
+                  dir,
+                  path: target.getAttribute('path'),
+                }
+                event.preventDefault()
+                event.stopPropagation()
+                break
+              }
+
+              if (target.classList.contains('tree-list__arrow')) {
+                getLeaf(target)
+                event.preventDefault()
+                event.stopPropagation()
+                break
+              }
+
+              target = target.parentElement
+            }
+          }, 300)
+        } else if (event.detail === 2) {
+          while (target && !target.isEqualNode(ulElement)) {
+            if (target.classList.contains('list__item')) {
+              getLeaf(target.querySelector('.tree-list__arrow'))
+              event.preventDefault()
+              event.stopPropagation()
+            }
+
+            target = target.parentElement
+          }
+          clearTimeout(timeoutId)
         }
       })
 
