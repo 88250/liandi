@@ -71,6 +71,7 @@ export class Editors {
             this.vditor.setValue(file.content);
         } else {
             this.vditor = new Vditor('liandiVditor', {
+                tab: '/t',
                 cache: false,
                 cdn: '../node_modules/vditor',
                 upload: {

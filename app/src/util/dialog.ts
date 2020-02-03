@@ -1,5 +1,5 @@
 export const destroyDialog = (destroyDialogCallback?: () => void) => {
-    const dialogElement =   document.getElementById('dialog');
+    const dialogElement = document.getElementById('dialog');
     if (dialogElement) {
         dialogElement.remove();
     }
@@ -9,7 +9,7 @@ export const destroyDialog = (destroyDialogCallback?: () => void) => {
 };
 
 export const dialog = (options: {
-    title: string,
+    title?: string,
     content: string,
     width: number
     height?: number,
@@ -21,14 +21,13 @@ export const dialog = (options: {
 <div class="dialog" id="dialog">
     <div class="dialog__bg"></div>
     <div class="dialog__main fn__layer">
+      <svg class="dialog__close"><use xlink:href="#iconClose"></use></svg>
       <div class="dialog__header" onselectstart="return false;">
-          <h2></h2>
-          <svg><use xlink:href="#iconClose"></use></svg>
       </div>
       <div class="dialog__content"></div>
     </div>
 </div>`);
-        document.querySelector('#dialog .dialog__header svg').addEventListener('click', () => {
+        document.querySelector('#dialog .dialog__close').addEventListener('click', () => {
             destroyDialog(options.destroyDialogCallback);
         });
 
@@ -38,7 +37,13 @@ export const dialog = (options: {
         dialogElement = document.querySelector('#dialog') as HTMLElement;
     }
 
-    dialogElement.querySelector('.dialog__header h2').innerHTML = options.title;
+    const headerElement = dialogElement.querySelector('.dialog__header') as HTMLElement
+    if (options.title) {
+        headerElement.innerHTML = `<h2>${options.title}</h2>`;
+        headerElement.style.display = 'block'
+    } else {
+        headerElement.style.display = 'none'
+    }
     dialogElement.querySelector('.dialog__content').innerHTML = options.content;
     const dialogMainElement = dialogElement.querySelector('.dialog__main') as HTMLElement;
     const dialogContentElement = dialogElement.querySelector('.dialog__content') as HTMLElement;

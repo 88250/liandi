@@ -46,9 +46,11 @@ customElements.define('file-item',
           // 同步导航目录
           const treeListElement = window.liandi.liandi.navigation.element.querySelector(
             `tree-list[url="${window.liandi.liandi.current.dir.url}"]`).shadowRoot
-          treeListElement.querySelector('.list__item--current').
-            classList.
-            remove('list__item--current')
+          const treeCurrentElement = treeListElement.querySelector(
+            '.list__item--current')
+          if (treeCurrentElement) {
+            treeCurrentElement.classList.remove('list__item--current')
+          }
           const treePathElement = treeListElement.querySelector(
             `.tree-list__folder[path="${path}"]`)
           if (treePathElement) {

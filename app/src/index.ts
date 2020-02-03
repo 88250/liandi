@@ -4,10 +4,12 @@ import {Files} from './files';
 import {WebSocketUtil} from './websocket';
 import './components/file-item';
 import './components/tree-list';
+import './components/tab-panel';
 import './icons/index';
 import {Editors} from './editors';
 import {Menus} from './menu';
 import {resize} from './util/resize';
+import {initGlobalKeyPress} from "./hotkey";
 
 class App {
     public liandi: ILiandi;
@@ -27,6 +29,8 @@ class App {
 
         resize('resize');
         resize('resize2');
+
+        initGlobalKeyPress()
     }
 }
 
