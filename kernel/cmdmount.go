@@ -22,15 +22,16 @@ func (cmd *mount) Exec() {
 	url := cmd.param["url"].(string)
 	url = NormalizeURL(url)
 	StopServeWebDAV()
-	url, alreadyMount := Mount(url, p)
+	Mount(url, p)
 	StartServeWebDAV()
-	if !alreadyMount {
-		ret.Data = map[string]interface{}{
-			"url":    url,
-			"remote": false,
-		}
-		Push(ret.Bytes())
+	data := []map[string]interface{}{}
+	for _, dir := range Conf.Dirs {
+		data = append(data, map[string]interface{}{
+			"dir": dir,
+		})
 	}
+	ret.Data = data
+	Push(ret.Bytes())
 }
 
 func (cmd *mount) Name() string {
