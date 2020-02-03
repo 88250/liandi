@@ -3,7 +3,7 @@ import {i18n} from '../i18n';
 import {Constants} from '../constants';
 import {destroyDialog, dialog} from '../util/dialog';
 import {rename} from '../util/rename';
-import {newFile, newFolder, showInFolder} from "./commonMenuItem";
+import {newFile, newFolder, showInFolder} from './commonMenuItem';
 
 export const initFilesMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
@@ -84,4 +84,4 @@ export const initFilesSpaceMenu = (liandi: ILiandi) => {
 
     menu.append(newFolder(liandi));
     return menu;
-}
+};

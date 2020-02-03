@@ -1,8 +1,8 @@
 import {i18n} from '../i18n';
 import {Constants} from '../constants';
 import {rename} from '../util/rename';
-import {getPath} from "../util/path";
-import * as path from "path";
+import {getPath} from '../util/path';
+import * as path from 'path';
 
 const Vditor = require('vditor');
 
@@ -12,7 +12,7 @@ export class Editors {
     private editorElement: HTMLElement;
     private vditor: any;
     private timeoutId: number;
-    public saved: boolean
+    public saved: boolean;
 
     constructor(liandi: ILiandi) {
         this.saved = true;
@@ -61,13 +61,13 @@ export class Editors {
 
         this.inputWrapElement.querySelector('input').value = file.name;
 
-        const linkBase = path.join(liandi.current.dir.url, getPath(liandi.current.path))
+        const linkBase = path.join(liandi.current.dir.url, getPath(liandi.current.path));
         if (this.editorElement.innerHTML !== '') {
-            this.vditor.vditor.lute.SetLinkBase(linkBase)
+            this.vditor.vditor.lute.SetLinkBase(linkBase);
             this.vditor.vditor.options.upload.headers = {
                 'X-URL': encodeURIComponent(liandi.current.dir.url),
                 'X-PATH': encodeURIComponent(liandi.current.path)
-            }
+            };
             this.vditor.setValue(file.content);
         } else {
             this.vditor = new Vditor('liandiVditor', {
@@ -82,15 +82,15 @@ export class Editors {
                     }
                 },
                 after: () => {
-                    this.vditor.vditor.lute.SetLinkBase(linkBase)
+                    this.vditor.vditor.lute.SetLinkBase(linkBase);
                     this.vditor.vditor.options.upload.headers = {
                         'X-URL': encodeURIComponent(liandi.current.dir.url),
                         'X-PATH': encodeURIComponent(liandi.current.path)
-                    }
+                    };
                     this.vditor.setValue(file.content);
                 },
                 input: () => {
-                    this.saved = false
+                    this.saved = false;
                     clearTimeout(this.timeoutId);
                     this.timeoutId = window.setTimeout(() => {
                         this.saveContent(liandi);

@@ -11,11 +11,11 @@ declare interface IFile {
 }
 
 declare interface IDir {
-    auth: string
-    password: string
-    path: string
-    url: string
-    user: string
+    auth: string;
+    password: string;
+    path: string;
+    url: string;
+    user: string;
 }
 
 declare interface ILiandi {

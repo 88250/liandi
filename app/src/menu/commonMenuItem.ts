@@ -1,11 +1,11 @@
-import {remote, shell} from "electron";
-import {i18n} from "../i18n";
-import {Constants} from "../constants";
-import * as path from "path";
-import {showMessage} from "../util/message";
-import {destroyDialog, dialog} from "../util/dialog";
-import {validateName} from "../util/rename";
-import {getPath, removeLastPath} from "../util/path";
+import {remote, shell} from 'electron';
+import {i18n} from '../i18n';
+import {Constants} from '../constants';
+import * as path from 'path';
+import {showMessage} from '../util/message';
+import {destroyDialog, dialog} from '../util/dialog';
+import {validateName} from '../util/rename';
+import {getPath, removeLastPath} from '../util/path';
 
 export const showInFolder = (liandi: ILiandi) => {
     return new remote.MenuItem({
@@ -13,22 +13,22 @@ export const showInFolder = (liandi: ILiandi) => {
         click: () => {
             const itemData = liandi.menus.itemData;
             if (itemData.target && itemData.target.tagName === 'TREE-LIST') {
-                const dir = JSON.parse(decodeURIComponent(itemData.target.getAttribute('dir')))
+                const dir = JSON.parse(decodeURIComponent(itemData.target.getAttribute('dir')));
                 if (dir.path) {
-                    shell.showItemInFolder(dir.path)
+                    shell.showItemInFolder(dir.path);
                 } else {
-                    showMessage(dir.url)
+                    showMessage(dir.url);
                 }
             } else {
                 if (liandi.current.dir.path) {
-                    shell.showItemInFolder(path.join(liandi.current.dir.path, itemData.path))
+                    shell.showItemInFolder(path.join(liandi.current.dir.path, itemData.path));
                 } else {
-                    showMessage(path.join(liandi.current.dir.url, itemData.path))
+                    showMessage(path.join(liandi.current.dir.url, itemData.path));
                 }
             }
         }
-    })
-}
+    });
+};
 
 export const newFile = (liandi: ILiandi) => {
     return new remote.MenuItem({
@@ -55,20 +55,20 @@ export const newFile = (liandi: ILiandi) => {
                     return false;
                 }
 
-                let path = removeLastPath(itemData.path) + name;
+                let currentNewPath = removeLastPath(itemData.path) + name;
                 if (!itemData.target) {
-                    path = getPath(itemData.path) + name;
+                    currentNewPath = getPath(itemData.path) + name;
                 }
                 liandi.ws.send('create', {
                     url: itemData.url,
-                    path
+                    path: currentNewPath
 
                 });
                 destroyDialog();
             });
         }
-    })
-}
+    });
+};
 
 
 export const newFolder = (liandi: ILiandi) => {
@@ -96,16 +96,16 @@ export const newFolder = (liandi: ILiandi) => {
                     return false;
                 }
 
-                let path = removeLastPath(itemData.path) + name + '/';
+                let currentNewPath = removeLastPath(itemData.path) + name + '/';
                 if (!itemData.target) {
-                    path = getPath(itemData.path) + name + '/';
+                    currentNewPath = getPath(itemData.path) + name + '/';
                 }
                 liandi.ws.send('mkdir', {
                     url: itemData.url,
-                    path
+                    path: currentNewPath
                 });
                 destroyDialog();
             });
         }
-    })
-}
+    });
+};
