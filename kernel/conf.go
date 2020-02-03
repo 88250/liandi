@@ -223,7 +223,7 @@ func (dir *Dir) Index() {
 	for _, file := range files {
 		content, err := dir.Get(file.(*gowebdav.File).Path())
 		if nil == err {
-			doc := newDoc(file.Name(), content, dir.URL, path.Join(dir.Path, file.Name()))
+			doc := newDoc(file.Name(), content, dir.URL, filepath.FromSlash(path.Join(dir.Path, file.Name())))
 			docs = append(docs, doc)
 		}
 	}
