@@ -142,7 +142,11 @@ func Put(url, path string, content []byte) error {
 	}
 
 	fname := filepath.Base(path)
-	doc := newDoc(fname, gulu.Str.FromBytes(content), url, filepath.FromSlash(stdpath.Join(path, fname)))
+	p := ""
+	if !dir.IsRemote() {
+		p = filepath.FromSlash(stdpath.Join(dir.Path, fname))
+	}
+	doc := newDoc(fname, gulu.Str.FromBytes(content), url, p)
 	Index(doc)
 	return nil
 }
