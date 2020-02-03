@@ -21,5 +21,6 @@ export const i18n: II18n = {
         config: '配置',
         userName: '用户名',
         password: '密码',
+        urlError: 'URL 错误',
     },
 };
