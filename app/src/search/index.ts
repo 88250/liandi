@@ -24,6 +24,12 @@ export const initSearch = (liandi: ILiandi) => {
     const dialogElement = document.querySelector('#dialog')
     const inputElement = dialogElement.querySelector('.input') as HTMLInputElement
     inputElement.focus()
+
+    inputElement.addEventListener("compositionend", () => {
+        liandi.ws.send('search', {
+            k: inputElement.value
+        })
+    });
     inputElement.addEventListener('input',  (event: InputEvent) => {
         if (event.isComposing) {
             return
