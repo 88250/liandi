@@ -24,9 +24,9 @@ export const mountWebDAV = (liandi: ILiandi) => {
         title: i18n[Constants.LANG].mountWebDAV,
         content: `<input placeholder="URL" class="input">
 <div class="fn__hr"></div>
-<input placeholder="用户名" class="input">
+<input placeholder="${i18n[Constants.LANG].userName}" class="input">
 <div class="fn__hr"></div>
-<input placeholder="密码" type="password" class="input">
+<input placeholder="${i18n[Constants.LANG].password}" type="password" class="input">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
 <button class="button button--confirm">${i18n[Constants.LANG].confirm}</button><div class="fn__space"></div>
@@ -40,6 +40,7 @@ export const mountWebDAV = (liandi: ILiandi) => {
     });
 
     const dialogElement = document.querySelector('#dialog');
+    dialogElement.querySelector('input').focus();
     dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
         if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {
             showMountDialog(liandi);
