@@ -22,11 +22,11 @@ export const mountFile = async (liandi: ILiandi) => {
 export const mountWebDAV = (liandi: ILiandi) => {
     dialog({
         title: i18n[Constants.LANG].mountWebDAV,
-        content: `<input placeholder="https://dav.jianguoyun.com/dav/" class="input">
+        content: `<input placeholder="URL" class="input">
 <div class="fn__hr"></div>
-<input placeholder="user name" class="input">
+<input placeholder="用户名" class="input">
 <div class="fn__hr"></div>
-<input placeholder="password" type="password" class="input">
+<input placeholder="密码" type="password" class="input">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
 <button class="button button--confirm">${i18n[Constants.LANG].confirm}</button><div class="fn__space"></div>
