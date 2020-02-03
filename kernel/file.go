@@ -147,7 +147,7 @@ func Put(url, path string, content []byte) error {
 		p = filepath.FromSlash(stdpath.Join(dir.Path, fname))
 	}
 	doc := newDoc(fname, gulu.Str.FromBytes(content), url, p)
-	Index(doc)
+	dir.IndexDoc(doc)
 	return nil
 }
 
@@ -194,7 +194,7 @@ func Rename(url, oldPath, newPath string) error {
 		return err
 	}
 
-	RemoveIndex(genDocId(url, oldPath))
+	dir.RemoveIndexDoc(genDocId(url, oldPath))
 	return nil
 }
 
@@ -211,6 +211,6 @@ func Remove(url, path string) error {
 	if nil == dir {
 		return ErrDirNotExist
 	}
-	RemoveIndex(genDocId(url, path))
+	dir.RemoveIndexDoc(genDocId(url, path))
 	return dir.Remove(path)
 }

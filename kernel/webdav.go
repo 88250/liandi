@@ -51,6 +51,7 @@ func Unmount(url string) {
 
 	dir.Unindex()
 	Conf.Dirs = append(Conf.Dirs[:i], Conf.Dirs[i+1:]...)
+	ReloadQueryIndex()
 	found.CloseClient()
 	routeWebDAV()
 	Conf.Save()
@@ -75,6 +76,7 @@ func MountRemote(url, user, password string) (ret string, alreadyMount bool) {
 	routeWebDAV()
 	Conf.Save()
 	dir.InitClient()
+	ReloadQueryIndex()
 	go dir.Index()
 	Logger.Debugf("挂载远程目录 [%s] 完毕", url)
 	return url, false
@@ -95,6 +97,7 @@ func Mount(url, localPath string) (ret string, alreadyMount bool) {
 	routeWebDAV()
 	Conf.Save()
 	dir.InitClient()
+	ReloadQueryIndex()
 	go dir.Index()
 	Logger.Debugf("挂载目录 [%s] 完毕", url)
 	return url, false
