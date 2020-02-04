@@ -3,7 +3,7 @@ import {hideMessage, showMessage} from '../util/message';
 import {destroyDialog} from '../util/dialog';
 import {i18n} from '../i18n';
 import {showMountDialog} from '../util/mount';
-import {lauguage} from "../config/language";
+import {lauguage} from '../config/language';
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -54,12 +54,12 @@ export class WebSocketUtil {
             }
             switch (response.cmd) {
                 case 'setlang':
-                    lauguage.onSetlang()
+                    lauguage.onSetlang();
                     break;
                 case 'getconf':
-                    liandi.config = response.data
+                    liandi.config = response.data;
                     if (callback) {
-                        callback()
+                        callback();
                     }
                     if (response.data.dirs.length === 0) {
                         showMountDialog(liandi);

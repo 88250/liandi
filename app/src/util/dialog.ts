@@ -37,12 +37,12 @@ export const dialog = (options: {
         dialogElement = document.querySelector('#dialog') as HTMLElement;
     }
 
-    const headerElement = dialogElement.querySelector('.dialog__header') as HTMLElement
+    const headerElement = dialogElement.querySelector('.dialog__header') as HTMLElement;
     if (options.title) {
         headerElement.innerHTML = `<h2>${options.title}</h2>`;
-        headerElement.style.display = 'block'
+        headerElement.style.display = 'block';
     } else {
-        headerElement.style.display = 'none'
+        headerElement.style.display = 'none';
     }
     dialogElement.querySelector('.dialog__content').innerHTML = options.content;
     const dialogMainElement = dialogElement.querySelector('.dialog__main') as HTMLElement;

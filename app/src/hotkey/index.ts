@@ -1,5 +1,5 @@
-import {Constants} from "../constants";
-import {initSearch} from "../search";
+import {Constants} from '../constants';
+import {initSearch} from '../search';
 
 export const initGlobalKeyPress = (liandi: ILiandi) => {
     let lastKeypressTime = 0;
@@ -9,9 +9,9 @@ export const initGlobalKeyPress = (liandi: ILiandi) => {
             let thisKeypressTime = new Date().getTime();
             if (thisKeypressTime - lastKeypressTime <= Constants.DOUBLE_DELTA) {
                 thisKeypressTime = 0;
-                initSearch(liandi)
+                initSearch(liandi);
             }
             lastKeypressTime = thisKeypressTime;
         }
-    })
-}
+    });
+};

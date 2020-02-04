@@ -9,7 +9,7 @@ import './icons/index';
 import {Editors} from './editors';
 import {Menus} from './menu';
 import {resize} from './util/resize';
-import {initGlobalKeyPress} from "./hotkey";
+import {initGlobalKeyPress} from './hotkey';
 
 class App {
     public liandi: ILiandi;
@@ -30,7 +30,7 @@ class App {
             resize('resize');
             resize('resize2');
 
-            initGlobalKeyPress(this.liandi)
+            initGlobalKeyPress(this.liandi);
         });
     }
 }

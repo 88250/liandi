@@ -1,6 +1,6 @@
-import {i18n} from "../i18n";
-import {dialog} from "../util/dialog";
-import {lauguage} from "../config/language";
+import {i18n} from '../i18n';
+import {dialog} from '../util/dialog';
+import {lauguage} from '../config/language';
 
 export const initSearch = (liandi: ILiandi) => {
     dialog({
@@ -30,26 +30,26 @@ export const initSearch = (liandi: ILiandi) => {
   </div>
 </tab-panel>`,
         width: 600
-    })
+    });
 
-    const dialogElement = document.querySelector('#dialog')
-    const inputElement = dialogElement.querySelector('.input') as HTMLInputElement
-    inputElement.focus()
+    const dialogElement = document.querySelector('#dialog');
+    const inputElement = dialogElement.querySelector('.input') as HTMLInputElement;
+    inputElement.focus();
 
-    inputElement.addEventListener("compositionend", () => {
+    inputElement.addEventListener('compositionend', () => {
         liandi.ws.send('search', {
             k: inputElement.value
-        })
+        });
     });
     inputElement.addEventListener('input', (event: InputEvent) => {
         if (event.isComposing) {
-            return
+            return;
         }
 
         liandi.ws.send('search', {
             k: inputElement.value
-        })
-    })
+        });
+    });
 
-    lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'))
-}
+    lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'));
+};
