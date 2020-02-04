@@ -30,7 +30,7 @@ export const mountWebDAV = (liandi: ILiandi) => {
 <input placeholder="${i18n[liandi.config.lang].password}" type="password" class="input">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button button--confirm">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
+<button class="button">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
 <button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
         width: 400,
         destroyDialogCallback: () => {
@@ -49,7 +49,7 @@ export const mountWebDAV = (liandi: ILiandi) => {
             destroyDialog();
         }
     });
-    dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
+    dialogElement.querySelector('.button').addEventListener('click', () => {
         const inputs = dialogElement.querySelectorAll('input');
         if (!inputs[0].value.startsWith('http')) {
             showMessage(i18n[liandi.config.lang].urlError);

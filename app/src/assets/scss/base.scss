@@ -48,7 +48,7 @@ tab-panel {
       user-select: none;
 
       &.tab--current {
-        color: #fff;
+        color: $white;
         background-color: $black;
       }
     }

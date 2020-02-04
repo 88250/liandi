@@ -31,7 +31,6 @@ export class WebSocketUtil {
             if (this.isFirst) {
                 this.send('getconf', {});
             }
-            this.isFirst = false;
         };
         this.webSocket.onclose = (e) => {
             console.warn('WebSocket is closed. Reconnect will be attempted in 1 second.', e);
@@ -61,9 +60,12 @@ export class WebSocketUtil {
                     theme.onSettheme(liandi, response.data);
                     break;
                 case 'getconf':
-                    liandi.config = response.data;
-                    if (callback) {
+                    if (this.isFirst) {
+                        liandi.config = response.data;
+                        document.title = i18n[liandi.config.lang].slogan
+                        theme.onSettheme(liandi, response.data.theme)
                         callback();
+                        this.isFirst = false;
                     }
                     if (response.data.dirs.length === 0) {
                         showMountDialog(liandi);

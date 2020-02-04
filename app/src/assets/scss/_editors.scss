@@ -1,7 +1,7 @@
 .editors {
   &__input {
     border: 0;
-    border-bottom: 1px solid $border;
+    border-bottom: 1px solid var(--border-color);
     font-size: 28px;
     box-sizing: border-box;
     padding: 10px;

@@ -11,30 +11,29 @@
   }
 
   &__item {
-    border-bottom: 1px solid $border;
-    color: $black;
+    border-bottom: 1px solid var(--border-color);
     line-height: 21px;
 
     svg {
-      color: $fade;
+      color: var(--text-secondary-color);
       transition: $transition;
     }
 
     &:hover {
-      color: $black-text;
-
-      svg {
-        color: $gray;
-      }
+      color: var(--text-secondary-color);
     }
 
     &--current {
       background-color: $blue !important;
-      color: #fff !important;
+      color: $white !important;
+
+      svg {
+        color: $white !important;
+      }
     }
 
     &--focus {
-      background-color: #ebeef1;
+      background-color: var(--list-focus-background-color);
     }
   }
 }

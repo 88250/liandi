@@ -21,7 +21,7 @@ export const initFilesMenu = (liandi: ILiandi) => {
                 content: `${i18n[liandi.config.lang].confirmDelete} <b>${itemData.name}</b>?
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button button--confirm">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
+<button class="button">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
 <button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
                 width: 400
             });
@@ -30,7 +30,7 @@ export const initFilesMenu = (liandi: ILiandi) => {
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
                 destroyDialog();
             });
-            dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
+            dialogElement.querySelector('.button').addEventListener('click', () => {
                 liandi.ws.send('remove',{
                         url: itemData.url,
                         path: itemData.path
@@ -53,7 +53,7 @@ export const initFilesMenu = (liandi: ILiandi) => {
                 content: `<input class="input" value="${itemData.name}">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button button--confirm">${i18n[liandi.config.lang].save}</button><div class="fn__space"></div>
+<button class="button">${i18n[liandi.config.lang].save}</button><div class="fn__space"></div>
 <button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
                 width: 400
             });
@@ -62,7 +62,7 @@ export const initFilesMenu = (liandi: ILiandi) => {
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
                 destroyDialog();
             });
-            dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
+            dialogElement.querySelector('.button').addEventListener('click', () => {
                 const newPath = rename(liandi, (dialogElement.querySelector('.input') as HTMLInputElement).value,
                     itemData.url, itemData.path);
 

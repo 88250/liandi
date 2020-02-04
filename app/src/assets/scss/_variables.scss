@@ -1,17 +1,18 @@
 // Colors
+$white: #fff !default;
 $blue: #4285f4 !default;
 $blue-light: #dbedff !default;
 $blue-lighter: #f1f7fe !default;
 $red: #d23f31 !default;
 $red-light: #ffdce0 !default;
 $green: #569e3d !default;
-$fade-white: rgba(255, 255, 255, .86) !default;
+$black: #3b3e43 !default;
+
+$fade-white: rgba(255, 255, 255, .87) !default;
 $fade: rgba(0, 0, 0, .38) !default;
 $gray: rgba(0, 0, 0, .54) !default;
-$black: #3b3e43 !default;
-$black-text: #000 !default; // rgba(0, 0, 0, .87)
+$black-text: rgba(0, 0, 0, .87) !default;
 $black-light: #616161 !default;
-$border: #e1e4eb !default;
 
 // Fonts
 $font-family-base: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Segoe UI Symbol", "Android Emoji", "EmojiSymbols" !default;
@@ -24,9 +25,24 @@ $shadow-tip: 0 1px 2px rgba(0, 0, 0, .2) !default;
 $transition: all .15s ease-in-out !default;
 
 :root {
+  --background-color: #fff;
+  --text-color: #24292e;
+  --text-secondary-color: #6a737d;
+  --border-color: #e1e4eb;
 
+  --list-focus-background-color: #ebeef1;
+
+  --input-background-color: var(--background-color);
 }
 
-body.them--dark {
+body.theme--dark {
+  --background-color: #24292e;
+  --text-color: #d1d5da;
+  --text-secondary-color: #959da5;
+  --border-color: #141414;
 
+  --list-focus-background-color: #444d56;
+
+  --input-background-color: #1d2125;
 }
+

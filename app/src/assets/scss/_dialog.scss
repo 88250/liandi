@@ -1,8 +1,7 @@
 .dialog {
   &__bg {
-    background-color: #000;
+    background-color: rgba(0, 0, 0, 0.4);
     height: 100%;
-    opacity: 0.48;
     left: 0;
     position: fixed;
     top: 0;
@@ -15,7 +14,7 @@
 
   &__header {
     padding: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-color);
     position: relative;
 
     h2 {
@@ -30,10 +29,10 @@
     cursor: pointer;
     top: 15px;
     right: -30px;
-    color: #fff;
+    color: var(--text-secondary-color);
 
     &:hover {
-      color: #eee;
+      color: var(--text-color);
     }
   }
 

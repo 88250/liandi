@@ -1,15 +1,14 @@
 .button {
   cursor: pointer;
-  color: $black-text;
+  color: var(--text-color);
   border-radius: 3px;
-  padding: 6px 12px;
-  background-color: rgba(255, 255, 255, .58);
-  border: 1px solid #D5D5D5;
-  border-bottom-color: #E1E1E1;
+  padding: 5px 10px;
+  background-color: $blue;
   box-sizing: border-box;
   line-height: 20px;
   white-space: nowrap;
   display: inline-block;
+  border: 1px solid $blue;
 
   &:disabled {
     opacity: 0.3;
@@ -17,59 +16,16 @@
   }
 
   &:hover {
-    text-decoration: none;
-    border-color: #eee;
-    background-color: rgba(255, 255, 255, .8);
+    border-color: var(--text-color);
   }
 
   &:active {
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.25) inset;
   }
 
-  &--confirm {
-    color: #fff;
-    background-color: #60b044;
-    border-color: $green;
-
-    &:hover {
-      background-color: $green;
-    }
-  }
-
   &--cancel {
+    background-color: var(--input-background-color);
     margin-left: 10px;
-    color: $black-light;
-    border: 0;
-
-    &:hover {
-      color: #000;
-    }
-  }
-
-  &--warn {
-    color: $red;
-
-    &:hover {
-      color: #FFF;
-      border-color: $red;
-      background-color: $red;
-    }
-  }
-
-  &--small {
-    padding: 0 5px;
-    font-size: 12px;
-    font-weight: normal;
-    display: inline-block;
-    line-height: 19px;
-    height: 20px;
-    text-shadow: initial;
-  }
-
-  &--mid {
-    padding: 3px 8px;
-    font-size: 13px;
-    line-height: 20px;
-    height: 28px;
+    border-color: var(--border-color);
   }
 }

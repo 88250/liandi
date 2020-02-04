@@ -1,15 +1,15 @@
 .files {
   max-width: 350px;
   min-width: 200px;
-  border-right: 1px solid $border;
+  border-right: 1px solid var(--border-color);
 
   &__path {
-    color: $fade;
+    color: var(--text-secondary-color);
     font-size: 12px;
     margin-top: -1px;
-    background: #fff;
+    background-color: var(--background-color);
     padding: 0 10px 10px 10px;
-    border-bottom: 1px solid $border;
+    border-bottom: 1px solid var(--border-color);
   }
 
   &__list {

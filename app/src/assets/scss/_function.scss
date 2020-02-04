@@ -104,10 +104,10 @@
     animation-name: scale-in;
     animation-timing-function: cubic-bezier(0.2, 0, 0.13, 1.5);
     position: absolute;
-    background-color: #fff;
+    background-color: var(--background-color);
     line-height: 20px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
-    border: 1px solid #eee;
+    border: 1px solid var(--border-color);
     border-radius: 3px;
     min-width: 180px;
     right: 0;

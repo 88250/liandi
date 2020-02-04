@@ -1,6 +1,5 @@
 import {remote, shell} from 'electron';
 import {i18n} from '../i18n';
-import {Constants} from '../constants';
 import * as path from 'path';
 import {showMessage} from '../util/message';
 import {destroyDialog, dialog} from '../util/dialog';
@@ -40,7 +39,7 @@ export const newFile = (liandi: ILiandi) => {
                 content: `<input class="input" value="">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button button--confirm">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
+<button class="button">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
 <button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
                 width: 400
             });
@@ -50,7 +49,7 @@ export const newFile = (liandi: ILiandi) => {
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
                 destroyDialog();
             });
-            dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
+            dialogElement.querySelector('.button').addEventListener('click', () => {
                 const name = (dialogElement.querySelector('.input') as HTMLInputElement).value;
                 if (!validateName(liandi, name)) {
                     return false;
@@ -82,7 +81,7 @@ export const newFolder = (liandi: ILiandi) => {
                 content: `<input class="input" value="">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button button--confirm">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
+<button class="button">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
 <button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
                 width: 400
             });
@@ -92,7 +91,7 @@ export const newFolder = (liandi: ILiandi) => {
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
                 destroyDialog();
             });
-            dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
+            dialogElement.querySelector('.button').addEventListener('click', () => {
                 const name = (dialogElement.querySelector('.input') as HTMLInputElement).value;
                 if (!validateName(liandi, name)) {
                     return false;
