@@ -58,7 +58,7 @@ export class WebSocketUtil {
                     lauguage.onSetlang();
                     break;
                 case 'settheme':
-                    theme.onSettheme();
+                    theme.onSettheme(liandi, response.data);
                     break;
                 case 'getconf':
                     liandi.config = response.data;
