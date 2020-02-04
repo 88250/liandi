@@ -29,8 +29,10 @@ func (cmd *BaseCmd) Id() float64 {
 
 func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) Cmd {
 	switch cmdStr {
-	case "dirs":
-		return &dirs{&BaseCmd{id: cmdId, param: param}}
+	case "getconf":
+		return &getconf{&BaseCmd{id: cmdId, param: param}}
+	case "setconf":
+		return &setconf{&BaseCmd{id: cmdId, param: param}}
 	case "mount":
 		return &mount{&BaseCmd{id: cmdId, param: param}}
 	case "mountremote":
@@ -55,10 +57,6 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) Cmd 
 		return &mkdir{&BaseCmd{id: cmdId, param: param}}
 	case "remove":
 		return &remove{&BaseCmd{id: cmdId, param: param}}
-	case "getconf":
-		return &getconf{&BaseCmd{id: cmdId, param: param}}
-	case "setconf":
-		return &setconf{&BaseCmd{id: cmdId, param: param}}
 	}
 	return nil
 }

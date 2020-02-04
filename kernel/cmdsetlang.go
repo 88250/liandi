@@ -12,29 +12,18 @@
 
 package main
 
-import "encoding/json"
-
-type setconf struct {
+type setlang struct {
 	*BaseCmd
 }
 
-func (cmd *setconf) Exec() {
+func (cmd *setlang) Exec() {
 	ret := NewCmdResult(cmd.Name(), cmd.id)
-	data, err := json.MarshalIndent(cmd.param, "", "   ")
-	if nil != err {
-		ret.Code = -1
-		ret.Msg = "设置配置参数异常"
-		Push(ret.Bytes())
-	}
-	if err = json.Unmarshal(data, Conf); nil != err {
-		ret.Code = -1
-		ret.Msg = "设置配置参数异常"
-		Push(ret.Bytes())
-	}
+	lang := cmd.param["lang"].(string)
+	Conf.Lang = lang
 	Conf.Save()
 	Push(ret.Bytes())
 }
 
-func (cmd *setconf) Name() string {
-	return "setconf"
+func (cmd *setlang) Name() string {
+	return "setlang"
 }
