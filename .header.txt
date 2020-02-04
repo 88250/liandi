@@ -1,4 +1,4 @@
-LianDi - 链滴笔记，链接点滴
+LianDi - 链滴笔记，连接点滴
 Copyright (c) {{.Year}}, {{.Owner}}
 
 Lute is licensed under the Mulan PSL v1.
