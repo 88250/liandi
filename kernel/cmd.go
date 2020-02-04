@@ -67,4 +67,3 @@ func Exec(cmd Cmd) {
 		cmd.Exec()
 	}()
 }
-
