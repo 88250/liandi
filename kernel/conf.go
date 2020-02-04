@@ -1,4 +1,4 @@
-// LianDi - 链滴笔记，链接点滴
+// LianDi - 链滴笔记，连接点滴
 // Copyright (c) 2020-present, b3log.org
 //
 // Lute is licensed under the Mulan PSL v1.
@@ -121,6 +121,10 @@ func (conf *AppConf) dir(url string) *Dir {
 	return nil
 }
 
+func (conf *AppConf) lang(num int) string {
+	return langs[conf.Lang][num]
+}
+
 // Dir 维护了打开的 WebDAV 文件夹。
 type Dir struct {
 	URL      string `json:"url"`      // WebDAV URL
@@ -170,7 +174,7 @@ func (dir *Dir) CloseClient() {
 
 func (dir *Dir) Ls(path string) (ret []os.FileInfo, err error) {
 	if ret, err = dir.client.ReadDir(path); nil != err {
-		msg := fmt.Sprintf("列出目录 [%s] 下路径为 [%s] 的文件列表失败：%s", dir.URL, path, err)
+		msg := fmt.Sprintf(Conf.lang(2), dir.URL, path, err)
 		Logger.Errorf(msg)
 		return nil, errors.New(msg)
 	}
@@ -180,7 +184,7 @@ func (dir *Dir) Ls(path string) (ret []os.FileInfo, err error) {
 func (dir *Dir) Get(path string) (ret string, err error) {
 	data, err := dir.client.Read(path)
 	if nil != err {
-		msg := fmt.Sprintf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
+		msg := fmt.Sprintf(Conf.lang(3), dir.URL, path, err)
 		Logger.Errorf(msg)
 		return "", errors.New(msg)
 	}
@@ -189,7 +193,7 @@ func (dir *Dir) Get(path string) (ret string, err error) {
 
 func (dir *Dir) Put(path string, content []byte) error {
 	if err := dir.client.Write(path, content, 0644); nil != err {
-		msg := fmt.Sprintf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, path, err)
+		msg := fmt.Sprintf(Conf.lang(3), dir.URL, path, err)
 		Logger.Errorf(msg)
 		return errors.New(msg)
 	}
@@ -198,7 +202,7 @@ func (dir *Dir) Put(path string, content []byte) error {
 
 func (dir *Dir) Stat(path string) (ret os.FileInfo, err error) {
 	if ret, err = dir.client.Stat(path); nil != err {
-		msg := fmt.Sprintf("查看目录 [%s] 下 [%s] 的元信息失败：%s", dir.URL, path, err)
+		msg := fmt.Sprintf(Conf.lang(4), dir.URL, path, err)
 		Logger.Errorf(msg)
 		return nil, errors.New(msg)
 	}
@@ -217,7 +221,7 @@ func (dir *Dir) Exist(path string) (ret bool, err error) {
 
 func (dir *Dir) Rename(oldPath, newPath string) error {
 	if err := dir.client.Rename(oldPath, newPath, false); nil != err {
-		msg := fmt.Sprintf("重命名目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, oldPath, err)
+		msg := fmt.Sprintf(Conf.lang(5), dir.URL, oldPath, err)
 		Logger.Errorf(msg)
 		return errors.New(msg)
 	}
@@ -226,7 +230,7 @@ func (dir *Dir) Rename(oldPath, newPath string) error {
 
 func (dir *Dir) Mkdir(path string) error {
 	if err := dir.client.Mkdir(path, 0755); nil != err {
-		msg := fmt.Sprintf("在目录 [%s] 下创建新目录 [%s] 失败：%s", dir.URL, path, err)
+		msg := fmt.Sprintf(Conf.lang(6), dir.URL, path, err)
 		Logger.Errorf(msg)
 		return errors.New(msg)
 	}
@@ -235,7 +239,7 @@ func (dir *Dir) Mkdir(path string) error {
 
 func (dir *Dir) Remove(path string) error {
 	if err := dir.client.Remove(path); nil != err {
-		msg := fmt.Sprintf("在目录 [%s] 下删除 [%s] 失败：%s", dir.URL, path, err)
+		msg := fmt.Sprintf(Conf.lang(7), dir.URL, path, err)
 		Logger.Errorf(msg)
 		return errors.New(msg)
 	}
@@ -315,4 +319,31 @@ func (dir *Dir) files(files, ret *[]os.FileInfo) {
 
 func (dir *Dir) isSkipDir(filename string) bool {
 	return "node_modules" == filename || "dist" == filename || "target" == filename
+}
+
+var zhCN = map[int]string{
+	0: "查询目录失败",
+	1: "文件名重复",
+	2: "列出目录 [%s] 下路径为 [%s] 的文件列表失败：%s",
+	3: "读取目录 [%s] 下的文件 [%s] 失败：%s",
+	4: "查看目录 [%s] 下 [%s] 的元信息失败：%s",
+	5: "重命名目录 [%s] 下的文件 [%s] 失败：%s",
+	6: "在目录 [%s] 下创建新目录 [%s] 失败：%s",
+	7: "在目录 [%s] 下删除 [%s] 失败：%s",
+}
+
+var enUS = map[int]string{
+	0: "Query dir failed",
+	1: "Duplicated filename",
+	2: "List files of dir [%s] and path [%s] failed: %s",
+	3: "Read dir [%s] file [%s] failed: %s",
+	4: "Get dir [%s] file [%s] meta info failed: %s",
+	5: "Rename dir [%s] file [%s] failed: %s",
+	6: "Create dir [%s] dir [%s] failed: %s",
+	7: "Remove dir [%s] path [%s] failed: %s",
+}
+
+var langs = map[string]map[int]string{
+	"zh_CN": zhCN,
+	"en_US": enUS,
 }

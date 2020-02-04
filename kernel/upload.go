@@ -1,4 +1,4 @@
-// LianDi - 链滴笔记，链接点滴
+// LianDi - 链滴笔记，连接点滴
 // Copyright (c) 2020-present, b3log.org
 //
 // Lute is licensed under the Mulan PSL v1.
@@ -36,7 +36,7 @@ func Upload(c *gin.Context) {
 	dir := Conf.dir(u)
 	if nil == dir {
 		ret.Code = -1
-		ret.Msg = ErrDirNotExist.Error()
+		ret.Msg = Conf.lang(0)
 		return
 	}
 

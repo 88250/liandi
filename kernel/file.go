@@ -1,4 +1,4 @@
-// LianDi - 链滴笔记，链接点滴
+// LianDi - 链滴笔记，连接点滴
 // Copyright (c) 2020-present, b3log.org
 //
 // Lute is licensed under the Mulan PSL v1.
@@ -55,7 +55,7 @@ func Ls(url, path string) (ret []*File, err error) {
 
 	dir := Conf.dir(url)
 	if nil == dir {
-		return nil, ErrDirNotExist
+		return nil, errors.New(Conf.lang(0))
 	}
 
 	files, err := dir.Ls(path)
@@ -93,7 +93,7 @@ func Lsd(url, path string) (ret []*File, err error) {
 
 	dir := Conf.dir(url)
 	if nil == dir {
-		return nil, ErrDirNotExist
+		return nil, errors.New(Conf.lang(0))
 	}
 
 	files, err := dir.Ls(path)
@@ -119,14 +119,10 @@ func Lsd(url, path string) (ret []*File, err error) {
 	return
 }
 
-var (
-	ErrDirNotExist = errors.New("查询目录失败")
-)
-
 func Get(url, path string) (ret string, err error) {
 	dir := Conf.dir(url)
 	if nil == dir {
-		return "", ErrDirNotExist
+		return "", errors.New(Conf.lang(0))
 	}
 	ret, err = dir.Get(path)
 	return
@@ -135,7 +131,7 @@ func Get(url, path string) (ret string, err error) {
 func Put(url, path string, content []byte) error {
 	dir := Conf.dir(url)
 	if nil == dir {
-		return ErrDirNotExist
+		return errors.New(Conf.lang(0))
 	}
 	if err := dir.Put(path, content); nil != err {
 		return err
@@ -157,7 +153,7 @@ func Create(url, path string) error {
 		return err
 	}
 	if exist {
-		return errors.New("文件名重复")
+		return errors.New(Conf.lang(1))
 	}
 	return Put(url, path, []byte(""))
 }
@@ -165,7 +161,7 @@ func Create(url, path string) error {
 func Exist(url, path string) (bool, error) {
 	dir := Conf.dir(url)
 	if nil == dir {
-		return false, ErrDirNotExist
+		return false, errors.New(Conf.lang(0))
 	}
 
 	return dir.Exist(path)
@@ -174,7 +170,7 @@ func Exist(url, path string) (bool, error) {
 func Stat(url, path string) (ret *File, err error) {
 	dir := Conf.dir(url)
 	if nil == dir {
-		return nil, ErrDirNotExist
+		return nil, errors.New(Conf.lang(0))
 	}
 
 	var f os.FileInfo
@@ -188,7 +184,7 @@ func Stat(url, path string) (ret *File, err error) {
 func Rename(url, oldPath, newPath string) error {
 	dir := Conf.dir(url)
 	if nil == dir {
-		return ErrDirNotExist
+		return errors.New(Conf.lang(0))
 	}
 	if err := dir.Rename(oldPath, newPath); nil != err {
 		return err
@@ -201,7 +197,7 @@ func Rename(url, oldPath, newPath string) error {
 func Mkdir(url, path string) error {
 	dir := Conf.dir(url)
 	if nil == dir {
-		return ErrDirNotExist
+		return errors.New(Conf.lang(0))
 	}
 	return dir.Mkdir(path)
 }
@@ -209,7 +205,7 @@ func Mkdir(url, path string) error {
 func Remove(url, path string) error {
 	dir := Conf.dir(url)
 	if nil == dir {
-		return ErrDirNotExist
+		return errors.New(Conf.lang(0))
 	}
 	dir.RemoveIndexDoc(genDocId(url, path))
 	return dir.Remove(path)
