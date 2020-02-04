@@ -121,6 +121,10 @@ func (conf *AppConf) dir(url string) *Dir {
 	return nil
 }
 
+func (conf *AppConf) lang(num int) string {
+	return langs[conf.Lang][num]
+}
+
 // Dir 维护了打开的 WebDAV 文件夹。
 type Dir struct {
 	URL      string `json:"url"`      // WebDAV URL
@@ -315,4 +319,19 @@ func (dir *Dir) files(files, ret *[]os.FileInfo) {
 
 func (dir *Dir) isSkipDir(filename string) bool {
 	return "node_modules" == filename || "dist" == filename || "target" == filename
+}
+
+var zhCN = map[int]string{
+	0: "查询目录失败",
+	1: "文件名重复",
+}
+
+var enUS = map[int]string{
+	0: "Query dir failed",
+	1: "Duplicated filename",
+}
+
+var langs = map[string]map[int]string{
+	"zh_CN": zhCN,
+	"en_US": enUS,
 }
