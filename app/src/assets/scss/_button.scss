@@ -1,14 +1,14 @@
 .button {
   cursor: pointer;
-  color: var(--text-color);
+  color: $white;
   border-radius: 3px;
-  padding: 5px 10px;
+  padding: 3px 10px;
   background-color: $blue;
   box-sizing: border-box;
   line-height: 20px;
   white-space: nowrap;
   display: inline-block;
-  border: 1px solid $blue;
+  border: 1px solid var(--border-color);
 
   &:disabled {
     opacity: 0.3;
@@ -16,7 +16,7 @@
   }
 
   &:hover {
-    border-color: var(--text-color);
+    border: 1px solid $blue;
   }
 
   &:active {
@@ -24,8 +24,12 @@
   }
 
   &--cancel {
+    color: var(--text-color);
     background-color: var(--input-background-color);
     margin-left: 10px;
     border-color: var(--border-color);
+    &:hover {
+      border-color: var(--text-color);
+    }
   }
 }
