@@ -9,9 +9,9 @@ export class WebSocketUtil {
     private reqId: number;
     private isFirst: boolean;
 
-    constructor(liandi: ILiandi) {
+    constructor(liandi: ILiandi, callback: () => void) {
         this.isFirst = true;
-        this.connect(liandi);
+        this.connect(liandi, callback);
     }
 
     public send(cmd: string, param: any, process = false) {
@@ -23,11 +23,11 @@ export class WebSocketUtil {
         }));
     }
 
-    private connect(liandi: ILiandi) {
+    private connect(liandi: ILiandi, callback?: () => void) {
         this.webSocket = new WebSocket(Constants.WEBSOCKET_ADDREDD);
         this.webSocket.onopen = () => {
             if (this.isFirst) {
-                this.send('dirs', {});
+                this.send('getconf', {});
             }
             this.isFirst = false;
         };
@@ -52,8 +52,22 @@ export class WebSocketUtil {
                 return;
             }
             switch (response.cmd) {
+                case 'getconf':
+                    liandi.config = response.data
+                    if (callback) {
+                        callback()
+                    }
+                    if (response.data.dirs.length === 0) {
+                        showMountDialog(liandi);
+                        return;
+                    }
+                    liandi.navigation.element.innerHTML = '';
+                    response.data.dirs.map((item: IDir) => {
+                        liandi.navigation.onMount({dir: item});
+                    });
+                    break;
                 case 'put':
-                    showMessage(i18n[Constants.LANG].saveSuccess);
+                    showMessage(i18n[liandi.config.lang].saveSuccess);
                     liandi.editors.saved = true;
                     break;
                 case 'lsd':
@@ -82,7 +96,7 @@ export class WebSocketUtil {
                         return;
                     }
                     liandi.navigation.element.innerHTML = '';
-                    response.data.map((item: { dir : IDir}) => {
+                    response.data.map((item: { dir: IDir }) => {
                         liandi.navigation.onMount(item);
                     });
                     break;

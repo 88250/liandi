@@ -22,16 +22,16 @@ export const mountFile = async (liandi: ILiandi) => {
 
 export const mountWebDAV = (liandi: ILiandi) => {
     dialog({
-        title: i18n[Constants.LANG].mountWebDAV,
+        title: i18n[liandi.config.lang].mountWebDAV,
         content: `<input placeholder="URL" class="input">
 <div class="fn__hr"></div>
-<input placeholder="${i18n[Constants.LANG].userName}" class="input">
+<input placeholder="${i18n[liandi.config.lang].userName}" class="input">
 <div class="fn__hr"></div>
-<input placeholder="${i18n[Constants.LANG].password}" type="password" class="input">
+<input placeholder="${i18n[liandi.config.lang].password}" type="password" class="input">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button button--confirm">${i18n[Constants.LANG].confirm}</button><div class="fn__space"></div>
-<button class="button button--cancel">${i18n[Constants.LANG].cancel}</button></div>`,
+<button class="button button--confirm">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
+<button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
         width: 400,
         destroyDialogCallback: () => {
             if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {
@@ -52,7 +52,7 @@ export const mountWebDAV = (liandi: ILiandi) => {
     dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
         const inputs = dialogElement.querySelectorAll('input');
         if (!inputs[0].value.startsWith('http')) {
-            showMessage(i18n[Constants.LANG].urlError)
+            showMessage(i18n[liandi.config.lang].urlError)
             return
         }
         liandi.ws.send('mountremote', {
@@ -65,9 +65,9 @@ export const mountWebDAV = (liandi: ILiandi) => {
 
 export const showMountDialog = (liandi: ILiandi) => {
     dialog({
-        title: i18n[Constants.LANG].slogan,
-        content: `<div class="list--signal"><div class="list__item">${i18n[Constants.LANG].mount}</div>
-<div class="list__item">${i18n[Constants.LANG].mountWebDAV}</div></div>`,
+        title: i18n[liandi.config.lang].slogan,
+        content: `<div class="list--signal"><div class="list__item">${i18n[liandi.config.lang].mount}</div>
+<div class="list__item">${i18n[liandi.config.lang].mountWebDAV}</div></div>`,
         width: 400,
         destroyDialogCallback: () => {
             if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {

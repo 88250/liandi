@@ -19,6 +19,10 @@ declare interface IDir {
 }
 
 declare interface ILiandi {
+    config?: {
+        lang:  keyof II18n
+        theme: "white" | "dark"
+    },
     componentCSS: string;
     ws?: {
         webSocket: WebSocket,

@@ -9,7 +9,7 @@ import {getPath, removeLastPath} from '../util/path';
 
 export const showInFolder = (liandi: ILiandi) => {
     return new remote.MenuItem({
-        label: i18n[Constants.LANG].showInFolder,
+        label: i18n[liandi.config.lang].showInFolder,
         click: () => {
             const itemData = liandi.menus.itemData;
             if (itemData.target && itemData.target.tagName === 'TREE-LIST') {
@@ -32,16 +32,16 @@ export const showInFolder = (liandi: ILiandi) => {
 
 export const newFile = (liandi: ILiandi) => {
     return new remote.MenuItem({
-        label: i18n[Constants.LANG].newFile,
+        label: i18n[liandi.config.lang].newFile,
         click: () => {
             const itemData = liandi.menus.itemData;
             dialog({
-                title: i18n[Constants.LANG].newFile,
+                title: i18n[liandi.config.lang].newFile,
                 content: `<input class="input" value="">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button button--confirm">${i18n[Constants.LANG].confirm}</button><div class="fn__space"></div>
-<button class="button button--cancel">${i18n[Constants.LANG].cancel}</button></div>`,
+<button class="button button--confirm">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
+<button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
                 width: 400
             });
 
@@ -52,7 +52,7 @@ export const newFile = (liandi: ILiandi) => {
             });
             dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
                 const name = (dialogElement.querySelector('.input') as HTMLInputElement).value;
-                if (!validateName(name)) {
+                if (!validateName(liandi, name)) {
                     return false;
                 }
 
@@ -74,16 +74,16 @@ export const newFile = (liandi: ILiandi) => {
 
 export const newFolder = (liandi: ILiandi) => {
     return new remote.MenuItem({
-        label: i18n[Constants.LANG].newFolder,
+        label: i18n[liandi.config.lang].newFolder,
         click: () => {
             const itemData = liandi.menus.itemData;
             dialog({
-                title: i18n[Constants.LANG].newFolder,
+                title: i18n[liandi.config.lang].newFolder,
                 content: `<input class="input" value="">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button button--confirm">${i18n[Constants.LANG].confirm}</button><div class="fn__space"></div>
-<button class="button button--cancel">${i18n[Constants.LANG].cancel}</button></div>`,
+<button class="button button--confirm">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
+<button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
                 width: 400
             });
 
@@ -94,7 +94,7 @@ export const newFolder = (liandi: ILiandi) => {
             });
             dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
                 const name = (dialogElement.querySelector('.input') as HTMLInputElement).value;
-                if (!validateName(name)) {
+                if (!validateName(liandi, name)) {
                     return false;
                 }
 

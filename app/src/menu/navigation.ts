@@ -7,7 +7,7 @@ export const initNavigationMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
 
     menu.append(new remote.MenuItem({
-        label: i18n[Constants.LANG].unMount,
+        label: i18n[liandi.config.lang].unMount,
         click: () => {
             const itemData = liandi.menus.itemData;
             if (itemData.target.shadowRoot.querySelector('.list__item').classList.contains('list__item--current')) {
