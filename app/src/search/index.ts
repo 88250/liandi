@@ -1,6 +1,7 @@
 import {i18n} from '../i18n';
 import {dialog} from '../util/dialog';
 import {lauguage} from '../config/language';
+import {theme} from "../config/theme";
 
 export const initSearch = (liandi: ILiandi) => {
     dialog({
@@ -24,7 +25,7 @@ export const initSearch = (liandi: ILiandi) => {
         <li data-name="language" class="fn__pointer">${i18n[liandi.config.lang].language}</li>
       </ul>
       <div class="tab__panel" data-name="markdown" slot="panel">markdown</div>
-      <div class="tab__panel" data-name="theme">language</div>
+      <div class="tab__panel" data-name="theme">${theme.genHTML(liandi)}</div>
       <div class="tab__panel" data-name="language">${lauguage.genHTML(liandi)}</div>
     </tab-panel>
   </div>
@@ -52,4 +53,5 @@ export const initSearch = (liandi: ILiandi) => {
     });
 
     lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'));
+    theme.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="theme"]'));
 };

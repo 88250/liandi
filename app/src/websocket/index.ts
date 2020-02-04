@@ -4,6 +4,7 @@ import {destroyDialog} from '../util/dialog';
 import {i18n} from '../i18n';
 import {showMountDialog} from '../util/mount';
 import {lauguage} from '../config/language';
+import {theme} from "../config/theme";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -55,6 +56,9 @@ export class WebSocketUtil {
             switch (response.cmd) {
                 case 'setlang':
                     lauguage.onSetlang();
+                    break;
+                case 'settheme':
+                    theme.onSettheme();
                     break;
                 case 'getconf':
                     liandi.config = response.data;
