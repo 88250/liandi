@@ -21,6 +21,7 @@ func (cmd *settheme) Exec() {
 	theme := cmd.param["theme"].(string)
 	Conf.Theme = theme
 	Conf.Save()
+	ret.Data = theme
 	Push(ret.Bytes())
 }
 
