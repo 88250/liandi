@@ -36,7 +36,7 @@ func Upload(c *gin.Context) {
 	dir := Conf.dir(u)
 	if nil == dir {
 		ret.Code = -1
-		ret.Msg = ErrDirNotExist.Error()
+		ret.Msg = Conf.lang(0)
 		return
 	}
 
