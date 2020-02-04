@@ -3,6 +3,7 @@ import {hideMessage, showMessage} from '../util/message';
 import {destroyDialog} from '../util/dialog';
 import {i18n} from '../i18n';
 import {showMountDialog} from '../util/mount';
+import {lauguage} from "../config/language";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -52,6 +53,9 @@ export class WebSocketUtil {
                 return;
             }
             switch (response.cmd) {
+                case 'setlang':
+                    lauguage.onSetlang()
+                    break;
                 case 'getconf':
                     liandi.config = response.data
                     if (callback) {

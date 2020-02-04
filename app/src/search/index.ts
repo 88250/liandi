@@ -1,7 +1,6 @@
 import {i18n} from "../i18n";
-import {Constants} from "../constants";
 import {dialog} from "../util/dialog";
-import {initLauguage} from "../config/language";
+import {lauguage} from "../config/language";
 
 export const initSearch = (liandi: ILiandi) => {
     dialog({
@@ -18,15 +17,15 @@ export const initSearch = (liandi: ILiandi) => {
   </div>
   <div data-name="search" slot="panel">searchPanel</div>
   <div data-name="config">
-    <tab-panel>
-      <ul slot="tab" class="tab fn__flex">
+    <tab-panel type="vertical">
+      <ul slot="tab" class="tab tab--vertical">
         <li data-name="markdown" class="tab--current fn__pointer">Markdown</li>
         <li data-name="theme" class="fn__pointer">${i18n[liandi.config.lang].theme}</li>
         <li data-name="language" class="fn__pointer">${i18n[liandi.config.lang].language}</li>
       </ul>
-      <div data-name="markdown" slot="panel">m</div>
-      <div data-name="theme">t</div>
-      <div data-name="language">l</div>
+      <div class="tab__panel" data-name="markdown" slot="panel">markdown</div>
+      <div class="tab__panel" data-name="theme">language</div>
+      <div class="tab__panel" data-name="language">${lauguage.genHTML(liandi)}</div>
     </tab-panel>
   </div>
 </tab-panel>`,
@@ -52,13 +51,5 @@ export const initSearch = (liandi: ILiandi) => {
         })
     })
 
-    dialogElement.querySelectorAll('div[data-name="config"] .list__item').forEach((item) => {
-        item.addEventListener('click', function () {
-            switch (this.getAttribute('data-type')) {
-                case 'language':
-                    initLauguage(liandi)
-                    break;
-            }
-        })
-    })
+    lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'))
 }
