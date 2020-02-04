@@ -120,14 +120,6 @@
 }
 
 .ft {
-  &__gray {
-    color: $gray;
-  }
-
-  &__green {
-    color: $green;
-  }
-
   &__smaller {
     font-size: 12px;
   }
@@ -138,17 +130,5 @@
 
   &__nowrap {
     white-space: nowrap;
-  }
-
-  &__fade {
-    color: $fade;
-  }
-
-  &__red {
-    color: $red;
-  }
-
-  &__pink {
-    color: #ea4aaa;
   }
 }

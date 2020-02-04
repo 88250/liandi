@@ -10,7 +10,6 @@ import {Editors} from './editors';
 import {Menus} from './menu';
 import {resize} from './util/resize';
 import {initGlobalKeyPress} from './hotkey';
-import {showMessage} from "./util/message";
 
 class App {
     public liandi: ILiandi;

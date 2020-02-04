@@ -32,29 +32,23 @@
   position: relative;
 }
 
-tree-list.focus {
-  background-color: #ebeef1 !important;
-}
-
 
 tab-panel {
   .tab {
-    border-bottom: 1px solid $black;
+    border-bottom: 1px solid var(--border-color);
     li {
       list-style: none;
-      color: $gray;
       padding: 0 10px;
       line-height: 36px;
       user-select: none;
 
       &.tab--current {
-        color: $white;
-        background-color: $black;
+        background-color: var(--focus-background-color);
       }
     }
 
     &--vertical {
-      border-right: 1px solid $black;
+      border-right: 1px solid var(--border-color);
       border-bottom: 0;
     }
 
