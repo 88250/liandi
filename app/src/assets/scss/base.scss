@@ -10,10 +10,15 @@
 @import "files";
 @import "editors";
 @import "list";
-@import "~vditor/dist/index.classic.css";
+//@import "~vditor/dist/index.classic.css";
 
 .vditor {
-  border-width: 0;
+  border-width: 1px 0 0 0;
+  border-radius: 0;
+
+  &-toolbar {
+    border-radius: 0;
+  }
 
   &-tip__content {
     box-sizing: border-box;
