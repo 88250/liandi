@@ -21,16 +21,17 @@ class App {
             },
             componentCSS: require('../dist/components.css')[0][1]
         };
-        this.liandi.ws =  new WebSocketUtil(this.liandi);
-        this.liandi.navigation =  new Navigation();
-        this.liandi.files =  new Files();
-        this.liandi.editors =  new Editors(this.liandi);
-        this.liandi.menus = new Menus(this.liandi);
+        this.liandi.ws =  new WebSocketUtil(this.liandi, () => {
+            this.liandi.navigation =  new Navigation();
+            this.liandi.files =  new Files();
+            this.liandi.editors =  new Editors(this.liandi);
+            this.liandi.menus = new Menus(this.liandi);
 
-        resize('resize');
-        resize('resize2');
+            resize('resize');
+            resize('resize2');
 
-        initGlobalKeyPress(this.liandi)
+            initGlobalKeyPress(this.liandi)
+        });
     }
 }
 

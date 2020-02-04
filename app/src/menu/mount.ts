@@ -6,14 +6,14 @@ import {mountFile, mountWebDAV} from '../util/mount';
 export const initMountMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
     menu.append(new remote.MenuItem({
-        label: i18n[Constants.LANG].mount,
+        label: i18n[liandi.config.lang].mount,
         click: async () => {
             mountFile(liandi);
         }
     }));
 
     menu.append(new remote.MenuItem({
-        label: i18n[Constants.LANG].mountWebDAV,
+        label: i18n[liandi.config.lang].mountWebDAV,
         click: async () => {
             mountWebDAV(liandi);
         }

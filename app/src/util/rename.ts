@@ -1,20 +1,19 @@
 import {hideMessage, showMessage} from './message';
 import {i18n} from '../i18n';
-import {Constants} from '../constants';
 import {destroyDialog} from './dialog';
 
-export const validateName = (name: string) => {
+export const validateName = (liandi: ILiandi, name: string) => {
     hideMessage();
 
     if (/\\|\/|\:|\*|\?|\"|<|>|\|/.test(name)) {
-        showMessage(i18n[Constants.LANG].fileNameRule);
+        showMessage(i18n[liandi.config.lang].fileNameRule);
         return false;
     }
     return true;
 };
 
-export const rename = (name: string, url: string, oldPath: string) => {
-    if (!validateName(name)) {
+export const rename = (liandi:ILiandi, name: string, url: string, oldPath: string) => {
+    if (!validateName(liandi, name)) {
         return false;
     }
 

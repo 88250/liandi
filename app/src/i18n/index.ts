@@ -1,5 +1,29 @@
 export const i18n: II18n = {
-    en_US: {},
+    en_US: {
+        newFile: 'New File',
+        newFolder: 'New Folder',
+        unMount: 'Unmount',
+        delete: 'Delete',
+        rename: 'Rename',
+        save: 'Save',
+        cancel: 'Cancel',
+        confirm: 'Confirm',
+        confirmDelete: 'Delete',
+        saveSuccess: 'Save Success',
+        back: 'Back',
+        mount: 'Mount',
+        mountWebDAV: 'Mount WebDAV',
+        fileNameRule: 'Not Allow \\/:*?"<>|',
+        slogan: 'LianDi, connect every bit',
+        showInFolder: 'Show in Folder',
+        search: 'Search',
+        config: 'Config',
+        userName: 'Username',
+        password: 'Password',
+        urlError: 'URL Error',
+        language: 'Language',
+        theme: 'Theme'
+    },
     zh_CN: {
         newFile: '新建文件',
         newFolder: '新建文件夹',
@@ -22,5 +46,7 @@ export const i18n: II18n = {
         userName: '用户名',
         password: '密码',
         urlError: 'URL 错误',
+        language: '语言',
+        theme: '主题'
     },
 };

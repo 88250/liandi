@@ -19,13 +19,13 @@ export class Editors {
         this.element = document.getElementById('editors');
         this.inputWrapElement = document.createElement('div');
         this.inputWrapElement.className = 'fn__flex';
-        this.inputWrapElement.innerHTML = `<input class="editors__input fn__flex-1"><button class="button">${i18n[Constants.LANG].save}</button>`;
+        this.inputWrapElement.innerHTML = `<input class="editors__input fn__flex-1"><button class="button">${i18n[liandi.config.lang].save}</button>`;
         this.inputWrapElement.querySelector('button').addEventListener('click', () => {
             this.saveContent(liandi);
         });
 
         this.inputWrapElement.querySelector('input').addEventListener('blur', () => {
-            rename(this.inputWrapElement.querySelector('input').value, liandi.current.dir.url, liandi.current.path);
+            rename(liandi, this.inputWrapElement.querySelector('input').value, liandi.current.dir.url, liandi.current.path);
         });
 
         this.editorElement = document.createElement('div');

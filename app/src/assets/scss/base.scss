@@ -52,5 +52,14 @@ tab-panel {
         background-color: $black;
       }
     }
+
+    &--vertical {
+      border-right: 1px solid $black;
+      border-bottom: 0;
+    }
+
+    &__panel {
+      padding: 10px;
+    }
   }
 }

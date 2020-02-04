@@ -33,7 +33,7 @@ export class Files {
             this.element.firstElementChild.innerHTML = '';
         } else {
             this.element.firstElementChild.innerHTML =
-                `<file-item name="${i18n[Constants.LANG].back}" path="${removeLastPath(data.path)}"></file-item>
+                `<file-item name="${i18n[liandi.config.lang].back}" path="${removeLastPath(data.path)}"></file-item>
 <div class="files__path">${liandi.current.path}</div>`;
         }
     }

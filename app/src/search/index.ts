@@ -1,13 +1,13 @@
 import {i18n} from "../i18n";
-import {Constants} from "../constants";
 import {dialog} from "../util/dialog";
+import {lauguage} from "../config/language";
 
 export const initSearch = (liandi: ILiandi) => {
     dialog({
         content: `<tab-panel>
   <ul slot="tab" class="tab fn__flex">
-    <li data-name="search" class="tab--current fn__pointer">${i18n[Constants.LANG].search}</li>
-    <li data-name="config" class="fn__pointer">${i18n[Constants.LANG].config}</li>
+    <li data-name="search" class="tab--current fn__pointer">${i18n[liandi.config.lang].search}</li>
+    <li data-name="config" class="fn__pointer">${i18n[liandi.config.lang].config}</li>
     <li class="fn__flex-1"></li>
   </ul>
   <div slot="ext">
@@ -16,7 +16,18 @@ export const initSearch = (liandi: ILiandi) => {
      <div class="fn__hr"></div>
   </div>
   <div data-name="search" slot="panel">searchPanel</div>
-  <div data-name="config">Config panel.</div>
+  <div data-name="config">
+    <tab-panel type="vertical">
+      <ul slot="tab" class="tab tab--vertical">
+        <li data-name="markdown" class="tab--current fn__pointer">Markdown</li>
+        <li data-name="theme" class="fn__pointer">${i18n[liandi.config.lang].theme}</li>
+        <li data-name="language" class="fn__pointer">${i18n[liandi.config.lang].language}</li>
+      </ul>
+      <div class="tab__panel" data-name="markdown" slot="panel">markdown</div>
+      <div class="tab__panel" data-name="theme">language</div>
+      <div class="tab__panel" data-name="language">${lauguage.genHTML(liandi)}</div>
+    </tab-panel>
+  </div>
 </tab-panel>`,
         width: 600
     })
@@ -30,7 +41,7 @@ export const initSearch = (liandi: ILiandi) => {
             k: inputElement.value
         })
     });
-    inputElement.addEventListener('input',  (event: InputEvent) => {
+    inputElement.addEventListener('input', (event: InputEvent) => {
         if (event.isComposing) {
             return
         }
@@ -39,4 +50,6 @@ export const initSearch = (liandi: ILiandi) => {
             k: inputElement.value
         })
     })
+
+    lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'))
 }
