@@ -46,7 +46,7 @@ export const newFile = (liandi: ILiandi) => {
             });
 
             const dialogElement = document.querySelector('#dialog');
-            (dialogElement.querySelector('.input') as HTMLElement).focus()
+            (dialogElement.querySelector('.input') as HTMLElement).focus();
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
                 destroyDialog();
             });
@@ -88,7 +88,7 @@ export const newFolder = (liandi: ILiandi) => {
             });
 
             const dialogElement = document.querySelector('#dialog');
-            (dialogElement.querySelector('.input') as HTMLElement).focus()
+            (dialogElement.querySelector('.input') as HTMLElement).focus();
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
                 destroyDialog();
             });

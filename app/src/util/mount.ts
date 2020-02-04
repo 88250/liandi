@@ -3,7 +3,7 @@ import {homedir} from 'os';
 import {Constants} from '../constants';
 import {destroyDialog, dialog} from './dialog';
 import {i18n} from '../i18n';
-import {showMessage} from "./message";
+import {showMessage} from './message';
 
 export const mountFile = async (liandi: ILiandi) => {
     const filePath = await remote.dialog.showOpenDialog({
@@ -52,8 +52,8 @@ export const mountWebDAV = (liandi: ILiandi) => {
     dialogElement.querySelector('.button--confirm').addEventListener('click', () => {
         const inputs = dialogElement.querySelectorAll('input');
         if (!inputs[0].value.startsWith('http')) {
-            showMessage(i18n[liandi.config.lang].urlError)
-            return
+            showMessage(i18n[liandi.config.lang].urlError);
+            return;
         }
         liandi.ws.send('mountremote', {
             url: inputs[0].value,
