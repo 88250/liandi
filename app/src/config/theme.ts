@@ -16,10 +16,14 @@ export const theme = {
         liandi.config.theme = theme
         if (theme === 'dark') {
             document.body.classList.add('theme--dark')
-            liandi.editors.vditor.setTheme('dark')
+            if (liandi.editors.vditor) {
+                liandi.editors.vditor.setTheme('dark')
+            }
         } else {
             document.body.classList.remove('theme--dark')
-            liandi.editors.vditor.setTheme('classic')
+            if (liandi.editors.vditor) {
+                liandi.editors.vditor.setTheme('classic')
+            }
         }
     }
 };
