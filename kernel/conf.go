@@ -51,7 +51,7 @@ func Close() {
 }
 
 func InitConf() {
-	Conf = &AppConf{LogLevel: "debug"}
+	Conf = &AppConf{LogLevel: "debug", Theme: "white", Lang: "zh_CN"}
 	if !gulu.File.IsExist(ConfPath) {
 		if err := os.Mkdir(LianDiDir, 0755); nil != err && !os.IsExist(err) {
 			Logger.Fatalf("创建配置目录 [%s] 失败：%s", LianDiDir, err)
@@ -88,6 +88,8 @@ func InitConf() {
 type AppConf struct {
 	LogLevel string `json:"logLevel"` // 日志级别：Off, Trace, Debug, Info, Warn, Error, Fatal
 	Dirs     []*Dir `json:"dirs"`     // 已经打开的文件夹
+	Theme    string `json:"theme"`    // 界面主题
+	Lang     string `json:"lang"`     // 界面语言
 }
 
 func (conf *AppConf) Save() {
