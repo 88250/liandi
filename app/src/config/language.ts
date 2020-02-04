@@ -7,13 +7,12 @@ export const lauguage = {
     },
     bindEvent: (liandi: ILiandi, element: HTMLElement) => {
         element.querySelector('select').addEventListener('change' , (event) => {
-            console.log(event);
             liandi.ws.send('setlang', {
                 lang: (event.target as HTMLSelectElement).value
             });
         });
     },
     onSetlang: () => {
-        window.location.reload();
+        window.location.reload()
     }
 };

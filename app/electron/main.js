@@ -15,8 +15,10 @@ function createWindow () {
 
   // 组织当前页面链接跳转
   mainWindow.webContents.on('will-navigate', (e, url) => {
+    if (url.endsWith('liandi/app/public/index.html')) {
+      return
+    }
     e.preventDefault()
-    console.log(e, url)
     shell.openExternal(url)
   })
 }
