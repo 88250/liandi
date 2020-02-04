@@ -63,7 +63,6 @@ export class WebSocketUtil {
                     if (this.isFirst) {
                         liandi.config = response.data;
                         document.title = i18n[liandi.config.lang].slogan
-                        theme.onSettheme(liandi, response.data.theme)
                         callback();
                         this.isFirst = false;
                     }

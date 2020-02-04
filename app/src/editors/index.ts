@@ -9,10 +9,10 @@ const Vditor = require('vditor');
 export class Editors {
     public inputWrapElement: HTMLElement;
     public element: HTMLElement;
-    private editorElement: HTMLElement;
-    private vditor: any;
-    private timeoutId: number;
+    public vditor: any;
     public saved: boolean;
+    private editorElement: HTMLElement;
+    private timeoutId: number;
 
     constructor(liandi: ILiandi) {
         this.saved = true;
@@ -74,6 +74,7 @@ export class Editors {
         } else {
             this.vditor = new Vditor('liandiVditor', {
                 tab: '/t',
+                theme: liandi.config.theme === 'dark' ? 'dark' : 'classic',
                 cache: false,
                 cdn: '../node_modules/vditor',
                 upload: {

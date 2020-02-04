@@ -43,6 +43,7 @@ declare interface ILiandi {
         element: HTMLElement
         inputWrapElement: HTMLElement
         saved: boolean
+        vditor: any
         saveContent: (liandi: ILiandi) => void
         remove: (liandi: ILiandi) => void
         onGet: (liandi: ILiandi, file: { name: string, content: string }) => void
