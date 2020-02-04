@@ -39,7 +39,7 @@ export const i18n: II18n = {
         mount: '挂载本地目录',
         mountWebDAV: '挂载远程 WebDAV 目录',
         fileNameRule: '不能包含 \\/:*?"<>| 字符',
-        slogan: '链滴笔记，链接点滴',
+        slogan: '链滴笔记，连接点滴',
         showInFolder: '打开文件位置',
         search: '搜索',
         config: '配置',
