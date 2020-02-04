@@ -18,8 +18,10 @@ export class Editors {
         this.saved = true;
         this.element = document.getElementById('editors');
         this.inputWrapElement = document.createElement('div');
-        this.inputWrapElement.className = 'fn__flex';
-        this.inputWrapElement.innerHTML = `<input class="editors__input fn__flex-1"><button class="button">${i18n[liandi.config.lang].save}</button>`;
+        this.inputWrapElement.className = 'fn__flex editors__title';
+        this.inputWrapElement.innerHTML = `<input class="editors__input input fn__flex-1">
+<div class="fn__space"></div>
+<button class="button">${i18n[liandi.config.lang].save}</button>`;
         this.inputWrapElement.querySelector('button').addEventListener('click', () => {
             this.saveContent(liandi);
         });
