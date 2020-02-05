@@ -124,11 +124,11 @@ func (conf *AppConf) lang(num int) string {
 
 // Dir 维护了打开的 WebDAV 文件夹。
 type Dir struct {
-	URL      string `json:"url"`      // WebDAV URL
-	Auth     string `json:"auth"`     // WebDAV 鉴权方式，空值表示不需要鉴权
-	User     string `json:"user"`     // WebDAV 用户名
-	Password string `json:"password"` // WebDAV 密码
-	LocalPath     string `json:"path"`     // 本地文件系统文件夹路径，远程 WebDAV 的话该字段为空
+	URL       string `json:"url"`      // WebDAV URL
+	Auth      string `json:"auth"`     // WebDAV 鉴权方式，空值表示不需要鉴权
+	User      string `json:"user"`     // WebDAV 用户名
+	Password  string `json:"password"` // WebDAV 密码
+	LocalPath string `json:"path"`     // 本地文件系统文件夹路径，远程 WebDAV 的话该字段为空
 
 	client *gowebdav.Client `json:"-"` // WebDAV 客户端
 }
