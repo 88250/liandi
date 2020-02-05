@@ -31,6 +31,10 @@ customElements.define('tab-panel',
               item.getAttribute('data-name')) {
               description.setAttribute('slot', 'panel')
               item.classList.add('tab--current')
+              const inputElement = description.querySelector('input')
+              if (inputElement) {
+                inputElement.focus()
+              }
             }
           })
         })

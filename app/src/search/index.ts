@@ -2,6 +2,7 @@ import {i18n} from '../i18n';
 import {dialog} from '../util/dialog';
 import {lauguage} from '../config/language';
 import {theme} from "../config/theme";
+import {initConfigSearch} from "../config/search";
 
 export const initSearch = (liandi: ILiandi) => {
     dialog({
@@ -11,13 +12,15 @@ export const initSearch = (liandi: ILiandi) => {
     <li data-name="config" class="fn__pointer">${i18n[liandi.config.lang].config}</li>
     <li class="fn__flex-1"></li>
   </ul>
-  <div slot="ext">
-     <div class="fn__hr"></div>
-     <input class="input">
-     <div class="fn__hr"></div>
+  <div data-name="search" slot="panel">
+    <div class="fn__hr"></div>
+    <input class="input">
+    <div class="fn__hr"></div>
   </div>
-  <div data-name="search" slot="panel">searchPanel</div>
   <div data-name="config">
+    <div class="fn__hr"></div>
+    <input class="input">
+    <div class="fn__hr"></div>
     <tab-panel type="vertical">
       <ul slot="tab" class="tab tab--vertical">
         <li data-name="markdown" class="tab--current fn__pointer">Markdown</li>
@@ -52,6 +55,7 @@ export const initSearch = (liandi: ILiandi) => {
         });
     });
 
+    initConfigSearch(liandi, dialogElement.querySelector('data-name="config"'))
     lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'));
     theme.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="theme"]'));
 };
