@@ -22,9 +22,8 @@ func (cmd *mountremote) Exec() {
 	url = NormalizeURL(url)
 	user := cmd.param["user"].(string)
 	password := cmd.param["password"].(string)
-	StopServeWebDAV()
 	MountRemote(url, user, password)
-	StartServeWebDAV()
+	RestartServeWebDAV()
 	Push(ret.Bytes())
 }
 

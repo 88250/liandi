@@ -31,7 +31,7 @@ var server *http.Server
 
 func InitMount() {
 	routeWebDAV()
-	StartServeWebDAV()
+	RestartServeWebDAV()
 }
 
 func Unmount(url string) {
@@ -122,7 +122,7 @@ func routeWebDAV() {
 	}
 }
 
-func StartServeWebDAV() {
+func RestartServeWebDAV() {
 	if nil != server {
 		StopServeWebDAV()
 	}

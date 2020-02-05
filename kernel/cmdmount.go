@@ -21,9 +21,8 @@ func (cmd *mount) Exec() {
 	p := cmd.param["path"].(string)
 	url := cmd.param["url"].(string)
 	url = NormalizeURL(url)
-	StopServeWebDAV()
 	Mount(url, p)
-	StartServeWebDAV()
+	RestartServeWebDAV()
 	Push(ret.Bytes())
 }
 

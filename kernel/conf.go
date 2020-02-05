@@ -43,6 +43,7 @@ var Conf *AppConf
 
 func Close() {
 	Conf.Close()
+	StopServeWebDAV()
 	CloseLog()
 }
 
