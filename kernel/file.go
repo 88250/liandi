@@ -15,7 +15,6 @@ package main
 import (
 	"errors"
 	"os"
-	stdpath "path"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -137,12 +136,7 @@ func Put(url, path string, content []byte) error {
 		return err
 	}
 
-	fname := filepath.Base(path)
-	p := ""
-	if !dir.IsRemote() {
-		p = filepath.FromSlash(stdpath.Join(dir.Path, fname))
-	}
-	doc := newDoc(gulu.Str.FromBytes(content), url, p)
+	doc := newDoc(url, path, gulu.Str.FromBytes(content))
 	dir.IndexDoc(doc)
 	return nil
 }
