@@ -112,8 +112,13 @@ func (dir *Dir) IndexDoc(doc *Doc) {
 }
 
 func Search(text string) (ret *bleve.SearchResult) {
-	query := bleve.NewMatchQuery(text)
-	query.Analyzer = "cjk"
+	nameQuery := bleve.NewMatchQuery(text)
+	nameQuery.Analyzer = "cjk"
+	nameQuery.SetField("Name")
+	contentQuery := bleve.NewMatchQuery(text)
+	contentQuery.Analyzer = "cjk"
+	contentQuery.SetField("Content")
+	query := bleve.NewDisjunctionQuery(nameQuery, contentQuery)
 	searchRequest := bleve.NewSearchRequest(query)
 	searchRequest.Highlight = bleve.NewHighlightWithStyle("html")
 	searchRequest.Fields = []string{"*"}
