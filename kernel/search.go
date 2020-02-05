@@ -12,6 +12,11 @@
 
 package main
 
+import (
+	"path/filepath"
+	"strings"
+)
+
 func InitSearch() {
 	for _, dir := range Conf.Dirs {
 		go dir.Index()
@@ -27,10 +32,11 @@ type Doc struct {
 }
 
 type Snippet struct {
-	Path     string   `json:"path"`
-	Line     int      `json:"line"`
-	Ch       int      `json:"ch"`
-	Contents []string `json:"contents"`
+	URL     string `json:"url"`
+	Path    string `json:"path"`
+	Line    int    `json:"line"`
+	Pos     int    `json:"pos"`
+	Content string `json:"content"`
 }
 
 func genDocId(url, path string) string {
@@ -54,6 +60,21 @@ func (dir *Dir) IndexDoc(doc *Doc) {
 	docs = append(docs, doc)
 }
 
-func Search(text string) (ret []*Snippet) {
+func Search(keyword string) (ret []*Snippet) {
+	for _, doc := range docs {
+		snippets := searchDoc(keyword, doc)
+		ret = append(ret, snippets...)
+	}
 	return
+}
+
+func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
+	lines := strings.Split(doc.Content, "\n")
+	for idx, line := range lines {
+		if pos := strings.Index(strings.ToLower(line), strings.ToLower(keyword)); -1 != pos {
+			snippet := &Snippet{URL: doc.URL, Path: filepath.ToSlash(doc.Path), Line: idx + 1, Pos: pos, Content: line}
+			ret = append(ret, snippet)
+		}
+	}
+	return ret
 }
