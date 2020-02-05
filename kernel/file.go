@@ -142,7 +142,7 @@ func Put(url, path string, content []byte) error {
 	if !dir.IsRemote() {
 		p = filepath.FromSlash(stdpath.Join(dir.Path, fname))
 	}
-	doc := newDoc(fname, gulu.Str.FromBytes(content), url, p)
+	doc := newDoc(gulu.Str.FromBytes(content), url, p)
 	dir.IndexDoc(doc)
 	return nil
 }
@@ -190,7 +190,7 @@ func Rename(url, oldPath, newPath string) error {
 		return err
 	}
 
-	dir.RemoveIndexDoc(genDocId(url, oldPath))
+	dir.RemoveIndexDoc(url, oldPath)
 	return nil
 }
 
@@ -207,6 +207,6 @@ func Remove(url, path string) error {
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
-	dir.RemoveIndexDoc(genDocId(url, path))
+	dir.RemoveIndexDoc(url, path)
 	return dir.Remove(path)
 }

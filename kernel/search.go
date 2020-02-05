@@ -12,121 +12,48 @@
 
 package main
 
-import (
-	"crypto/sha1"
-	"encoding/hex"
-	stdpath "path"
-
-	"github.com/88250/gulu"
-	"github.com/blevesearch/bleve"
-	_ "github.com/blevesearch/bleve/analysis/lang/cjk"
-)
-
-var queryIndex bleve.Index
-
 func InitSearch() {
-	ReloadQueryIndex()
 	for _, dir := range Conf.Dirs {
 		go dir.Index()
 	}
 }
 
-func ReloadQueryIndex() {
-	if nil != queryIndex {
-		queryIndex.Close()
-	}
-	queryIndex = nil
-	var indices []bleve.Index
-	for _, dir := range Conf.Dirs {
-		indices = append(indices, dir.index)
-	}
-	queryIndex = bleve.NewIndexAlias(indices...)
-}
+var docs []*Doc
 
 type Doc struct {
-	Id      string
-	Name    string
-	Content string
 	URL     string
 	Path    string
+	Content string
 }
 
-func sha(str string) string {
-	hash := sha1.Sum(gulu.Str.ToBytes(str))
-	return hex.EncodeToString(hash[:])
+type Snippet struct {
+	Path     string   `json:"path"`
+	Line     int      `json:"line"`
+	Ch       int      `json:"ch"`
+	Contents []string `json:"contents"`
 }
 
 func genDocId(url, path string) string {
-	return sha(stdpath.Join(url, path))
+	return url + path
 }
 
-func newDoc(name, content, url, path string) (doc *Doc) {
-	id := genDocId(url, path)
-	return &Doc{Id: id, Name: name, Content: content, URL: url, Path: path}
+func newDoc(url, path, content string) (doc *Doc) {
+	return &Doc{URL: url, Path: path, Content: content}
 }
 
-func (dir *Dir) BatchIndexDocs(docs []*Doc) {
-	length := len(docs)
-	if 1 > length {
-		return
-	}
-
-	batch := dir.index.NewBatch()
-	for _, doc := range docs {
-		if err := batch.Index(doc.Id, doc); nil != err {
-			Logger.Errorf("加入批量索引失败：%s", err)
+func (dir *Dir) RemoveIndexDoc(url, path string) {
+	for i, doc := range docs {
+		if doc.URL == url && doc.Path == path {
+			docs = docs[:i+copy(docs[i:], docs[i+1:])]
+			break
 		}
-	}
-
-	if err := dir.index.Batch(batch); nil != err {
-		Logger.Errorf("批量索引失败：%s", err)
-	}
-}
-
-func (dir *Dir) BatchUnindexDocs(docIds []string) {
-	length := len(docIds)
-	if 1 > length {
-		return
-	}
-
-	batch := dir.index.NewBatch()
-	for i := 0; i < length; i++ {
-		batch.Delete(docIds[i])
-	}
-
-	if err := dir.index.Batch(batch); nil != err {
-		Logger.Errorf("批量删除索引失败：%s", err)
-	}
-}
-
-func (dir *Dir) RemoveIndexDoc(docId string) {
-	if err := dir.index.Delete(docId); nil != err {
-		Logger.Errorf("删除索引失败：%s", err)
 	}
 }
 
 func (dir *Dir) IndexDoc(doc *Doc) {
-	if err := dir.index.Index(doc.Id, doc); nil != err {
-		Logger.Errorf("索引失败：%s", err)
-	}
+	docs = append(docs, doc)
 }
 
-func Search(text string) (ret *bleve.SearchResult) {
-	nameQuery := bleve.NewMatchQuery(text)
-	nameQuery.Analyzer = "cjk"
-	nameQuery.SetField("Name")
-	contentQuery := bleve.NewMatchQuery(text)
-	contentQuery.Analyzer = "cjk"
-	contentQuery.SetField("Content")
-	query := bleve.NewDisjunctionQuery(nameQuery, contentQuery)
-	searchRequest := bleve.NewSearchRequest(query)
-	searchRequest.Highlight = bleve.NewHighlightWithStyle("html")
-	searchRequest.Fields = []string{"*"}
-	ret, err := queryIndex.Search(searchRequest)
-	if nil != err {
-		Logger.Warnf("搜索失败：%s", err)
-		return nil
-	}
-	Logger.Infof("%s", ret)
+func Search(text string) (ret []*Snippet) {
 	return
 }

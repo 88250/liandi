@@ -18,14 +18,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
-	"github.com/blevesearch/bleve"
 )
 
 const (
@@ -38,14 +36,12 @@ var (
 	HomeDir, _ = gulu.OS.Home()
 	LianDiDir  = filepath.Join(HomeDir, ".liandi")
 	ConfPath   = filepath.Join(LianDiDir, "conf.json")
-	IndexPath  = filepath.Join(LianDiDir, "index")
 	LogPath    = filepath.Join(LianDiDir, "liandi.log")
 )
 
 var Conf *AppConf
 
 func Close() {
-	queryIndex.Close()
 	Conf.Close()
 	CloseLog()
 }
@@ -134,7 +130,6 @@ type Dir struct {
 	Path     string `json:"path"`     // 本地文件系统文件夹路径，远程 WebDAV 的话该字段为空
 
 	client *gowebdav.Client `json:"-"` // WebDAV 客户端
-	index  bleve.Index      `json:"-"` // 搜索引擎客户端
 }
 
 func (dir *Dir) IsRemote() bool {
@@ -145,31 +140,10 @@ func (dir *Dir) InitClient() {
 	// 初始化 WebDAV 客户端
 	dir.client = gowebdav.NewClient(dir.URL, dir.User, dir.Password)
 	dir.client.SetTimeout(7 * time.Second)
-
-	// 初始化搜索引擎客户端
-	indexName := sha(dir.URL)
-	indexPath := filepath.Join(IndexPath, indexName)
-	var err error
-	if gulu.File.IsExist(indexPath) {
-		dir.index, err = bleve.Open(indexPath)
-		if nil != err {
-			Logger.Fatalf("加载搜索索引失败：%s", err)
-			return
-		}
-	} else {
-		mapping := bleve.NewIndexMapping()
-		mapping.DefaultAnalyzer = "cjk"
-		dir.index, err = bleve.New(indexPath, mapping)
-		if nil != err {
-			Logger.Fatalf("创建搜索索引失败：%s", err)
-			return
-		}
-	}
 }
 
 func (dir *Dir) CloseClient() {
 	dir.client = nil
-	dir.index.Close()
 }
 
 func (dir *Dir) Ls(path string) (ret []os.FileInfo, err error) {
@@ -249,38 +223,23 @@ func (dir *Dir) Remove(path string) error {
 func (dir *Dir) Index() {
 	Logger.Debugf("开始索引 [%s] 目录", dir.URL)
 	files := dir.Files("/")
-	var docs []*Doc
 	for _, file := range files {
-		content, err := dir.Get(file.(*gowebdav.File).Path())
-		if nil == err {
-			p := ""
-			if !dir.IsRemote() {
-				p = filepath.FromSlash(path.Join(dir.Path, file.Name()))
-			}
-			doc := newDoc(file.Name(), content, dir.URL, p)
+		p := file.(*gowebdav.File).Path()
+		if content, err := dir.Get(p); nil == err {
+			doc := newDoc(dir.URL, p, content)
 			docs = append(docs, doc)
 		}
 	}
-	dir.BatchIndexDocs(docs)
 	Logger.Debugf("索引目录 [%s] 完毕", dir.URL)
 }
 
 func (dir *Dir) Unindex() {
 	Logger.Debugf("开始删除索引 [%s] 目录", dir.URL)
 	files := dir.Files("/")
-	var docIds []string
 	for _, file := range files {
-		content, err := dir.Get(file.(*gowebdav.File).Path())
-		if nil == err {
-			doc := newDoc(file.Name(), content, dir.URL, path.Join(dir.Path, file.Name()))
-			docIds = append(docIds, doc.Id)
-		}
+		p := file.(*gowebdav.File).Path()
+		dir.RemoveIndexDoc(dir.URL, p)
 	}
-	dir.BatchUnindexDocs(docIds)
-	indexName := sha(dir.URL)
-	dir.index.Close()
-	os.RemoveAll(filepath.Join(IndexPath, indexName))
-	Logger.Debugf("删除索引目录 [%s] 完毕", dir.URL)
 }
 
 func (dir *Dir) Files(path string) (ret []os.FileInfo) {
