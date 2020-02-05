@@ -5,9 +5,190 @@
     <title>链滴笔记，连接点滴</title>
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <meta http-equiv="Content-Security-Policy" content="*"/>
+    <style>
+        /* Basic styling */
+        * {margin: 0; padding: 0; border: 0; vertical-align: baseline;}
+        html {box-sizing: border-box;}
+        *, *:before, *:after {box-sizing: inherit;}
+        html, body {height: 100%; margin: 0;}
+
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background: #1A2933;
+            color: #FFF;
+        }
+
+        h1 {
+            margin: 0 0 10px 0;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        p {
+            margin-top: 10px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* Styling of window frame and titlebar */
+        body {
+            border: 1px solid #48545c;
+            overflow-y: hidden;
+        }
+
+        #titlebar {
+            display: block;
+            position: fixed;
+            height: 32px;
+            width: calc(100% - 2px);
+        }
+
+        .maximized #titlebar {
+            width: 100%;
+            padding: 0;
+        }
+
+        #main {
+            height: calc(100% - 32px);
+            margin-top: 32px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        #titlebar {
+            padding: 4px;
+        }
+
+        #titlebar #drag-region {
+            width: 100%;
+            height: 100%;
+            -webkit-app-region: drag;
+        }
+
+        #titlebar {
+            color: #FFF;
+        }
+
+        #titlebar #drag-region {
+            display: grid;
+            grid-template-columns: auto 138px;
+        }
+
+        #window-title {
+            grid-column: 1;
+            display: flex;
+            align-items: center;
+            margin-left: 8px;
+            overflow-x: hidden;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 12px;
+        }
+
+        .maximized #window-title {
+            margin-left: 12px;
+        }
+
+        #window-title span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.5;
+        }
+
+        #window-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 46px);
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            font-family: "Segoe MDL2 Assets";
+            font-size: 10px;
+        }
+
+        #window-controls {
+            -webkit-app-region: no-drag;
+        }
+
+        #window-controls .button {
+            grid-row: 1 / span 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        #window-controls .button {
+            user-select: none;
+            cursor: default;
+        }
+
+        #window-controls .button:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        #window-controls .button:active {
+            background: rgba(255,255,255,0.2);
+        }
+
+        #close-button:hover {
+            background: #E81123 !important;
+        }
+
+        #close-button:active {
+            background: #f1707a !important;
+            color: #000;
+        }
+
+        #min-button {
+            grid-column: 1;
+        }
+        #max-button, #restore-button {
+            grid-column: 2;
+        }
+        #close-button {
+            grid-column: 3;
+        }
+
+        #restore-button {
+            display: none !important;
+        }
+
+        .maximized #restore-button {
+            display: flex !important;
+        }
+
+        .maximized #max-button {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <div class="fn__flex wrap">
+
+    <header id="titlebar">
+        <div id="drag-region">
+
+            <div id="window-title">
+                <span>Electron quick start</span>
+            </div>
+
+            <div id="window-controls">
+                <div class="button" id="min-button">
+                    <span>&#xE921;</span>
+                </div>
+                <div class="button" id="max-button">
+                    <span>&#xE922;</span>
+                </div>
+                <div class="button" id="restore-button">
+                    <span>&#xE923;</span>
+                </div>
+                <div class="button" id="close-button">
+                    <span>&#xE8BB;</span>
+                </div>
+
+            </div>
+        </div>
+    </header>
     <div class="navigation fn__flex-column" id="navigation"></div>
     <div class="resize" id="resize"></div>
     <div class="files fn__flex-column" id="files"></div>
@@ -15,5 +196,52 @@
     <div class="fn__flex-1 fn__flex-column" id="editors"></div>
 </div>
 <script src="../dist/main.js"></script>
+<script>
+    // This file is required by the index.html file and will
+    // be executed in the renderer process for that window.
+    // All of the Node.js APIs are available in this process.
+    const remote = require('electron').remote;
+
+    // When document has loaded, initialise
+    document.onreadystatechange = () => {
+        if (document.readyState == "complete") {
+            handleWindowControls();
+        }
+    };
+
+    function handleWindowControls() {
+
+        let win = remote.getCurrentWindow();
+        // Make minimise/maximise/restore/close buttons work when they are clicked
+        document.getElementById('min-button').addEventListener("click", event => {
+            win.minimize();
+        });
+
+        document.getElementById('max-button').addEventListener("click", event => {
+            win.maximize();
+        });
+
+        document.getElementById('restore-button').addEventListener("click", event => {
+            win.unmaximize();
+        });
+
+        document.getElementById('close-button').addEventListener("click", event => {
+            win.close();
+        });
+
+        // Toggle maximise/restore buttons when maximisation/unmaximisation occurs
+        toggleMaxRestoreButtons();
+        win.on('maximize', toggleMaxRestoreButtons);
+        win.on('unmaximize', toggleMaxRestoreButtons);
+
+        function toggleMaxRestoreButtons() {
+            if (win.isMaximized()) {
+                document.body.classList.add('maximized');
+            } else {
+                document.body.classList.remove('maximized');
+            }
+        }
+    }
+</script>
 </body>
 </html>
