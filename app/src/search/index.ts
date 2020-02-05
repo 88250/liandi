@@ -55,7 +55,7 @@ export const initSearch = (liandi: ILiandi) => {
         });
     });
 
-    initConfigSearch(liandi, dialogElement.querySelector('data-name="config"'))
+    initConfigSearch(liandi, dialogElement.querySelector('div[data-name="config"]'))
     lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'));
     theme.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="theme"]'));
 };
