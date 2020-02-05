@@ -68,9 +68,9 @@ func InitConf() {
 
 	for i := 0; i < len(Conf.Dirs); i++ {
 		dir := Conf.Dirs[i]
-		if !dir.IsRemote() && !gulu.File.IsExist(dir.Path) {
+		if !dir.IsRemote() && !gulu.File.IsExist(dir.LocalPath) {
 			Conf.Dirs = append(Conf.Dirs[:i], Conf.Dirs[i+1:]...)
-			Logger.Debugf("目录 [%s] 不存在，已从配置中移除", dir.Path)
+			Logger.Debugf("目录 [%s] 不存在，已从配置中移除", dir.LocalPath)
 			continue
 		}
 	}
@@ -128,13 +128,13 @@ type Dir struct {
 	Auth     string `json:"auth"`     // WebDAV 鉴权方式，空值表示不需要鉴权
 	User     string `json:"user"`     // WebDAV 用户名
 	Password string `json:"password"` // WebDAV 密码
-	Path     string `json:"path"`     // 本地文件系统文件夹路径，远程 WebDAV 的话该字段为空
+	LocalPath     string `json:"path"`     // 本地文件系统文件夹路径，远程 WebDAV 的话该字段为空
 
 	client *gowebdav.Client `json:"-"` // WebDAV 客户端
 }
 
 func (dir *Dir) IsRemote() bool {
-	return "" == dir.Path
+	return "" == dir.LocalPath
 }
 
 func (dir *Dir) InitClient() {
