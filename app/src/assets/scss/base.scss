@@ -12,18 +12,44 @@
 @import "list";
 @import "~vditor/dist/index.css";
 
+.window-controls {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 48px;
+
+  div {
+    cursor: pointer;
+    float: left;
+    transition: $transition;
+    color: var(--text-color);
+    text-align: center;
+    padding: 3px;
+    height: 16px;
+    box-sizing: border-box;
+    display: block;
+
+    svg {
+      height: 10px;
+      width: 10px;
+      float: left;
+    }
+
+    &:hover {
+      background-color: #e5e5e5;
+      color: #24292e;
+    }
+
+    &.close:hover {
+      color: $white;
+      background-color: #e5182c;
+    }
+  }
+}
+
 .vditor {
   border-width: 1px 0 0 0;
   border-radius: 0;
-
-  &-toolbar {
-    border-radius: 0;
-  }
-
-  &-tip__content {
-    box-sizing: border-box;
-    max-width: 520px;
-  }
 }
 
 .wrap {
@@ -37,10 +63,10 @@
   position: relative;
 }
 
-
 tab-panel {
   .tab {
     border-bottom: 1px solid var(--border-color);
+
     li {
       list-style: none;
       padding: 0 10px;

@@ -10,6 +10,7 @@ import {Editors} from './editors';
 import {Menus} from './menu';
 import {resize} from './util/resize';
 import {initGlobalKeyPress} from './hotkey';
+import {remote} from 'electron';
 
 class App {
     public liandi: ILiandi;
@@ -32,6 +33,42 @@ class App {
 
             initGlobalKeyPress(this.liandi);
         });
+
+        this.initWindow()
+    }
+
+    initWindow () {
+        const currentWindow = remote.getCurrentWindow();
+        const maxBtnElement = document.getElementById('maxWindow')
+        const restoreBtnElement = document.getElementById('restoreWindow')
+        document.getElementById('minWindow').addEventListener("click", event => {
+            currentWindow.minimize();
+        });
+
+        maxBtnElement.addEventListener("click", event => {
+            currentWindow.maximize();
+        });
+
+        restoreBtnElement.addEventListener("click", event => {
+            currentWindow.unmaximize();
+        });
+
+        document.getElementById('closeWindow').addEventListener("click", event => {
+            currentWindow.close();
+        });
+
+        const toggleMaxRestoreButtons = () => {
+            if (currentWindow.isMaximized()) {
+                restoreBtnElement.style.display = 'block'
+                maxBtnElement.style.display = 'none'
+            } else {
+                restoreBtnElement.style.display = 'none'
+                maxBtnElement.style.display = 'block'
+            }
+        }
+        toggleMaxRestoreButtons();
+        currentWindow.on('maximize', toggleMaxRestoreButtons);
+        currentWindow.on('unmaximize', toggleMaxRestoreButtons);
     }
 }
 

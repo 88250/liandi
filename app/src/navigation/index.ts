@@ -11,7 +11,7 @@ export class Navigation {
                 .querySelector(`.tree-list__arrow[path="${data.path}"]`);
             arrowElement.setAttribute('has-file', 'true');
             arrowElement.setAttribute('files', JSON.stringify(data.files));
-            arrowElement.innerHTML = '<path d="M21.875 14c0 0.465-0.191 0.902-0.52 1.23l-12.25 12.25c-0.328 0.328-0.766 0.52-1.23 0.52-0.957 0-1.75-0.793-1.75-1.75v-24.5c0-0.957 0.793-1.75 1.75-1.75 0.465 0 0.902 0.191 1.23 0.52l12.25 12.25c0.328 0.328 0.52 0.766 0.52 1.23z"></path>';
+            arrowElement.innerHTML = '<path d="M25 16c0 0.531-0.219 1.031-0.594 1.406l-14 14c-0.375 0.375-0.875 0.594-1.406 0.594-1.094 0-2-0.906-2-2v-28c0-1.094 0.906-2 2-2 0.531 0 1.031 0.219 1.406 0.594l14 14c0.375 0.375 0.594 0.875 0.594 1.406z"></path>';
         }
     }
 

@@ -8,16 +8,16 @@ customElements.define('tree-list',
       const dir = JSON.parse(decodeURIComponent(this.getAttribute('dir')))
       const remote = dir.path === '' ? 'true' : 'false'
 
-      let pathHTML = '<path d="M28 18.667c0 3.092-2.508 5.6-5.6 5.6h-15.867c-3.602 0-6.533-2.931-6.533-6.533 0-2.61 1.546-4.871 3.762-5.906-0.015-0.204-0.029-0.423-0.029-0.627 0-4.127 3.34-7.467 7.467-7.467 3.121 0 5.79 1.91 6.913 4.637 0.642-0.569 1.487-0.904 2.421-0.904 2.056 0 3.733 1.677 3.733 3.733 0 0.744-0.219 1.429-0.598 2.013 2.479 0.583 4.331 2.8 4.331 5.454z"></path>'
+      let pathHTML = '<path d="M32 21.333c0 3.533-2.867 6.4-6.4 6.4h-18.133c-4.117 0-7.467-3.35-7.467-7.467 0-2.983 1.767-5.567 4.3-6.75-0.017-0.233-0.033-0.483-0.033-0.717 0-4.717 3.817-8.533 8.533-8.533 3.567 0 6.617 2.183 7.9 5.3 0.733-0.65 1.7-1.033 2.767-1.033 2.35 0 4.267 1.917 4.267 4.267 0 0.85-0.25 1.633-0.683 2.3 2.833 0.667 4.95 3.2 4.95 6.233z"></path>'
       if (remote === 'false') {
-        pathHTML = '<path d="M28 10.231v11.846c0 2.070-1.7 3.769-3.769 3.769h-20.462c-2.070 0-3.769-1.7-3.769-3.769v-16.154c0-2.070 1.7-3.769 3.769-3.769h5.385c2.070 0 3.769 1.7 3.769 3.769v0.538h11.308c2.070 0 3.769 1.7 3.769 3.769z"></path>'
+        pathHTML = '<path d="M32 11.692v13.538c0 2.365-1.942 4.308-4.308 4.308h-23.385c-2.365 0-4.308-1.942-4.308-4.308v-18.462c0-2.365 1.942-4.308 4.308-4.308h6.154c2.365 0 4.308 1.942 4.308 4.308v0.615h12.923c2.365 0 4.308 1.942 4.308 4.308z"></path>'
       }
       const ulElement = document.createElement('ul')
       ulElement.className = 'tree-list'
       ulElement.innerHTML = `<li class="list__item fn__flex">
-<svg class="fn__flex-shrink0 tree-list__arrow" path="/" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"></svg>
+<svg class="fn__flex-shrink0 tree-list__arrow" path="/" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
 <span class="tree-list__folder fn__ellipsis" path="/">
-  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${pathHTML}</svg>
   <span>${getName(dir.url)}</span>
 </span>
 </li>`
@@ -48,9 +48,9 @@ customElements.define('tree-list',
             ? ' list__item--current'
             : ''}" style="padding-left: ${(item.path.split(
             '/').length - 2) * 13}px">
-<svg class="fn__flex-shrink0 tree-list__arrow" path="${item.path}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"></svg>
+<svg class="fn__flex-shrink0 tree-list__arrow" path="${item.path}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
 <span class="tree-list__folder fn__ellipsis" path="${item.path}">
-  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">${pathHTML}</svg>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${pathHTML}</svg>
   <span>${item.name}</span>
 </span>
 </li>`
