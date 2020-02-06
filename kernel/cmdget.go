@@ -34,6 +34,8 @@ func (cmd *get) Exec() {
 		ret.Data = map[string]interface{}{
 			"name":    path.Base(p),
 			"content": content,
+			"url":     url,
+			"path":    p,
 		}
 	}
 	Push(ret.Bytes())
