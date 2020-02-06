@@ -57,6 +57,12 @@ func (dir *Dir) RemoveIndexDoc(url, path string) {
 }
 
 func (dir *Dir) IndexDoc(doc *Doc) {
+	for i, d := range docs {
+		if doc.URL == d.URL && doc.Path == d.Path {
+			docs = docs[:i+copy(docs[i:], docs[i+1:])]
+			break
+		}
+	}
 	docs = append(docs, doc)
 }
 

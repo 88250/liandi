@@ -31,7 +31,7 @@ var server *http.Server
 
 func InitMount() {
 	routeWebDAV()
-	StartServeWebDAV()
+	RestartServeWebDAV()
 }
 
 func Unmount(url string) {
@@ -64,7 +64,7 @@ func MountRemote(url, user, password string) (ret string, alreadyMount bool) {
 		}
 	}
 
-	dir := &Dir{URL: url, Path: ""}
+	dir := &Dir{URL: url, LocalPath: ""}
 	if "" != user || "" != password {
 		dir.User = user
 		dir.Password = password
@@ -82,7 +82,7 @@ func MountRemote(url, user, password string) (ret string, alreadyMount bool) {
 
 func Mount(url, localPath string) (ret string, alreadyMount bool) {
 	for _, dir := range Conf.Dirs {
-		if "" != localPath && dir.Path == localPath {
+		if "" != localPath && dir.LocalPath == localPath {
 			return dir.URL, true
 		}
 	}
@@ -90,7 +90,7 @@ func Mount(url, localPath string) (ret string, alreadyMount bool) {
 	id := gulu.Rand.String(7)
 	url = url + id + "/" + filepath.Base(localPath) + "/"
 
-	dir := &Dir{URL: url, Path: localPath}
+	dir := &Dir{URL: url, LocalPath: localPath}
 	Conf.Dirs = append(Conf.Dirs, dir)
 	routeWebDAV()
 	Conf.Save()
@@ -112,7 +112,7 @@ func routeWebDAV() {
 		prefix := dir.URL[strings.Index(dir.URL, "/webdav/"):]
 		webdavHandler := &webdav.Handler{
 			Prefix:     prefix,
-			FileSystem: webdav.Dir(dir.Path),
+			FileSystem: webdav.Dir(dir.LocalPath),
 			LockSystem: webdav.NewMemLS(),
 		}
 
@@ -122,7 +122,7 @@ func routeWebDAV() {
 	}
 }
 
-func StartServeWebDAV() {
+func RestartServeWebDAV() {
 	if nil != server {
 		StopServeWebDAV()
 	}

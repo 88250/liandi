@@ -20,9 +20,8 @@ func (cmd *unmount) Exec() {
 	ret := NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
 	url = NormalizeURL(url)
-	StopServeWebDAV()
 	Unmount(url)
-	StartServeWebDAV()
+	RestartServeWebDAV()
 	Push(ret.Bytes())
 }
 
