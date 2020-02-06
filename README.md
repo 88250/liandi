@@ -1,5 +1,5 @@
 <p align="center">
-Logo(TBD)1
+Logo(TBD)
 <br><br>
 <em>链滴笔记，连接点滴</em>
 <br><br>
