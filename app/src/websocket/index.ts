@@ -5,6 +5,7 @@ import {i18n} from '../i18n';
 import {showMountDialog} from '../util/mount';
 import {lauguage} from '../config/language';
 import {theme} from "../config/theme";
+import {onSearch} from "../search";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -53,6 +54,9 @@ export class WebSocketUtil {
                 return;
             }
             switch (response.cmd) {
+                case 'search':
+                    onSearch(liandi, response.data)
+                    break;
                 case 'setlang':
                     lauguage.onSetlang();
                     break;

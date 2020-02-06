@@ -63,17 +63,11 @@ customElements.define('tree-list',
           `<ul>${fileHTML}</ul>`)
       }
 
-      ulElement.addEventListener('dblclick', (event) => {
-        let target = event.target
-
-
-      })
-
       let timeoutId
       ulElement.addEventListener('click', (event) => {
         let target = event.target
         if (event.detail === 1) {
-          timeoutId = setTimeout(()=> {
+          timeoutId = setTimeout(() => {
             while (target && !target.parentElement.isEqualNode(ulElement)) {
               if (target.classList.contains('tree-list__folder')) {
                 if (target.parentElement.classList.contains(

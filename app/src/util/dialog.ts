@@ -49,7 +49,7 @@ export const dialog = (options: {
     const dialogContentElement = dialogElement.querySelector('.dialog__content') as HTMLElement;
     if (options.height) {
         dialogMainElement.style.height = options.height + 'px';
-        dialogContentElement.style.height = (options.height - 85) + 'px';
+        dialogContentElement.style.height = (options.height - (options.title ? 85 : 0)) + 'px';
     } else {
         dialogMainElement.style.height = 'auto';
         dialogContentElement.style.height = 'auto';

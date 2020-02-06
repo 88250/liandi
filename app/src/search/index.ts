@@ -1,8 +1,9 @@
 import {i18n} from '../i18n';
-import {dialog} from '../util/dialog';
+import {destroyDialog, dialog} from '../util/dialog';
 import {lauguage} from '../config/language';
 import {theme} from "../config/theme";
 import {initConfigSearch} from "../config/search";
+import {getPath, removeLastPath} from "../util/path";
 
 export const initSearch = (liandi: ILiandi) => {
     dialog({
@@ -16,6 +17,7 @@ export const initSearch = (liandi: ILiandi) => {
     <div class="fn__hr"></div>
     <input class="input">
     <div class="fn__hr"></div>
+    <div class="list--signal" style="height: 403px"></div>
   </div>
   <div data-name="config">
     <div class="fn__hr"></div>
@@ -33,7 +35,8 @@ export const initSearch = (liandi: ILiandi) => {
     </tab-panel>
   </div>
 </tab-panel>`,
-        width: 600
+        width: 600,
+        height: 520
     });
 
     const dialogElement = document.querySelector('#dialog');
@@ -54,8 +57,82 @@ export const initSearch = (liandi: ILiandi) => {
             k: inputElement.value
         });
     });
+    inputElement.addEventListener('keydown', (event: KeyboardEvent) => {
+        let currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current')
+
+        if (event.code === 'ArrowDown') {
+            if (currentList.nextElementSibling) {
+                currentList.classList.remove('list__item--current')
+                currentList = currentList.nextElementSibling as HTMLElement
+                currentList.classList.add('list__item--current')
+                if (currentList.parentElement.scrollTop + 478 < currentList.offsetTop) {
+                    currentList.parentElement.scrollTop = currentList.offsetTop - 478
+                }
+            }
+            event.preventDefault()
+        } else if (event.code === 'ArrowUp') {
+            if (currentList.previousElementSibling) {
+                currentList.classList.remove('list__item--current')
+                currentList = currentList.previousElementSibling as HTMLElement
+                currentList.classList.add('list__item--current')
+                if (currentList.parentElement.scrollTop > currentList.offsetTop - 107) {
+                    currentList.parentElement.scrollTop = currentList.offsetTop - 107
+                }
+            }
+            event.preventDefault()
+        } else if (event.code === 'Enter') {
+            liandi.editors.saveContent(liandi)
+
+            const currentNavigationElement =
+                liandi.navigation.element.querySelector(`tree-list[url="${currentList.getAttribute('data-url')}"]`)
+
+            liandi.current.dir = JSON.parse(decodeURIComponent(currentNavigationElement.getAttribute('dir')))
+            liandi.current.path = currentList.getAttribute('data-path')
+
+            const currentTreeElement = currentNavigationElement.shadowRoot.querySelector('.list__item--current')
+            if (currentTreeElement) {
+                currentTreeElement.classList.remove('list__item--current')
+            }
+            const currentTreeFolderElement = currentNavigationElement.shadowRoot.querySelector(`.tree-list__folder[path="${removeLastPath(liandi.current.path)}"]`)
+            if (currentTreeFolderElement) {
+                currentTreeFolderElement.parentElement.classList.add('list__item--current')
+            }
+
+            window.liandi.liandi.ws.send('ls', {
+                url: liandi.current.dir.url,
+                path: getPath(liandi.current.path)
+            })
+            liandi.ws.send('get', {
+                url: liandi.current.dir.url,
+                path: liandi.current.path
+            })
+            destroyDialog();
+            event.preventDefault()
+        }
+    });
 
     initConfigSearch(liandi, dialogElement.querySelector('div[data-name="config"]'))
     lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'));
     theme.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="theme"]'));
 };
+
+export const onSearch = (liandi: ILiandi, data: {
+    content: string,
+    line: number
+    path: string
+    pos: number
+    url: string
+}[]) => {
+    let resultHTML = ''
+    data.forEach((item, index) => {
+        resultHTML += `<div class="list__item fn__flex${index === 0 ? ' list__item--current' : ''}" 
+title="${item.content}" data-url="${item.url}" data-path="${item.path}">
+<span class="fn__flex-1 fn__ellipsis">${item.content}</span>
+<span class="fn__space"></span>
+<span class="ft__smaller ft__secondary">${item.path} ${item.line}:${item.pos}</span>
+</div>`
+    })
+
+    const panelElement = document.querySelector('#dialog div[data-name="search"]')
+    panelElement.querySelector('.list--signal').innerHTML = resultHTML;
+}
