@@ -1,9 +1,7 @@
 <p align="center">
 Logo(TBD)
 <br><br>
-<em>
-链滴笔记，连接点滴
-</em>
+<em>链滴笔记，连接点滴</em>
 <br><br>
 <a title="Build Status" target="_blank" href="https://travis-ci.org/88250/liandi"><img src="https://img.shields.io/travis/88250/liandi.svg?style=flat-square"></a>
 <a title="Code Size" target="_blank" href="https://github.com/88250/liandi"><img src="https://img.shields.io/github/languages/code-size/88250/liandi.svg?style=flat-square"></a>
