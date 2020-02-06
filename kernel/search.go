@@ -67,6 +67,7 @@ func (dir *Dir) IndexDoc(doc *Doc) {
 }
 
 func Search(keyword string) (ret []*Snippet) {
+	ret = []*Snippet{}
 	for _, doc := range docs {
 		snippets := searchDoc(keyword, doc)
 		ret = append(ret, snippets...)
@@ -78,7 +79,8 @@ func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
 	lines := strings.Split(doc.Content, "\n")
 	for idx, line := range lines {
 		if pos := strings.Index(strings.ToLower(line), strings.ToLower(keyword)); -1 != pos {
-			snippet := &Snippet{URL: doc.URL, Path: filepath.ToSlash(doc.Path), Line: idx + 1, Pos: pos, Content: line}
+			highlight := line[0:pos] + "<mark>" + keyword + "</mark>" + line[pos+len(keyword):]
+			snippet := &Snippet{URL: doc.URL, Path: filepath.ToSlash(doc.Path), Line: idx + 1, Pos: pos, Content: highlight}
 			ret = append(ret, snippet)
 		}
 	}
