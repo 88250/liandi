@@ -9,7 +9,6 @@ function createWindow () {
       nodeIntegration: true,
     },
     frame: false,
-    // titleBarStyle: 'hidden',
   })
 
   // 加载index.html文件

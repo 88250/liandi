@@ -6,102 +6,10 @@
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <meta http-equiv="Content-Security-Policy" content="*"/>
     <style>
-        /* Basic styling */
-        * {margin: 0; padding: 0; border: 0; vertical-align: baseline;}
-        html {box-sizing: border-box;}
-        *, *:before, *:after {box-sizing: inherit;}
-        html, body {height: 100%; margin: 0;}
-
-        body {
-            font-family: "Segoe UI", sans-serif;
-            background: #1A2933;
-            color: #FFF;
-        }
-
-        h1 {
-            margin: 0 0 10px 0;
-            font-weight: 600;
-            line-height: 1.2;
-        }
-
-        p {
-            margin-top: 10px;
-            color: rgba(255,255,255,0.4);
-        }
-
-        /* Styling of window frame and titlebar */
-        body {
-            border: 1px solid #48545c;
-            overflow-y: hidden;
-        }
-
-        #titlebar {
-            display: block;
-            position: fixed;
-            height: 32px;
-            width: calc(100% - 2px);
-        }
-
-        .maximized #titlebar {
-            width: 100%;
-            padding: 0;
-        }
-
-        #main {
-            height: calc(100% - 32px);
-            margin-top: 32px;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        #titlebar {
-            padding: 4px;
-        }
-
-        #titlebar #drag-region {
-            width: 100%;
-            height: 100%;
-            -webkit-app-region: drag;
-        }
-
-        #titlebar {
-            color: #FFF;
-        }
-
-        #titlebar #drag-region {
-            display: grid;
-            grid-template-columns: auto 138px;
-        }
-
-        #window-title {
-            grid-column: 1;
-            display: flex;
-            align-items: center;
-            margin-left: 8px;
-            overflow-x: hidden;
-            font-family: "Segoe UI", sans-serif;
-            font-size: 12px;
-        }
-
-        .maximized #window-title {
-            margin-left: 12px;
-        }
-
-        #window-title span {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1.5;
-        }
-
         #window-controls {
-            display: grid;
-            grid-template-columns: repeat(3, 46px);
-            position: absolute;
-            top: 0;
+            position: fixed;
             right: 0;
-            height: 100%;
-            font-family: "Segoe MDL2 Assets";
-            font-size: 10px;
+            top: 0;
         }
 
         #window-controls {
@@ -165,30 +73,21 @@
 <body>
 <div class="fn__flex wrap">
 
-    <header id="titlebar">
-        <div id="drag-region">
-
-            <div id="window-title">
-                <span>Electron quick start</span>
-            </div>
-
-            <div id="window-controls">
-                <div class="button" id="min-button">
-                    <span>&#xE921;</span>
-                </div>
-                <div class="button" id="max-button">
-                    <span>&#xE922;</span>
-                </div>
-                <div class="button" id="restore-button">
-                    <span>&#xE923;</span>
-                </div>
-                <div class="button" id="close-button">
-                    <span>&#xE8BB;</span>
-                </div>
-
-            </div>
+    <div id="window-controls">
+        <div class="button" id="min-button">
+            <span>&#xE921;</span>
         </div>
-    </header>
+        <div class="button" id="max-button">
+            <span>&#xE922;</span>
+        </div>
+        <div class="button" id="restore-button">
+            <span>&#xE923;</span>
+        </div>
+        <div class="button" id="close-button">
+            <span>&#xE8BB;</span>
+        </div>
+
+    </div>
     <div class="navigation fn__flex-column" id="navigation"></div>
     <div class="resize" id="resize"></div>
     <div class="files fn__flex-column" id="files"></div>
