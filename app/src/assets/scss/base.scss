@@ -16,7 +16,7 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 48px;
+  width: 60px;
 
   div {
     cursor: pointer;
@@ -24,8 +24,9 @@
     transition: $transition;
     color: var(--text-color);
     text-align: center;
-    padding: 3px;
+    padding: 3px 0 0 5px;
     height: 16px;
+    width: 20px;
     box-sizing: border-box;
     display: block;
 
