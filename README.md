@@ -29,7 +29,7 @@ Logo(TBD)
 
 **当前项目还处于初始开发阶段，欢迎反馈建议和参与代码贡献**
 
-![white](https://user-images.githubusercontent.com/873584/73909426-999bef00-48e7-11ea-8935-9e50720cf1a7.png)
+![white](https://user-images.githubusercontent.com/873584/73909569-f39cb480-48e7-11ea-94bf-847f6ea45d83.png)
 
 ![dark](https://user-images.githubusercontent.com/873584/73909423-96a0fe80-48e7-11ea-8609-fd2aee081b42.png)
 
