@@ -35,6 +35,7 @@
   cursor: pointer;
   padding: 5px 10px;
   user-select: none;
+  -webkit-app-region: no-drag;
 
   svg {
     float: left;

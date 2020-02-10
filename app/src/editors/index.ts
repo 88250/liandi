@@ -42,7 +42,7 @@ export class Editors {
         this.onGet(liandi, {
             content,
             name
-        })
+        });
     }
 
     remove(liandi: ILiandi) {

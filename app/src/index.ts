@@ -39,11 +39,13 @@ class App {
 
     initWindow() {
         if (process.platform !== 'win32') {
-            document.querySelectorAll('.window-controls__item').forEach((item:HTMLElement) => {
-                item.style.display = 'none'
-            })
+            document.querySelectorAll('.window-controls__item').forEach((item: HTMLElement) => {
+                item.style.display = 'none';
+            });
             return;
         }
+
+        document.querySelector('.navigation').classList.add('navigation--win32');
         const currentWindow = remote.getCurrentWindow();
         const maxBtnElement = document.getElementById('maxWindow');
         const restoreBtnElement = document.getElementById('restoreWindow');

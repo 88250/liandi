@@ -5,4 +5,8 @@
   overflow: auto;
   padding-top: $barHeight;
   box-sizing: border-box;
+
+  &--win32 {
+    padding-top: 0;
+  }
 }

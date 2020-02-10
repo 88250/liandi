@@ -1,4 +1,4 @@
-import {i18n} from "../i18n";
+import {i18n} from '../i18n';
 
 export const markdown = {
     genHTML: (liandi: ILiandi) => {
@@ -45,7 +45,7 @@ export const markdown = {
                     toc: false,
                 });
             });
-        })
+        });
     },
     onSetmd: (liandi: ILiandi, md: IMD) => {
         liandi.config.markdown = md;
