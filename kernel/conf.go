@@ -95,6 +95,8 @@ type AppConf struct {
 }
 
 type Markdown struct {
+	Footnotes                           bool   `json:"footnotes"`
+	ToC                                 bool   `json:"toc"`
 	AutoSpace                           bool   `json:"autoSpace"`
 	FixTermTypo                         bool   `json:"fixTermTypo"`
 	ChinesePunct                        bool   `json:"chinesePunct"`
@@ -104,6 +106,8 @@ type Markdown struct {
 
 func newMarkdown() *Markdown {
 	return &Markdown{
+		Footnotes:                           false,
+		ToC:                                 false,
 		AutoSpace:                           true,
 		FixTermTypo:                         true,
 		ChinesePunct:                        true,
