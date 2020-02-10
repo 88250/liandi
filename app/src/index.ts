@@ -38,6 +38,15 @@ class App {
     }
 
     initWindow() {
+        const currentWindow = remote.getCurrentWindow();
+        document.querySelector('.window-controls .fn__flex-1').addEventListener('dblclick', event => {
+            if (currentWindow.isMaximized()) {
+                currentWindow.setSize(1024, 768);
+            } else {
+                currentWindow.maximize();
+            }
+        });
+
         if (process.platform !== 'win32') {
             document.querySelectorAll('.window-controls__item').forEach((item: HTMLElement) => {
                 item.style.display = 'none';
@@ -46,17 +55,8 @@ class App {
         }
 
         document.querySelector('.navigation').classList.add('navigation--win32');
-        const currentWindow = remote.getCurrentWindow();
         const maxBtnElement = document.getElementById('maxWindow');
         const restoreBtnElement = document.getElementById('restoreWindow');
-
-        document.querySelector('.window-controls .fn__flex-1').addEventListener('dblclick', event => {
-            if (currentWindow.isMaximized()) {
-                currentWindow.setSize(1024, 768);
-            } else {
-                currentWindow.maximize();
-            }
-        });
 
         document.getElementById('minWindow').addEventListener('click', event => {
             currentWindow.minimize();
