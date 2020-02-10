@@ -8,7 +8,7 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true,
     },
-    // frame: true,
+    frame: process.platform !== 'win32',
     titleBarStyle: 'hidden',
   })
 

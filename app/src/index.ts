@@ -22,10 +22,10 @@ class App {
             },
             componentCSS: require('../dist/components.css')[0][1]
         };
-        this.liandi.ws =  new WebSocketUtil(this.liandi, () => {
-            this.liandi.navigation =  new Navigation();
-            this.liandi.files =  new Files();
-            this.liandi.editors =  new Editors(this.liandi);
+        this.liandi.ws = new WebSocketUtil(this.liandi, () => {
+            this.liandi.navigation = new Navigation();
+            this.liandi.files = new Files();
+            this.liandi.editors = new Editors(this.liandi);
             this.liandi.menus = new Menus(this.liandi);
 
             resize('resize');
@@ -37,7 +37,13 @@ class App {
         this.initWindow();
     }
 
-    initWindow () {
+    initWindow() {
+        if (process.platform !== 'win32') {
+            document.querySelectorAll('.window-controls__item').forEach((item:HTMLElement) => {
+                item.style.display = 'none'
+            })
+            return;
+        }
         const currentWindow = remote.getCurrentWindow();
         const maxBtnElement = document.getElementById('maxWindow');
         const restoreBtnElement = document.getElementById('restoreWindow');
