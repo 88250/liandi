@@ -40,6 +40,7 @@ func (cmd *setmd) Exec() {
 	Conf.Markdown = md
 	Conf.Save()
 
+	ret.Data = Conf.Markdown
 	Push(ret.Bytes())
 }
 
