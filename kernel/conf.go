@@ -95,10 +95,11 @@ type AppConf struct {
 }
 
 type Markdown struct {
-	AutoSpace                           bool `json:"autoSpace"`
-	FixTermTypo                         bool `json:"fixTermTypo"`
-	ChinesePunct                        bool `json:"chinesePunct"`
-	InlineMathAllowDigitAfterOpenMarker bool `json:"inlineMathAllowDigitAfterOpenMarker"`
+	AutoSpace                           bool   `json:"autoSpace"`
+	FixTermTypo                         bool   `json:"fixTermTypo"`
+	ChinesePunct                        bool   `json:"chinesePunct"`
+	InlineMathAllowDigitAfterOpenMarker bool   `json:"inlineMathAllowDigitAfterOpenMarker"`
+	MathEngine                          string `json:"mathEngine"` // Ketax 或者 MathJax
 }
 
 func newMarkdown() *Markdown {
@@ -107,6 +108,7 @@ func newMarkdown() *Markdown {
 		FixTermTypo:                         true,
 		ChinesePunct:                        true,
 		InlineMathAllowDigitAfterOpenMarker: false,
+		MathEngine:                          "Ketax",
 	}
 }
 
