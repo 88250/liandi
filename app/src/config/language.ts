@@ -13,6 +13,6 @@ export const lauguage = {
         });
     },
     onSetlang: () => {
-        window.location.reload()
+        window.location.reload();
     }
 };
