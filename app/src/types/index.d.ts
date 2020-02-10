@@ -18,10 +18,19 @@ declare interface IDir {
     user: string;
 }
 
+declare interface IMD {
+    autoSpace: boolean
+    chinesePunct: boolean
+    fixTermTypo: boolean
+    inlineMathAllowDigitAfterOpenMarker: boolean
+    mathEngine: "KaTeX" | "MathJax";
+}
+
 declare interface ILiandi {
     config?: {
-        lang:  keyof II18n
-        theme: 'white' | 'dark'
+        lang: keyof II18n
+        theme: 'white' | 'dark',
+        markdown: IMD
     };
     componentCSS: string;
     ws?: {
@@ -47,6 +56,7 @@ declare interface ILiandi {
         saveContent: (liandi: ILiandi) => void
         remove: (liandi: ILiandi) => void
         onGet: (liandi: ILiandi, file: { name: string, content: string }) => void
+        reload: (liandi: ILiandi) => void
     };
     menus?: {
         itemData: {

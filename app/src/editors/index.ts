@@ -35,10 +35,21 @@ export class Editors {
         this.editorElement.className = 'fn__flex-1';
     }
 
+    reload (liandi: ILiandi) {
+        const content = this.vditor.getValue();
+        const name = this.inputWrapElement.querySelector('input').value;
+        this.remove(liandi);
+        this.onGet(liandi, {
+            content,
+            name
+        })
+    }
+
     remove(liandi: ILiandi) {
         clearTimeout(this.timeoutId);
         this.saveContent(liandi);
         this.element.innerHTML = '';
+        this.editorElement.innerHTML = '';
     }
 
     public saveContent(liandi: ILiandi) {
@@ -77,6 +88,12 @@ export class Editors {
                 theme: liandi.config.theme === 'dark' ? 'dark' : 'classic',
                 cache: false,
                 cdn: '../node_modules/vditor',
+                preview: {
+                    math: {
+                        inlineDigit: liandi.config.markdown.inlineMathAllowDigitAfterOpenMarker,
+                        engine: liandi.config.markdown.mathEngine,
+                    },
+                },
                 upload: {
                     filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
                     url: Constants.UPLOAD_ADDRESS,
@@ -87,6 +104,9 @@ export class Editors {
                 },
                 after: () => {
                     this.vditor.vditor.lute.SetLinkBase(linkBase);
+                    this.vditor.vditor.lute.SetAutoSpace(liandi.config.markdown.autoSpace);
+                    this.vditor.vditor.lute.SetChinesePunct(liandi.config.markdown.chinesePunct);
+                    this.vditor.vditor.lute.SetFixTermTypo(liandi.config.markdown.fixTermTypo);
                     this.vditor.vditor.options.upload.headers = {
                         'X-URL': encodeURIComponent(liandi.current.dir.url),
                         'X-PATH': encodeURIComponent(liandi.current.path)

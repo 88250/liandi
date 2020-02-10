@@ -6,6 +6,7 @@ import {showMountDialog} from '../util/mount';
 import {lauguage} from '../config/language';
 import {theme} from '../config/theme';
 import {onSearch} from '../search';
+import {markdown} from "../config/markdown";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -59,6 +60,9 @@ export class WebSocketUtil {
                     break;
                 case 'setlang':
                     lauguage.onSetlang();
+                    break;
+                case 'setmd':
+                    markdown.onSetmd(liandi, response.data);
                     break;
                 case 'settheme':
                     theme.onSettheme(liandi, response.data);

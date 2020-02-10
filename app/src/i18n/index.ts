@@ -28,7 +28,6 @@ export const i18n: II18n = {
         chinesePunctuation: 'Chinese punctuation is automatically replaced with Chinese punctuation',
         inlineMathDigit: 'Allow inline math formulas to follow numbers',
         mathEngine:'Mathematical formula engine',
-        needReopenEditor: 'Reopen the editor to take effect'
     },
     zh_CN: {
         newFile: '新建文件',
@@ -59,6 +58,5 @@ export const i18n: II18n = {
         chinesePunctuation: '中文后标点符号自动替换为中文标点',
         inlineMathDigit: '允许内联数学公式后紧跟数字',
         mathEngine:'数学公式引擎',
-        needReopenEditor: '重新打开编辑器才能生效'
     },
 };

@@ -115,6 +115,7 @@ export const initSearch = (liandi: ILiandi) => {
     initConfigSearch(liandi, dialogElement.querySelector('div[data-name="config"]'));
     lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'));
     theme.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="theme"]'));
+    markdown.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="markdown"]'));
 };
 
 export const onSearch = (liandi: ILiandi, data: {
