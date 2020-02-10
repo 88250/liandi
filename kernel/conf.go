@@ -75,6 +75,10 @@ func InitConf() {
 		}
 	}
 
+	if nil == Conf.Markdown {
+		Conf.Markdown = newMarkdown()
+	}
+
 	Conf.Save()
 	Conf.InitClient()
 
@@ -83,10 +87,27 @@ func InitConf() {
 
 // AppConf 维护应用元数据，保存在 ~/.liandi/conf.json ，记录已经打开的文件夹、各种配置项等。
 type AppConf struct {
-	LogLevel string `json:"logLevel"` // 日志级别：Off, Trace, Debug, Info, Warn, Error, Fatal
-	Dirs     []*Dir `json:"dirs"`     // 已经打开的文件夹
-	Theme    string `json:"theme"`    // 界面主题
-	Lang     string `json:"lang"`     // 界面语言
+	LogLevel string    `json:"logLevel"` // 日志级别：Off, Trace, Debug, Info, Warn, Error, Fatal
+	Dirs     []*Dir    `json:"dirs"`     // 已经打开的文件夹
+	Theme    string    `json:"theme"`    // 界面主题
+	Lang     string    `json:"lang"`     // 界面语言
+	Markdown *Markdown `json:"markdown"` // Markdown 引擎配置
+}
+
+type Markdown struct {
+	AutoSpace                           bool `json:"autoSpace"`
+	FixTermTypo                         bool `json:"fixTermTypo"`
+	ChinesePunct                        bool `json:"chinesePunct"`
+	InlineMathAllowDigitAfterOpenMarker bool `json:"inlineMathAllowDigitAfterOpenMarker"`
+}
+
+func newMarkdown() *Markdown {
+	return &Markdown{
+		AutoSpace:                           true,
+		FixTermTypo:                         true,
+		ChinesePunct:                        true,
+		InlineMathAllowDigitAfterOpenMarker: false,
+	}
 }
 
 func (conf *AppConf) Save() {
