@@ -4,6 +4,7 @@ import {lauguage} from '../config/language';
 import {theme} from '../config/theme';
 import {initConfigSearch} from '../config/search';
 import {getPath, removeLastPath} from '../util/path';
+import {markdown} from "../config/markdown";
 
 export const initSearch = (liandi: ILiandi) => {
     dialog({
@@ -29,7 +30,7 @@ export const initSearch = (liandi: ILiandi) => {
         <li data-name="theme" class="fn__pointer">${i18n[liandi.config.lang].theme}</li>
         <li data-name="language" class="fn__pointer">${i18n[liandi.config.lang].language}</li>
       </ul>
-      <div class="tab__panel" data-name="markdown" slot="panel">markdown</div>
+      <div class="tab__panel" data-name="markdown" slot="panel">${markdown.genHTML(liandi)}</div>
       <div class="tab__panel" data-name="theme">${theme.genHTML(liandi)}</div>
       <div class="tab__panel" data-name="language">${lauguage.genHTML(liandi)}</div>
     </tab-panel>
