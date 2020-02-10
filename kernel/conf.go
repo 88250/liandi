@@ -99,7 +99,7 @@ type Markdown struct {
 	FixTermTypo                         bool   `json:"fixTermTypo"`
 	ChinesePunct                        bool   `json:"chinesePunct"`
 	InlineMathAllowDigitAfterOpenMarker bool   `json:"inlineMathAllowDigitAfterOpenMarker"`
-	MathEngine                          string `json:"mathEngine"` // Ketax 或者 MathJax
+	MathEngine                          string `json:"mathEngine"` // KaTeX 或者 MathJax
 }
 
 func newMarkdown() *Markdown {
@@ -108,7 +108,7 @@ func newMarkdown() *Markdown {
 		FixTermTypo:                         true,
 		ChinesePunct:                        true,
 		InlineMathAllowDigitAfterOpenMarker: false,
-		MathEngine:                          "Ketax",
+		MathEngine:                          "KaTeX",
 	}
 }
 
