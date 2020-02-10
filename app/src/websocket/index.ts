@@ -6,7 +6,7 @@ import {showMountDialog} from '../util/mount';
 import {lauguage} from '../config/language';
 import {theme} from '../config/theme';
 import {onSearch} from '../search';
-import {markdown} from "../config/markdown";
+import {markdown} from '../config/markdown';
 
 export class WebSocketUtil {
     public webSocket: WebSocket;

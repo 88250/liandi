@@ -4,7 +4,7 @@ import {lauguage} from '../config/language';
 import {theme} from '../config/theme';
 import {initConfigSearch} from '../config/search';
 import {getPath, removeLastPath} from '../util/path';
-import {markdown} from "../config/markdown";
+import {markdown} from '../config/markdown';
 
 export const initSearch = (liandi: ILiandi) => {
     dialog({

@@ -19,11 +19,11 @@ declare interface IDir {
 }
 
 declare interface IMD {
-    autoSpace: boolean
-    chinesePunct: boolean
-    fixTermTypo: boolean
-    inlineMathAllowDigitAfterOpenMarker: boolean
-    mathEngine: "KaTeX" | "MathJax";
+    autoSpace: boolean;
+    chinesePunct: boolean;
+    fixTermTypo: boolean;
+    inlineMathAllowDigitAfterOpenMarker: boolean;
+    mathEngine: 'KaTeX' | 'MathJax';
 }
 
 declare interface ILiandi {
