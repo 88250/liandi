@@ -1,49 +1,49 @@
 export const initConfigSearch = (liandi: ILiandi, element: HTMLElement) => {
     const configIndex = [
-        ["markdown"],
+        ['markdown'],
         ['white', 'dark', 'theme', '主题'],
         ['zh_CN', 'en_US', 'language', '语言']
-    ]
-    const inputElement = element.querySelector('.input') as HTMLInputElement
+    ];
+    const inputElement = element.querySelector('.input') as HTMLInputElement;
     const updateTab = () => {
-        let indexList: number[] = []
-        const inputValue = inputElement.value
+        const indexList: number[] = [];
+        const inputValue = inputElement.value;
         configIndex.map((item, index) => {
             item.map(subItem => {
                 if (inputValue.toLowerCase().indexOf(subItem) > -1 || subItem.toLowerCase().indexOf(inputValue) > -1) {
-                    indexList.push(index)
+                    indexList.push(index);
                 }
-            })
-        })
+            });
+        });
 
-        let currentTabElement: HTMLElement
+        let currentTabElement: HTMLElement;
         element.querySelectorAll('.tab--vertical li').forEach((item: HTMLElement, index) => {
             if (indexList.includes(index)) {
                 if (!currentTabElement) {
-                    currentTabElement = item
+                    currentTabElement = item;
                 }
-                item.style.display = 'block'
+                item.style.display = 'block';
             } else {
-                item.style.display = 'none'
+                item.style.display = 'none';
             }
-        })
+        });
 
-        const tabPanelElement = element.querySelector('tab-panel') as HTMLElement
+        const tabPanelElement = element.querySelector('tab-panel') as HTMLElement;
         if (currentTabElement) {
-            tabPanelElement.style.display = 'block'
-            currentTabElement.click()
+            tabPanelElement.style.display = 'block';
+            currentTabElement.click();
         } else {
-            tabPanelElement.style.display = 'none'
+            tabPanelElement.style.display = 'none';
         }
-    }
+    };
 
     inputElement.addEventListener('compositionend', () => {
-        updateTab()
+        updateTab();
     });
     inputElement.addEventListener('input', (event: InputEvent) => {
         if (event.isComposing) {
             return;
         }
-        updateTab()
-    })
-}
+        updateTab();
+    });
+};

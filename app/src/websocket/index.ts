@@ -4,8 +4,8 @@ import {destroyDialog} from '../util/dialog';
 import {i18n} from '../i18n';
 import {showMountDialog} from '../util/mount';
 import {lauguage} from '../config/language';
-import {theme} from "../config/theme";
-import {onSearch} from "../search";
+import {theme} from '../config/theme';
+import {onSearch} from '../search';
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -55,7 +55,7 @@ export class WebSocketUtil {
             }
             switch (response.cmd) {
                 case 'search':
-                    onSearch(liandi, response.data)
+                    onSearch(liandi, response.data);
                     break;
                 case 'setlang':
                     lauguage.onSetlang();
@@ -66,9 +66,9 @@ export class WebSocketUtil {
                 case 'getconf':
                     if (this.isFirst) {
                         liandi.config = response.data;
-                        document.title = i18n[liandi.config.lang].slogan
+                        document.title = i18n[liandi.config.lang].slogan;
                         callback();
-                        theme.onSettheme(liandi, response.data.theme)
+                        theme.onSettheme(liandi, response.data.theme);
                         this.isFirst = false;
                     }
                     if (response.data.dirs.length === 0) {

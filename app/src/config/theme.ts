@@ -12,17 +12,17 @@ export const theme = {
             });
         });
     },
-    onSettheme: (liandi: ILiandi, theme: 'white' | 'dark') => {
-        liandi.config.theme = theme
-        if (theme === 'dark') {
-            document.body.classList.add('theme--dark')
+    onSettheme: (liandi: ILiandi, themeName: 'white' | 'dark') => {
+        liandi.config.theme = themeName;
+        if (themeName === 'dark') {
+            document.body.classList.add('theme--dark');
             if (liandi.editors.vditor) {
-                liandi.editors.vditor.setTheme('dark')
+                liandi.editors.vditor.setTheme('dark');
             }
         } else {
-            document.body.classList.remove('theme--dark')
+            document.body.classList.remove('theme--dark');
             if (liandi.editors.vditor) {
-                liandi.editors.vditor.setTheme('classic')
+                liandi.editors.vditor.setTheme('classic');
             }
         }
     }
