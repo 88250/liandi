@@ -41,6 +41,8 @@ export const markdown = {
                     fixTermTypo: (element.querySelector('#fixTermTypo') as HTMLInputElement).checked,
                     inlineMathAllowDigitAfterOpenMarker: (element.querySelector('#inlineMathAllowDigitAfterOpenMarker') as HTMLInputElement).checked,
                     mathEngine: (element.querySelector('[name="mathEngine"]:checked') as HTMLInputElement).value,
+                    footnotes: false,
+                    toc: false,
                 });
             });
         })
