@@ -15,16 +15,20 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 60px;
+  width: 100%;
+  height: $barHeight;
 
-  div {
+  .fn__flex-1 {
+    -webkit-app-region: drag;
+  }
+
+  &__item {
     cursor: pointer;
-    float: left;
     transition: $transition;
     color: var(--text-color);
     text-align: center;
-    padding: 3px 0 0 5px;
-    height: 16px;
+    padding: 5px;
+    height: $barHeight;
     width: 20px;
     box-sizing: border-box;
     display: block;
@@ -40,7 +44,7 @@
       color: #24292e;
     }
 
-    &.close:hover {
+    &--close:hover {
       color: $white;
       background-color: #e5182c;
     }

@@ -41,6 +41,15 @@ class App {
         const currentWindow = remote.getCurrentWindow();
         const maxBtnElement = document.getElementById('maxWindow');
         const restoreBtnElement = document.getElementById('restoreWindow');
+
+        document.querySelector('.window-controls .fn__flex-1').addEventListener('dblclick', event => {
+            if (currentWindow.isMaximized()) {
+                currentWindow.setSize(1024, 768);
+            } else {
+                currentWindow.maximize();
+            }
+        });
+
         document.getElementById('minWindow').addEventListener('click', event => {
             currentWindow.minimize();
         });

@@ -8,7 +8,8 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true,
     },
-    frame: false,
+    // frame: true,
+    titleBarStyle: 'hidden',
   })
 
   // 加载index.html文件

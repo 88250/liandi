@@ -8,6 +8,9 @@ $font-family-base: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragi
 // transition
 $transition: all .15s ease-in-out !default;
 
+// size
+$barHeight: 20px !default;
+
 :root {
   --background-color: #fff;
   --text-color: #24292e;

@@ -3,4 +3,6 @@
   min-width: 200px;
   border-right: 1px solid var(--border-color);
   overflow: auto;
+  padding-top: $barHeight;
+  box-sizing: border-box;
 }
