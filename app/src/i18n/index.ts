@@ -22,7 +22,13 @@ export const i18n: II18n = {
         password: 'Password',
         urlError: 'URL Error',
         language: 'Language',
-        theme: 'Theme'
+        theme: 'Theme',
+        autoSpace: 'Automatically insert spaces between Chinese and Western languages',
+        fixTermTypo: 'Fix term typo',
+        chinesePunctuation: 'Chinese punctuation is automatically replaced with Chinese punctuation',
+        inlineMathDigit: 'Allow inline math formulas to follow numbers',
+        mathEngine:'Mathematical formula engine',
+        needReopenEditor: 'Reopen the editor to take effect'
     },
     zh_CN: {
         newFile: '新建文件',
@@ -47,6 +53,12 @@ export const i18n: II18n = {
         password: '密码',
         urlError: 'URL 错误',
         language: '语言',
-        theme: '主题'
+        theme: '主题',
+        autoSpace: '中西文中间自动插入空格',
+        fixTermTypo: '自动术语修正',
+        chinesePunctuation: '中文后标点符号自动替换为中文标点',
+        inlineMathDigit: '允许内联数学公式后紧跟数字',
+        mathEngine:'数学公式引擎',
+        needReopenEditor: '重新打开编辑器才能生效'
     },
 };
