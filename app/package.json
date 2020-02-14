@@ -7,7 +7,8 @@
     "dev": "webpack",
     "build": "webpack --mode production",
     "start": "electron ./electron/main.js",
-    "pack": "electron-builder --dir"
+    "pack": "electron-builder --dir",
+    "dist": "set ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder"
   },
   "keywords": [
     "markdown",

@@ -20,5 +20,14 @@ export const initGlobalKeyPress = (liandi: ILiandi) => {
         if (isCtrl(event) && event.key === 's') {
             liandi.editors.saveContent(liandi);
         }
+
+        // 搜索
+        if (isCtrl(event) && event.key === 'f') {
+            const findElement = document.querySelector('.find') as HTMLElement;
+            findElement.style.display = 'flex';
+            const inputElement = findElement.querySelector('input') as HTMLInputElement
+            inputElement.value = ''
+            inputElement.focus()
+        }
     });
 };
