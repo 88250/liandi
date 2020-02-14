@@ -1,6 +1,6 @@
 export const i18n: II18n = {
     en_US: {
-        newFile: 'New File',
+        newFile: 'New Doc',
         newFolder: 'New Folder',
         unMount: 'Unmount',
         delete: 'Delete',
@@ -30,7 +30,7 @@ export const i18n: II18n = {
         mathEngine:'Mathematical formula engine',
     },
     zh_CN: {
-        newFile: '新建文件',
+        newFile: '新建文档',
         newFolder: '新建文件夹',
         unMount: '取消挂载',
         delete: '删除',

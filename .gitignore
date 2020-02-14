@@ -6,10 +6,9 @@
 app/node_modules
 app/dist
 header
-kernel/kernel
-kernel/kernel.exe
-kernel/kernel-darwin
-kernel/kernel-linux
+kernel.exe
+kernel-darwin
+kernel-linux
 
 # Test binary, build with `go test -c`
 *.test
