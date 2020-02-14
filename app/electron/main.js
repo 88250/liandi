@@ -7,6 +7,7 @@ function createWindow () {
     height: 768,
     webPreferences: {
       nodeIntegration: true,
+      nativeWindowOpen: true,
     },
     frame: process.platform !== 'win32',
     titleBarStyle: 'hidden',
@@ -16,11 +17,16 @@ function createWindow () {
   mainWindow.loadFile('../public/index.html')
 
   // 组织当前页面链接跳转
-  mainWindow.webContents.on('will-navigate', (e, url) => {
+  mainWindow.webContents.on('will-navigate', (event, url) => {
     if (url.endsWith('liandi/app/public/index.html')) {
       return
     }
-    e.preventDefault()
+    event.preventDefault()
+    shell.openExternal(url)
+  })
+
+  mainWindow.webContents.on('new-window', (event, url) => {
+    event.preventDefault()
     shell.openExternal(url)
   })
 }

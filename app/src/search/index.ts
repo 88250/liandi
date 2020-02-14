@@ -6,6 +6,37 @@ import {initConfigSearch} from '../config/search';
 import {getPath, removeLastPath} from '../util/path';
 import {markdown} from '../config/markdown';
 
+export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
+    let currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
+
+    liandi.editors.saveContent(liandi);
+
+    const currentNavigationElement =
+        liandi.navigation.element.querySelector(`tree-list[url="${currentList.getAttribute('data-url')}"]`);
+
+    liandi.current.dir = JSON.parse(decodeURIComponent(currentNavigationElement.getAttribute('dir')));
+    liandi.current.path = currentList.getAttribute('data-path');
+
+    const currentTreeElement = currentNavigationElement.shadowRoot.querySelector('.list__item--current');
+    if (currentTreeElement) {
+        currentTreeElement.classList.remove('list__item--current');
+    }
+    const currentTreeFolderElement = currentNavigationElement.shadowRoot.querySelector(`.tree-list__folder[path="${removeLastPath(liandi.current.path)}"]`);
+    if (currentTreeFolderElement) {
+        currentTreeFolderElement.parentElement.classList.add('list__item--current');
+    }
+
+    window.liandi.liandi.ws.send('ls', {
+        url: liandi.current.dir.url,
+        path: getPath(liandi.current.path)
+    });
+    liandi.ws.send('get', {
+        url: liandi.current.dir.url,
+        path: liandi.current.path
+    });
+    destroyDialog();
+}
+
 export const initSearch = (liandi: ILiandi) => {
     dialog({
         content: `<tab-panel>
@@ -82,35 +113,24 @@ export const initSearch = (liandi: ILiandi) => {
             }
             event.preventDefault();
         } else if (event.code === 'Enter') {
-            liandi.editors.saveContent(liandi);
-
-            const currentNavigationElement =
-                liandi.navigation.element.querySelector(`tree-list[url="${currentList.getAttribute('data-url')}"]`);
-
-            liandi.current.dir = JSON.parse(decodeURIComponent(currentNavigationElement.getAttribute('dir')));
-            liandi.current.path = currentList.getAttribute('data-path');
-
-            const currentTreeElement = currentNavigationElement.shadowRoot.querySelector('.list__item--current');
-            if (currentTreeElement) {
-                currentTreeElement.classList.remove('list__item--current');
-            }
-            const currentTreeFolderElement = currentNavigationElement.shadowRoot.querySelector(`.tree-list__folder[path="${removeLastPath(liandi.current.path)}"]`);
-            if (currentTreeFolderElement) {
-                currentTreeFolderElement.parentElement.classList.add('list__item--current');
-            }
-
-            window.liandi.liandi.ws.send('ls', {
-                url: liandi.current.dir.url,
-                path: getPath(liandi.current.path)
-            });
-            liandi.ws.send('get', {
-                url: liandi.current.dir.url,
-                path: liandi.current.path
-            });
-            destroyDialog();
+            quickOpenFile(liandi, dialogElement)
             event.preventDefault();
         }
     });
+
+    const searchPanelElement = dialogElement.querySelector('div[data-name="search"]');
+    searchPanelElement.addEventListener("dblclick", (event) => {
+        let target = event.target as HTMLElement
+        while (target && !target.parentElement.isEqualNode(searchPanelElement)) {
+            if (target.classList.contains('list__item')) {
+                quickOpenFile(liandi, dialogElement)
+                event.preventDefault()
+                event.stopPropagation()
+                break
+            }
+            target = target.parentElement
+        }
+    }, false);
 
     initConfigSearch(liandi, dialogElement.querySelector('div[data-name="config"]'));
     lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'));
