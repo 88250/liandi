@@ -89,6 +89,11 @@ export class Editors {
                 cache: false,
                 cdn: '../node_modules/vditor',
                 preview: {
+                    markdown: {
+                        autoSpace: liandi.config.markdown.autoSpace,
+                        chinesePunct: liandi.config.markdown.chinesePunct,
+                        fixTermTypo: liandi.config.markdown.fixTermTypo
+                    },
                     math: {
                         inlineDigit: liandi.config.markdown.inlineMathAllowDigitAfterOpenMarker,
                         engine: liandi.config.markdown.mathEngine,
@@ -104,9 +109,6 @@ export class Editors {
                 },
                 after: () => {
                     this.vditor.vditor.lute.SetLinkBase(linkBase);
-                    this.vditor.vditor.lute.SetAutoSpace(liandi.config.markdown.autoSpace);
-                    this.vditor.vditor.lute.SetChinesePunct(liandi.config.markdown.chinesePunct);
-                    this.vditor.vditor.lute.SetFixTermTypo(liandi.config.markdown.fixTermTypo);
                     this.vditor.vditor.options.upload.headers = {
                         'X-URL': encodeURIComponent(liandi.current.dir.url),
                         'X-PATH': encodeURIComponent(liandi.current.path)
