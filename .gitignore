@@ -6,7 +6,7 @@
 app/node_modules
 app/dist
 header
-kernel
+kernel/kernel
 kernel.exe
 kernel-darwin
 kernel-linux
