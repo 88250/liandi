@@ -67,7 +67,7 @@ export const initSearch = (liandi: ILiandi) => {
     </tab-panel>
   </div>
 </tab-panel>`,
-        width: 600,
+        width: Math.max(window.innerWidth - 520, 600),
         height: 520
     });
 

@@ -6,6 +6,7 @@ export const initGlobalKeyPress = (liandi: ILiandi) => {
     let lastKeypressTime = 0;
 
     window.addEventListener('keydown', (event) => {
+        // 快捷搜素
         if (event.key === 'Shift') {
             let thisKeypressTime = new Date().getTime();
             if (thisKeypressTime - lastKeypressTime <= Constants.DOUBLE_DELTA) {
@@ -15,6 +16,7 @@ export const initGlobalKeyPress = (liandi: ILiandi) => {
             lastKeypressTime = thisKeypressTime;
         }
 
+        // 文件保存
         if (isCtrl(event) && event.key === 's') {
             liandi.editors.saveContent(liandi);
         }
