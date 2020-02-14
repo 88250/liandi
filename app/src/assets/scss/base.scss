@@ -26,8 +26,8 @@
     height: $barHeight;
     width: 32px;
     box-sizing: border-box;
-    display: block;
     float: left;
+    display: none;
 
     svg {
       height: 10px;
