@@ -54,6 +54,21 @@ Logo(TBD)
 * 支持多主题
 * 支持导出静态站点，内置多套主题模板
 
+### 🛠️ 安装
+
+#### 安装包 TBD
+
+#### 源码构建
+
+1. 安装 Go、Node 环境
+2. 运行项目根目录下的 build 脚本 
+3. 构建成功后将在 TBD 下生成安装包
+
+如果你要修改源码，请按如下步骤搭建开发环境：
+
+1. 在 kernel 目录下构建内核并启动 `go build && ./kernel`
+2. 在 app 目录下构建前端 `npm run dev` 然后启动主进程 `npm run start`
+
 ### 🏗️ 技术架构
 
 ![链滴笔记架构图](https://user-images.githubusercontent.com/873584/73417483-2e847280-4353-11ea-9e4c-2594c4b08b35.png)
