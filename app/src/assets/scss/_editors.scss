@@ -1,10 +1,15 @@
 .editors {
-  &__input {
-    font-size: 28px;
+  &__drag {
+    -webkit-app-region: drag;
+    height: 20px;
+    background-color: var(--background-color);
   }
 
-  &__title {
-    padding: 10px;
+  &__input {
+    font-size: 28px;
+    border: 0;
+    padding: 0 10px 10px;
+    background-color: var(--background-color);
   }
 }
 

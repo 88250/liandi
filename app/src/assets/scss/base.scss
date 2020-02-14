@@ -15,12 +15,8 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 100%;
   height: $barHeight;
-
-  .fn__flex-1 {
-    -webkit-app-region: drag;
-  }
+  width: #{32*3}px;
 
   &__item {
     cursor: pointer;
@@ -31,6 +27,7 @@
     width: 32px;
     box-sizing: border-box;
     display: block;
+    float: left;
 
     svg {
       height: 10px;
@@ -53,6 +50,10 @@
 .vditor {
   border-width: 1px 0 0 0;
   border-radius: 0;
+
+  &-preview {
+    background-color: var(--focus-background-color);
+  }
 }
 
 .wrap {

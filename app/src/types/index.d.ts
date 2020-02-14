@@ -50,7 +50,7 @@ declare interface ILiandi {
     };
     editors?: {
         element: HTMLElement
-        inputWrapElement: HTMLElement
+        inputElement: HTMLInputElement
         saved: boolean
         vditor: any
         saveContent: (liandi: ILiandi) => void

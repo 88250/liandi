@@ -32,14 +32,14 @@ class App {
             resize('resize2');
 
             initGlobalKeyPress(this.liandi);
-        });
 
-        this.initWindow();
+            this.initWindow();
+        });
     }
 
     initWindow() {
         const currentWindow = remote.getCurrentWindow();
-        document.querySelector('.window-controls .fn__flex-1').addEventListener('dblclick', event => {
+        document.querySelector('.editors__drag').addEventListener('dblclick', event => {
             if (currentWindow.isMaximized()) {
                 currentWindow.setSize(1024, 768);
             } else {
