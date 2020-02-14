@@ -106,7 +106,7 @@ Logo(TBD)
 
 ### 📄 开源协议
 
-链滴笔记使用 [木兰宽松许可证, 第1版](http://license.coscl.org.cn/MulanPSL) 开源协议。
+链滴笔记使用 [木兰宽松许可证, 第2版](http://license.coscl.org.cn/MulanPSL2) 开源协议。
 
 ### 🛠️ 鸣谢
 
