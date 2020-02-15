@@ -1,4 +1,6 @@
 const {app, BrowserWindow, shell, ipcMain} = require('electron')
+const {spawn} = require('child_process')
+const path = require('path')
 
 app.on('ready', () => {
   // 创建浏览器窗口
@@ -57,4 +59,28 @@ app.on('ready', () => {
   mainWindow.webContents.on('found-in-page', (event, result) => {
     mainWindow.webContents.send('liandi_find_result', result)
   })
+
+  startKernel()
 })
+
+
+const startKernel = () => {
+  let fileName = 'kernel.exe'
+  if (process.platform !== 'win32') {
+    fileName = 'kernel'
+  }
+
+  let kernel = spawn(path.join('..', 'kernel', fileName))
+
+  kernel.stdout.on('data', (data) => {
+    console.log(data)
+  })
+
+  kernel.stderr.on('data', (data) => {
+    console.log(data)
+  })
+
+  kernel.on('close', (code) => {
+    console.log(`child process exited with code ${code}`)
+  })
+}

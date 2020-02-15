@@ -8,15 +8,15 @@ export GOPROXY=https://goproxy.io
 
 export GOOS=windows
 export GOARCH=amd64
-go build -v -o app/kernel.exe -ldflags "-s -w -H=windowsgui" ./kernel
+go build -v -o app/kernel/kernel.exe -ldflags "-s -w -H=windowsgui" ./kernel
 
 export GOOS=darwin
 export GOARCH=amd64
-go build -v -o app/kernel-darwin -ldflags "-s -w" ./kernel
+go build -v -o app/kernel/kernel-darwin -ldflags "-s -w" ./kernel
 
 export GOOS=linux
 export GOARCH=amd64
-go build -v -o app/kernel-linux -ldflags "-s -w" ./kernel
+go build -v -o app/kernel/kernel-linux -ldflags "-s -w" ./kernel
 
 echo Building UI
 cd app

@@ -5,6 +5,8 @@
 *.dylib
 app/node_modules
 app/dist
+!/app/dist/components.css
+app/build
 header
 kernel/kernel
 kernel.exe

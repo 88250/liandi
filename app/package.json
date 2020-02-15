@@ -2,13 +2,14 @@
   "name": "app",
   "version": "1.0.0",
   "description": "链滴笔记前端应用",
+  "main": "./electron/main.js",
   "scripts": {
     "lint": "tslint --fix -c tslint.json 'src/**/*.ts'",
     "dev": "webpack",
     "build": "webpack --mode production",
     "start": "electron ./electron/main.js",
     "pack": "electron-builder --dir",
-    "dist": "set ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder"
+    "dist": "cross-env ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder"
   },
   "keywords": [
     "markdown",
@@ -18,8 +19,10 @@
   "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^9.7.4",
+    "cross-env": "^7.0.0",
     "css-loader": "^3.4.2",
     "electron": "^7.1.10",
+    "electron-builder": "^22.3.2",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.13.1",
     "postcss-loader": "^3.0.0",
