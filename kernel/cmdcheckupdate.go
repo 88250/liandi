@@ -34,6 +34,7 @@ func (cmd *checkupdate) Exec() {
 		Push(ret.Bytes())
 		return
 	}
+	Logger.Infof("检查版本结果 [%s]", result)
 	latestVer := result["ver"].(string)
 	if latestVer > Ver {
 		ret.Code = 1
