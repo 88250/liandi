@@ -16,14 +16,14 @@ extraFiles:
 mac:
   icon: "public/icon.icns"
   extraResources:
-    - from: "kernel/kernel-darwin"
+    - from: "../kernel/kernel-darwin"
       to: "kernel-darwin"
   target:
     - target: "tar.bz2"
 win:
   icon: "public/icon.ico"
   extraResources:
-    - from: "kernel/kernel.exe"
+    - from: "../kernel/kernel.exe"
       to: "kernel.exe"
   requestedExecutionLevel: "asInvoker"
   target:
@@ -31,7 +31,7 @@ win:
 linux:
   icon: "public"
   extraResources:
-    - from: "kernel/kernel-linux"
+    - from: "../kernel/kernel-linux"
       to: "kernel-linux"
   target:
     - target: "tar.bz2"
