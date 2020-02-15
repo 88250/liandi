@@ -1,6 +1,6 @@
 import {Constants} from '../constants';
 import {initSearch} from '../search';
-import {isCtrl} from "../util/compatibility";
+import {isCtrl} from '../util/compatibility';
 
 export const initGlobalKeyPress = (liandi: ILiandi) => {
     let lastKeypressTime = 0;
@@ -25,9 +25,11 @@ export const initGlobalKeyPress = (liandi: ILiandi) => {
         if (isCtrl(event) && event.key === 'f') {
             const findElement = document.querySelector('.find') as HTMLElement;
             findElement.style.display = 'flex';
-            const inputElement = findElement.querySelector('input') as HTMLInputElement
-            inputElement.value = ''
-            inputElement.focus()
+            const inputElement = findElement.querySelector('input') as HTMLInputElement;
+            inputElement.value = '';
+            inputElement.focus();
+
+            (liandi.editors.element.querySelector('.editors__drag') as HTMLElement).style.marginRight = '408px';
         }
     });
 };
