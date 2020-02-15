@@ -7,6 +7,7 @@ import {lauguage} from '../config/language';
 import {theme} from '../config/theme';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
+import {about} from "../config/about";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -58,6 +59,8 @@ export class WebSocketUtil {
                 case 'search':
                     onSearch(liandi, response.data);
                     break;
+                case 'checkupdate':
+                    about.onCheckUpdate(response.data);
                 case 'setlang':
                     lauguage.onSetlang();
                     break;

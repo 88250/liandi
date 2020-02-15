@@ -61,6 +61,8 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) Cmd 
 		return &settheme{&BaseCmd{id: cmdId, param: param}}
 	case "setmd":
 		return &setmd{&BaseCmd{id: cmdId, param: param}}
+	case "checkupdate":
+		return &checkupdate{&BaseCmd{id: cmdId, param: param}}
 	}
 	return nil
 }
