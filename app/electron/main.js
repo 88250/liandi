@@ -76,7 +76,7 @@ const startKernel = () => {
 
   let kernelPath = path.join(path.dirname(app.getAppPath()), fileName)
   if (process.env.NODE_ENV === 'development') {
-    kernelPath = path.join('kernel', fileName)
+    kernelPath = path.join('..', 'kernel', fileName)
   }
   spawn(kernelPath)
 }
