@@ -16,7 +16,6 @@ export class Editors {
     constructor(liandi: ILiandi) {
         this.saved = true;
         this.element = document.getElementById('editors');
-        this.element.innerHTML = '<div class="editors__drag"></div>'
 
         this.inputElement = document.createElement('input');
         this.inputElement.className ="editors__input";
@@ -42,7 +41,11 @@ export class Editors {
     remove(liandi: ILiandi) {
         clearTimeout(this.timeoutId);
         this.saveContent(liandi);
-        this.element.innerHTML = '<div class="editors__drag"></div>';
+        const inputElement = this.element.querySelector('.editors__input')
+        if (inputElement) {
+            this.element.querySelector('#liandiVditor').remove();
+            this.element.querySelector('.editors__input').remove();
+        }
     }
 
     public saveContent(liandi: ILiandi) {
