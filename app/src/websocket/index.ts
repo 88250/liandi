@@ -61,6 +61,7 @@ export class WebSocketUtil {
                     break;
                 case 'checkupdate':
                     about.onCheckUpdate(response.data);
+                    break;
                 case 'setlang':
                     lauguage.onSetlang();
                     break;
