@@ -78,7 +78,7 @@ func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
 	for idx, line := range lines {
 		if pos := strings.Index(strings.ToLower(line), strings.ToLower(keyword)); -1 != pos {
 			highlight := line[0:pos] + "<mark>" + line[pos:pos+len(keyword)] + "</mark>" + line[pos+len(keyword):]
-			snippet := &Snippet{URL: doc.URL, Path: filepath.ToSlash(doc.Path), Line: idx + 1, Pos: pos, Content: highlight}
+			snippet := &Snippet{URL: doc.URL, Path: filepath.ToSlash(doc.Path), Line: idx + 1, Pos: pos + 1, Content: highlight}
 			ret = append(ret, snippet)
 		}
 	}
