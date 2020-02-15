@@ -1,5 +1,5 @@
 const {app, BrowserWindow, shell, ipcMain} = require('electron')
-const {execFile} = require('child_process')
+const {spawn} = require('child_process')
 const path = require('path')
 
 app.on('ready', () => {
@@ -65,6 +65,7 @@ app.on('ready', () => {
 
 
 const startKernel = () => {
+  const pwd = path.dirname(app.getAppPath())
   let fileName = 'kernel.exe'
   if (process.platform === 'darwin') {
     fileName = 'kernel-darwin'
@@ -72,11 +73,14 @@ const startKernel = () => {
     fileName = 'kernel-linux'
   }
 
-  execFile(path.join('kernel', fileName), [""], (error, stdout, stderr) => {
-    if (error) {
-      console.log(`kernel error: ${error}`)
-    }
-    console.log(`kernel stdout: ${stdout}`)
-    console.log(`kernel stderr: ${stderr}`)
-  });
+  const kernel = spawn(path.join(pwd, fileName))
+  kernel.stdout.on('data', (data) => {
+    console.log(`kernel stdout: ${data.toString()}`)
+  })
+  kernel.stderr.on('data', (data) => {
+    console.log(`kernel stderr: ${data.toString()}`)
+  })
+  kernel.on('close', (code) => {
+    console.log(`kernel close: child process exited with code ${code}`)
+  })
 }
