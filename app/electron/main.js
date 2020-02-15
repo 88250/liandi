@@ -1,6 +1,32 @@
-const {app, BrowserWindow, shell, ipcMain} = require('electron')
+const {app, BrowserWindow, shell, ipcMain, Menu} = require('electron')
 const {spawn} = require('child_process')
 const path = require('path')
+
+const createMenu = () => {
+  const template = [
+    {
+      label: '链滴笔记',
+      submenu: [
+        {role: 'about'},
+        {type: 'separator'},
+        {role: 'cut'},
+        {role: 'copy'},
+        {role: 'paste'},
+        {role: 'pasteAndMatchStyle'},
+        {role: 'selectAll'},
+        {type: 'separator'},
+        {role: 'toggledevtools'},
+        {type: 'separator'},
+        {role: 'togglefullscreen'},
+        {role: 'minimize'},
+        {role: 'close'},
+        {role: 'quit'},
+      ],
+    },
+  ]
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
+}
 
 const createWindow = () => {
   // 创建浏览器窗口
@@ -64,6 +90,8 @@ const createWindow = () => {
   ipcMain.on('liandi_find_clear', () => {
     mainWindow.webContents.stopFindInPage('keepSelection')
   })
+
+  createMenu()
 }
 
 const startKernel = () => {
