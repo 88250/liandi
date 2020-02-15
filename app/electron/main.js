@@ -73,6 +73,8 @@ const startKernel = () => {
   }
 
   const kernel = spawn(path.join(path.dirname(app.getAppPath()), fileName))
+  kernel.stdout.setEncoding('utf8');
+  kernel.stderr.setEncoding('utf8');
   kernel.stdout.on('data', (data) => {
     console.log(`kernel stdout: ${data.toString()}`)
   })
