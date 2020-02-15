@@ -2,9 +2,6 @@ productName: "liandi"
 appId: "org.b3log.liandi"
 extraMetadata:
   main: "electron/main.js"
-asar: true
-asarUnpack:
-  - "**/*.node"
 directories:
   output: "build"
 files:
@@ -13,6 +10,19 @@ files:
   - "electron"
 mac:
   icon: "public/icon.icns"
+  extraResources:
+    - from: "kernel/kernel-darwin"
+      to: "kernel/kernel-darwin"
+win:
+  icon: "public/icon.ico"
+  extraResources:
+    - from: "kernel/kernel.exe"
+      to: "kernel/kernel.exe"
+linux:
+  icon: "public"
+  extraResources:
+    - from: "kernel/kernel-linux"
+      to: "kernel/kernel-linux"
 extraResources:
   - from: "public"
     to: "public"
@@ -20,7 +30,4 @@ extraResources:
     to: "dist"
   - from: "node_modules/vditor/dist"
     to: "node_modules/vditor/dist"
-  - from: "../kernel/kernel"
-    to: "kernel/kernel"
-  - from: "../kernel/kernel.exe"
-    to: "kernel/kernel.exe"
+

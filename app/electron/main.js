@@ -66,21 +66,23 @@ app.on('ready', () => {
 
 const startKernel = () => {
   let fileName = 'kernel.exe'
-  if (process.platform !== 'win32') {
-    fileName = 'kernel'
+  if (process.platform === 'darwin') {
+    fileName = 'kernel-darwin'
+  } else if (process.platform === 'linux') {
+    fileName = 'kernel-linux'
   }
 
-  let kernel = spawn(path.join('..', 'kernel', fileName))
+  let kernel = spawn(path.join('kernel', fileName))
 
   kernel.stdout.on('data', (data) => {
-    console.log(data)
+    console.log(`kernel stdout: ${data.toString()}`)
   })
 
   kernel.stderr.on('data', (data) => {
-    console.log(data)
+    console.log(`kernel stderr: ${data.toString()}`)
   })
 
   kernel.on('close', (code) => {
-    console.log(`child process exited with code ${code}`)
+    console.log(`kernel close: child process exited with code ${code}`)
   })
 }
