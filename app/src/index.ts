@@ -128,10 +128,13 @@ class App {
         document.querySelector('.navigation').classList.add('navigation--win32');
         const maxBtnElement = document.getElementById('maxWindow');
         const restoreBtnElement = document.getElementById('restoreWindow');
+        const minBtnElement = document.getElementById('minWindow');
+        const closeBtnElement = document.getElementById('closeWindow');
 
-        document.getElementById('minWindow').addEventListener('click', event => {
+        minBtnElement.addEventListener('click', event => {
             currentWindow.minimize();
         });
+        minBtnElement.style.display = 'block';
 
         maxBtnElement.addEventListener('click', event => {
             currentWindow.maximize();
@@ -141,9 +144,10 @@ class App {
             currentWindow.unmaximize();
         });
 
-        document.getElementById('closeWindow').addEventListener('click', event => {
+        closeBtnElement.addEventListener('click', event => {
             currentWindow.close();
         });
+        closeBtnElement.style.display = 'block';
 
         const toggleMaxRestoreButtons = () => {
             if (currentWindow.isMaximized()) {
