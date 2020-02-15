@@ -60,7 +60,7 @@ export class WebSocketUtil {
                     onSearch(liandi, response.data);
                     break;
                 case 'checkupdate':
-                    about.onCheckUpdate(response.data);
+                    about.onCheckUpdate(liandi, response);
                     break;
                 case 'setlang':
                     lauguage.onSetlang();
