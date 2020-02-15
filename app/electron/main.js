@@ -9,12 +9,6 @@ const createMenu = () => {
       submenu: [
         {role: 'about'},
         {type: 'separator'},
-        {role: 'cut'},
-        {role: 'copy'},
-        {role: 'paste'},
-        {role: 'pasteAndMatchStyle'},
-        {role: 'selectAll'},
-        {type: 'separator'},
         {role: 'toggledevtools'},
         {type: 'separator'},
         {role: 'togglefullscreen'},
