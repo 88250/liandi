@@ -143,11 +143,11 @@ export const initSearch = (liandi: ILiandi) => {
 };
 
 export const onSearch = (liandi: ILiandi, data: {
-    content: string,
-    line: number
-    path: string
-    pos: number
     url: string
+    path: string
+    content: string,
+    ln: number
+    col: number
 }[]) => {
     let resultHTML = '';
     data.forEach((item, index) => {
@@ -155,7 +155,7 @@ export const onSearch = (liandi: ILiandi, data: {
 title="${item.content}" data-url="${item.url}" data-path="${item.path}">
 <span class="fn__flex-1 fn__ellipsis">${item.content}</span>
 <span class="fn__space"></span>
-<span class="ft__smaller ft__secondary">${item.path} ${item.line}:${item.pos}</span>
+<span class="ft__smaller ft__secondary">${item.path} ${item.ln}:${item.col}</span>
 </div>`;
     });
 
