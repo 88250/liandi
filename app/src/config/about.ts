@@ -11,5 +11,16 @@ export const about = {
     },
     onCheckUpdate: (data: any) => {
         console.log(data)
+        if (0 === data.code) {
+            return;
+        }
+        if (-1 === data.code) {
+            // TODO: 报错提示
+            return;
+        }
+        if (1 === data.code) {
+            // 有更新
+            return;
+        }
     }
 };
