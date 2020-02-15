@@ -42,11 +42,11 @@ app.on('ready', () => {
   ipcMain.on('liandi_find_text', (event, options) => {
     const requestId = mainWindow.webContents.findInPage(options.key, {
       forward: options.forward,
-      findNext: options.findNext
+      findNext: options.findNext,
     })
     console.log(requestId, {
       forward: options.forward,
-      findNext: options.findNext
+      findNext: options.findNext,
     })
   })
 
@@ -63,7 +63,6 @@ app.on('ready', () => {
   startKernel()
 })
 
-
 const startKernel = () => {
   let fileName = 'kernel.exe'
   if (process.platform === 'darwin') {
@@ -72,5 +71,9 @@ const startKernel = () => {
     fileName = 'kernel-linux'
   }
 
-  spawn(path.join(path.dirname(app.getAppPath()), fileName))
+  let kernelPath = path.join(path.dirname(app.getAppPath()), fileName)
+  if (process.env.NODE_ENV === 'development') {
+    kernelPath = path.join('kernel', fileName)
+  }
+  spawn(kernelPath)
 }
