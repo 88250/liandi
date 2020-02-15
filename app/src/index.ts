@@ -157,9 +157,6 @@ class App {
         toggleMaxRestoreButtons();
         currentWindow.on('maximize', toggleMaxRestoreButtons);
         currentWindow.on('unmaximize', toggleMaxRestoreButtons);
-        document.querySelectorAll('.window-controls__item').forEach((item: HTMLElement) => {
-            item.style.display = 'block'
-        });
     }
 }
 

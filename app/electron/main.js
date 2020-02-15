@@ -72,16 +72,5 @@ const startKernel = () => {
     fileName = 'kernel-linux'
   }
 
-  const kernel = spawn(path.join(path.dirname(app.getAppPath()), fileName))
-  kernel.stdout.setEncoding('utf8');
-  kernel.stderr.setEncoding('utf8');
-  kernel.stdout.on('data', (data) => {
-    console.log(`kernel stdout: ${data.toString()}`)
-  })
-  kernel.stderr.on('data', (data) => {
-    console.log(`kernel stderr: ${data.toString()}`)
-  })
-  kernel.on('close', (code) => {
-    console.log(`kernel close: child process exited with code ${code}`)
-  })
+  spawn(path.join(path.dirname(app.getAppPath()), fileName))
 }
