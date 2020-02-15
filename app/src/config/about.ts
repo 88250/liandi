@@ -9,20 +9,21 @@ export const about = {
             liandi.ws.send('checkupdate', {})
         });
     },
-    onCheckUpdate: (result: any) => {
+    onCheckUpdate: (liandi: ILiandi, result: any) => {
         console.log(result)
         const outputSpan = document.querySelector('#checkUpdateOutput')
-        console.log(outputSpan)
         if (0 === result.code) {
-            outputSpan.innerHTML = "已是最新版"
+            outputSpan.innerHTML = i18n[liandi.config.lang].alreadyLatestVer
             return;
         }
         if (-1 === result.code) {
-            outputSpan.innerHTML = "检查版本失败"
+            outputSpan.innerHTML = i18n[liandi.config.lang].checkUpdateErr
             return;
         }
         if (1 === result.code) {
-            outputSpan.innerHTML = "最新版为 v" + result.ver + " 下载请看 "  + result.dl
+            let msg = i18n[liandi.config.lang].latestVerIs
+            msg = msg.replace("{ver}", result.data.ver).replace("{dl", result.data.dl)
+            outputSpan.innerHTML = msg
             return;
         }
     }
