@@ -63,6 +63,8 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) Cmd 
 		return &setmd{&BaseCmd{id: cmdId, param: param}}
 	case "checkupdate":
 		return &checkupdate{&BaseCmd{id: cmdId, param: param}}
+	case "searchget":
+		return &searchget{&BaseCmd{id: cmdId, param: param}}
 	}
 	return nil
 }
