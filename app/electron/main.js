@@ -32,6 +32,11 @@ app.on('ready', () => {
     shell.openExternal(url)
   })
 
+  // 页面加载完成时，清空搜索
+  mainWindow.webContents.on('did-finish-load', async () => {
+    mainWindow.webContents.stopFindInPage('keepSelection')
+  })
+
   // 新开页面使用浏览器打开
   mainWindow.webContents.on('new-window', (event, url) => {
     event.preventDefault()

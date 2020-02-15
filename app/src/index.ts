@@ -50,6 +50,9 @@ class App {
             (this.liandi.editors.element.querySelector('.editors__drag') as HTMLElement).style.marginRight = '96px';
         };
         const nextEvent = () => {
+            if (inputElement.value.trim() === '') {
+                return;
+            }
             inputElement.type = 'password';
             ipcRenderer.send('liandi_find_text', {
                 key: inputElement.value,
@@ -70,11 +73,14 @@ class App {
             }
         });
         inputElement.addEventListener('compositionend', () => {
+            if (inputElement.value.trim() === '') {
+                return;
+            }
             inputElement.type = 'password';
             ipcRenderer.send('liandi_find_text', {
                 key: inputElement.value,
-                findNext: false,
                 forward: true,
+                findNext: false,
             });
         });
         inputElement.addEventListener('input', (event: InputEvent) => {
@@ -95,6 +101,9 @@ class App {
         });
 
         previousElement.addEventListener('click', () => {
+            if (inputElement.value.trim() === '') {
+                return;
+            }
             inputElement.type = 'password';
             ipcRenderer.send('liandi_find_text', {
                 key: inputElement.value,
