@@ -5,7 +5,7 @@ export const about = {
         return `<button id="checkUpdateBtn">${i18n[liandi.config.lang].checkUpdate}</button>`
     },
     bindEvent: (liandi: ILiandi, element: HTMLElement) => {
-        element.querySelector('button').addEventListener('click', (event) => {
+        element.querySelector('button').addEventListener('click', event => {
             liandi.ws.send('checkupdate', {})
         });
     },
