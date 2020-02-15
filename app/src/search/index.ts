@@ -8,7 +8,7 @@ import {getPath, removeLastPath} from '../util/path';
 import {markdown} from '../config/markdown';
 
 export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
-    let currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
+    const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
 
     liandi.editors.saveContent(liandi);
 
@@ -36,7 +36,7 @@ export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
         path: liandi.current.path
     });
     destroyDialog();
-}
+};
 
 export const initSearch = (liandi: ILiandi) => {
     dialog({
@@ -116,22 +116,22 @@ export const initSearch = (liandi: ILiandi) => {
             }
             event.preventDefault();
         } else if (event.code === 'Enter') {
-            quickOpenFile(liandi, dialogElement)
+            quickOpenFile(liandi, dialogElement);
             event.preventDefault();
         }
     });
 
     const searchPanelElement = dialogElement.querySelector('div[data-name="search"]');
-    searchPanelElement.addEventListener("dblclick", (event) => {
-        let target = event.target as HTMLElement
+    searchPanelElement.addEventListener('dblclick', (event) => {
+        let target = event.target as HTMLElement;
         while (target && !target.parentElement.isEqualNode(searchPanelElement)) {
             if (target.classList.contains('list__item')) {
-                quickOpenFile(liandi, dialogElement)
-                event.preventDefault()
-                event.stopPropagation()
-                break
+                quickOpenFile(liandi, dialogElement);
+                event.preventDefault();
+                event.stopPropagation();
+                break;
             }
-            target = target.parentElement
+            target = target.parentElement;
         }
     }, false);
 

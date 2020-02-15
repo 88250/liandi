@@ -18,7 +18,7 @@ export class Editors {
         this.element = document.getElementById('editors');
 
         this.inputElement = document.createElement('input');
-        this.inputElement.className ="editors__input";
+        this.inputElement.className ='editors__input';
         this.inputElement.addEventListener('blur', () => {
             rename(liandi, this.inputElement.value, liandi.current.dir.url, liandi.current.path);
         });
@@ -41,7 +41,7 @@ export class Editors {
     remove(liandi: ILiandi) {
         clearTimeout(this.timeoutId);
         this.saveContent(liandi);
-        const inputElement = this.element.querySelector('.editors__input')
+        const inputElement = this.element.querySelector('.editors__input');
         if (inputElement) {
             this.element.querySelector('#liandiVditor').remove();
             this.element.querySelector('.editors__input').remove();

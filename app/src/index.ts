@@ -35,28 +35,42 @@ class App {
 
             this.initWindow();
         });
-        this.initFind()
+        this.initFind();
     }
 
     initFind() {
-        const inputElement = document.querySelector('.find input') as HTMLInputElement
-        const previousElement = document.querySelector('#findPrevious') as HTMLElement
-        const nextElement = document.querySelector('#findNext') as HTMLElement
-        const closeElement = document.querySelector('#findClose') as HTMLElement
-        const textElement = document.querySelector('.find__text') as HTMLElement
+        const inputElement = document.querySelector('.find input') as HTMLInputElement;
+        const previousElement = document.querySelector('#findPrevious') as HTMLElement;
+        const nextElement = document.querySelector('#findNext') as HTMLElement;
+        const closeElement = document.querySelector('#findClose') as HTMLElement;
+        const textElement = document.querySelector('.find__text') as HTMLElement;
+        const closeEvent = () => {
+            ipcRenderer.send('liandi_find_clear');
+            (document.querySelector('.find') as HTMLElement).style.display = 'none';
+            (this.liandi.editors.element.querySelector('.editors__drag') as HTMLElement).style.marginRight = '96px';
+        };
+        const nextEvent = () => {
+            inputElement.type = 'password';
+            ipcRenderer.send('liandi_find_text', {
+                key: inputElement.value,
+                forward: true,
+                findNext: true,
+            });
+        };
+
         inputElement.addEventListener('keydown', (event: KeyboardEvent) => {
             if (event.isComposing) {
-                return
+                return;
             }
             if (event.key === 'Escape') {
-                closeElement.click()
+                closeEvent();
             }
             if (event.key === 'Enter') {
-                nextElement.click()
+                nextEvent();
             }
         });
         inputElement.addEventListener('compositionend', () => {
-            inputElement.type = 'password'
+            inputElement.type = 'password';
             ipcRenderer.send('liandi_find_text', {
                 key: inputElement.value,
                 findNext: false,
@@ -65,63 +79,57 @@ class App {
         });
         inputElement.addEventListener('input', (event: InputEvent) => {
             if (event.isComposing) {
-                return
+                return;
             }
             if (inputElement.value.trim() === '') {
                 ipcRenderer.send('liandi_find_clear');
-                textElement.innerText = ''
+                textElement.innerText = '';
                 return;
             }
-            inputElement.type = 'password'
+            inputElement.type = 'password';
             ipcRenderer.send('liandi_find_text', {
                 key: inputElement.value,
                 forward: true,
                 findNext: false,
             });
-        })
+        });
 
         previousElement.addEventListener('click', () => {
-            inputElement.type = 'password'
+            inputElement.type = 'password';
             ipcRenderer.send('liandi_find_text', {
                 key: inputElement.value,
                 forward: false,
                 findNext: true,
             });
-        })
+        });
 
         nextElement.addEventListener('click', () => {
-            inputElement.type = 'password'
-            ipcRenderer.send('liandi_find_text', {
-                key: inputElement.value,
-                forward: true,
-                findNext: true,
-            });
-        })
+            nextEvent();
+        });
 
         closeElement.addEventListener('click', () => {
-            ipcRenderer.send('liandi_find_clear');
-            (document.querySelector('.find') as HTMLElement).style.display = 'none'
-        })
+            closeEvent();
+        });
 
         ipcRenderer.on('liandi_find_result', (event, message) => {
             inputElement.type = 'text';
             inputElement.focus();
-            textElement.innerHTML = `${message.activeMatchOrdinal}/${message.matches}`
-            console.log(message)
-        })
+            textElement.innerHTML = `${message.activeMatchOrdinal}/${message.matches}`;
+            console.log(message);
+        });
     }
 
     initWindow() {
         const currentWindow = remote.getCurrentWindow();
-        document.querySelector('.editors__drag').addEventListener('dblclick', event => {
-            if (currentWindow.isMaximized()) {
-                currentWindow.setSize(1024, 768);
-            } else {
-                currentWindow.maximize();
-            }
-        });
 
         if (process.platform !== 'win32') {
+            document.querySelector('.editors__drag').addEventListener('dblclick', () => {
+                if (currentWindow.isMaximized()) {
+                    currentWindow.setSize(1024, 768);
+                } else {
+                    currentWindow.maximize();
+                }
+            });
             return;
         }
 
