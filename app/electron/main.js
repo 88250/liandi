@@ -65,7 +65,6 @@ app.on('ready', () => {
 
 
 const startKernel = () => {
-  const pwd = path.dirname(app.getAppPath())
   let fileName = 'kernel.exe'
   if (process.platform === 'darwin') {
     fileName = 'kernel-darwin'
@@ -73,7 +72,7 @@ const startKernel = () => {
     fileName = 'kernel-linux'
   }
 
-  const kernel = spawn(path.join(pwd, fileName))
+  const kernel = spawn(path.join(path.dirname(app.getAppPath()), fileName))
   kernel.stdout.on('data', (data) => {
     console.log(`kernel stdout: ${data.toString()}`)
   })
