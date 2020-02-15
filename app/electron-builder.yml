@@ -1,5 +1,6 @@
-productName: "liandi"
+productName: "链滴笔记"
 appId: "org.b3log.liandi"
+copyright: "Copyright (c) 2020-present, b3log.org"
 extraMetadata:
   main: "electron/main.js"
 directories:
@@ -8,6 +9,10 @@ files:
   - "dist"
   - "public"
   - "electron"
+extraFiles:
+  - "LICENSE"
+  - from: "../LICENSE"
+    to: "LICENSE"
 mac:
   icon: "public/icon.icns"
   extraResources:
@@ -18,6 +23,7 @@ win:
   extraResources:
     - from: "kernel/kernel.exe"
       to: "kernel/kernel.exe"
+  requestedExecutionLevel: "asInvoker"
 linux:
   icon: "public"
   extraResources:
@@ -30,4 +36,3 @@ extraResources:
     to: "dist"
   - from: "node_modules/vditor/dist"
     to: "node_modules/vditor/dist"
-

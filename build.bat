@@ -23,7 +23,7 @@ echo Building UI
 cd app
 node -v
 call npm -v
-call npm install && npm run build
+call npm install && npm run build && npm run pack
 cd ..
 
 :errorend

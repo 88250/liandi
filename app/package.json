@@ -8,7 +8,7 @@
     "dev": "webpack",
     "build": "webpack --mode production",
     "start": "electron ./electron/main.js",
-    "pack": "electron-builder --dir",
+    "pack": "cross-env ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder --dir",
     "dist": "cross-env ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/ electron-builder"
   },
   "keywords": [
