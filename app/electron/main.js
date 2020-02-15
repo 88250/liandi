@@ -2,7 +2,7 @@ const {app, BrowserWindow, shell, ipcMain} = require('electron')
 const {spawn} = require('child_process')
 const path = require('path')
 
-app.on('ready', () => {
+const createWindow = () => {
   // 创建浏览器窗口
   let mainWindow = new BrowserWindow({
     show: false,
@@ -43,6 +43,11 @@ app.on('ready', () => {
     shell.openExternal(url)
   })
 
+  // 监听 findInPage 有返回值时的处理
+  mainWindow.webContents.on('found-in-page', (event, result) => {
+    mainWindow.webContents.send('liandi_find_result', result)
+  })
+
   // 监听页面搜索框输入
   ipcMain.on('liandi_find_text', (event, options) => {
     const requestId = mainWindow.webContents.findInPage(options.key, {
@@ -59,14 +64,7 @@ app.on('ready', () => {
   ipcMain.on('liandi_find_clear', () => {
     mainWindow.webContents.stopFindInPage('keepSelection')
   })
-
-  // 监听 findInPage 有返回值时的处理
-  mainWindow.webContents.on('found-in-page', (event, result) => {
-    mainWindow.webContents.send('liandi_find_result', result)
-  })
-
-  startKernel()
-})
+}
 
 const startKernel = () => {
   let fileName = 'kernel.exe'
@@ -82,3 +80,20 @@ const startKernel = () => {
   }
   spawn(kernelPath)
 }
+
+app.whenReady().then(() => {
+  createWindow()
+  startKernel()
+})
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow()
+  }
+})
