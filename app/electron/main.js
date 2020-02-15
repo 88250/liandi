@@ -85,6 +85,10 @@ const createWindow = () => {
     mainWindow.webContents.stopFindInPage('keepSelection')
   })
 
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.openDevTools({mode: 'bottom'})
+  }
+
   createMenu()
 }
 
