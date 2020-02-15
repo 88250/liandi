@@ -22,5 +22,5 @@ echo Building UI
 cd app
 node -v
 npm -v
-npm install && npm run build && npm run pack
+npm install && npm run build && npm run dist
 cd ..
