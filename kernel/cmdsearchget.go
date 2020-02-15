@@ -12,7 +12,6 @@ package main
 
 import (
 	"path"
-	"strings"
 )
 
 type searchget struct {
@@ -29,11 +28,10 @@ func (cmd *searchget) Exec() {
 	Logger.Info(ln, col)
 	content, err := Get(url, p)
 
-	lines := strings.Split(content, "\n")
-	hitLn := lines[ln-1]
-	p0 := hitLn[:(col-1)]
-
-
+	//lines := strings.Split(content, "\n")
+	//hitLn := lines[ln-1]
+	//p0 := hitLn[:(col-1)]
+	// TODO: search
 
 	if nil != err {
 		ret.Code = -1
