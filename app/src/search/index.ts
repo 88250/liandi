@@ -1,6 +1,7 @@
 import {i18n} from '../i18n';
 import {destroyDialog, dialog} from '../util/dialog';
 import {lauguage} from '../config/language';
+import {about} from '../config/about';
 import {theme} from '../config/theme';
 import {initConfigSearch} from '../config/search';
 import {getPath, removeLastPath} from '../util/path';
@@ -60,10 +61,12 @@ export const initSearch = (liandi: ILiandi) => {
         <li data-name="markdown" class="tab--current fn__pointer">Markdown</li>
         <li data-name="theme" class="fn__pointer">${i18n[liandi.config.lang].theme}</li>
         <li data-name="language" class="fn__pointer">${i18n[liandi.config.lang].language}</li>
+        <li data-name="about" class="fn__pointer">${i18n[liandi.config.lang].about}</li>
       </ul>
       <div class="tab__panel" data-name="markdown" slot="panel">${markdown.genHTML(liandi)}</div>
       <div class="tab__panel" data-name="theme">${theme.genHTML(liandi)}</div>
       <div class="tab__panel" data-name="language">${lauguage.genHTML(liandi)}</div>
+      <div class="tab__panel" data-name="about">${about.genHTML(liandi)}</div>
     </tab-panel>
   </div>
 </tab-panel>`,
@@ -133,6 +136,7 @@ export const initSearch = (liandi: ILiandi) => {
     }, false);
 
     initConfigSearch(liandi, dialogElement.querySelector('div[data-name="config"]'));
+    about.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="about"]'));
     lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'));
     theme.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="theme"]'));
     markdown.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="markdown"]'));
