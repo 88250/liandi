@@ -65,7 +65,7 @@ declare interface ILiandi {
         path?: string
     };
     find?: {
-        open: () => void
+        open: (key?: string, index?: number) => void
     };
 }
 
