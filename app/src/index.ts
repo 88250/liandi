@@ -13,6 +13,7 @@ import {initGlobalKeyPress} from './hotkey';
 import {remote, ipcRenderer} from 'electron';
 import {Find} from './search/Find';
 import {Constants} from "./constants";
+import {initSearch} from "./search";
 
 class App {
     public liandi: ILiandi;
@@ -57,6 +58,9 @@ class App {
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_SAVE, () => {
             this.liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SAVE);
+        });
+        ipcRenderer.on(Constants.LIANDI_SEARCH_OPEN, () => {
+            initSearch(this.liandi);
         });
     }
 
