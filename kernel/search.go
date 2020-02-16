@@ -34,6 +34,7 @@ type Snippet struct {
 	Path    string `json:"path"`
 	Ln      int    `json:"ln"`
 	Col     int    `json:"col"`
+	Index   int    `json:"index"`
 	Content string `json:"content"`
 }
 
@@ -75,11 +76,13 @@ func Search(keyword string) (ret []*Snippet) {
 
 func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
 	lines := strings.Split(doc.Content, "\n")
+	index := 0
 	for idx, line := range lines {
 		if pos := strings.Index(strings.ToLower(line), strings.ToLower(keyword)); -1 != pos {
 			highlight := line[0:pos] + "<mark>" + line[pos:pos+len(keyword)] + "</mark>" + line[pos+len(keyword):]
-			snippet := &Snippet{URL: doc.URL, Path: filepath.ToSlash(doc.Path), Ln: idx + 1, Col: pos + 1, Content: highlight}
+			snippet := &Snippet{URL: doc.URL, Path: filepath.ToSlash(doc.Path), Ln: idx + 1, Col: pos + 1, Index: index, Content: highlight}
 			ret = append(ret, snippet)
+			index++
 		}
 	}
 	return ret
