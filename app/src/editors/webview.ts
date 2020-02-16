@@ -84,7 +84,16 @@ export class EditorWebview {
                 'preview',
                 'format',
                 '|',
-                'fullscreen',
+                {
+                    name: 'fullscreen',
+                    click: (isFullscreen: boolean) => {
+                        if (isFullscreen) {
+                            ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_FULLSCREEN)
+                        } else {
+                            ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_RESTORE)
+                        }
+                    },
+                },
                 'devtools',
                 'info',
                 'help',
