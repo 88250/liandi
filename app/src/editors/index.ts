@@ -1,14 +1,14 @@
 import {rename} from '../util/rename';
-import {Constants} from "../constants";
-import {ipcRenderer} from "electron";
+import {Constants} from '../constants';
+import {ipcRenderer} from 'electron';
 
 export class Editors {
     public isOpen: boolean;
-    private inputElement: HTMLInputElement
+    private inputElement: HTMLInputElement;
     private editorWebviewElement: Electron.WebviewTag;
 
     constructor(liandi: ILiandi) {
-        this.isOpen = false
+        this.isOpen = false;
         const editorElement = document.getElementById('editors');
 
         this.inputElement = editorElement.querySelector('.editors__input') as HTMLInputElement;
@@ -20,27 +20,27 @@ export class Editors {
     }
 
     sendMessage(message: string, data?: any, liandi?: ILiandi) {
-        let sendData = data
+        let sendData = data;
         if (message === Constants.LIANDI_EDITOR_OPEN) {
             this.inputElement.classList.remove('fn__none');
             this.editorWebviewElement.classList.remove('fn__none');
-            this.inputElement.value = data.name
-            this.isOpen = true
+            this.inputElement.value = data.name;
+            this.isOpen = true;
         }
 
         if (message === Constants.LIANDI_EDITOR_CLOSE) {
             this.inputElement.classList.add('fn__none');
             this.editorWebviewElement.classList.add('fn__none');
-            this.isOpen = false
+            this.isOpen = false;
         }
 
         if (liandi) {
             sendData = {
-                liandi: liandi,
-                data: data
-            }
+                liandi,
+                data
+            };
         }
 
-        this.editorWebviewElement.send(message, sendData)
+        this.editorWebviewElement.send(message, sendData);
     }
 }

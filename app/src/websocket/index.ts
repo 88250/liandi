@@ -8,7 +8,7 @@ import {theme} from '../config/theme';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
 import {about} from '../config/about';
-import {ipcRenderer} from "electron";
+import {ipcRenderer} from 'electron';
 
 export class WebSocketUtil {
     public webSocket: WebSocket;

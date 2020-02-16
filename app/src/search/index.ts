@@ -6,7 +6,7 @@ import {theme} from '../config/theme';
 import {initConfigSearch} from '../config/search';
 import {getPath, removeLastPath} from '../util/path';
 import {markdown} from '../config/markdown';
-import {Constants} from "../constants";
+import {Constants} from '../constants';
 
 export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
@@ -127,8 +127,8 @@ export const initSearch = (liandi: ILiandi) => {
         let target = event.target as HTMLElement;
         while (target && !target.parentElement.isEqualNode(searchPanelElement)) {
             if (target.classList.contains('list__item')) {
-                dialogElement.querySelector('.list__item--current').classList.remove('list__item--current')
-                target.classList.add('list__item--current')
+                dialogElement.querySelector('.list__item--current').classList.remove('list__item--current');
+                target.classList.add('list__item--current');
                 quickOpenFile(liandi, dialogElement);
                 event.preventDefault();
                 event.stopPropagation();

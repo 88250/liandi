@@ -1,8 +1,8 @@
 import '../assets/scss/editor.scss';
 import {Constants} from '../constants';
 import {getPath} from '../util/path';
-import {initGlobalKeyPress} from "../hotkey";
-import {ipcRenderer} from 'electron'
+import {initGlobalKeyPress} from '../hotkey';
+import {ipcRenderer} from 'electron';
 
 const Vditor = require('vditor');
 
@@ -16,28 +16,28 @@ export class EditorWebview {
         this.saved = true;
         this.editorElement = document.getElementById('liandiVditor');
 
-        this.onMessage()
+        this.onMessage();
     }
 
     private onMessage() {
         ipcRenderer.on(Constants.LIANDI_EDITOR_INIT, (event, data) => {
-            initGlobalKeyPress(data)
-        })
+            initGlobalKeyPress(data);
+        });
         ipcRenderer.on(Constants.LIANDI_EDITOR_OPEN, (event, data) => {
-            this.onOpen(data.liandi, data.data.content)
-        })
+            this.onOpen(data.liandi, data.data.content);
+        });
         ipcRenderer.on(Constants.LIANDI_EDITOR_CLOSE, () => {
-            this.saveContent()
-            this.editorElement.innerHTML = ''
+            this.saveContent();
+            this.editorElement.innerHTML = '';
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_SAVE, () => {
-            this.saveContent()
+            this.saveContent();
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_SETTHEME, (event, data) => {
             this.vditor.setTheme(data);
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_RELOAD, (event, data) => {
-            this.onOpen(data, this.vditor.getValue())
+            this.onOpen(data, this.vditor.getValue());
         });
     }
 
@@ -48,8 +48,8 @@ export class EditorWebview {
         if (this.editorElement.innerHTML === '') {
             return;
         }
-        ipcRenderer.send(Constants.LIANDI_WEBSOCKET_PUT, this.vditor.getValue())
-        this.saved = true
+        ipcRenderer.send(Constants.LIANDI_WEBSOCKET_PUT, this.vditor.getValue());
+        this.saved = true;
     }
 
     private onOpen(liandi: ILiandi, value: string) {
@@ -131,4 +131,4 @@ export class EditorWebview {
     }
 }
 
-new EditorWebview();
+const editor = new EditorWebview();

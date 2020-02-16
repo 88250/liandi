@@ -12,8 +12,8 @@ import {resize} from './util/resize';
 import {initGlobalKeyPress} from './hotkey';
 import {remote, ipcRenderer} from 'electron';
 import {Find} from './search/Find';
-import {Constants} from "./constants";
-import {initSearch} from "./search";
+import {Constants} from './constants';
+import {initSearch} from './search';
 
 class App {
     public liandi: ILiandi;
