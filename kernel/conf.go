@@ -46,7 +46,7 @@ func Close() {
 }
 
 func InitConf() {
-	Conf = &AppConf{LogLevel: "debug", Theme: "white", Lang: "zh_CN"}
+	Conf = &AppConf{LogLevel: "debug", Theme: "white", Lang: "zh_CN", Dirs: []*Dir{}}
 	if gulu.File.IsExist(ConfPath) {
 		data, err := ioutil.ReadFile(ConfPath)
 		if nil != err {
