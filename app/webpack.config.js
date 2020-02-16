@@ -12,6 +12,10 @@ module.exports = (env, argv) => {
     watch: argv.mode !== 'production',
     devtool: argv.mode !== 'production' ? 'source-map' : 'false',
     target: 'electron-renderer',
+    entry: {
+      'main': './src/index.ts',
+      'editor': './src/editors/index.ts',
+    },
     resolve: {
       extensions: ['.ts', '.scss', '.js', '.css'],
     },

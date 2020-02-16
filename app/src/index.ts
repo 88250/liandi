@@ -10,7 +10,7 @@ import {Editors} from './editors';
 import {Menus} from './menu';
 import {resize} from './util/resize';
 import {initGlobalKeyPress} from './hotkey';
-import {remote} from 'electron';
+import {remote, ipcRenderer} from 'electron';
 import {Find} from "./search/Find";
 
 class App {
@@ -36,10 +36,20 @@ class App {
             initGlobalKeyPress(this.liandi);
 
             this.initWindow();
+            this.onIpc()
         });
     }
 
-    initWindow() {
+    private onIpc() {
+        ipcRenderer.on('liandi-find-show', () => {
+            this.liandi.find.open()
+        });
+        ipcRenderer.on('liandi-editor-save', () => {
+            this.liandi.editors.saveContent(this.liandi);
+        });
+    }
+
+    private initWindow() {
         const currentWindow = remote.getCurrentWindow();
 
         if (process.platform !== 'win32') {

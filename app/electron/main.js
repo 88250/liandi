@@ -1,4 +1,4 @@
-const {app, BrowserWindow, shell, Menu} = require('electron')
+const {app, BrowserWindow, shell, Menu, globalShortcut} = require('electron')
 const {spawn} = require('child_process')
 const path = require('path')
 
@@ -66,9 +66,15 @@ const createWindow = () => {
 
   if (process.env.NODE_ENV === 'development') {
     mainWindow.webContents.openDevTools({mode: 'bottom'})
+    const editorWebview=  document.querySelector('.editors__webview')
+    editorWebview.addEventListener('dom-ready', () => {
+      editorWebview.openDevTools()
+    })
   } else {
     createMenu()
   }
+
+  registerShortcut(mainWindow)
 }
 
 const startKernel = () => {
@@ -86,6 +92,16 @@ const startKernel = () => {
   spawn(kernelPath)
 }
 
+const registerShortcut = (mainWindow) => {
+  globalShortcut.register('CommandOrControl+F', () => {
+    mainWindow.webContents.send('liandi-find-show')
+  })
+
+  globalShortcut.register('CommandOrControl+S', () => {
+    mainWindow.webContents.send('liandi-editor-save')
+  })
+}
+
 app.whenReady().then(() => {
   createWindow()
   startKernel()
@@ -101,4 +117,9 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow()
   }
+})
+
+app.on('will-quit', () => {
+  // 注销所有快捷键
+  globalShortcut.unregisterAll()
 })

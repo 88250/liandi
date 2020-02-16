@@ -33,21 +33,15 @@
         <input class="fn__flex-1">
         <span class="find__text"></span>
     </div>
-    <button id="findPrevious">
-        <svg>
-            <use xlink:href="#iconUp"></use>
-        </svg>
-    </button>
-    <button id="findNext">
-        <svg>
-            <use xlink:href="#iconDown"></use>
-        </svg>
-    </button>
-    <button id="findClose">
-        <svg>
-            <use xlink:href="#iconClose"></use>
-        </svg>
-    </button>
+    <svg id="findPrevious">
+        <use xlink:href="#iconUp"></use>
+    </svg>
+    <svg id="findNext">
+        <use xlink:href="#iconDown"></use>
+    </svg>
+    <svg id="findClose">
+        <use xlink:href="#iconClose"></use>
+    </svg>
 </div>
 <div class="fn__flex wrap">
     <div class="navigation fn__flex-column" id="navigation"></div>
@@ -57,7 +51,7 @@
     <div class="fn__flex-1 fn__flex-column" id="editors">
         <div class="editors__drag"></div>
         <input class="editors__input">
-        <webview class="editors__webview" src="editor.html"></webview>
+        <webview class="editors__webview fn__flex-1" src="editor.html"></webview>
     </div>
 </div>
 <script src="../dist/main.js"></script>
