@@ -70,6 +70,9 @@ declare interface ILiandi {
         dir?: IDir
         path?: string
     };
+    find?: {
+        open: () => void
+    }
 }
 
 interface II18n {

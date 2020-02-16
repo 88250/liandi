@@ -10,7 +10,8 @@ import {Editors} from './editors';
 import {Menus} from './menu';
 import {resize} from './util/resize';
 import {initGlobalKeyPress} from './hotkey';
-import {remote, ipcRenderer} from 'electron';
+import {remote} from 'electron';
+import {Find} from "./search/Find";
 
 class App {
     public liandi: ILiandi;
@@ -27,6 +28,7 @@ class App {
             this.liandi.files = new Files();
             this.liandi.editors = new Editors(this.liandi);
             this.liandi.menus = new Menus(this.liandi);
+            this.liandi.find = new Find();
 
             resize('resize');
             resize('resize2');
@@ -34,97 +36,6 @@ class App {
             initGlobalKeyPress(this.liandi);
 
             this.initWindow();
-        });
-        this.initFind();
-    }
-
-    initFind() {
-        const inputElement = document.querySelector('.find input') as HTMLInputElement;
-        const previousElement = document.querySelector('#findPrevious') as HTMLElement;
-        const nextElement = document.querySelector('#findNext') as HTMLElement;
-        const closeElement = document.querySelector('#findClose') as HTMLElement;
-        const textElement = document.querySelector('.find__text') as HTMLElement;
-        const closeEvent = () => {
-            ipcRenderer.send('liandi_find_clear');
-            (document.querySelector('.find') as HTMLElement).style.display = 'none';
-            (this.liandi.editors.element.querySelector('.editors__drag') as HTMLElement).style.marginRight = '96px';
-        };
-        const nextEvent = () => {
-            if (inputElement.value.trim() === '') {
-                return;
-            }
-            inputElement.type = 'password';
-            ipcRenderer.send('liandi_find_text', {
-                key: inputElement.value,
-                forward: true,
-                findNext: true,
-            });
-        };
-
-        inputElement.addEventListener('keydown', (event: KeyboardEvent) => {
-            if (event.isComposing) {
-                return;
-            }
-            if (event.key === 'Escape') {
-                closeEvent();
-            }
-            if (event.key === 'Enter') {
-                nextEvent();
-            }
-        });
-        inputElement.addEventListener('compositionend', () => {
-            if (inputElement.value.trim() === '') {
-                return;
-            }
-            inputElement.type = 'password';
-            ipcRenderer.send('liandi_find_text', {
-                key: inputElement.value,
-                forward: true,
-                findNext: false,
-            });
-        });
-        inputElement.addEventListener('input', (event: InputEvent) => {
-            if (event.isComposing) {
-                return;
-            }
-            if (inputElement.value.trim() === '') {
-                ipcRenderer.send('liandi_find_clear');
-                textElement.innerText = '';
-                return;
-            }
-            inputElement.type = 'password';
-            ipcRenderer.send('liandi_find_text', {
-                key: inputElement.value,
-                forward: true,
-                findNext: false,
-            });
-        });
-
-        previousElement.addEventListener('click', () => {
-            if (inputElement.value.trim() === '') {
-                return;
-            }
-            inputElement.type = 'password';
-            ipcRenderer.send('liandi_find_text', {
-                key: inputElement.value,
-                forward: false,
-                findNext: true,
-            });
-        });
-
-        nextElement.addEventListener('click', () => {
-            nextEvent();
-        });
-
-        closeElement.addEventListener('click', () => {
-            closeEvent();
-        });
-
-        ipcRenderer.on('liandi_find_result', (event, message) => {
-            inputElement.type = 'text';
-            inputElement.focus();
-            textElement.innerHTML = `${message.activeMatchOrdinal}/${message.matches}`;
-            console.log(message);
         });
     }
 

@@ -1,4 +1,4 @@
-const {app, BrowserWindow, shell, ipcMain, Menu} = require('electron')
+const {app, BrowserWindow, shell, Menu} = require('electron')
 const {spawn} = require('child_process')
 const path = require('path')
 
@@ -31,6 +31,7 @@ const createWindow = () => {
     webPreferences: {
       nodeIntegration: true,
       nativeWindowOpen: true,
+      webviewTag: true,
     },
     frame: process.platform !== 'win32',
     titleBarStyle: 'hidden',
@@ -52,44 +53,22 @@ const createWindow = () => {
     shell.openExternal(url)
   })
 
-  // 页面加载完成时，清空搜索
-  mainWindow.webContents.on('did-finish-load', async () => {
-    mainWindow.webContents.stopFindInPage('keepSelection')
-  })
-
   // 新开页面使用浏览器打开
   mainWindow.webContents.on('new-window', (event, url) => {
     event.preventDefault()
     shell.openExternal(url)
   })
 
-  // 监听 findInPage 有返回值时的处理
-  mainWindow.webContents.on('found-in-page', (event, result) => {
-    mainWindow.webContents.send('liandi_find_result', result)
-  })
-
-  // 监听页面搜索框输入
-  ipcMain.on('liandi_find_text', (event, options) => {
-    const requestId = mainWindow.webContents.findInPage(options.key, {
-      forward: options.forward,
-      findNext: options.findNext,
-    })
-    console.log(requestId, {
-      forward: options.forward,
-      findNext: options.findNext,
-    })
-  })
-
-  // 清空搜索
-  ipcMain.on('liandi_find_clear', () => {
+  // 页面加载完成时，清空搜索
+  mainWindow.webContents.on('did-finish-load', async () => {
     mainWindow.webContents.stopFindInPage('keepSelection')
   })
 
   if (process.env.NODE_ENV === 'development') {
     mainWindow.webContents.openDevTools({mode: 'bottom'})
+  } else {
+    createMenu()
   }
-
-  createMenu()
 }
 
 const startKernel = () => {

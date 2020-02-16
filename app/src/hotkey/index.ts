@@ -23,13 +23,7 @@ export const initGlobalKeyPress = (liandi: ILiandi) => {
 
         // 搜索
         if (isCtrl(event) && event.key === 'f') {
-            const findElement = document.querySelector('.find') as HTMLElement;
-            findElement.style.display = 'flex';
-            const inputElement = findElement.querySelector('input') as HTMLInputElement;
-            inputElement.value = '';
-            inputElement.focus();
-
-            (liandi.editors.element.querySelector('.editors__drag') as HTMLElement).style.marginRight = '408px';
+            liandi.find.open();
         }
     });
 };
