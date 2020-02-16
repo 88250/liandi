@@ -35,6 +35,7 @@ func (cmd *searchget) Exec() {
 			"url":     url,
 			"path":    p,
 			"index":   cmd.param["index"],
+			"key":     cmd.param["key"],
 		}
 	}
 	Push(ret.Bytes())
