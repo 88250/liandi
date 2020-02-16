@@ -34,7 +34,7 @@ linux:
     - from: "../kernel/kernel-linux"
       to: "kernel-linux"
   target:
-    - target: "tar.bz2"
+    - target: "tar.gz"
 extraResources:
   - from: "public"
     to: "public"
