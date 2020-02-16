@@ -1,4 +1,4 @@
-const {app, BrowserWindow, shell, Menu, globalShortcut} = require('electron')
+const {app, BrowserWindow, shell, Menu, globalShortcut, ipcMain} = require('electron')
 const {spawn} = require('child_process')
 const path = require('path')
 
@@ -62,6 +62,10 @@ const createWindow = () => {
   // 页面加载完成时，清空搜索
   mainWindow.webContents.on('did-finish-load', async () => {
     mainWindow.webContents.stopFindInPage('keepSelection')
+  })
+
+  ipcMain.on('liandi-websocket-put', (event, options) => {
+    mainWindow.webContents.send('liandi-websocket-put', options)
   })
 
   if (process.env.NODE_ENV === 'development') {

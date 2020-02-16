@@ -1,3 +1,4 @@
+import '../assets/scss/editor.scss';
 import {Constants} from '../constants';
 import {getPath} from '../util/path';
 import {initGlobalKeyPress} from "../hotkey";
@@ -5,13 +6,11 @@ import {ipcRenderer} from 'electron'
 
 const Vditor = require('vditor');
 
-
 export class EditorWebview {
     private vditor: any;
     private saved: boolean;
     private editorElement: HTMLElement;
     private timeoutId: number;
-    private liandi: ILiandi;
 
     constructor() {
         this.saved = true;
@@ -20,58 +19,41 @@ export class EditorWebview {
         this.onMessage()
     }
 
-    onMessage() {
+    private onMessage() {
         ipcRenderer.on(Constants.LIANDI_EDITOR_INIT, (event, data) => {
-            this.liandi = data;
             initGlobalKeyPress(data)
         })
-        ipcRenderer.on(Constants.LIANDI_EDITOR_SAVE, () => {
-            console.log('save')
+        ipcRenderer.on(Constants.LIANDI_EDITOR_OPEN, (event, data) => {
+            this.onOpen(data.liandi, data.data.content)
+        })
+        ipcRenderer.on(Constants.LIANDI_EDITOR_CLOSE, () => {
+            this.saveContent()
+            this.editorElement.innerHTML = ''
         });
-        ipcRenderer.on(Constants.LIANDI_EDITOR_RELOAD, () => {
-            console.log('save')
+        ipcRenderer.on(Constants.LIANDI_EDITOR_SAVE, () => {
+            this.saveContent()
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_SETTHEME, (event, data) => {
-            this.vditor.setTheme('dark');
+            this.vditor.setTheme(data);
         });
-        ipcRenderer.on(Constants.LIANDI_EDITOR_OPEN, (event, data) => {
-        });
-        ipcRenderer.on(Constants.LIANDI_EDITOR_CLOSE, (event, data) => {
-        });
-    }
-
-    reload(liandi: ILiandi) {
-        const content = this.vditor.getValue();
-        this.onGet(liandi, {
-            content,
-            name
+        ipcRenderer.on(Constants.LIANDI_EDITOR_RELOAD, (event, data) => {
+            this.onOpen(data, this.vditor.getValue())
         });
     }
 
-    remove(liandi: ILiandi) {
-        clearTimeout(this.timeoutId);
-        this.saveContent(liandi);
-        // this.element.querySelector('#liandiVditor').remove();
-    }
-
-    public saveContent(liandi: ILiandi) {
+    private saveContent() {
         if (this.saved) {
             return;
         }
         if (this.editorElement.innerHTML === '') {
             return;
         }
-        liandi.ws.send('put', {
-            url: liandi.current.dir.url,
-            path: liandi.current.path,
-            content: this.vditor.getValue()
-        });
+        ipcRenderer.send(Constants.LIANDI_WEBSOCKET_PUT, this.vditor.getValue())
         this.saved = true
     }
 
-    onGet(liandi: ILiandi, file: { content: string, name: string }) {
+    private onOpen(liandi: ILiandi, value: string) {
         this.editorElement.innerHTML = '';
-
         const linkBase = liandi.current.dir.url + getPath(liandi.current.path);
         this.vditor = new Vditor('liandiVditor', {
             toolbar: [
@@ -122,7 +104,7 @@ export class EditorWebview {
                     engine: liandi.config.markdown.mathEngine,
                 },
             },
-            value: file.content,
+            value,
             upload: {
                 filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
                 url: Constants.UPLOAD_ADDRESS,
@@ -142,7 +124,7 @@ export class EditorWebview {
                 this.saved = false;
                 clearTimeout(this.timeoutId);
                 this.timeoutId = window.setTimeout(() => {
-                    this.saveContent(liandi);
+                    this.saveContent();
                 }, 5000);
             }
         });

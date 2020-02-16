@@ -1,5 +1,6 @@
 import {rename} from '../util/rename';
 import {Constants} from "../constants";
+import {ipcRenderer} from "electron";
 
 export class Editors {
     public isOpen: boolean;
@@ -18,8 +19,8 @@ export class Editors {
         this.editorWebviewElement = editorElement.querySelector('.editors__webview');
     }
 
-    sendMessage(message: string, data?: any) {
-        this.editorWebviewElement.send(message, data)
+    sendMessage(message: string, data?: any, liandi?: ILiandi) {
+        let sendData = data
         if (message === Constants.LIANDI_EDITOR_OPEN) {
             this.inputElement.classList.remove('fn__none');
             this.editorWebviewElement.classList.remove('fn__none');
@@ -32,5 +33,14 @@ export class Editors {
             this.editorWebviewElement.classList.add('fn__none');
             this.isOpen = false
         }
+
+        if (liandi) {
+            sendData = {
+                liandi: liandi,
+                data: data
+            }
+        }
+
+        this.editorWebviewElement.send(message, sendData)
     }
 }

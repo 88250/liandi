@@ -12,5 +12,7 @@ export abstract class Constants {
     public static readonly LIANDI_EDITOR_OPEN: string = 'liandi-editor-open';
     public static readonly LIANDI_EDITOR_CLOSE: string = 'liandi-editor-close';
 
+    public static readonly LIANDI_WEBSOCKET_PUT: string = 'liandi-websocket-put';
+
     public static readonly LIANDI_FIND_SHOW: string = 'liandi-find-show';
 }

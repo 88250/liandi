@@ -9,7 +9,6 @@
 @import "files";
 @import "editors";
 @import "list";
-@import "~vditor/dist/index.css";
 
 .window-controls {
   position: fixed;
@@ -84,15 +83,6 @@
     &:hover {
       color: var(--text-secondary-color);
     }
-  }
-}
-
-.vditor {
-  border-width: 1px 0 0 0;
-  border-radius: 0;
-
-  &-preview {
-    background-color: var(--focus-background-color);
   }
 }
 

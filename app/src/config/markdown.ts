@@ -50,6 +50,6 @@ export const markdown = {
     },
     onSetmd: (liandi: ILiandi, md: IMD) => {
         liandi.config.markdown = md;
-        liandi.editors.sendMessage(Constants.LIANDI_EDITOR_RELOAD);
+        liandi.editors.sendMessage(Constants.LIANDI_EDITOR_RELOAD, liandi);
     }
 };

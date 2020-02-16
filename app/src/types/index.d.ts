@@ -50,7 +50,7 @@ declare interface ILiandi {
     };
     editors?: {
         isOpen: boolean
-        sendMessage: (message: string, data?: any) => void;
+        sendMessage: (message: string, data?: any, liandi?: ILiandi) => void;
     };
     menus?: {
         itemData: {

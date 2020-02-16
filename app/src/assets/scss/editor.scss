@@ -1,0 +1,18 @@
+@import "variables";
+@import "reset";
+@import "~vditor/dist/index.css";
+
+body {
+  border: 0;
+  height: 100%;
+}
+
+.vditor {
+  border-width: 1px 0 0 0;
+  border-radius: 0;
+  height: 100%;
+
+  &-preview {
+    background-color: var(--focus-background-color);
+  }
+}
