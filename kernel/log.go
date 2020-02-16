@@ -28,6 +28,12 @@ var (
 )
 
 func InitLog() {
+	if !gulu.File.IsExist(LianDiDir) {
+		if err := os.Mkdir(LianDiDir, 0755); nil != err && !os.IsExist(err) {
+			Logger.Fatalf("创建配置目录 [%s] 失败：%s", LianDiDir, err)
+		}
+	}
+
 	if size := gulu.File.GetFileSize(LogPath); 1024*1024*8 <= size {
 		// 日志文件大于 8M 的话删了重建
 		if err := os.Remove(LogPath); nil != err {

@@ -47,12 +47,7 @@ func Close() {
 
 func InitConf() {
 	Conf = &AppConf{LogLevel: "debug", Theme: "white", Lang: "zh_CN"}
-	if !gulu.File.IsExist(ConfPath) {
-		if err := os.Mkdir(LianDiDir, 0755); nil != err && !os.IsExist(err) {
-			Logger.Fatalf("创建配置目录 [%s] 失败：%s", LianDiDir, err)
-		}
-		Logger.Infof("初始化配置文件 [%s] 完毕", ConfPath)
-	} else {
+	if gulu.File.IsExist(ConfPath) {
 		data, err := ioutil.ReadFile(ConfPath)
 		if nil != err {
 			Logger.Fatalf("加载配置文件 [%s] 失败：%s", ConfPath, err)
