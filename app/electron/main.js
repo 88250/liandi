@@ -137,11 +137,11 @@ app.on('will-quit', () => {
 })
 
 // 在编辑器内打开链接的处理
-app.on('web-contents-created', function (webContentsCreatedEvent, contents) {
+app.on('web-contents-created', (webContentsCreatedEvent, contents) => {
   if (contents.getType() === 'webview') {
-    contents.on('new-window', function (newWindowEvent, url) {
-      console.log('block');
+    contents.on('new-window', (newWindowEvent, url) => {
       newWindowEvent.preventDefault();
+      shell.openExternal(url);
     });
   }
 });
