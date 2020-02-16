@@ -33,7 +33,7 @@ const createWindow = () => {
       nativeWindowOpen: true,
       webviewTag: true,
     },
-    frame: process.platform !== 'win32',
+    frame: process.platform === 'darwin',
     titleBarStyle: 'hidden',
   })
 

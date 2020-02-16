@@ -10,7 +10,7 @@ import {Editors} from './editors';
 import {Menus} from './menu';
 import {resize} from './util/resize';
 import {initGlobalKeyPress} from './hotkey';
-import {remote, ipcRenderer} from 'electron';
+import {ipcRenderer, remote} from 'electron';
 import {Find} from './search/Find';
 import {Constants} from './constants';
 import {initSearch} from './search';
@@ -67,7 +67,7 @@ class App {
     private initWindow() {
         const currentWindow = remote.getCurrentWindow();
 
-        if (process.platform !== 'win32') {
+        if (process.platform === 'darwin') {
             document.querySelector('.editors__drag').addEventListener('dblclick', () => {
                 if (currentWindow.isMaximized()) {
                     currentWindow.setSize(1024, 768);
