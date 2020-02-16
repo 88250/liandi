@@ -17,8 +17,7 @@ export class Editors {
         this.saved = true;
         this.element = document.getElementById('editors');
 
-        this.inputElement = document.createElement('input');
-        this.inputElement.className ='editors__input';
+        this.inputElement = document.querySelector('.editors__input');
         this.inputElement.addEventListener('blur', () => {
             rename(liandi, this.inputElement.value, liandi.current.dir.url, liandi.current.path);
         });
@@ -41,11 +40,7 @@ export class Editors {
     remove(liandi: ILiandi) {
         clearTimeout(this.timeoutId);
         this.saveContent(liandi);
-        const inputElement = this.element.querySelector('.editors__input');
-        if (inputElement) {
-            this.element.querySelector('#liandiVditor').remove();
-            this.element.querySelector('.editors__input').remove();
-        }
+        // this.element.querySelector('#liandiVditor').remove();
     }
 
     public saveContent(liandi: ILiandi) {
@@ -64,7 +59,6 @@ export class Editors {
 
     onGet(liandi: ILiandi, file: { content: string, name: string }) {
         if (!this.element.querySelector('.editors__input')) {
-            this.element.appendChild(this.inputElement);
             this.element.appendChild(this.editorElement);
         }
         this.editorElement.innerHTML = '';
@@ -146,3 +140,5 @@ export class Editors {
         });
     }
 }
+
+// new Editors();

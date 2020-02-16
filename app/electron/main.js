@@ -66,10 +66,6 @@ const createWindow = () => {
 
   if (process.env.NODE_ENV === 'development') {
     mainWindow.webContents.openDevTools({mode: 'bottom'})
-    const editorWebview=  document.querySelector('.editors__webview')
-    editorWebview.addEventListener('dom-ready', () => {
-      editorWebview.openDevTools()
-    })
   } else {
     createMenu()
   }

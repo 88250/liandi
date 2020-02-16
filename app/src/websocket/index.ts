@@ -7,7 +7,7 @@ import {lauguage} from '../config/language';
 import {theme} from '../config/theme';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
-import {about} from "../config/about";
+import {about} from '../config/about';
 
 export class WebSocketUtil {
     public webSocket: WebSocket;

@@ -11,7 +11,7 @@ import {Menus} from './menu';
 import {resize} from './util/resize';
 import {initGlobalKeyPress} from './hotkey';
 import {remote, ipcRenderer} from 'electron';
-import {Find} from "./search/Find";
+import {Find} from './search/Find';
 
 class App {
     public liandi: ILiandi;
@@ -23,6 +23,7 @@ class App {
             },
             componentCSS: require('../dist/components.css')[0][1]
         };
+
         this.liandi.ws = new WebSocketUtil(this.liandi, () => {
             this.liandi.navigation = new Navigation();
             this.liandi.files = new Files();
@@ -36,13 +37,21 @@ class App {
             initGlobalKeyPress(this.liandi);
 
             this.initWindow();
-            this.onIpc()
+            this.onIpc();
         });
+
+        // 开发环境打开 editor 调试窗口
+        if (process.env.NODE_ENV === 'development') {
+            const editorWebview = document.querySelector('.editors__webview') as Electron.WebviewTag;
+            editorWebview.addEventListener('dom-ready', () => {
+                editorWebview.openDevTools();
+            });
+        }
     }
 
     private onIpc() {
         ipcRenderer.on('liandi-find-show', () => {
-            this.liandi.find.open()
+            this.liandi.find.open();
         });
         ipcRenderer.on('liandi-editor-save', () => {
             this.liandi.editors.saveContent(this.liandi);

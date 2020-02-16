@@ -72,7 +72,7 @@ declare interface ILiandi {
     };
     find?: {
         open: () => void
-    }
+    };
 }
 
 interface II18n {
