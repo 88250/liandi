@@ -118,7 +118,7 @@ Logo(TBD)
 
 链滴笔记使用 [木兰宽松许可证, 第2版](http://license.coscl.org.cn/MulanPSL2) 开源协议。
 
-### 🛠️ 鸣谢
+### 🙏 鸣谢
 
 * [浏览器端的编辑器 Vditor](https://github.com/Vanessa219/vditor)
 * [对中文语境优化的 Markdown 引擎 Lute](https://github.com/88250/lute)
