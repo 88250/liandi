@@ -10,21 +10,14 @@ export const about = {
         });
     },
     onCheckUpdate: (liandi: ILiandi, result: any) => {
-        console.log(result);
         const outputSpan = document.querySelector('#checkUpdateOutput');
-        if (0 === result.code) {
+        if (!result.data) {
             outputSpan.innerHTML = i18n[liandi.config.lang].alreadyLatestVer;
             return;
         }
-        if (-1 === result.code) {
-            outputSpan.innerHTML = i18n[liandi.config.lang].checkUpdateErr;
-            return;
-        }
-        if (1 === result.code) {
-            let msg = i18n[liandi.config.lang].latestVerIs;
-            msg = msg.replace('{ver}', result.data.ver).replace('{dl', result.data.dl);
-            outputSpan.innerHTML = msg;
-            return;
-        }
+        let msg = i18n[liandi.config.lang].latestVerIs;
+        msg = msg.replace('{ver}', result.data.ver).replace('{dl}', result.data.dl);
+        outputSpan.innerHTML = msg;
+        return;
     }
 };

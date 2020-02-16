@@ -29,18 +29,16 @@ func (cmd *checkupdate) Exec() {
 	_, _, errs := request.Get("https://rhythm.b3log.org/version/liandi").
 		Set("User-Agent", UserAgent).Timeout(7 * time.Second).EndStruct(&result)
 	if nil != errs {
-		Logger.Errorf("Check update failed: %s", errs)
+		Logger.Errorf("检查版本更新失败：%s", errs)
+		ret.Msg = Conf.lang(1)
 		ret.Code = -1
 		Push(ret.Bytes())
 		return
 	}
-	Logger.Infof("检查版本结果 [%s]", result)
+	Logger.Infof("检查版本更新结果 [%s]", result)
 	latestVer := result["ver"].(string)
 	if latestVer > Ver {
-		ret.Code = 1
-		ret.Data = map[string]interface{}{
-			"dl": result["dl"].(string),
-		}
+		ret.Data = map[string]interface{}{"dl": result["dl"].(string), "ver": latestVer}
 	}
 	Push(ret.Bytes())
 }
