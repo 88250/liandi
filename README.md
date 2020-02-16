@@ -49,39 +49,48 @@ Logo(TBD)
 
 * 为 Markdown 而生
   * 支持传统的分屏编辑预览模式
-  * 支持类似 Typora 保留标记符的实时渲染模式
+  * 支持类似 Typora 保留标记符的实时渲染模式 `TBD`
   * 支持所见即所得编辑模式
   * 粘贴 HTML 自动转换为 Markdown
   * Markdown 格式化、语法树实时渲染
   * 支持数学公式、图表、流程图、甘特图、时序图、五线谱
   * 可配置 Markdown 解析渲染细节参数
-    * 是否启用脚注支持
-    * 是否启用 [ToC] 支持
+    * 是否启用脚注支持 `TBD`
+    * 是否启用 [ToC] 支持 `TBD`
     * 是否需要中西文间自动插入空格
     * 是否进行自动术语修正
     * 中文后跟英文逗号句号等标点是否自动替换为中文对应标点
     * 内联数学公式是否允许起始 $ 后紧跟数字
     * 数学公式引擎切换 MathJax、Ketax
-* 支持 WebDAV 挂载本地或远程目录
+* 支持 WebDAV 挂载
 * 支持“快速导航”（Double Shift）
 * 支持全文搜索
 * 支持多主题
-* 支持导出静态站点，内置多套主题模板
+* 支持标签聚合分类 `TBD`
+* 支持导出静态站点，内置多套主题模板 `TBD`
 
 ### 🛠️ 安装
 
-#### 安装包 TBD
+#### 安装包
+
+`TBD`
+
+* [GitHub](https://github.com/88250/liandi/releases)
+* [码云](https://gitee.com/dl88250/liandi/releases)
 
 #### 源码构建
 
 1. 安装 Go、Node 环境
 2. 运行项目根目录下的 build 脚本 
-3. 构建成功后将在 TBD 下生成安装包
+3. 构建成功后将在 app/build 下生成安装包
 
 如果你要修改源码，请按如下步骤搭建开发环境：
 
-1. 在 kernel 目录下构建内核并启动 `go build && ./kernel`
-2. 在 app 目录下构建前端 `npm run dev` 然后启动主进程 `npm run start`
+1. 在 kernel 目录下构建内核并启动
+   * Windows：`go build -o kernel.exe && kernel.exe`
+   * Mac：`go build -o kernel-darwin && ./kernel-darwin`
+   * Linux：`go build -o kernel-linux && ./kernel-linux`
+2. 在 app 目录下构建前端 `npm run dev` 并启动主进程 `npm run start`
 
 ### 🏗️ 技术架构
 
