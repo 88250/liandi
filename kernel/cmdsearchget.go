@@ -23,16 +23,7 @@ func (cmd *searchget) Exec() {
 	url := cmd.param["url"].(string)
 	url = NormalizeURL(url)
 	p := cmd.param["path"].(string)
-	ln := cmd.param["ln"].(float64)
-	col := cmd.param["col"].(float64)
-	Logger.Info(ln, col)
 	content, err := Get(url, p)
-
-	//lines := strings.Split(content, "\n")
-	//hitLn := lines[ln-1]
-	//p0 := hitLn[:(col-1)]
-	// TODO: search
-
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
@@ -43,6 +34,7 @@ func (cmd *searchget) Exec() {
 			"content": content,
 			"url":     url,
 			"path":    p,
+			"index":   cmd.param["index"],
 		}
 	}
 	Push(ret.Bytes())
