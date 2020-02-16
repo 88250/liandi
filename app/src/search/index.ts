@@ -127,6 +127,8 @@ export const initSearch = (liandi: ILiandi) => {
         let target = event.target as HTMLElement;
         while (target && !target.parentElement.isEqualNode(searchPanelElement)) {
             if (target.classList.contains('list__item')) {
+                dialogElement.querySelector('.list__item--current').classList.remove('list__item--current')
+                target.classList.add('list__item--current')
                 quickOpenFile(liandi, dialogElement);
                 event.preventDefault();
                 event.stopPropagation();
