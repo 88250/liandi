@@ -52,20 +52,11 @@ class App {
 
             // 在编辑器内打开链接的处理
             editorWebview.addEventListener('will-navigate', e => {
-                console.log(e)
                 e.preventDefault();
                 editorWebview.stop();
                 editorWebview.getWebContents().stop();
                 shell.openExternal(e.url);
             });
-
-            editorWebview.addEventListener('new-window', e => {
-                console.log(e)
-                e.preventDefault();
-                editorWebview.stop();
-                editorWebview.getWebContents().stop();
-                shell.openExternal(e.url);
-            })
         }
     }
 
