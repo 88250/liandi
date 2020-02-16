@@ -315,6 +315,7 @@ var zhCN = map[int]string{
 	5: "重命名目录 [%s] 下的文件 [%s] 失败：%s",
 	6: "在目录 [%s] 下创建新目录 [%s] 失败：%s",
 	7: "在目录 [%s] 下删除 [%s] 失败：%s",
+	8: "检查更新失败",
 }
 
 var enUS = map[int]string{
@@ -326,6 +327,7 @@ var enUS = map[int]string{
 	5: "Rename dir [%s] file [%s] failed: %s",
 	6: "Create dir [%s] dir [%s] failed: %s",
 	7: "Remove dir [%s] path [%s] failed: %s",
+	8: "Check update failed",
 }
 
 var langs = map[string]map[int]string{

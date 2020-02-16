@@ -31,7 +31,6 @@ export const i18n: II18n = {
         mathEngine: 'Mathematical formula engine',
         checkUpdate: 'Check update',
         alreadyLatestVer: 'Already using the latest ver',
-        checkUpdateErr: 'Check update failed',
         latestVerIs: 'The latest ver is v{ver}, visit <a href="{dl}">here</a> for more details',
     },
     zh_CN: {
@@ -66,7 +65,6 @@ export const i18n: II18n = {
         mathEngine: '数学公式引擎',
         checkUpdate: '检查更新',
         alreadyLatestVer: '已是最新版',
-        checkUpdateErr: '检查版本失败',
         latestVerIs: '最新版为 v{ver}，下载请看<a href="{dl}">这里</a>',
     },
 };
