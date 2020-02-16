@@ -10,7 +10,7 @@ import {Editors} from './editors';
 import {Menus} from './menu';
 import {resize} from './util/resize';
 import {initGlobalKeyPress} from './hotkey';
-import {ipcRenderer, remote} from 'electron';
+import {ipcRenderer, remote, shell} from 'electron';
 import {Find} from './search/Find';
 import {Constants} from './constants';
 import {initSearch} from './search';
@@ -49,6 +49,23 @@ class App {
                 editorWebview.openDevTools();
                 this.liandi.editors.sendMessage(Constants.LIANDI_EDITOR_INIT, this.liandi);
             });
+
+            // 在编辑器内打开链接的处理
+            editorWebview.addEventListener('will-navigate', e => {
+                console.log(e)
+                e.preventDefault();
+                editorWebview.stop();
+                editorWebview.getWebContents().stop();
+                shell.openExternal(e.url);
+            });
+
+            editorWebview.addEventListener('new-window', e => {
+                console.log(e)
+                e.preventDefault();
+                editorWebview.stop();
+                editorWebview.getWebContents().stop();
+                shell.openExternal(e.url);
+            })
         }
     }
 

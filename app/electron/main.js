@@ -135,3 +135,13 @@ app.on('will-quit', () => {
   // 注销所有快捷键
   globalShortcut.unregisterAll()
 })
+
+// 在编辑器内打开链接的处理
+app.on('web-contents-created', function (webContentsCreatedEvent, contents) {
+  if (contents.getType() === 'webview') {
+    contents.on('new-window', function (newWindowEvent, url) {
+      console.log('block');
+      newWindowEvent.preventDefault();
+    });
+  }
+});
