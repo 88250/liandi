@@ -19,7 +19,7 @@ mac:
     - from: "../kernel/kernel-darwin"
       to: "kernel-darwin"
   target:
-    - target: "tar.bz2"
+    - target: "dmg"
 win:
   icon: "public/icon.ico"
   extraResources:
