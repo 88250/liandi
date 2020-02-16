@@ -24,7 +24,7 @@ const createMenu = () => {
 
 const createWindow = () => {
   // 创建浏览器窗口
-  let mainWindow = new BrowserWindow({
+  const mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
     height: 768,
@@ -46,7 +46,7 @@ const createWindow = () => {
 
   // 当前页面链接使用浏览器打开
   mainWindow.webContents.on('will-navigate', (event, url) => {
-    if (url.endsWith('liandi/app/public/index.html')) {
+    if (url.endsWith('public/index.html')) {
       return
     }
     event.preventDefault()
@@ -80,7 +80,13 @@ const createWindow = () => {
     createMenu()
   }
 
-  registerShortcut(mainWindow)
+  mainWindow.on('blur',() => {
+    globalShortcut.unregisterAll()
+  })
+
+  mainWindow.on('focus',() => {
+    registerShortcut(mainWindow)
+  })
 }
 
 const startKernel = () => {
