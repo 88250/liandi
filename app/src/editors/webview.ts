@@ -25,6 +25,11 @@ export class EditorWebview {
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_OPEN, (event, data) => {
             this.onOpen(data.liandi, data.data.content);
+            if (data.liandi.config.theme === 'dark') {
+                document.body.classList.add('theme--dark')
+            } else {
+                document.body.classList.remove('theme--dark')
+            }
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_CLOSE, () => {
             this.saveContent();
@@ -35,6 +40,11 @@ export class EditorWebview {
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_SETTHEME, (event, data) => {
             this.vditor.setTheme(data);
+            if (data === 'dark') {
+                document.body.classList.add('theme--dark')
+            } else {
+                document.body.classList.remove('theme--dark')
+            }
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_RELOAD, (event, data) => {
             this.onOpen(data, this.vditor.getValue());
