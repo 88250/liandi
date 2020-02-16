@@ -1,7 +1,7 @@
 import {remote} from 'electron';
 import {i18n} from '../i18n';
 import {Constants} from '../constants';
-import {destroyDialog, dialog} from '../util/dialog';
+import {bindDialogInput, destroyDialog, dialog} from '../util/dialog';
 import {rename} from '../util/rename';
 import {newFile, newFolder, showInFolder} from './commonMenuItem';
 
@@ -31,10 +31,10 @@ export const initFilesMenu = (liandi: ILiandi) => {
                 destroyDialog();
             });
             dialogElement.querySelector('.button').addEventListener('click', () => {
-                liandi.ws.send('remove',{
-                        url: itemData.url,
-                        path: itemData.path
-                    });
+                liandi.ws.send('remove', {
+                    url: itemData.url,
+                    path: itemData.path
+                });
                 if (liandi.current.dir.url === itemData.url && itemData.path === liandi.current.path) {
                     liandi.editors.sendMessage(Constants.LIANDI_EDITOR_CLOSE);
                     liandi.current.path = '';
@@ -58,18 +58,21 @@ export const initFilesMenu = (liandi: ILiandi) => {
                 width: 400
             });
             const dialogElement = document.querySelector('#dialog');
-            (dialogElement.querySelector('.input') as HTMLElement).focus();
+            const inputElement = dialogElement.querySelector('.input') as HTMLInputElement
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
                 destroyDialog();
             });
             dialogElement.querySelector('.button').addEventListener('click', () => {
-                const newPath = rename(liandi, (dialogElement.querySelector('.input') as HTMLInputElement).value,
+                const newPath = rename(liandi, inputElement.value,
                     itemData.url, itemData.path);
 
                 if (newPath) {
                     destroyDialog();
                 }
             });
+            bindDialogInput(inputElement, () => {
+                (dialogElement.querySelector('.button') as HTMLButtonElement).click();
+            })
         }
     }));
 

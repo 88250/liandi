@@ -60,3 +60,20 @@ export const dialog = (options: {
     dialogMainElement.style.width = `${options.width}px`;
     dialogElement.style.display = 'block';
 };
+
+export const bindDialogInput = (inputElement: HTMLInputElement, enterEvent?: () => void) => {
+    inputElement.focus();
+    inputElement.addEventListener('keydown', (event) => {
+        if (event.isComposing) {
+            return;
+        }
+        if (event.key === 'Escape') {
+            destroyDialog()
+            event.preventDefault();
+        }
+        if (event.key === 'Enter' && enterEvent) {
+            enterEvent()
+            event.preventDefault();
+        }
+    })
+}

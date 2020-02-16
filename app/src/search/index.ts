@@ -96,6 +96,13 @@ export const initSearch = (liandi: ILiandi) => {
         });
     });
     inputElement.addEventListener('keydown', (event: KeyboardEvent) => {
+        if (event.isComposing) {
+            return;
+        }
+        if (event.key === 'Escape') {
+            destroyDialog()
+            event.preventDefault();
+        }
         let currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
 
         if (event.code === 'ArrowDown') {

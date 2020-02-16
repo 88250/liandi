@@ -2,7 +2,7 @@ import {remote, shell} from 'electron';
 import {i18n} from '../i18n';
 import * as path from 'path';
 import {showMessage} from '../util/message';
-import {destroyDialog, dialog} from '../util/dialog';
+import {bindDialogInput, destroyDialog, dialog} from '../util/dialog';
 import {validateName} from '../util/rename';
 import {getPath, removeLastPath} from '../util/path';
 
@@ -45,12 +45,12 @@ export const newFile = (liandi: ILiandi) => {
             });
 
             const dialogElement = document.querySelector('#dialog');
-            (dialogElement.querySelector('.input') as HTMLElement).focus();
+            const inputElement = dialogElement.querySelector('.input') as HTMLInputElement;
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
                 destroyDialog();
             });
             dialogElement.querySelector('.button').addEventListener('click', () => {
-                const name = (dialogElement.querySelector('.input') as HTMLInputElement).value;
+                const name = inputElement.value;
                 if (!validateName(liandi, name)) {
                     return false;
                 }
@@ -66,6 +66,9 @@ export const newFile = (liandi: ILiandi) => {
                 });
                 destroyDialog();
             });
+            bindDialogInput(inputElement, () => {
+                (dialogElement.querySelector('.button') as HTMLButtonElement).click();
+            })
         }
     });
 };
@@ -87,12 +90,12 @@ export const newFolder = (liandi: ILiandi) => {
             });
 
             const dialogElement = document.querySelector('#dialog');
-            (dialogElement.querySelector('.input') as HTMLElement).focus();
+            const inputElement = dialogElement.querySelector('.input') as HTMLInputElement;
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
                 destroyDialog();
             });
             dialogElement.querySelector('.button').addEventListener('click', () => {
-                const name = (dialogElement.querySelector('.input') as HTMLInputElement).value;
+                const name = inputElement.value;
                 if (!validateName(liandi, name)) {
                     return false;
                 }
@@ -107,6 +110,9 @@ export const newFolder = (liandi: ILiandi) => {
                 });
                 destroyDialog();
             });
+            bindDialogInput(inputElement, () => {
+                (dialogElement.querySelector('.button') as HTMLButtonElement).click();
+            })
         }
     });
 };
