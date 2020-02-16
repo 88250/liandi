@@ -27,24 +27,6 @@ Logo(TBD)
 
 **当前项目还处于初始开发阶段，欢迎反馈建议和参与代码贡献**
 
-## 📸 截图
-
-### 明亮主题
-
-![white](https://user-images.githubusercontent.com/873584/74507339-11e16080-4f37-11ea-8700-e9d4ebfa9787.png)
-
-### 暗黑主题
-
-![dark](https://user-images.githubusercontent.com/873584/74507336-0ee67000-4f37-11ea-827c-903644d0de3e.png)
-
-### Markdown 配置
-
-![dark-md](https://user-images.githubusercontent.com/873584/74507501-89af8b00-4f37-11ea-9de2-534aed8c2c78.png)
-
-### 全文搜索
-
-![dark-search](https://user-images.githubusercontent.com/873584/74507506-8c11e500-4f37-11ea-9ff2-b1c41b3be225.png)
-
 ### ✨  特性
 
 * 为 Markdown 而生
@@ -68,6 +50,24 @@ Logo(TBD)
 * 支持多主题
 * 支持标签聚合分类 `TBD`
 * 支持导出静态站点，内置多套主题模板 `TBD`
+
+## 📸 截图
+
+### 明亮主题
+
+![white](https://user-images.githubusercontent.com/873584/74507339-11e16080-4f37-11ea-8700-e9d4ebfa9787.png)
+
+### 暗黑主题
+
+![dark](https://user-images.githubusercontent.com/873584/74507336-0ee67000-4f37-11ea-827c-903644d0de3e.png)
+
+### Markdown 配置
+
+![dark-md](https://user-images.githubusercontent.com/873584/74507501-89af8b00-4f37-11ea-9de2-534aed8c2c78.png)
+
+### 全文搜索
+
+![dark-search](https://user-images.githubusercontent.com/873584/74507506-8c11e500-4f37-11ea-9ff2-b1c41b3be225.png)
 
 ### 🛠️ 安装
 
