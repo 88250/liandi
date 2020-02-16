@@ -13,4 +13,12 @@
     background-color: var(--background-color);
     color: var(--textarea-text-color);
   }
+
+  &__webview--fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+  }
 }
