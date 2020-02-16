@@ -20,8 +20,8 @@ export class EditorWebview {
     }
 
     private onMessage() {
-        ipcRenderer.on(Constants.LIANDI_EDITOR_INIT, (event, data) => {
-            initGlobalKeyPress(data);
+        ipcRenderer.on(Constants.LIANDI_EDITOR_INIT, () => {
+            initGlobalKeyPress();
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_OPEN, (event, data) => {
             this.onOpen(data.liandi, data.data.content);
@@ -48,7 +48,7 @@ export class EditorWebview {
         if (this.editorElement.innerHTML === '') {
             return;
         }
-        ipcRenderer.send(Constants.LIANDI_WEBSOCKET_PUT, this.vditor.getValue());
+        ipcRenderer.sendToHost(Constants.LIANDI_WEBSOCKET_PUT, this.vditor.getValue())
         this.saved = true;
     }
 
@@ -89,8 +89,10 @@ export class EditorWebview {
                     click: (isFullscreen: boolean) => {
                         if (isFullscreen) {
                             ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_FULLSCREEN)
+                            this.vditor.focus()
                         } else {
                             ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_RESTORE)
+                            this.vditor.focus()
                         }
                     },
                 },

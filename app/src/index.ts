@@ -38,26 +38,51 @@ class App {
 
             initGlobalKeyPress(this.liandi);
 
-            this.initWindow();
             this.onIpc();
+            this.initWindow();
+            this.initWebview();
         });
+    }
 
+    private initWebview() {
         // 开发环境打开 editor 调试窗口
+        const editorWebview = document.querySelector('.editors__webview') as Electron.WebviewTag;
         if (process.env.NODE_ENV === 'development') {
-            const editorWebview = document.querySelector('.editors__webview') as Electron.WebviewTag;
             editorWebview.addEventListener('dom-ready', () => {
                 editorWebview.openDevTools();
-                this.liandi.editors.sendMessage(Constants.LIANDI_EDITOR_INIT, this.liandi);
-            });
-
-            // 在编辑器内打开链接的处理
-            editorWebview.addEventListener('will-navigate', e => {
-                e.preventDefault();
-                editorWebview.stop();
-                editorWebview.getWebContents().stop();
-                shell.openExternal(e.url);
+                this.liandi.editors.sendMessage(Constants.LIANDI_EDITOR_INIT);
             });
         }
+        // 在编辑器内打开链接的处理
+        editorWebview.addEventListener('will-navigate', e => {
+            e.preventDefault();
+            editorWebview.stop();
+            editorWebview.getWebContents().stop();
+            shell.openExternal(e.url);
+        });
+
+        editorWebview.addEventListener('ipc-message', (event) => {
+            switch (event.channel) {
+                case Constants.LIANDI_EDITOR_FULLSCREEN:
+                    editorWebview.classList.add('editors__webview--fullscreen')
+                    break
+                case Constants.LIANDI_EDITOR_RESTORE:
+                    editorWebview.classList.remove('editors__webview--fullscreen')
+                    break
+                case Constants.LIANDI_WEBSOCKET_PUT:
+                    this.liandi.ws.send('put', {
+                        url: this.liandi.current.dir.url,
+                        path: this.liandi.current.path,
+                        content: event.args[0]
+                    });
+                    break
+                case Constants.LIANDI_SEARCH_OPEN:
+                    initSearch(this.liandi);
+                    break
+                default:
+                    break;
+            }
+        })
     }
 
     private onIpc() {
@@ -66,9 +91,6 @@ class App {
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_SAVE, () => {
             this.liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SAVE);
-        });
-        ipcRenderer.on(Constants.LIANDI_SEARCH_OPEN, () => {
-            initSearch(this.liandi);
         });
     }
 

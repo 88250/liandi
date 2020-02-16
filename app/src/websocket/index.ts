@@ -8,8 +8,6 @@ import {theme} from '../config/theme';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
 import {about} from '../config/about';
-import {ipcRenderer} from 'electron';
-
 export class WebSocketUtil {
     public webSocket: WebSocket;
     private reqId: number;
@@ -18,14 +16,6 @@ export class WebSocketUtil {
     constructor(liandi: ILiandi, callback: () => void) {
         this.isFirst = true;
         this.connect(liandi, callback);
-
-        ipcRenderer.on(Constants.LIANDI_WEBSOCKET_PUT, (event, data) => {
-            liandi.ws.send('put', {
-                url: liandi.current.dir.url,
-                path: liandi.current.path,
-                content: data
-            });
-        });
     }
 
     public send(cmd: string, param: any, process = false) {
