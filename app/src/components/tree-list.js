@@ -83,7 +83,7 @@ customElements.define('tree-list',
                 })
 
                 target.parentElement.classList.add('list__item--current')
-                window.liandi.liandi.editors.remove(window.liandi.liandi)
+                window.liandi.liandi.editors.sendMessage('liandi-editor-close')
 
                 window.liandi.liandi.ws.send('ls', {
                   url: dir.url,

@@ -1,4 +1,5 @@
 import {i18n} from '../i18n';
+import {Constants} from "../constants";
 
 export const markdown = {
     genHTML: (liandi: ILiandi) => {
@@ -49,6 +50,6 @@ export const markdown = {
     },
     onSetmd: (liandi: ILiandi, md: IMD) => {
         liandi.config.markdown = md;
-        liandi.editors.reload(liandi);
+        liandi.editors.sendMessage(Constants.LIANDI_EDITOR_RELOAD);
     }
 };

@@ -36,8 +36,8 @@ linux:
   target:
     - target: "tar.bz2"
 extraResources:
-  - from: "public/index.html"
-    to: "public/index.html"
+  - from: "public"
+    to: "public"
   - from: "dist"
     to: "dist"
   - from: "node_modules/vditor/dist"

@@ -12,6 +12,7 @@ import {resize} from './util/resize';
 import {initGlobalKeyPress} from './hotkey';
 import {remote, ipcRenderer} from 'electron';
 import {Find} from './search/Find';
+import {Constants} from "./constants";
 
 class App {
     public liandi: ILiandi;
@@ -45,16 +46,17 @@ class App {
             const editorWebview = document.querySelector('.editors__webview') as Electron.WebviewTag;
             editorWebview.addEventListener('dom-ready', () => {
                 editorWebview.openDevTools();
+                this.liandi.editors.sendMessage(Constants.LIANDI_EDITOR_INIT, this.liandi);
             });
         }
     }
 
     private onIpc() {
-        ipcRenderer.on('liandi-find-show', () => {
+        ipcRenderer.on(Constants.LIANDI_FIND_SHOW, () => {
             this.liandi.find.open();
         });
-        ipcRenderer.on('liandi-editor-save', () => {
-            this.liandi.editors.saveContent(this.liandi);
+        ipcRenderer.on(Constants.LIANDI_EDITOR_SAVE, () => {
+            this.liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SAVE);
         });
     }
 

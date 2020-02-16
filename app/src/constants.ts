@@ -3,4 +3,14 @@ export abstract class Constants {
     public static readonly WEBDAV_ADDRESS: string = 'http://127.0.0.1:6807/webdav';
     public static readonly UPLOAD_ADDRESS: string = 'http://127.0.0.1:6806/upload';
     public static readonly DOUBLE_DELTA: number = 500;
+
+
+    public static readonly LIANDI_EDITOR_INIT: string = 'liandi-editor-init';
+    public static readonly LIANDI_EDITOR_SAVE: string = 'liandi-editor-save';
+    public static readonly LIANDI_EDITOR_RELOAD: string = 'liandi-editor-reload';
+    public static readonly LIANDI_EDITOR_SETTHEME: string = 'liandi-editor-settheme';
+    public static readonly LIANDI_EDITOR_OPEN: string = 'liandi-editor-open';
+    public static readonly LIANDI_EDITOR_CLOSE: string = 'liandi-editor-close';
+
+    public static readonly LIANDI_FIND_SHOW: string = 'liandi-find-show';
 }

@@ -90,7 +90,6 @@ export class WebSocketUtil {
                     break;
                 case 'put':
                     showMessage(i18n[liandi.config.lang].saveSuccess);
-                    liandi.editors.saved = true;
                     break;
                 case 'lsd':
                     liandi.navigation.onLsd(liandi, response.data);
@@ -110,7 +109,7 @@ export class WebSocketUtil {
                     liandi.files.onLs(liandi, response.data);
                     break;
                 case 'get':
-                    liandi.editors.onGet(liandi, response.data);
+                    liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, response.data);
                     break;
                 case 'dirs':
                     if (response.data.length === 0) {

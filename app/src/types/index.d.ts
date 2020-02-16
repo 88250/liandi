@@ -49,14 +49,8 @@ declare interface ILiandi {
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
     };
     editors?: {
-        element: HTMLElement
-        inputElement: HTMLInputElement
-        saved: boolean
-        vditor: any
-        saveContent: (liandi: ILiandi) => void
-        remove: (liandi: ILiandi) => void
-        onGet: (liandi: ILiandi, file: { name: string, content: string }) => void
-        reload: (liandi: ILiandi) => void
+        isOpen: boolean
+        sendMessage: (message: string, data?: any) => void;
     };
     menus?: {
         itemData: {

@@ -36,7 +36,7 @@ export const initFilesMenu = (liandi: ILiandi) => {
                         path: itemData.path
                     });
                 if (liandi.current.dir.url === itemData.url && itemData.path === liandi.current.path) {
-                    liandi.editors.element.innerHTML = '';
+                    liandi.editors.sendMessage(Constants.LIANDI_EDITOR_CLOSE);
                     liandi.current.path = '';
                 }
                 destroyDialog();

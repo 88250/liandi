@@ -6,11 +6,12 @@ import {theme} from '../config/theme';
 import {initConfigSearch} from '../config/search';
 import {getPath, removeLastPath} from '../util/path';
 import {markdown} from '../config/markdown';
+import {Constants} from "../constants";
 
 export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
 
-    liandi.editors.saveContent(liandi);
+    liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SAVE);
 
     const currentNavigationElement =
         liandi.navigation.element.querySelector(`tree-list[url="${currentList.getAttribute('data-url')}"]`);
