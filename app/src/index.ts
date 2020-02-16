@@ -67,7 +67,7 @@ class App {
     private initWindow() {
         const currentWindow = remote.getCurrentWindow();
 
-        if (process.platform !== 'win32') {
+        if (process.platform !== 'darwin') {
             document.querySelector('.editors__drag').addEventListener('dblclick', () => {
                 if (currentWindow.isMaximized()) {
                     currentWindow.setSize(1024, 768);
