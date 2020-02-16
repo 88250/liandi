@@ -64,8 +64,14 @@ const createWindow = () => {
     mainWindow.webContents.stopFindInPage('keepSelection')
   })
 
+  // editor webview 发送给主线程，再由主线程发送给主页面进行保存
   ipcMain.on('liandi-websocket-put', (event, options) => {
     mainWindow.webContents.send('liandi-websocket-put', options)
+  })
+
+  // editor webview 发送给主线程，再由主线程发送给主页面进 double shift
+  ipcMain.on('liandi-search-open', () => {
+    mainWindow.webContents.send('liandi-search-open')
   })
 
   if (process.env.NODE_ENV === 'development') {
