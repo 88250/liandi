@@ -120,6 +120,10 @@ export class WebSocketUtil {
                 case 'get':
                     liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, response.data, liandi);
                     break;
+                case 'searchget':
+                    liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, response.data, liandi);
+                    liandi.find.open(response.data.key, parseInt(response.data.index, 10));
+                    break;
                 case 'dirs':
                     if (response.data.length === 0) {
                         showMountDialog(liandi);

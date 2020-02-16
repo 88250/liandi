@@ -74,11 +74,21 @@ export class Find extends EventEmitter {
         });
     }
 
-    open() {
+    open(key = '', index?: number) {
         const findElement = document.querySelector('.find') as HTMLElement;
         findElement.style.display = 'flex';
-        this.inputElement.value = '';
+        this.inputElement.value = key;
         this.inputElement.focus();
         (document.querySelector('.editors__drag') as HTMLElement).style.marginRight = '408px';
+
+        if (typeof index === 'number') {
+            for (let i = 0; i <= index; i++) {
+                if (i === 0) {
+                    this.nextEvent();
+                } else {
+                    this.nextEvent(true, true);
+                }
+            }
+        }
     }
 }

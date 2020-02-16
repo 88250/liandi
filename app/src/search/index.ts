@@ -32,9 +32,11 @@ export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
         url: liandi.current.dir.url,
         path: getPath(liandi.current.path)
     });
-    liandi.ws.send('get', {
+    liandi.ws.send('searchget', {
         url: liandi.current.dir.url,
-        path: liandi.current.path
+        path: liandi.current.path,
+        index: currentList.getAttribute('data-index'),
+        key: (dialogElement.querySelector('.input') as HTMLInputElement).value
     });
     destroyDialog();
 };
@@ -148,14 +150,15 @@ export const initSearch = (liandi: ILiandi) => {
 export const onSearch = (liandi: ILiandi, data: {
     url: string
     path: string
-    content: string,
+    content: string
     ln: number
     col: number
+    index: number
 }[]) => {
     let resultHTML = '';
     data.forEach((item, index) => {
         resultHTML += `<div class="list__item fn__flex${index === 0 ? ' list__item--current' : ''}"
-title="${item.content}" data-url="${item.url}" data-path="${item.path}">
+title="${item.content}" data-url="${item.url}" data-path="${item.path}" data-index="${item.index}">
 <span class="fn__flex-1 fn__ellipsis">${item.content}</span>
 <span class="fn__space"></span>
 <span class="ft__smaller ft__secondary">${item.path} ${item.ln}:${item.col}</span>
