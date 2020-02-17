@@ -83,6 +83,7 @@ func Upload(c *gin.Context) {
 	ret.Data = map[string]interface{}{
 		"errFiles": errFiles,
 		"succMap":  succMap,
+		"linkBase": path.Join(u, p),
 	}
 
 	c.JSON(200, ret)
