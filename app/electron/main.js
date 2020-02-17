@@ -3,7 +3,7 @@ const {spawn} = require('child_process')
 const path = require('path')
 
 const createWindow = () => {
-  console.log(screen.getPrimaryDisplay())
+  console.log(screen.getPrimaryDisplay());
   // 创建浏览器窗口
   const mainWindow = new BrowserWindow({
     show: false,
