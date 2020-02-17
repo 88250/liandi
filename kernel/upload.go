@@ -41,6 +41,10 @@ func Upload(c *gin.Context) {
 
 	errFiles := []string{}
 	succMap := map[string]interface{}{}
+	linkBase := path.Join(u, p)
+	if "markdown" == mode {
+		linkBase = ""
+	}
 	for _, file := range files {
 		fname := file.Filename
 		f, err := file.Open()
@@ -78,17 +82,12 @@ func Upload(c *gin.Context) {
 			break
 		}
 
-		succMap[file.Filename] = fname
+		succMap[file.Filename] = path.Join(linkBase, fname)
 	}
 
-	linkBase := path.Join(u, p)
-	if "markdown" == mode {
-		linkBase = ""
-	}
 	ret.Data = map[string]interface{}{
 		"errFiles": errFiles,
 		"succMap":  succMap,
-		"linkBase": linkBase,
 	}
 
 	c.JSON(200, ret)
