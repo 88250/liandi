@@ -5,9 +5,11 @@
 body {
   border: 0;
   height: 100%;
+  padding-top: 20px;
+  box-sizing: border-box;
 }
 
-.vditor {
+#liandiVditor {
   border-width: 1px 0 0 0;
   border-radius: 0;
   height: 100%;
@@ -15,10 +17,6 @@ body {
   &-preview {
     background-color: var(--focus-background-color);
   }
-}
-
-#liandiVditor {
-  margin-top: 20px;
 
   .vditor-tooltipped__n:before, .vditor-tooltipped__ne:before, .vditor-tooltipped__nw:before {
     top: 5px;
