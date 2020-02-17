@@ -4,9 +4,7 @@
 
 body {
   border: 0;
-  height: 100%;
   padding-top: 20px;
-  box-sizing: border-box;
 }
 
 #liandiVditor {
@@ -16,6 +14,10 @@ body {
 
   &-preview {
     background-color: var(--focus-background-color);
+  }
+
+  &.vditor--fullscreen {
+    border-top-color: var(--toolbar-background-color);
   }
 
   .vditor-tooltipped__n:before, .vditor-tooltipped__ne:before, .vditor-tooltipped__nw:before {

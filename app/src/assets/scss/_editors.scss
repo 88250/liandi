@@ -16,9 +16,11 @@
 
   &__webview--fullscreen {
     position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
+    top: 1px;
+    left: 1px;
+    bottom: 1px;
+    right: 1px;
+    -webkit-app-region: no-drag;
+    z-index: 1;
   }
 }
