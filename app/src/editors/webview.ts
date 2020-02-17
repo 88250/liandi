@@ -41,12 +41,12 @@ export class EditorWebview {
             this.saveContent();
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_SETTHEME, (event, data) => {
-            this.vditor.setTheme(data);
-            if (data === 'dark') {
+            if (data.config.theme === 'dark') {
                 document.body.classList.add('theme--dark')
             } else {
                 document.body.classList.remove('theme--dark')
             }
+            this.onOpen(data, this.vditor.getValue());
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_RELOAD, (event, data) => {
             this.onOpen(data, this.vditor.getValue());
@@ -68,6 +68,7 @@ export class EditorWebview {
         this.editorElement.innerHTML = '';
         const linkBase = path.join(liandi.current.dir.url, getPath(liandi.current.path));
         this.vditor = new Vditor('liandiVditor', {
+            typewriterMode: true,
             toolbar: [
                 'emoji',
                 'headings',
@@ -125,6 +126,9 @@ export class EditorWebview {
                     inlineDigit: liandi.config.markdown.inlineMathAllowDigitAfterOpenMarker,
                     engine: liandi.config.markdown.mathEngine,
                 },
+                hljs: {
+                    style: liandi.config.theme === 'dark' ?'native': 'github'
+                }
             },
             upload: {
                 filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),

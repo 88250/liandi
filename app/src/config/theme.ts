@@ -19,12 +19,12 @@ export const theme = {
         if (themeName === 'dark') {
             document.body.classList.add('theme--dark');
             if (liandi.editors.isOpen) {
-                liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SETTHEME, 'dark');
+                liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SETTHEME, liandi);
             }
         } else {
             document.body.classList.remove('theme--dark');
             if (liandi.editors.isOpen) {
-                liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SETTHEME, 'classic');
+                liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SETTHEME, liandi);
             }
         }
     }
