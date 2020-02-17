@@ -22,7 +22,7 @@ $barHeight: 20px !default;
   --input-background-color: var(--background-color);
 
   --scroll-bar-thumb-background-color: rgba(0, 0, 0, 0.2);
-  --scroll-bar-thumb-background-color-active: rgba(0, 0, 0, 0.5);
+  --scroll-bar-thumb-background-color-active: rgba(0, 0, 0, 0.3);
 }
 
 body.theme--dark {
@@ -35,7 +35,7 @@ body.theme--dark {
 
   --input-background-color: #1d2125;
 
-  --scroll-bar-thumb-background-color: rgba(0, 0, 0, 0.7);
-  --scroll-bar-thumb-background-color-active: rgba(0, 0, 0, 0.8);
+  --scroll-bar-thumb-background-color: rgba(209, 213, 218, 0.36);
+  --scroll-bar-thumb-background-color-active: rgba(209, 213, 218, 0.48);
 }
 
