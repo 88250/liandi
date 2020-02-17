@@ -85,7 +85,6 @@ export class EditorWebview {
                 'inline-code',
                 '|',
                 'upload',
-                'record',
                 'table',
                 '|',
                 'undo',
@@ -127,21 +126,21 @@ export class EditorWebview {
                     engine: liandi.config.markdown.mathEngine,
                 },
             },
-            value,
             upload: {
                 filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
                 url: Constants.UPLOAD_ADDRESS,
-                headers: {
-                    'X-URL': encodeURIComponent(liandi.current.dir.url),
-                    'X-PATH': encodeURIComponent(liandi.current.path)
+                file: (files: File[]) => {
+                    this.vditor.vditor.options.upload.headers = {
+                        'X-URL': encodeURIComponent(liandi.current.dir.url),
+                        'X-PATH': encodeURIComponent(liandi.current.path),
+                        'X-Mode': this.vditor.vditor.currentMode
+                    };
+                    return files
                 }
             },
             after: () => {
                 this.vditor.vditor.lute.SetLinkBase(linkBase);
-                this.vditor.vditor.options.upload.headers = {
-                    'X-URL': encodeURIComponent(liandi.current.dir.url),
-                    'X-PATH': encodeURIComponent(liandi.current.path)
-                };
+                this.vditor.setValue(value);
             },
             input: () => {
                 this.saved = false;
