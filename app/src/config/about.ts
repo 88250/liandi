@@ -9,7 +9,8 @@ export const about = {
     <strong class="fn__flex-center">${i18n[liandi.config.lang].slogan}</strong>
 </div>
 <div class="about__item">
-    <span class="ft__secondary ft__smaller">${i18n[liandi.config.lang].currentVer} v${packageJSON.version}</span>
+    <div>${i18n[liandi.config.lang].currentVer} v${packageJSON.version}</div>
+    <div class="fn__hr--s"></div>
     <button class="button">${i18n[liandi.config.lang].checkUpdate}</button>
     <span class="ft__secondary ft__smaller" id="configAboutUpdateTip"></span>
 </div>
