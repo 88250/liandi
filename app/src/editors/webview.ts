@@ -1,10 +1,8 @@
 import '../assets/scss/editor.scss';
 import {Constants} from '../constants';
-import {getPath} from '../util/path';
+import {getPath, urlJoin} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
 import {ipcRenderer} from 'electron';
-import * as path from "path";
-import {platform} from "os";
 
 const Vditor = require('vditor');
 
@@ -67,7 +65,6 @@ export class EditorWebview {
 
     private onOpen(liandi: ILiandi, value: string) {
         this.editorElement.innerHTML = '';
-        const linkBase = path.join(liandi.current.dir.url, getPath(liandi.current.path));
         this.vditor = new Vditor('liandiVditor', {
             typewriterMode: true,
             toolbar: [
@@ -150,7 +147,7 @@ export class EditorWebview {
                 }
             },
             after: () => {
-                this.vditor.vditor.lute.SetLinkBase(linkBase);
+                this.vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
                 this.vditor.setValue(value);
             },
             input: () => {

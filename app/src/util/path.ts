@@ -21,3 +21,15 @@ export const getPath = (path: string) => {
     }
     return path.substr(0, path.lastIndexOf('/') + 1);
 };
+
+export const urlJoin = (url1: string, url2: string) => {
+    if (url1.endsWith('/')) {
+        url1 = url1.substr(0, url1.length - 1)
+    }
+
+    if (url2.startsWith('/')) {
+        url2 = url2.substring(1)
+    }
+
+    return `${url1}/${url2}`
+}

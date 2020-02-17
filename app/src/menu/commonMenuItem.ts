@@ -4,7 +4,7 @@ import * as path from 'path';
 import {showMessage} from '../util/message';
 import {bindDialogInput, destroyDialog, dialog} from '../util/dialog';
 import {validateName} from '../util/rename';
-import {getPath, removeLastPath} from '../util/path';
+import {getPath, removeLastPath, urlJoin} from '../util/path';
 
 export const showInFolder = (liandi: ILiandi) => {
     return new remote.MenuItem({
@@ -22,7 +22,7 @@ export const showInFolder = (liandi: ILiandi) => {
                 if (liandi.current.dir.path) {
                     shell.showItemInFolder(path.join(liandi.current.dir.path, itemData.path));
                 } else {
-                    showMessage(path.join(liandi.current.dir.url, itemData.path));
+                    showMessage(urlJoin(liandi.current.dir.url, itemData.path));
                 }
             }
         }
