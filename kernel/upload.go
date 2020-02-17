@@ -30,7 +30,8 @@ func Upload(c *gin.Context) {
 	p := c.GetHeader("X-Path")
 	p, _ = url.PathUnescape(p)
 	p = path.Dir(p)
-	p = p[1:] // 去掉开头的 /
+	p = p[1:]                     // 去掉开头的 /
+	mode := c.GetHeader("X-Mode") // markdown, wysiwyg
 	dir := Conf.dir(u)
 	if nil == dir {
 		ret.Code = -1
@@ -80,10 +81,14 @@ func Upload(c *gin.Context) {
 		succMap[file.Filename] = fname
 	}
 
+	linkBase := path.Join(u, p)
+	if "markdown" == mode {
+		linkBase = ""
+	}
 	ret.Data = map[string]interface{}{
 		"errFiles": errFiles,
 		"succMap":  succMap,
-		"linkBase": path.Join(u, p),
+		"linkBase": linkBase,
 	}
 
 	c.JSON(200, ret)
