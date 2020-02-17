@@ -1,6 +1,6 @@
 <p align="center">
 <img alt="LianDi" src="https://user-images.githubusercontent.com/873584/74642382-d7352d80-51ad-11ea-8a70-d73beb9534e4.png">
-<br><br>
+<br>
 <em>链滴笔记，连接点滴</em>
 <br><br>
 <a title="Build Status" target="_blank" href="https://travis-ci.org/88250/liandi"><img src="https://img.shields.io/travis/88250/liandi.svg?style=flat-square"></a>
