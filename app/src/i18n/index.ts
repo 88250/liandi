@@ -1,5 +1,6 @@
 export const i18n: II18n = {
     en_US: {
+        title: 'LianDi',
         newFile: 'New Doc',
         newFolder: 'New Folder',
         unMount: 'Unmount',
@@ -34,6 +35,7 @@ export const i18n: II18n = {
         latestVerIs: 'The latest ver is v{ver}, visit <a href="{dl}">here</a> for more details',
     },
     zh_CN: {
+        title: '链滴笔记',
         newFile: '新建文档',
         newFolder: '新建文件夹',
         unMount: '取消挂载',

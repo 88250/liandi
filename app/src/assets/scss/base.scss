@@ -122,3 +122,18 @@ tab-panel {
     }
   }
 }
+
+.about {
+  &__item {
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 0;
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+  &__logo {
+    height: 48px;
+    width: 48px;
+    margin-right: 10px;
+  }
+}

@@ -50,6 +50,15 @@ const createWindow = () => {
     createMenu()
   }
 
+  // 当前页面链接使用浏览器打开
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    if (url.endsWith('public/index.html')) {
+      return
+    }
+    event.preventDefault()
+    shell.openExternal(url)
+  })
+
   mainWindow.on('blur',() => {
     globalShortcut.unregisterAll()
   })

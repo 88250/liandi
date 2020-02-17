@@ -16,13 +16,11 @@ export class EditorWebview {
         this.saved = true;
         this.editorElement = document.getElementById('liandiVditor');
 
+        initGlobalKeyPress();
         this.onMessage();
     }
 
     private onMessage() {
-        ipcRenderer.on(Constants.LIANDI_EDITOR_INIT, () => {
-            initGlobalKeyPress();
-        });
         ipcRenderer.on(Constants.LIANDI_EDITOR_OPEN, (event, data) => {
             this.onOpen(data.liandi, data.data.content);
             if (data.liandi.config.theme === 'dark') {

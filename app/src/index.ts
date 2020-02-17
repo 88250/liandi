@@ -45,14 +45,7 @@ class App {
     }
 
     private initWebview() {
-        // 开发环境打开 editor 调试窗口
         const editorWebview = document.querySelector('.editors__webview') as Electron.WebviewTag;
-        if (process.env.NODE_ENV === 'development') {
-            editorWebview.addEventListener('dom-ready', () => {
-                editorWebview.openDevTools();
-                this.liandi.editors.sendMessage(Constants.LIANDI_EDITOR_INIT);
-            });
-        }
         // 在编辑器内打开链接的处理
         editorWebview.addEventListener('will-navigate', e => {
             e.preventDefault();

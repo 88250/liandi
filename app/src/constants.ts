@@ -5,7 +5,6 @@ export abstract class Constants {
     public static readonly DOUBLE_DELTA: number = 500;
 
 
-    public static readonly LIANDI_EDITOR_INIT: string = 'liandi-editor-init';
     public static readonly LIANDI_EDITOR_SAVE: string = 'liandi-editor-save';
     public static readonly LIANDI_EDITOR_RELOAD: string = 'liandi-editor-reload';
     public static readonly LIANDI_EDITOR_SETTHEME: string = 'liandi-editor-settheme';
