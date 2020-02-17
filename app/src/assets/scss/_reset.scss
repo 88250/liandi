@@ -19,33 +19,25 @@ body {
 
   &.body--win32 {
     ::-webkit-scrollbar {
-      width: 5px;
-
+      width: 8px;
+      background: transparent;
+      cursor: pointer;
       &:window-inactive {
         display: none;
       }
     }
-
-    ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
-      background: transparent;
-      cursor: pointer;
+    ::-webkit-scrollbar-track {
+        background-color: transparent
     }
-
     ::-webkit-scrollbar-thumb {
       background-color: var(--scroll-bar-thumb-background-color);
-      border-radius: 5px;
-      border-color: transparent;
-      border-style: solid;
-      border-width: 3px;
       background-clip: padding-box;
+      cursor: pointer;
+      opacity: 0.3;
 
       &:active,
       &:hover {
-        border-width: 1px;
         background-color: var(--scroll-bar-thumb-background-color-active);
-        cursor: pointer;
       }
     }
   }
