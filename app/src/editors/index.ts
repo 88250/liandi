@@ -16,10 +16,6 @@ export class Editors {
         });
 
         this.editorWebviewElement = editorElement.querySelector('.editors__webview');
-
-        if (process.platform === 'win32') {
-            document.body.classList.add('body--win32')
-        }
     }
 
     sendMessage(message: string, data?: any, liandi?: ILiandi) {

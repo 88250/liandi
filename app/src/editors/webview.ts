@@ -18,6 +18,9 @@ export class EditorWebview {
 
         initGlobalKeyPress();
         this.onMessage();
+        if (process.platform === 'win32') {
+            document.body.classList.add('body--win32')
+        }
     }
 
     private onMessage() {
