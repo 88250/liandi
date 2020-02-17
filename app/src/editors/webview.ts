@@ -3,6 +3,7 @@ import {Constants} from '../constants';
 import {getPath} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
 import {ipcRenderer} from 'electron';
+import * as path from "path";
 
 const Vditor = require('vditor');
 
@@ -65,7 +66,7 @@ export class EditorWebview {
 
     private onOpen(liandi: ILiandi, value: string) {
         this.editorElement.innerHTML = '';
-        const linkBase = liandi.current.dir.url + getPath(liandi.current.path);
+        const linkBase = path.join(liandi.current.dir.url, getPath(liandi.current.path));
         this.vditor = new Vditor('liandiVditor', {
             toolbar: [
                 'emoji',
