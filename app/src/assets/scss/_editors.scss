@@ -16,10 +16,10 @@
 
   &__webview--fullscreen {
     position: fixed;
-    top: 1px;
-    left: 1px;
-    bottom: 1px;
-    right: 1px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     -webkit-app-region: no-drag;
     z-index: 1;
   }

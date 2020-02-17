@@ -14,8 +14,6 @@ body {
   -webkit-overflow-scrolling: touch;
   height: 100%;
   transition: $transition;
-  border: 1px solid #707070;
-  border-top-color: transparent;
   box-sizing: border-box;
 
   &.body--blur {
@@ -23,6 +21,16 @@ body {
   }
 
   &.body--win32 {
+    border: 1px solid #707070;
+    border-top-color: transparent;
+
+    .editors__webview--fullscreen {
+      top: 1px;
+      left: 1px;
+      bottom: 1px;
+      right: 1px;
+    }
+
     ::-webkit-scrollbar {
       width: 8px;
       background: transparent;

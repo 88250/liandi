@@ -4,6 +4,7 @@ import {getPath} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
 import {ipcRenderer} from 'electron';
 import * as path from "path";
+import {platform} from "os";
 
 const Vditor = require('vditor');
 
@@ -102,9 +103,15 @@ export class EditorWebview {
                         if (isFullscreen) {
                             ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_FULLSCREEN)
                             this.vditor.focus()
+                            if (process.platform === 'darwin') {
+                                (document.querySelector('.vditor-toolbar') as HTMLElement).style.paddingLeft = '70px'
+                            }
                         } else {
                             ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_RESTORE)
                             this.vditor.focus()
+                            if (process.platform === 'darwin') {
+                                (document.querySelector('.vditor-toolbar') as HTMLElement).style.paddingLeft = '0'
+                            }
                         }
                     },
                 },
