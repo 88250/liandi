@@ -9,8 +9,9 @@ export const initGlobalKeyPress = (liandi?: ILiandi) => {
         // 快捷搜素
         if (event.key === 'Shift') {
             let thisKeypressTime = new Date().getTime();
-            if (thisKeypressTime - lastKeypressTime <= Constants.DOUBLE_DELTA) {
-                thisKeypressTime = 0;
+            if (thisKeypressTime - lastKeypressTime <= Constants.DOUBLE_DELTA
+                && thisKeypressTime - lastKeypressTime >= 50) { // 防止 win32 长按
+                lastKeypressTime = 0
                 if (liandi) {
                     initSearch(liandi);
                 } else {
