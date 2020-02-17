@@ -35,7 +35,7 @@
     }
 
     &:hover {
-      background-color: #e5e5e5;
+      background-color: var(--scroll-bar-thumb-background-color);
       color: #24292e;
     }
 
