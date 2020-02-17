@@ -10,7 +10,7 @@ import {Editors} from './editors';
 import {Menus} from './menu';
 import {resize} from './util/resize';
 import {initGlobalKeyPress} from './hotkey';
-import {ipcRenderer, remote, shell, screen} from 'electron';
+import {ipcRenderer, remote, shell} from 'electron';
 import {Find} from './search/Find';
 import {Constants} from './constants';
 import {initSearch} from './search';
