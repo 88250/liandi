@@ -1,4 +1,4 @@
-const {app, BrowserWindow, shell, Menu, globalShortcut} = require('electron')
+const {app, BrowserWindow, shell, Menu, globalShortcut, screen} = require('electron')
 const {spawn} = require('child_process')
 const path = require('path')
 
@@ -6,8 +6,8 @@ const createWindow = () => {
   // 创建浏览器窗口
   const mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 768,
+    width: screen.getPrimaryDisplay().workArea.width * 0.8,
+    height: screen.getPrimaryDisplay().workArea.height * 0.8,
     webPreferences: {
       nodeIntegration: true,
       nativeWindowOpen: true,
