@@ -1,5 +1,5 @@
 <p align="center">
-Logo(TBD)
+<img alt="LianDi" src="https://user-images.githubusercontent.com/873584/74642382-d7352d80-51ad-11ea-8a70-d73beb9534e4.png">
 <br><br>
 <em>链滴笔记，连接点滴</em>
 <br><br>
