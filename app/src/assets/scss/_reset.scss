@@ -14,8 +14,12 @@ body {
   -webkit-overflow-scrolling: touch;
   height: 100%;
   transition: $transition;
-  border: 1px solid var(--border-color);
+  border: 1px solid #707070;
   box-sizing: border-box;
+
+  &.body--blur {
+    border-top: #aaa;
+  }
 
   &.body--win32 {
     ::-webkit-scrollbar {

@@ -89,7 +89,16 @@ class App {
 
     private initWindow() {
         const currentWindow = remote.getCurrentWindow();
+        currentWindow.on('blur', () => {
+            document.body.classList.add('body--blur')
+        })
 
+        currentWindow.on('focus', () => {
+            document.body.classList.remove('body--blur')
+        })
+
+
+        // window action
         if (process.platform === 'darwin') {
             document.querySelector('.editors__drag').addEventListener('dblclick', () => {
                 if (currentWindow.isMaximized()) {
