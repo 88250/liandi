@@ -1,4 +1,4 @@
-const {app, BrowserWindow, shell, Menu, globalShortcut, ipcMain} = require('electron')
+const {app, BrowserWindow, shell, Menu, globalShortcut, ipcMain, screen} = require('electron')
 const {spawn} = require('child_process')
 const path = require('path')
 
@@ -23,11 +23,13 @@ const createMenu = () => {
 }
 
 const createWindow = () => {
+  const width = screen.getPrimaryDisplay().workArea.width * 0.8;
+  const height = screen.getPrimaryDisplay().workArea.height * 0.8
   // 创建浏览器窗口
   const mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 768,
+    width: width,
+    height: height,
     webPreferences: {
       nodeIntegration: true,
       nativeWindowOpen: true,
