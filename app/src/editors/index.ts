@@ -1,6 +1,5 @@
 import {rename} from '../util/rename';
 import {Constants} from '../constants';
-import {ipcRenderer} from 'electron';
 
 export class Editors {
     public isOpen: boolean;
@@ -17,6 +16,10 @@ export class Editors {
         });
 
         this.editorWebviewElement = editorElement.querySelector('.editors__webview');
+
+        if (process.platform === 'win32') {
+            document.body.classList.add('body--win32')
+        }
     }
 
     sendMessage(message: string, data?: any, liandi?: ILiandi) {

@@ -20,6 +20,9 @@ $barHeight: 20px !default;
   --focus-background-color: #ebeef1;
 
   --input-background-color: var(--background-color);
+
+  --scroll-bar-thumb-background-color: rgba(0, 0, 0, 0.2);
+  --scroll-bar-thumb-background-color-active: rgba(0, 0, 0, 0.5);
 }
 
 body.theme--dark {
@@ -31,5 +34,8 @@ body.theme--dark {
   --focus-background-color: #444d56;
 
   --input-background-color: #1d2125;
+
+  --scroll-bar-thumb-background-color: rgba(0, 0, 0, 0.7);
+  --scroll-bar-thumb-background-color-active: rgba(0, 0, 0, 0.8);
 }
 

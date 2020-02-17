@@ -101,6 +101,10 @@ class App {
             return;
         }
 
+        if (process.platform === 'win32') {
+            document.body.classList.add('body--win32')
+        }
+
         document.querySelector('.navigation').classList.add('navigation--win32');
         const maxBtnElement = document.getElementById('maxWindow');
         const restoreBtnElement = document.getElementById('restoreWindow');
