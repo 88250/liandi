@@ -16,13 +16,13 @@ body {
   transition: $transition;
   box-sizing: border-box;
 
-  &.body--blur {
-    border-color: #aaa;
-  }
 
   &.body--win32 {
     border: 1px solid #707070;
     border-top-color: transparent;
+    &.body--blur {
+      border-color: #aaa;
+    }
 
     .editors__webview--fullscreen {
       top: 1px;
