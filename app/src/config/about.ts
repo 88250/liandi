@@ -5,7 +5,7 @@ export const about = {
     genHTML: (liandi: ILiandi) => {
         return `<div class="about">
 <div class="about__item fn__flex">
-    <img src="../public/icon.ico" class="about__logo">
+    <img src="../public/icon.png" class="about__logo">
     <strong class="fn__flex-center">${i18n[liandi.config.lang].slogan}</strong>
 </div>
 <div class="about__item">
