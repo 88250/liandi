@@ -45,7 +45,7 @@
     * 内联数学公式是否允许起始 $ 后紧跟数字
     * 数学公式引擎切换 MathJax、Ketax
 * 支持 WebDAV 挂载
-* 支持“快速导航”（Double Shift）
+* 支持 Double Shift 快速导航
 * 支持全文搜索
 * 支持多主题
 * 支持标签聚合分类 `TBD`
