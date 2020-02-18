@@ -12,10 +12,6 @@ body {
   border-radius: 0;
   height: 100%;
 
-  .vditor-preview {
-    background-color: var(--focus-background-color);
-  }
-
   &.vditor--fullscreen {
     border-top-color: var(--toolbar-background-color);
   }
