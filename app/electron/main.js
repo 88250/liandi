@@ -21,7 +21,7 @@ const createWindow = () => {
     mainWindow.show()
   })
 
-  // 加载index.html文件
+  // 加载主界面
   mainWindow.loadFile('../public/index.html')
 
   if (process.env.NODE_ENV === 'development') {
