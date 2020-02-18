@@ -1,10 +1,11 @@
 import {Constants} from '../constants';
+import {i18n} from "../i18n";
 
 export const theme = {
     genHTML: (liandi: ILiandi) => {
         return `<select class="input">
-    <option value="white" ${liandi.config.theme === 'white' ? 'selected' : ''}>White</option>
-    <option value="dark" ${liandi.config.theme === 'dark' ? 'selected' : ''}>Dark</option>
+    <option value="white" ${liandi.config.theme === 'white' ? 'selected' : ''}>${i18n[liandi.config.lang].themeWhite}</option>
+    <option value="dark" ${liandi.config.theme === 'dark' ? 'selected' : ''}>${i18n[liandi.config.lang].themeDark}</option>
 </select>`;
     },
     bindEvent: (liandi: ILiandi, element: HTMLElement) => {

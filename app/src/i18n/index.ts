@@ -34,6 +34,8 @@ export const i18n: II18n = {
         alreadyLatestVer: 'Already using the latest ver',
         latestVerIs: 'The latest ver is v{ver}, visit <a href="{dl}">here</a> for more details',
         currentVer: 'Current ver',
+        themeWhite: 'White',
+        themeDark: 'Dark'
     },
     zh_CN: {
         title: '链滴笔记',
@@ -70,5 +72,7 @@ export const i18n: II18n = {
         alreadyLatestVer: '已是最新版',
         latestVerIs: '最新版为 v{ver}，下载请看<a href="{dl}">这里</a>',
         currentVer: '当前版本',
+        themeWhite: '明亮',
+        themeDark: '暗黑'
     },
 };
