@@ -15,6 +15,7 @@ import (
 	"net/url"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/88250/gulu"
 	"github.com/gin-gonic/gin"
@@ -41,7 +42,7 @@ func Upload(c *gin.Context) {
 
 	errFiles := []string{}
 	succMap := map[string]interface{}{}
-	linkBase := path.Join(u, p)
+	linkBase := joinUrlPath(u, p)
 	if "markdown" == mode {
 		linkBase = ""
 	}
@@ -61,7 +62,7 @@ func Upload(c *gin.Context) {
 			break
 		}
 
-		writePath := path.Join(p, fname)
+		writePath := joinUrlPath(p, fname)
 		exist, err := Exist(u, writePath)
 		if nil != err {
 			errFiles = append(errFiles, fname)
@@ -73,7 +74,7 @@ func Upload(c *gin.Context) {
 			ext := filepath.Ext(fname)
 			fname = fname[:len(fname)-len(ext)]
 			fname = fname + "-" + gulu.Rand.String(7) + ext
-			writePath = path.Join(p, fname)
+			writePath = joinUrlPath(p, fname)
 		}
 
 		if err := Put(u, writePath, data); nil != err {
@@ -82,7 +83,7 @@ func Upload(c *gin.Context) {
 			break
 		}
 
-		succMap[file.Filename] = path.Join(linkBase, fname)
+		succMap[file.Filename] = joinUrlPath(linkBase, fname)
 	}
 
 	ret.Data = map[string]interface{}{
@@ -91,4 +92,12 @@ func Upload(c *gin.Context) {
 	}
 
 	c.JSON(200, ret)
+}
+
+func joinUrlPath(urlPart string, pathParts ...string) string {
+	pathPart := path.Join(pathParts...)
+	if !strings.HasSuffix(urlPart, "/") {
+		return urlPart + "/" + pathPart
+	}
+	return urlPart + pathPart
 }
