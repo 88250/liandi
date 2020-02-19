@@ -32,6 +32,7 @@ func init() {
 	InitSearch()
 
 	go ParentExited()
+	checkUpdatePeriodically()
 }
 
 func main() {
