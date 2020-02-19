@@ -12,12 +12,14 @@ package main
 
 import (
 	"crypto/tls"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/88250/gulu"
@@ -25,17 +27,24 @@ import (
 )
 
 func checkUpdatePeriodically() {
-	go checkUpdate()
-
 	go func() {
 		for range time.Tick(time.Minute * 30) {
-			checkUpdate()
+			checkUpdate(false)
 		}
 	}()
 }
 
-func checkUpdate() {
+var checkUpdateLock = &sync.Mutex{}
+
+func checkUpdate(now bool) {
 	defer gulu.Panic.Recover(nil)
+	checkUpdateLock.Lock()
+	defer checkUpdateLock.Unlock()
+
+	if !now {
+		time.Sleep(16 * time.Second)
+	}
+	Logger.Info("开始检查更新")
 
 	kernel := "kernel"
 	newkernel := "newkernel"
@@ -52,6 +61,7 @@ func checkUpdate() {
 
 	newkernel = filepath.Join(LianDiDir, newkernel)
 	if gulu.File.IsExist(newkernel) {
+		pushMsg(fmt.Sprintf(Conf.lang(10)))
 		return
 	}
 
@@ -61,11 +71,13 @@ func checkUpdate() {
 		Set("User-Agent", UserAgent).Timeout(3 * time.Second).EndStruct(&result)
 	if nil != errs {
 		Logger.Errorf("检查版本更新失败：%s", errs)
+		pushMsg(Conf.lang(8))
 		return
 	}
 
 	ver := result["ver"].(string)
 	if ver <= Ver {
+		pushMsg(fmt.Sprintf(Conf.lang(10)))
 		return
 	}
 
@@ -73,6 +85,7 @@ func checkUpdate() {
 	upgrade := result["upgrade"].(bool)
 	if upgrade {
 		Logger.Infof("需要重新下载进行升级 [dl=%s]", dl)
+		pushMsg(fmt.Sprintf(Conf.lang(9), dl))
 		return
 	}
 
@@ -81,21 +94,25 @@ func checkUpdate() {
 	resp, data, errs := request.Get(dl).Set("User-Agent", UserAgent).Timeout(3 * time.Minute).EndBytes()
 	if nil != errs {
 		Logger.Errorf("下载更新包 [%s] 失败：%s", dl, errs)
+		pushMsg(Conf.lang(11))
 		return
 	}
 	if http.StatusOK != resp.StatusCode {
 		Logger.Errorf("下载更新包 [%s] 失败 [sc=%d]", dl, resp.StatusCode)
+		pushMsg(Conf.lang(11))
 		return
 	}
 
 	file, err := ioutil.TempFile("", "liandi-*.zip")
 	if nil != err {
 		Logger.Errorf("创建更新包临时文件失败：%s", err)
+		pushMsg(Conf.lang(11))
 		return
 	}
 
 	if _, err = file.Write(data); nil != err {
 		Logger.Errorf("写入更新包临时文件失败：%s", err)
+		pushMsg(Conf.lang(11))
 		return
 	}
 	file.Close()
@@ -104,33 +121,47 @@ func checkUpdate() {
 	if gulu.File.IsExist(updateDir) {
 		if err = os.RemoveAll(updateDir); nil != err {
 			Logger.Errorf("清空更新包解压目录失败：%s", err)
+			pushMsg(Conf.lang(11))
 			return
 		}
 	}
 	if err = os.MkdirAll(updateDir, 0644); nil != err {
 		Logger.Errorf("创建更新包解压目录失败：%s", err)
+		pushMsg(Conf.lang(11))
 		return
 	}
 
 	if err = gulu.Zip.Unzip(file.Name(), updateDir); nil != err {
 		Logger.Errorf("解压更新包失败：%s", err)
+		pushMsg(Conf.lang(11))
 		return
 	}
 
 	if err = os.Rename(filepath.Join(updateDir, kernel), newkernel); nil != err {
 		Logger.Errorf("安装新内核失败：%s", err)
+		pushMsg(Conf.lang(11))
 		return
 	}
 
 	if err = os.Rename(filepath.Join(updateDir, "ui"), filepath.Join(LianDiDir, "newui")); nil != err {
 		Logger.Errorf("安装新界面失败：%s", err)
+		pushMsg(Conf.lang(11))
 		return
 	}
 
 	if err = os.RemoveAll(updateDir); nil != err {
 		Logger.Errorf("清理更新包目录失败：%s", err)
+		pushMsg(Conf.lang(11))
 		return
 	}
 
 	Logger.Infof("安装更新包 [%s] 成功", dl)
+	pushMsg(fmt.Sprintf(Conf.lang(10)))
+	return
+}
+
+func pushMsg(msg string) {
+	ret := NewCmdResult("msg", 0)
+	ret.Msg = msg
+	Push(ret.Bytes())
 }

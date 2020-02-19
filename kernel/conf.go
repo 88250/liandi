@@ -302,27 +302,33 @@ func (dir *Dir) isSkipDir(filename string) bool {
 }
 
 var zhCN = map[int]string{
-	0: "查询目录失败",
-	1: "文件名重复",
-	2: "列出目录 [%s] 下路径为 [%s] 的文件列表失败：%s",
-	3: "读取目录 [%s] 下的文件 [%s] 失败：%s",
-	4: "查看目录 [%s] 下 [%s] 的元信息失败：%s",
-	5: "重命名目录 [%s] 下的文件 [%s] 失败：%s",
-	6: "在目录 [%s] 下创建新目录 [%s] 失败：%s",
-	7: "在目录 [%s] 下删除 [%s] 失败：%s",
-	8: "检查更新失败",
+	0:  "查询目录失败",
+	1:  "文件名重复",
+	2:  "列出目录 [%s] 下路径为 [%s] 的文件列表失败：%s",
+	3:  "读取目录 [%s] 下的文件 [%s] 失败：%s",
+	4:  "查看目录 [%s] 下 [%s] 的元信息失败：%s",
+	5:  "重命名目录 [%s] 下的文件 [%s] 失败：%s",
+	6:  "在目录 [%s] 下创建新目录 [%s] 失败：%s",
+	7:  "在目录 [%s] 下删除 [%s] 失败：%s",
+	8:  "检查更新失败",
+	9:  "新版本可用 %s",
+	10: "更新补丁已经准备完毕，请重启应用",
+	11: "安装更新包失败",
 }
 
 var enUS = map[int]string{
-	0: "Query dir failed",
-	1: "Duplicated filename",
-	2: "List files of dir [%s] and path [%s] failed: %s",
-	3: "Read dir [%s] file [%s] failed: %s",
-	4: "Get dir [%s] file [%s] meta info failed: %s",
-	5: "Rename dir [%s] file [%s] failed: %s",
-	6: "Create dir [%s] dir [%s] failed: %s",
-	7: "Remove dir [%s] path [%s] failed: %s",
-	8: "Check update failed",
+	0:  "Query dir failed",
+	1:  "Duplicated filename",
+	2:  "List files of dir [%s] and path [%s] failed: %s",
+	3:  "Read dir [%s] file [%s] failed: %s",
+	4:  "Get dir [%s] file [%s] meta info failed: %s",
+	5:  "Rename dir [%s] file [%s] failed: %s",
+	6:  "Create dir [%s] dir [%s] failed: %s",
+	7:  "Remove dir [%s] path [%s] failed: %s",
+	8:  "Check update failed",
+	9:  "New version is available %s",
+	10: "Update patch already setup, please restart to apply it",
+	11: "Setup update patch failed",
 }
 
 var langs = map[string]map[int]string{

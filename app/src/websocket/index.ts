@@ -47,6 +47,11 @@ export class WebSocketUtil {
         };
         this.webSocket.onmessage = (event) => {
             const response = JSON.parse(event.data);
+            if ("msg" === response.cmd) {
+                showMessage(response.msg, 0);
+                return;
+            }
+
             if (response.reqId !== this.reqId) {
                 return;
             }
@@ -58,9 +63,6 @@ export class WebSocketUtil {
             switch (response.cmd) {
                 case 'search':
                     onSearch(liandi, response.data);
-                    break;
-                case 'checkupdate':
-                    about.onCheckUpdate(liandi, response);
                     break;
                 case 'setlang':
                     lauguage.onSetlang();

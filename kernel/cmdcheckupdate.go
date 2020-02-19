@@ -10,37 +10,12 @@
 
 package main
 
-import (
-	"crypto/tls"
-	"time"
-
-	"github.com/parnurzeal/gorequest"
-)
-
 type checkupdate struct {
 	*BaseCmd
 }
 
 func (cmd *checkupdate) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-
-	var result map[string]interface{}
-	request := gorequest.New().TLSClientConfig(&tls.Config{InsecureSkipVerify: true})
-	_, _, errs := request.Get("https://rhythm.b3log.org/version/liandi").
-		Set("User-Agent", UserAgent).Timeout(7 * time.Second).EndStruct(&result)
-	if nil != errs {
-		Logger.Errorf("检查版本更新失败：%s", errs)
-		ret.Msg = Conf.lang(1)
-		ret.Code = -1
-		Push(ret.Bytes())
-		return
-	}
-	Logger.Infof("检查版本更新结果 [%s]", result)
-	latestVer := result["ver"].(string)
-	if latestVer > Ver {
-		ret.Data = map[string]interface{}{"dl": result["dl"].(string), "ver": latestVer}
-	}
-	Push(ret.Bytes())
+	checkUpdate(true)
 }
 
 func (cmd *checkupdate) Name() string {

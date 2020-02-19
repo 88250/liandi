@@ -31,8 +31,6 @@ export const i18n: II18n = {
         inlineMathDigit: 'Allow inline math formulas to follow numbers',
         mathEngine: 'Mathematical formula engine',
         checkUpdate: 'Check update',
-        alreadyLatestVer: 'Already using the latest ver',
-        latestVerIs: 'The latest ver is v{ver}, visit <a href="{dl}">here</a> for more details',
         currentVer: 'Current ver',
         themeWhite: 'White',
         themeDark: 'Dark'
@@ -69,8 +67,6 @@ export const i18n: II18n = {
         inlineMathDigit: '允许内联数学公式后紧跟数字',
         mathEngine: '数学公式引擎',
         checkUpdate: '检查更新',
-        alreadyLatestVer: '已是最新版',
-        latestVerIs: '最新版为 v{ver}，下载请看<a href="{dl}">这里</a>',
         currentVer: '当前版本',
         themeWhite: '明亮',
         themeDark: '暗黑'

@@ -1,6 +1,8 @@
 const {app, BrowserWindow, shell, Menu, globalShortcut, screen} = require('electron')
 const {spawn} = require('child_process')
 const path = require('path')
+const os = require('os')
+const fs = require('fs')
 
 const createWindow = () => {
   // 创建浏览器窗口
@@ -76,17 +78,33 @@ const createWindow = () => {
 }
 
 const startKernel = () => {
-  let fileName = 'kernel.exe'
+  let kernelName = 'kernel.exe'
   if (process.platform === 'darwin') {
-    fileName = 'kernel-darwin'
+    kernelName = 'kernel-darwin'
   } else if (process.platform === 'linux') {
-    fileName = 'kernel-linux'
+    kernelName = 'kernel-linux'
   }
 
-  let kernelPath = path.join(path.dirname(app.getAppPath()), fileName)
-  if (process.env.NODE_ENV === 'development') {
-    kernelPath = path.join('..', 'kernel', fileName)
+  const homedir = os.homedir()
+  const liandi = path.join(homedir, ".liandi")
+  let kernelPath = path.join(path.dirname(app.getAppPath()), kernelName)
+  const latestKernel = path.join(liandi, "new" + kernelName)
+  if (fs.existsSync(latestKernel)) {
+    kernelPath = path.join(liandi, kernelName)
+    fs.renameSync(latestKernel, kernelPath)
   }
+
+  const latestUI = path.join(liandi, "newui")
+  if (fs.existsSync(latestUI)) {
+    const ui = path.join(liandi, "ui")
+    removeDir(ui)
+    fs.renameSync(latestUI, ui)
+  }
+
+  if (process.env.NODE_ENV === 'development') {
+    kernelPath = path.join('..', 'kernel', kernelName)
+  }
+
   spawn(kernelPath)
 }
 
@@ -121,3 +139,17 @@ app.on('web-contents-created', (webContentsCreatedEvent, contents) => {
     });
   }
 });
+
+const removeDir = function(dirPath) {
+  if (fs.existsSync(dirPath)) {
+    fs.readdirSync(dirPath).forEach((file, index) => {
+      const curPath = path.join(dirPath, file);
+      if (fs.lstatSync(curPath).isDirectory()) {
+        removeDir(curPath);
+      } else {
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(dirPath);
+  }
+};

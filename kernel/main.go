@@ -52,19 +52,19 @@ func main() {
 
 	m.HandleConnect(func(s *melody.Session) {
 		SetPushChan(s)
-		Logger.Debug("websocket connected")
+		Logger.Debug("WebSocket 已连接")
 	})
 
 	m.HandleDisconnect(func(s *melody.Session) {
-		Logger.Debugf("websocket disconnected")
+		Logger.Debugf("WebSocket 连接已断开")
 	})
 
 	m.HandleError(func(s *melody.Session, err error) {
-		Logger.Debugf("websocket on error: %s", err)
+		Logger.Debugf("WebSocket 连接报错：%s", err)
 	})
 
 	m.HandleClose(func(s *melody.Session, i int, str string) error {
-		Logger.Debugf("websocket on close: %v, %v", i, str)
+		Logger.Debugf("WebSocket 关闭：%v, %v", i, str)
 		return nil
 	})
 

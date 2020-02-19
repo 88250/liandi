@@ -12,7 +12,6 @@ export const about = {
     <div>${i18n[liandi.config.lang].currentVer} v${packageJSON.version}</div>
     <div class="fn__hr--s"></div>
     <button class="button">${i18n[liandi.config.lang].checkUpdate}</button>
-    <span class="ft__secondary ft__smaller" id="configAboutUpdateTip"></span>
 </div>
 <div class="about__item ft__secondary ft__smaller">
     Copyright (c) 2020-present, <a href="https://b3log.org">b3log.org</a><br><br>
@@ -30,15 +29,4 @@ export const about = {
             liandi.ws.send('checkupdate', {});
         });
     },
-    onCheckUpdate: (liandi: ILiandi, result: any) => {
-        const outputSpan = document.querySelector('#configAboutUpdateTip');
-        if (!result.data) {
-            outputSpan.innerHTML = i18n[liandi.config.lang].alreadyLatestVer;
-            return;
-        }
-        let msg = i18n[liandi.config.lang].latestVerIs;
-        msg = msg.replace('{ver}', result.data.ver).replace('{dl}', result.data.dl);
-        outputSpan.innerHTML = msg;
-        return;
-    }
 };
