@@ -91,11 +91,16 @@ const applyUpdate = () => {
   if (process.env.NODE_ENV === 'development') {
     kernelPath = path.join('..', 'kernel', kernelName)
   }
-  if (!fs.existsSync(liandi)) {
-    fs.mkdirSync(liandi)
-    fs.copyFileSync(kernelPath, path.join(liandi, kernelName))
-    // TODO: copy UI
 
+  const appDir = path.dirname(app.getAppPath())
+  const ui = path.join(liandi, "ui")
+  if (!fs.existsSync(liandi)) {
+    fs.mkdirSync(ui, { recursive: true })
+    copyDir(path.join(appDir, "public"), path.join(ui, "public"))
+    copyDir(path.join(appDir, "dist"), path.join(ui, "dist"))
+    fs.mkdirSync(path.join(ui, "node_modules", "vditor"), { recursive: true })
+    copyDir(path.join(appDir, "node_modules", "vditor", "dist"), path.join(ui, "node_modules", "vditor", "dist"))
+    fs.copyFileSync(kernelPath, path.join(liandi, kernelName))
   } else {
     const latestKernel = path.join(liandi, "new" + kernelName)
     if (fs.existsSync(latestKernel)) {
@@ -105,7 +110,6 @@ const applyUpdate = () => {
 
     const latestUI = path.join(liandi, "newui")
     if (fs.existsSync(latestUI)) {
-      const ui = path.join(liandi, "ui")
       removeDir(ui)
       fs.renameSync(latestUI, ui)
     }
@@ -168,5 +172,16 @@ const removeDir = function(dirPath) {
       }
     });
     fs.rmdirSync(dirPath);
+  }
+};
+
+const copyDir = function(src, dest) {
+  if (fs.existsSync(src) && fs.statSync(src).isDirectory()) {
+    fs.mkdirSync(dest);
+    fs.readdirSync(src).forEach(childItemName => {
+      copyDir(path.join(src, childItemName), path.join(dest, childItemName));
+    });
+  } else {
+    fs.copyFileSync(src, dest);
   }
 };
