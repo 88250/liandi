@@ -68,6 +68,11 @@ const createWindow = () => {
       mainWindow.webContents.send('liandi-editor-save')
     })
   })
+
+  global.liandiEditor = {
+    editorText: '',
+    saved: true
+  }
 }
 
 const startKernel = () => {

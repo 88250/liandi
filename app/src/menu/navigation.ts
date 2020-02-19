@@ -13,7 +13,7 @@ export const initNavigationMenu = (liandi: ILiandi) => {
             if (itemData.target.shadowRoot.querySelector('.list__item').classList.contains('list__item--current')) {
                 liandi.files.listElement.innerHTML = '';
                 liandi.files.element.firstElementChild.innerHTML = '';
-                liandi.editors.sendMessage(Constants.LIANDI_EDITOR_CLOSE);
+                liandi.editors.close(liandi);
                 liandi.current = {
                     path: '',
                 };

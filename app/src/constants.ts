@@ -9,7 +9,6 @@ export abstract class Constants {
     public static readonly LIANDI_EDITOR_RELOAD: string = 'liandi-editor-reload';
     public static readonly LIANDI_EDITOR_SETTHEME: string = 'liandi-editor-settheme';
     public static readonly LIANDI_EDITOR_OPEN: string = 'liandi-editor-open';
-    public static readonly LIANDI_EDITOR_CLOSE: string = 'liandi-editor-close';
     public static readonly LIANDI_EDITOR_FULLSCREEN: string = 'liandi-editor-fullscreen';
     public static readonly LIANDI_EDITOR_RESTORE: string = 'liandi-editor-restore';
 

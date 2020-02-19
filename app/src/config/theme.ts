@@ -19,14 +19,10 @@ export const theme = {
         liandi.config.theme = themeName;
         if (themeName === 'dark') {
             document.body.classList.add('theme--dark');
-            if (liandi.editors.isOpen) {
-                liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SETTHEME, liandi);
-            }
+            liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SETTHEME, liandi);
         } else {
             document.body.classList.remove('theme--dark');
-            if (liandi.editors.isOpen) {
-                liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SETTHEME, liandi);
-            }
+            liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SETTHEME, liandi);
         }
     }
 };

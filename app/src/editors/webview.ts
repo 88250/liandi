@@ -2,20 +2,16 @@ import '../assets/scss/editor.scss';
 import {Constants} from '../constants';
 import {getPath, urlJoin} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
-import {ipcRenderer} from 'electron';
+import {ipcRenderer, remote} from 'electron';
 
 const Vditor = require('vditor');
 
 export class EditorWebview {
     private vditor: any;
-    private saved: boolean;
     private editorElement: HTMLElement;
-    private timeoutId: number;
 
     constructor() {
-        this.saved = true;
         this.editorElement = document.getElementById('liandiVditor');
-
         initGlobalKeyPress();
         this.onMessage();
         if (process.platform === 'win32') {
@@ -25,19 +21,12 @@ export class EditorWebview {
 
     private onMessage() {
         ipcRenderer.on(Constants.LIANDI_EDITOR_OPEN, (event, data) => {
-            this.onOpen(data.liandi, data.data.content);
-            if (data.liandi.config.theme === 'dark') {
+            this.onOpen(data);
+            if (data.config.theme === 'dark') {
                 document.body.classList.add('theme--dark')
             } else {
                 document.body.classList.remove('theme--dark')
             }
-        });
-        ipcRenderer.on(Constants.LIANDI_EDITOR_CLOSE, () => {
-            this.saveContent();
-            this.editorElement.innerHTML = '';
-        });
-        ipcRenderer.on(Constants.LIANDI_EDITOR_SAVE, () => {
-            this.saveContent();
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_SETTHEME, (event, data) => {
             if (data.config.theme === 'dark') {
@@ -45,26 +34,16 @@ export class EditorWebview {
             } else {
                 document.body.classList.remove('theme--dark')
             }
-            this.onOpen(data, this.vditor.getValue());
+            this.onOpen(data);
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_RELOAD, (event, data) => {
-            this.onOpen(data, this.vditor.getValue());
+            this.onOpen(data);
         });
     }
 
-    private saveContent() {
-        if (this.saved) {
-            return;
-        }
-        if (this.editorElement.innerHTML === '') {
-            return;
-        }
-        ipcRenderer.sendToHost(Constants.LIANDI_WEBSOCKET_PUT, this.vditor.getValue())
-        this.saved = true;
-    }
-
-    private onOpen(liandi: ILiandi, value: string) {
+    private onOpen(liandi: ILiandi, value: string = remote.getGlobal('liandiEditor').editorText) {
         this.editorElement.innerHTML = '';
+        let timeoutId:number
         this.vditor = new Vditor('liandiVditor', {
             typewriterMode: true,
             toolbar: [
@@ -131,7 +110,7 @@ export class EditorWebview {
                     engine: liandi.config.markdown.mathEngine,
                 },
                 hljs: {
-                    style: liandi.config.theme === 'dark' ?'native': 'github'
+                    style: liandi.config.theme === 'dark' ? 'native' : 'github'
                 }
             },
             upload: {
@@ -149,12 +128,15 @@ export class EditorWebview {
             after: () => {
                 this.vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
                 this.vditor.setValue(value);
+                remote.getGlobal('liandiEditor').editorText = value
+                remote.getGlobal('liandiEditor').saved = true
             },
-            input: () => {
-                this.saved = false;
-                clearTimeout(this.timeoutId);
-                this.timeoutId = window.setTimeout(() => {
-                    this.saveContent();
+            input: (value: string) => {
+                remote.getGlobal('liandiEditor').editorText = value
+                remote.getGlobal('liandiEditor').saved = false
+                clearTimeout(timeoutId);
+                timeoutId = window.setTimeout(() => {
+                    ipcRenderer.sendToHost(Constants.LIANDI_WEBSOCKET_PUT)
                 }, 5000);
             }
         });

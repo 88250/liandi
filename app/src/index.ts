@@ -63,11 +63,7 @@ class App {
                     editorWebview.classList.remove('editors__webview--fullscreen')
                     break
                 case Constants.LIANDI_WEBSOCKET_PUT:
-                    this.liandi.ws.send('put', {
-                        url: this.liandi.current.dir.url,
-                        path: this.liandi.current.path,
-                        content: event.args[0]
-                    });
+                    this.liandi.editors.save(this.liandi);
                     break
                 case Constants.LIANDI_SEARCH_OPEN:
                     initSearch(this.liandi);
@@ -83,7 +79,7 @@ class App {
             this.liandi.find.open();
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_SAVE, () => {
-            this.liandi.editors.sendMessage(Constants.LIANDI_EDITOR_SAVE);
+            this.liandi.editors.save(this.liandi);
         });
     }
 

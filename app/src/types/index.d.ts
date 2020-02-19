@@ -49,7 +49,8 @@ declare interface ILiandi {
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
     };
     editors?: {
-        isOpen: boolean
+        save: (liandi:ILiandi) => void;
+        close: (liandi:ILiandi) => void;
         sendMessage: (message: string, data?: any, liandi?: ILiandi) => void;
     };
     menus?: {

@@ -57,13 +57,13 @@ customElements.define('file-item',
             treePathElement.parentElement.classList.add('list__item--current')
           }
 
-          window.liandi.liandi.editors.sendMessage('liandi-editor-close')
+          window.liandi.liandi.editors.close(window.liandi.liandi)
           window.liandi.liandi.ws.send('ls', {
             url,
             path,
           })
         } else {
-          window.liandi.liandi.editors.sendMessage('liandi-editor-save')
+          window.liandi.liandi.editors.save(window.liandi.liandi)
           window.liandi.liandi.ws.send('get', {
             url,
             path,

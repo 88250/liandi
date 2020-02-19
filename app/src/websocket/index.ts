@@ -8,6 +8,7 @@ import {theme} from '../config/theme';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
 import {about} from '../config/about';
+import {remote} from "electron";
 export class WebSocketUtil {
     public webSocket: WebSocket;
     private reqId: number;
@@ -108,10 +109,10 @@ export class WebSocketUtil {
                     liandi.files.onLs(liandi, response.data);
                     break;
                 case 'get':
-                    liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, response.data, liandi);
+                    liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, liandi, response.data);
                     break;
                 case 'searchget':
-                    liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, response.data, liandi);
+                    liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, liandi, response.data);
                     liandi.find.open(response.data.key, parseInt(response.data.index, 10));
                     break;
                 case 'dirs':
