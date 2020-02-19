@@ -70,6 +70,12 @@ func checkUpdate() {
 	}
 
 	dl := result["dl"].(string)
+	upgrade := result["upgrade"].(bool)
+	if upgrade {
+		Logger.Infof("需要重新下载进行升级 [dl=%s]", dl)
+		return
+	}
+
 	dl = strings.ReplaceAll(dl, "{os}", runtime.GOOS)
 	request = gorequest.New().TLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 	resp, data, errs := request.Get(dl).Set("User-Agent", UserAgent).Timeout(3 * time.Minute).EndBytes()
