@@ -3,6 +3,8 @@ const {spawn} = require('child_process')
 const path = require('path')
 const os = require('os')
 const fs = require('fs')
+const homedir = os.homedir()
+const liandi = path.join(homedir, ".liandi")
 
 const createWindow = () => {
   // 创建浏览器窗口
@@ -77,6 +79,39 @@ const createWindow = () => {
   }
 }
 
+const applyUpdate = () => {
+  let kernelName = 'kernel.exe'
+  if (process.platform === 'darwin') {
+    kernelName = 'kernel-darwin'
+  } else if (process.platform === 'linux') {
+    kernelName = 'kernel-linux'
+  }
+
+  let kernelPath = path.join(path.dirname(app.getAppPath()), kernelName)
+  if (process.env.NODE_ENV === 'development') {
+    kernelPath = path.join('..', 'kernel', kernelName)
+  }
+  if (!fs.existsSync(liandi)) {
+    fs.mkdirSync(liandi)
+    fs.copyFileSync(kernelPath, path.join(liandi, kernelName))
+    // TODO: copy UI
+
+  } else {
+    const latestKernel = path.join(liandi, "new" + kernelName)
+    if (fs.existsSync(latestKernel)) {
+      kernelPath = path.join(liandi, kernelName)
+      fs.renameSync(latestKernel, kernelPath)
+    }
+
+    const latestUI = path.join(liandi, "newui")
+    if (fs.existsSync(latestUI)) {
+      const ui = path.join(liandi, "ui")
+      removeDir(ui)
+      fs.renameSync(latestUI, ui)
+    }
+  }
+}
+
 const startKernel = () => {
   let kernelName = 'kernel.exe'
   if (process.platform === 'darwin') {
@@ -85,30 +120,12 @@ const startKernel = () => {
     kernelName = 'kernel-linux'
   }
 
-  const homedir = os.homedir()
-  const liandi = path.join(homedir, ".liandi")
-  let kernelPath = path.join(path.dirname(app.getAppPath()), kernelName)
-  const latestKernel = path.join(liandi, "new" + kernelName)
-  if (fs.existsSync(latestKernel)) {
-    kernelPath = path.join(liandi, kernelName)
-    fs.renameSync(latestKernel, kernelPath)
-  }
-
-  const latestUI = path.join(liandi, "newui")
-  if (fs.existsSync(latestUI)) {
-    const ui = path.join(liandi, "ui")
-    removeDir(ui)
-    fs.renameSync(latestUI, ui)
-  }
-
-  if (process.env.NODE_ENV === 'development') {
-    kernelPath = path.join('..', 'kernel', kernelName)
-  }
-
+  const kernelPath = path.join(liandi, kernelName)
   spawn(kernelPath)
 }
 
 app.whenReady().then(() => {
+  applyUpdate()
   createWindow()
   startKernel()
 })
