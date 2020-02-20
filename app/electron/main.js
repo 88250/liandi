@@ -3,8 +3,22 @@ const {spawn} = require('child_process')
 const path = require('path')
 const os = require('os')
 const fs = require('fs')
+process.noAsar = true
 const homedir = os.homedir()
 const liandi = path.join(homedir, ".liandi")
+const appDir = path.dirname(app.getAppPath())
+const current = path.join(liandi, "current")
+const getKernelName = () => {
+  let ret = 'kernel.exe'
+  if (process.platform === 'darwin') {
+    ret = 'kernel-darwin'
+  } else if (process.platform === 'linux') {
+    ret = 'kernel-linux'
+  }
+  return ret
+}
+const kernelName = getKernelName()
+const isDevEnv = process.env.NODE_ENV === 'development'
 
 const createWindow = () => {
   // 创建浏览器窗口
@@ -80,22 +94,12 @@ const createWindow = () => {
 }
 
 const applyUpdate = () => {
-  let kernelName = 'kernel.exe'
-  if (process.platform === 'darwin') {
-    kernelName = 'kernel-darwin'
-  } else if (process.platform === 'linux') {
-    kernelName = 'kernel-linux'
+  if (isDevEnv) {
+    return
   }
 
-  let kernelPath = path.join(path.dirname(app.getAppPath()), kernelName)
-  if (process.env.NODE_ENV === 'development') {
-    kernelPath = path.join('..', 'kernel', kernelName)
-  }
-
-  const appDir = path.dirname(app.getAppPath())
-  const current = path.join(liandi, "current")
   if (!fs.existsSync(liandi)) { // 第一次启动
-    fs.mkdirSync(current, {recursive: true})
+    fs.mkdirSync(liandi)
     copyDir(appDir, current)
   } else {
     const update = path.join(liandi, "update")
@@ -107,14 +111,10 @@ const applyUpdate = () => {
 }
 
 const startKernel = () => {
-  let kernelName = 'kernel.exe'
-  if (process.platform === 'darwin') {
-    kernelName = 'kernel-darwin'
-  } else if (process.platform === 'linux') {
-    kernelName = 'kernel-linux'
+  let kernelPath = path.join(current, kernelName)
+  if (isDevEnv) {
+    kernelPath = path.join('..', 'kernel', kernelName)
   }
-
-  const kernelPath = path.join(liandi, kernelName)
   spawn(kernelPath)
 }
 
@@ -152,21 +152,31 @@ app.on('web-contents-created', (webContentsCreatedEvent, contents) => {
 });
 
 const removeDir = function (dirPath) {
-  if (fs.existsSync(dirPath)) {
-    fs.readdirSync(dirPath).forEach((file, index) => {
-      const curPath = path.join(dirPath, file);
-      if (fs.lstatSync(curPath).isDirectory()) {
-        removeDir(curPath);
-      } else {
-        fs.unlinkSync(curPath);
-      }
-    });
-    fs.rmdirSync(dirPath);
+  if (!fs.existsSync(dirPath)) {
+    return
   }
-};
+
+  fs.readdirSync(dirPath).forEach((file, index) => {
+    const curPath = path.join(dirPath, file);
+    if (fs.lstatSync(curPath).isDirectory()) {
+      removeDir(curPath);
+    } else {
+      fs.unlinkSync(curPath);
+    }
+  });
+  fs.rmdirSync(dirPath);
+}
 
 const copyDir = function (src, dest) {
-  if (fs.existsSync(src) && fs.statSync(src).isDirectory()) {
+  if (!fs.existsSync(src)) {
+    return
+  }
+
+  if (".asar" === path.extname(src)) {
+    return
+  }
+
+  if (fs.lstatSync(src).isDirectory()) {
     fs.mkdirSync(dest);
     fs.readdirSync(src).forEach(childItemName => {
       copyDir(path.join(src, childItemName), path.join(dest, childItemName));
