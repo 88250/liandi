@@ -59,8 +59,8 @@ func checkUpdate(now bool) {
 		newkernel += ".exe"
 	}
 
-	newkernel = filepath.Join(LianDiDir, newkernel)
-	if gulu.File.IsExist(newkernel) {
+	updateDir := filepath.Join(LianDiDir, "update")
+	if gulu.File.IsExist(updateDir) {
 		pushMsg(fmt.Sprintf(Conf.lang(10)))
 		return
 	}
@@ -77,7 +77,6 @@ func checkUpdate(now bool) {
 
 	ver := result["ver"].(string)
 	if ver <= Ver {
-		pushMsg(fmt.Sprintf(Conf.lang(10)))
 		return
 	}
 
@@ -117,14 +116,12 @@ func checkUpdate(now bool) {
 	}
 	file.Close()
 
-	updateDir := filepath.Join(LianDiDir, "update")
-	if gulu.File.IsExist(updateDir) {
-		if err = os.RemoveAll(updateDir); nil != err {
-			Logger.Errorf("清空更新包解压目录失败：%s", err)
-			pushMsg(Conf.lang(11))
-			return
-		}
+	if err = os.RemoveAll(updateDir); nil != err {
+		Logger.Errorf("清空更新包解压目录失败：%s", err)
+		pushMsg(Conf.lang(11))
+		return
 	}
+
 	if err = os.MkdirAll(updateDir, 0644); nil != err {
 		Logger.Errorf("创建更新包解压目录失败：%s", err)
 		pushMsg(Conf.lang(11))
@@ -133,24 +130,6 @@ func checkUpdate(now bool) {
 
 	if err = gulu.Zip.Unzip(file.Name(), updateDir); nil != err {
 		Logger.Errorf("解压更新包失败：%s", err)
-		pushMsg(Conf.lang(11))
-		return
-	}
-
-	if err = os.Rename(filepath.Join(updateDir, kernel), newkernel); nil != err {
-		Logger.Errorf("安装新内核失败：%s", err)
-		pushMsg(Conf.lang(11))
-		return
-	}
-
-	if err = os.Rename(filepath.Join(updateDir, "ui"), filepath.Join(LianDiDir, "newui")); nil != err {
-		Logger.Errorf("安装新界面失败：%s", err)
-		pushMsg(Conf.lang(11))
-		return
-	}
-
-	if err = os.RemoveAll(updateDir); nil != err {
-		Logger.Errorf("清理更新包目录失败：%s", err)
 		pushMsg(Conf.lang(11))
 		return
 	}

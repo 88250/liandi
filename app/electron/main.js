@@ -59,11 +59,11 @@ const createWindow = () => {
     shell.openExternal(url)
   })
 
-  mainWindow.on('blur',() => {
+  mainWindow.on('blur', () => {
     globalShortcut.unregisterAll()
   })
 
-  mainWindow.on('focus',() => {
+  mainWindow.on('focus', () => {
     globalShortcut.register('CommandOrControl+F', () => {
       mainWindow.webContents.send('liandi-find-show')
     })
@@ -93,25 +93,15 @@ const applyUpdate = () => {
   }
 
   const appDir = path.dirname(app.getAppPath())
-  const ui = path.join(liandi, "ui")
-  if (!fs.existsSync(liandi)) {
-    fs.mkdirSync(ui, { recursive: true })
-    copyDir(path.join(appDir, "public"), path.join(ui, "public"))
-    copyDir(path.join(appDir, "dist"), path.join(ui, "dist"))
-    fs.mkdirSync(path.join(ui, "node_modules", "vditor"), { recursive: true })
-    copyDir(path.join(appDir, "node_modules", "vditor", "dist"), path.join(ui, "node_modules", "vditor", "dist"))
-    fs.copyFileSync(kernelPath, path.join(liandi, kernelName))
+  const current = path.join(liandi, "current")
+  if (!fs.existsSync(liandi)) { // 第一次启动
+    fs.mkdirSync(current, {recursive: true})
+    copyDir(appDir, current)
   } else {
-    const latestKernel = path.join(liandi, "new" + kernelName)
-    if (fs.existsSync(latestKernel)) {
-      kernelPath = path.join(liandi, kernelName)
-      fs.renameSync(latestKernel, kernelPath)
-    }
-
-    const latestUI = path.join(liandi, "newui")
-    if (fs.existsSync(latestUI)) {
-      removeDir(ui)
-      fs.renameSync(latestUI, ui)
+    const update = path.join(liandi, "update")
+    if (fs.existsSync(update)) {
+      removeDir(current)
+      fs.renameSync(update, current)
     }
   }
 }
@@ -161,7 +151,7 @@ app.on('web-contents-created', (webContentsCreatedEvent, contents) => {
   }
 });
 
-const removeDir = function(dirPath) {
+const removeDir = function (dirPath) {
   if (fs.existsSync(dirPath)) {
     fs.readdirSync(dirPath).forEach((file, index) => {
       const curPath = path.join(dirPath, file);
@@ -175,7 +165,7 @@ const removeDir = function(dirPath) {
   }
 };
 
-const copyDir = function(src, dest) {
+const copyDir = function (src, dest) {
   if (fs.existsSync(src) && fs.statSync(src).isDirectory()) {
     fs.mkdirSync(dest);
     fs.readdirSync(src).forEach(childItemName => {
