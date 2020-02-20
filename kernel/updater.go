@@ -77,6 +77,8 @@ func checkUpdate(now bool) {
 
 	ver := result["ver"].(string)
 	if ver <= Ver {
+		Logger.Infof(Conf.lang(12) + " v%s", Ver)
+		pushMsg(Conf.lang(12))
 		return
 	}
 

@@ -314,6 +314,7 @@ var zhCN = map[int]string{
 	9:  "新版本可用 %s",
 	10: "更新补丁已经准备完毕，请重启应用",
 	11: "安装更新包失败",
+	12: "已是最新版",
 }
 
 var enUS = map[int]string{
@@ -329,6 +330,7 @@ var enUS = map[int]string{
 	9:  "New version is available %s",
 	10: "Update patch already setup, please restart to apply it",
 	11: "Setup update patch failed",
+	12: "Is the latest version",
 }
 
 var langs = map[string]map[int]string{
