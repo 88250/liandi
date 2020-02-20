@@ -42,7 +42,7 @@ const createWindow = () => {
   // 加载主界面
   mainWindow.loadFile('../public/index.html')
 
-  if (process.env.NODE_ENV === 'development') {
+  if (isDevEnv) {
     mainWindow.webContents.openDevTools({mode: 'bottom'})
   } else {
     const template = [
