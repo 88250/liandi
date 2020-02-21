@@ -9,6 +9,7 @@
 <br>
 <a title="Releases" target="_blank" href="https://github.com/88250/liandi/releases"><img src="https://img.shields.io/github/release/88250/liandi.svg?style=flat-square"></a>
 <a title="Release Date" target="_blank" href="https://github.com/88250/liandi/releases"><img src="https://img.shields.io/github/release-date/88250/liandi.svg?style=flat-square&color=99CCFF"></a>
+<a title="Downloads" target="_blank" href="https://github.com/88250/liandi/releases"><img src="https://img.shields.io/github/downloads/88250/liandi/total.svg?style=flat-square&color=blueviolet"></a>
 <br>
 <a title="GitHub Commits" target="_blank" href="https://github.com/88250/liandi/commits/master"><img src="https://img.shields.io/github/commit-activity/m/88250/liandi.svg?style=flat-square"></a>
 <a title="Last Commit" target="_blank" href="https://github.com/88250/liandi/commits/master"><img src="https://img.shields.io/github/last-commit/88250/liandi.svg?style=flat-square&color=FF9900"></a>
