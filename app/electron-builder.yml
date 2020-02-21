@@ -1,6 +1,7 @@
 productName: "liandi"
 appId: "org.b3log.liandi"
 copyright: "Copyright (c) 2020-present, b3log.org"
+artifactName: "liandi-${version}-${os}.${ext}"
 extraMetadata:
   main: "electron/main.js"
 directories:
