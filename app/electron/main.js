@@ -40,7 +40,12 @@ const createWindow = () => {
   })
 
   // 加载主界面
-  mainWindow.loadFile('../public/index.html')
+  if (isDevEnv) {
+    console.log(appDir)
+    mainWindow.loadFile(path.join(appDir, 'public/index.html'))
+  } else {
+    mainWindow.loadFile(path.join(current, 'public/index.html'))
+  }
 
   if (isDevEnv) {
     mainWindow.webContents.openDevTools({mode: 'bottom'})
