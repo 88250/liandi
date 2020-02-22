@@ -41,7 +41,6 @@ const createWindow = () => {
 
   // 加载主界面
   if (isDevEnv) {
-    console.log(appDir)
     mainWindow.loadFile(path.join(appDir, 'public/index.html'))
   } else {
     mainWindow.loadFile(path.join(current, 'public/index.html'))
@@ -55,6 +54,10 @@ const createWindow = () => {
         label: '链滴笔记',
         submenu: [
           {role: 'about'},
+          {type: 'separator'},
+          {role: 'cut'},
+          {role: 'copy'},
+          {role: 'paste'},
           {type: 'separator'},
           {role: 'toggledevtools'},
           {type: 'separator'},
