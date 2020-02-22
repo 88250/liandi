@@ -102,8 +102,8 @@ func newMarkdown() *Markdown {
 		Footnotes:                           false,
 		ToC:                                 false,
 		AutoSpace:                           true,
-		FixTermTypo:                         true,
-		ChinesePunct:                        true,
+		FixTermTypo:                         false,
+		ChinesePunct:                        false,
 		InlineMathAllowDigitAfterOpenMarker: false,
 		MathEngine:                          "KaTeX",
 	}
