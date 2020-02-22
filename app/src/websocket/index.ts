@@ -7,8 +7,7 @@ import {lauguage} from '../config/language';
 import {theme} from '../config/theme';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
-import {about} from '../config/about';
-import {remote} from "electron";
+
 export class WebSocketUtil {
     public webSocket: WebSocket;
     private reqId: number;
@@ -48,7 +47,7 @@ export class WebSocketUtil {
         this.webSocket.onmessage = (event) => {
             const response = JSON.parse(event.data);
             if ("msg" === response.cmd) {
-                showMessage(response.msg, 0);
+                showMessage(response.msg, response.data.closeTimeout);
                 return;
             }
 
