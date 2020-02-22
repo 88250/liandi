@@ -77,8 +77,10 @@ func checkUpdate(now bool) {
 
 	ver := result["ver"].(string)
 	if ver <= Ver {
-		Logger.Infof(Conf.lang(12) + " v%s", Ver)
-		pushMsg(Conf.lang(12))
+		Logger.Infof(Conf.lang(12)+" v%s", Ver)
+		if now { // 定时检查的话不弹提示，只有用户手动触发更新检查才弹
+			pushMsg(Conf.lang(12))
+		}
 		return
 	}
 
