@@ -1,4 +1,4 @@
-productName: "liandi"
+productName: "链滴笔记"
 appId: "org.b3log.liandi"
 copyright: "Copyright (c) 2020-present, b3log.org"
 artifactName: "liandi-${version}-${os}.${ext}"
