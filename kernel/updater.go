@@ -40,19 +40,6 @@ func checkUpdate(now bool) {
 	}
 	Logger.Info("开始检查更新")
 
-	kernel := "kernel"
-	newkernel := "newkernel"
-	if gulu.OS.IsLinux() {
-		kernel += "-linux"
-		newkernel += "-linux"
-	} else if gulu.OS.IsDarwin() {
-		kernel += "-darwin"
-		newkernel += "-darwin"
-	} else {
-		kernel += ".exe"
-		newkernel += ".exe"
-	}
-
 	result := map[string]interface{}{}
 	request := gorequest.New().TLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 	_, _, errs := request.Get("https://rhythm.b3log.org/version/liandi").
