@@ -6,11 +6,8 @@ import {newFile, newFolder, showInFolder} from './commonMenuItem';
 
 export const initFilesMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
-
     menu.append(newFile(liandi));
-
     menu.append(newFolder(liandi));
-
     menu.append(new remote.MenuItem({
         label: i18n[liandi.config.lang].delete,
         click: () => {
@@ -82,9 +79,7 @@ export const initFilesMenu = (liandi: ILiandi) => {
 
 export const initFilesSpaceMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
-
     menu.append(newFile(liandi));
-
     menu.append(newFolder(liandi));
     return menu;
 };
