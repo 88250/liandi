@@ -24,12 +24,12 @@ export const getPath = (path: string) => {
 
 export const urlJoin = (url1: string, url2: string) => {
     if (url1.endsWith('/')) {
-        url1 = url1.substr(0, url1.length - 1)
+        url1 = url1.substr(0, url1.length - 1);
     }
 
     if (url2.startsWith('/')) {
-        url2 = url2.substring(1)
+        url2 = url2.substring(1);
     }
 
-    return `${url1}/${url2}`
-}
+    return `${url1}/${url2}`;
+};

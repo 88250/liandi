@@ -57,21 +57,21 @@ class App {
         editorWebview.addEventListener('ipc-message', (event) => {
             switch (event.channel) {
                 case Constants.LIANDI_EDITOR_FULLSCREEN:
-                    editorWebview.classList.add('editors__webview--fullscreen')
-                    break
+                    editorWebview.classList.add('editors__webview--fullscreen');
+                    break;
                 case Constants.LIANDI_EDITOR_RESTORE:
-                    editorWebview.classList.remove('editors__webview--fullscreen')
-                    break
+                    editorWebview.classList.remove('editors__webview--fullscreen');
+                    break;
                 case Constants.LIANDI_WEBSOCKET_PUT:
                     this.liandi.editors.save(this.liandi);
-                    break
+                    break;
                 case Constants.LIANDI_SEARCH_OPEN:
                     initSearch(this.liandi);
-                    break
+                    break;
                 default:
                     break;
             }
-        })
+        });
     }
 
     private onIpc() {
@@ -86,12 +86,12 @@ class App {
     private initWindow() {
         const currentWindow = remote.getCurrentWindow();
         currentWindow.on('blur', () => {
-            document.body.classList.add('body--blur')
-        })
+            document.body.classList.add('body--blur');
+        });
 
         currentWindow.on('focus', () => {
-            document.body.classList.remove('body--blur')
-        })
+            document.body.classList.remove('body--blur');
+        });
 
 
         // window action
@@ -107,7 +107,7 @@ class App {
         }
 
         if (process.platform === 'win32') {
-            document.body.classList.add('body--win32')
+            document.body.classList.add('body--win32');
         }
 
         document.querySelector('.navigation').classList.add('navigation--win32');

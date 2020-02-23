@@ -16,33 +16,33 @@ export class EditorWebview {
         initGlobalKeyPress();
         this.onMessage();
         if (process.platform === 'win32') {
-            document.body.classList.add('body--win32')
+            document.body.classList.add('body--win32');
         }
 
-        const menu = new remote.Menu()
-        const win = remote.getCurrentWindow()
+        const menu = new remote.Menu();
+        const win = remote.getCurrentWindow();
         menu.append(new remote.MenuItem({
             label: '剪切',
             id: 'menuItemCut',
             role: 'cut'
-        }))
+        }));
         menu.append(new remote.MenuItem({
             label: '复制',
             id: 'menuItemCopy',
             role: 'copy',
-        }))
+        }));
         menu.append(new remote.MenuItem({
             label: '粘贴',
             id: 'menuItemPaste',
             role: 'paste',
-        }))
+        }));
         menu.append(new remote.MenuItem({
             label: '粘贴为纯文本',
             id: 'menuItemPasteAsPlainText',
             click: () => {
-                console.log('Paste as plain text')
+                console.log('Paste as plain text');
             }
-        }))
+        }));
 
         window.addEventListener('contextmenu', (event) => {
             let target = event.target as HTMLElement;
@@ -52,6 +52,7 @@ export class EditorWebview {
                     event.preventDefault();
                     break;
                 }
+                target = target.parentElement;
             }
         });
     }
@@ -59,9 +60,9 @@ export class EditorWebview {
     private onMessage() {
         ipcRenderer.on(Constants.LIANDI_EDITOR_OPEN, (event, data) => {
             if (data.config.theme === 'dark') {
-                document.body.classList.add('theme--dark')
+                document.body.classList.add('theme--dark');
             } else {
-                document.body.classList.remove('theme--dark')
+                document.body.classList.remove('theme--dark');
             }
             this.onOpen(data);
         });
@@ -72,7 +73,7 @@ export class EditorWebview {
 
     private onOpen(liandi: ILiandi, value: string = remote.getGlobal('liandiEditor').editorText) {
         this.editorElement.innerHTML = '';
-        let timeoutId: number
+        let timeoutId: number;
         this.vditor = new Vditor('liandiVditor', {
             typewriterMode: true,
             toolbar: [
@@ -106,16 +107,16 @@ export class EditorWebview {
                     name: 'fullscreen',
                     click: (isFullscreen: boolean) => {
                         if (isFullscreen) {
-                            ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_FULLSCREEN)
-                            this.vditor.focus()
+                            ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_FULLSCREEN);
+                            this.vditor.focus();
                             if (process.platform === 'darwin') {
-                                (document.querySelector('.vditor-toolbar') as HTMLElement).style.paddingLeft = '70px'
+                                (document.querySelector('.vditor-toolbar') as HTMLElement).style.paddingLeft = '70px';
                             }
                         } else {
-                            ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_RESTORE)
-                            this.vditor.focus()
+                            ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_RESTORE);
+                            this.vditor.focus();
                             if (process.platform === 'darwin') {
-                                (document.querySelector('.vditor-toolbar') as HTMLElement).style.paddingLeft = '0'
+                                (document.querySelector('.vditor-toolbar') as HTMLElement).style.paddingLeft = '0';
                             }
                         }
                     },
@@ -151,21 +152,21 @@ export class EditorWebview {
                         'X-PATH': encodeURIComponent(liandi.current.path),
                         'X-Mode': this.vditor.vditor.currentMode
                     };
-                    return files
+                    return files;
                 }
             },
             after: () => {
                 this.vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
                 this.vditor.setValue(value);
-                remote.getGlobal('liandiEditor').editorText = value
-                remote.getGlobal('liandiEditor').saved = true
+                remote.getGlobal('liandiEditor').editorText = value;
+                remote.getGlobal('liandiEditor').saved = true;
             },
-            input: (value: string) => {
-                remote.getGlobal('liandiEditor').editorText = value
-                remote.getGlobal('liandiEditor').saved = false
+            input: (textContent: string) => {
+                remote.getGlobal('liandiEditor').editorText = textContent;
+                remote.getGlobal('liandiEditor').saved = false;
                 clearTimeout(timeoutId);
                 timeoutId = window.setTimeout(() => {
-                    ipcRenderer.sendToHost(Constants.LIANDI_WEBSOCKET_PUT)
+                    ipcRenderer.sendToHost(Constants.LIANDI_WEBSOCKET_PUT);
                 }, 5000);
             }
         });

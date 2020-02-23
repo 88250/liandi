@@ -1,5 +1,5 @@
 import {Constants} from '../constants';
-import {i18n} from "../i18n";
+import {i18n} from '../i18n';
 
 export const theme = {
     genHTML: (liandi: ILiandi) => {

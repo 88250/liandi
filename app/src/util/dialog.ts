@@ -68,12 +68,12 @@ export const bindDialogInput = (inputElement: HTMLInputElement, enterEvent?: () 
             return;
         }
         if (event.key === 'Escape') {
-            destroyDialog()
+            destroyDialog();
             event.preventDefault();
         }
         if (event.key === 'Enter' && enterEvent) {
-            enterEvent()
+            enterEvent();
             event.preventDefault();
         }
-    })
-}
+    });
+};

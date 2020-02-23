@@ -46,7 +46,7 @@ export class WebSocketUtil {
         };
         this.webSocket.onmessage = (event) => {
             const response = JSON.parse(event.data);
-            if ("msg" === response.cmd) {
+            if ('msg' === response.cmd) {
                 showMessage(response.msg, response.data.closeTimeout);
                 return;
             }

@@ -10,7 +10,7 @@ import {markdown} from '../config/markdown';
 export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
 
-    liandi.editors.save(liandi)
+    liandi.editors.save(liandi);
 
     const currentNavigationElement =
         liandi.navigation.element.querySelector(`tree-list[url="${currentList.getAttribute('data-url')}"]`);
@@ -99,7 +99,7 @@ export const initSearch = (liandi: ILiandi) => {
             return;
         }
         if (event.key === 'Escape') {
-            destroyDialog()
+            destroyDialog();
             event.preventDefault();
         }
         let currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');

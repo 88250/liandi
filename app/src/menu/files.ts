@@ -57,7 +57,7 @@ export const initFilesMenu = (liandi: ILiandi) => {
                 width: 400
             });
             const dialogElement = document.querySelector('#dialog');
-            const inputElement = dialogElement.querySelector('.input') as HTMLInputElement
+            const inputElement = dialogElement.querySelector('.input') as HTMLInputElement;
             dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
                 destroyDialog();
             });
@@ -71,7 +71,7 @@ export const initFilesMenu = (liandi: ILiandi) => {
             });
             bindDialogInput(inputElement, () => {
                 (dialogElement.querySelector('.button') as HTMLButtonElement).click();
-            })
+            });
         }
     }));
 

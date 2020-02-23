@@ -68,7 +68,7 @@ export const newFile = (liandi: ILiandi) => {
             });
             bindDialogInput(inputElement, () => {
                 (dialogElement.querySelector('.button') as HTMLButtonElement).click();
-            })
+            });
         }
     });
 };
@@ -112,7 +112,7 @@ export const newFolder = (liandi: ILiandi) => {
             });
             bindDialogInput(inputElement, () => {
                 (dialogElement.querySelector('.button') as HTMLButtonElement).click();
-            })
+            });
         }
     });
 };

@@ -1,5 +1,5 @@
-import {destroyDialog} from "../util/dialog";
-import {i18n} from "../i18n";
+import {destroyDialog} from '../util/dialog';
+import {i18n} from '../i18n';
 
 export const initConfigSearch = (liandi: ILiandi, element: HTMLElement) => {
     const configIndex = [
@@ -43,7 +43,7 @@ export const initConfigSearch = (liandi: ILiandi, element: HTMLElement) => {
             tabPanelElement.style.display = 'none';
         }
 
-        inputElement.focus()
+        inputElement.focus();
     };
 
     inputElement.addEventListener('compositionend', () => {
@@ -60,8 +60,8 @@ export const initConfigSearch = (liandi: ILiandi, element: HTMLElement) => {
             return;
         }
         if (event.key === 'Escape') {
-            destroyDialog()
+            destroyDialog();
             event.preventDefault();
         }
-    })
+    });
 };

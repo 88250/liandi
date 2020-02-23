@@ -1,5 +1,5 @@
 import {i18n} from '../i18n';
-const packageJSON = require('../../package.json')
+const packageJSON = require('../../package.json');
 
 export const about = {
     genHTML: (liandi: ILiandi) => {

@@ -18,25 +18,25 @@ export class Editors {
 
     save(liandi: ILiandi) {
         if (remote.getGlobal('liandiEditor').saved) {
-            return
+            return;
         }
         liandi.ws.send('put', {
             url: liandi.current.dir.url,
             path: liandi.current.path,
             content: remote.getGlobal('liandiEditor').editorText
         });
-        remote.getGlobal('liandiEditor').saved = true
+        remote.getGlobal('liandiEditor').saved = true;
     }
 
     close(liandi: ILiandi) {
-        this.save(liandi)
+        this.save(liandi);
         this.inputElement.classList.add('fn__none');
         this.editorWebviewElement.classList.add('fn__none');
     }
 
     sendMessage(message: string, liandi: ILiandi, editorData?: any) {
         if (editorData) {
-            remote.getGlobal('liandiEditor').editorText = editorData.content
+            remote.getGlobal('liandiEditor').editorText = editorData.content;
             this.inputElement.value = editorData.name;
             this.inputElement.classList.remove('fn__none');
             this.editorWebviewElement.classList.remove('fn__none');
