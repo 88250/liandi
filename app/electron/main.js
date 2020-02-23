@@ -8,7 +8,6 @@ process.noAsar = true
 const homedir = os.homedir()
 const liandi = path.join(homedir, '.liandi')
 const appDir = path.dirname(app.getAppPath())
-const current = path.join(liandi, 'current')
 const getKernelName = () => {
   let ret = 'kernel.exe'
   if (process.platform === 'darwin') {
@@ -47,7 +46,7 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools({mode: 'bottom'})
   } else {
     // 加载主界面
-    mainWindow.loadFile(path.join(current, 'public/index.html'))
+    mainWindow.loadFile('../public/index.html')
     // 菜单
     const productName = '链滴笔记'
     const template = [
@@ -129,28 +128,8 @@ const createWindow = () => {
   })
 }
 
-const applyUpdate = () => {
-  if (isDevEnv) {
-    return
-  }
-
-  if (!fs.existsSync(liandi)) { // 第一次启动
-    fs.mkdirSync(liandi)
-    copyDir(appDir, current)
-  } else {
-    const update = path.join(liandi, 'update')
-    if (fs.existsSync(update)) {
-      removeDir(current)
-      fs.renameSync(update, current)
-    }
-  }
-}
-
 const startKernel = () => {
-  let kernelPath = path.join(current, kernelName)
-  if (isDevEnv) {
-    kernelPath = path.join('..', 'kernel', kernelName)
-  }
+  kernelPath = path.join('..', 'kernel', kernelName)
   if (process.platform !== 'win32') {
     fs.fchmodSync(kernelPath, 777)
   }
@@ -158,7 +137,6 @@ const startKernel = () => {
 }
 
 app.whenReady().then(() => {
-  applyUpdate()
   createWindow()
   startKernel()
 })
@@ -189,38 +167,3 @@ app.on('web-contents-created', (webContentsCreatedEvent, contents) => {
     })
   }
 })
-
-const removeDir = function (dirPath) {
-  if (!fs.existsSync(dirPath)) {
-    return
-  }
-
-  fs.readdirSync(dirPath).forEach((file) => {
-    const curPath = path.join(dirPath, file)
-    if (fs.lstatSync(curPath).isDirectory()) {
-      removeDir(curPath)
-    } else {
-      fs.unlinkSync(curPath)
-    }
-  })
-  fs.rmdirSync(dirPath)
-}
-
-const copyDir = function (src, dest) {
-  if (!fs.existsSync(src)) {
-    return
-  }
-
-  if ('.asar' === path.extname(src)) {
-    return
-  }
-
-  if (fs.lstatSync(src).isDirectory()) {
-    fs.mkdirSync(dest)
-    fs.readdirSync(src).forEach(childItemName => {
-      copyDir(path.join(src, childItemName), path.join(dest, childItemName))
-    })
-  } else {
-    fs.copyFileSync(src, dest)
-  }
-}
