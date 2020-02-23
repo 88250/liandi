@@ -22,15 +22,28 @@ export class EditorWebview {
         const menu = new Menu()
         const win = remote.getCurrentWindow()
         menu.append(new MenuItem({
-            label: 'Copy',
+            label: '剪切',
+            id: 'menuItemCut',
+            role: 'cut'
+        }))
+        menu.append(new MenuItem({
+            label: '复制',
             id: 'menuItemCopy',
             role: 'copy',
         }))
         menu.append(new MenuItem({
-            label: 'Paste',
+            label: '粘贴',
             id: 'menuItemPaste',
             role: 'paste',
         }))
+        menu.append(new MenuItem({
+            label: '粘贴为纯文本',
+            id: 'menuItemPasteAsPlainText',
+            click: () => {
+                console.log('Paste as plain text')
+            }
+        }))
+
         this.editorElement.addEventListener('mousedown', event => {
             if (2 !== event.button) { // 仅绑定右键
                 return
