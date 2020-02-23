@@ -1,5 +1,4 @@
 import {i18n} from '../i18n';
-import {Constants} from '../constants';
 import {removeLastPath} from '../util/path';
 
 export class Files {
