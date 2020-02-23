@@ -129,9 +129,9 @@ const createWindow = () => {
 }
 
 const startKernel = () => {
-  kernelPath = path.join('..', 'kernel', kernelName)
-  if (process.platform !== 'win32') {
-    fs.fchmodSync(kernelPath, 777)
+  kernelPath = path.join('..', kernelName)
+  if (isDevEnv) {
+    kernelPath = path.join('..', 'kernel', kernelName)
   }
   spawn(kernelPath)
 }
