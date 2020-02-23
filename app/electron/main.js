@@ -40,58 +40,56 @@ const createWindow = () => {
     mainWindow.show()
   })
 
+  // 菜单
+  const productName = '链滴笔记'
+  const template = [
+    {
+      label: productName,
+      submenu: [
+        {
+          label: `About ${productName}`,
+          role: 'about',
+        },
+        {type: 'separator'},
+        {role: 'services'},
+        {type: 'separator'},
+        {
+          label: `Hide ${productName}`,
+          role: 'hide',
+        },
+        {role: 'hideOthers'},
+        {role: 'unhide'},
+        {type: 'separator'},
+        {
+          label: `Quit ${productName}`,
+          role: 'quit',
+        },
+      ],
+    },
+    {role: 'editMenu'},
+    {
+      role: 'windowMenu',
+      submenu: [
+        {role: 'minimize'},
+        {role: 'zoom'},
+        {role: 'togglefullscreen'},
+        {role: 'close'},
+        {type: 'separator'},
+        {role: 'toggledevtools'},
+        {type: 'separator'},
+        {role: 'front'},
+      ],
+    },
+  ]
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
+
   // 加载主界面
   if (isDevEnv) {
     mainWindow.loadFile(path.join(appDir, 'public/index.html'))
-  } else {
-    mainWindow.loadFile(path.join(current, 'public/index.html'))
-  }
-
-  if (isDevEnv) {
     mainWindow.webContents.openDevTools({mode: 'bottom'})
   } else {
-    const productName = "链滴笔记"
-    const template = [
-      {
-        label: productName,
-        submenu: [
-          {
-            label: `About ${productName}`,
-            role: 'about'
-          },
-          {type: 'separator'},
-          {role: 'services'},
-          {type: 'separator'},
-          {
-            label: `Hide ${productName}`,
-            role: 'hide'
-          },
-          {role: 'hideOthers'},
-          {role: 'unhide'},
-          {type: 'separator'},
-          {
-            label: `Quit ${productName}`,
-            role: 'quit'
-          },
-        ],
-      },
-      {role: 'editMenu'},
-      {
-        role: 'windowMenu',
-        submenu: [
-          {role: 'minimize'},
-          {role: 'zoom'},
-          {role: 'togglefullscreen'},
-          {role: 'close'},
-          {type: 'separator'},
-          {role: 'toggledevtools'},
-          {type: 'separator'},
-          {role: 'front'},
-        ]
-      },
-    ]
-    const menu = Menu.buildFromTemplate(template)
-    Menu.setApplicationMenu(menu)
+    mainWindow.loadFile(path.join(current, 'public/index.html'))
   }
 
   // 当前页面链接使用浏览器打开
@@ -103,6 +101,7 @@ const createWindow = () => {
     shell.openExternal(url)
   })
 
+  // 快捷键
   mainWindow.on('blur', () => {
     globalShortcut.unregisterAll()
   })
@@ -117,6 +116,7 @@ const createWindow = () => {
     })
   })
 
+  // 全局对象
   global.liandiEditor = {
     editorText: '',
     saved: true,

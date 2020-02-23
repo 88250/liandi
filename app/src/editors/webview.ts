@@ -2,10 +2,9 @@ import '../assets/scss/editor.scss';
 import {Constants} from '../constants';
 import {getPath, urlJoin} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
-import {ipcRenderer, remote} from 'electron';
+import {ipcRenderer, remote, Menu, MenuItem} from 'electron';
 import {i18n} from '../i18n';
 
-const {Menu, MenuItem} = remote
 const Vditor = require('vditor');
 
 export class EditorWebview {
@@ -38,7 +37,7 @@ export class EditorWebview {
             role: 'paste',
         }))
         menu.append(new MenuItem({
-            label: i18n[liandi.config.lang].pasteAsPlainText,
+            label: 'Paste As Plain Text',
             id: 'menuItemPasteAsPlainText',
             click: () => {
                 console.log('Paste as plain text')
@@ -55,14 +54,6 @@ export class EditorWebview {
 
     private onMessage() {
         ipcRenderer.on(Constants.LIANDI_EDITOR_OPEN, (event, data) => {
-            this.onOpen(data);
-            if (data.config.theme === 'dark') {
-                document.body.classList.add('theme--dark')
-            } else {
-                document.body.classList.remove('theme--dark')
-            }
-        });
-        ipcRenderer.on(Constants.LIANDI_EDITOR_SETTHEME, (event, data) => {
             if (data.config.theme === 'dark') {
                 document.body.classList.add('theme--dark')
             } else {
