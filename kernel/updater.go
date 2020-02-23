@@ -88,7 +88,7 @@ func checkUpdate(now bool) {
 	upgrade := result["upgrade"].(bool)
 	if upgrade {
 		Logger.Infof("需要重新下载进行升级 [dl=%s]", dl)
-		pushMsg(fmt.Sprintf(Conf.lang(9), dl), 0)
+		pushMsg(fmt.Sprintf(Conf.lang(9), "<a href=\"" + dl + "\">" + dl + "</a>"), 0)
 		return
 	}
 

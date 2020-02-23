@@ -20,6 +20,10 @@
     background-color: rgba($blue, 0.8);
     max-width: 520px;
     box-sizing: border-box;
+
+      a {
+        color: $white;
+      }
   }
 
   &__close {
