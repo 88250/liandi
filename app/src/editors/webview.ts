@@ -37,7 +37,7 @@ export class EditorWebview {
             role: 'paste',
         }))
         menu.append(new MenuItem({
-            label: 'Paste As Plain Text',
+            label: '粘贴为纯文本',
             id: 'menuItemPasteAsPlainText',
             click: () => {
                 console.log('Paste as plain text')
