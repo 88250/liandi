@@ -40,9 +40,8 @@ export class EditorWebview {
         }));
         menu.append(new remote.MenuItem({
             label: i18n[lang].pasteAsPlainText,
-            click: (a, v, c) => {
-                const vditorDomHTML = this.vditor.vditor.lute.Md2VditorDOM(clipboard.readText());
-                //insertHTML(vditorDomHTML, vditor);
+            click: () => {
+                this.vditor.insertValue(clipboard.readText());
             }
         }));
 
@@ -50,8 +49,7 @@ export class EditorWebview {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
                 if (target.tagName === 'PRE') {
-                    const range = getSelection().getRangeAt(0);
-                    if (range.toString() === "") {
+                    if (this.vditor.getSelection() === "") {
                         menu.items[0].enabled = false;
                         menu.items[1].enabled = false;
                     } else {
