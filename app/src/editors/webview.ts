@@ -38,7 +38,7 @@ export class EditorWebview {
             role: 'paste',
         }))
         menu.append(new MenuItem({
-            label: i18n[liandi.config.lang].pasteAsPlainText,
+            label: '粘贴为纯文本',
             id: 'menuItemPasteAsPlainText',
             click: () => {
                 console.log('Paste as plain text')
