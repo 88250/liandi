@@ -37,7 +37,7 @@ export class Editors {
     sendMessage(message: string, liandi: ILiandi, editorData?: { content: string, name: string }) {
         if (editorData) {
             remote.getGlobal('liandiEditor').editorText = editorData.content;
-            this.inputElement.value = editorData.name;
+            this.inputElement.value = editorData.name.replace(".md", "");
             this.inputElement.classList.remove('fn__none');
             this.editorWebviewElement.classList.remove('fn__none');
         }

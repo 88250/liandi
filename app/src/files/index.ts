@@ -46,7 +46,7 @@ export class Files {
             liandi.current.path = data.newPath;
 
             if (!data.newPath.endsWith('/')) {
-                (document.querySelector('.editors__input') as HTMLInputElement).value = data.newName;
+                (document.querySelector('.editors__input') as HTMLInputElement).value = data.newName.replace('.md', '');
             }
         }
     }

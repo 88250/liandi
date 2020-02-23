@@ -17,6 +17,10 @@ export const rename = (liandi:ILiandi, name: string, url: string, oldPath: strin
         return false;
     }
 
+    if (!name.endsWith('.md')) {
+        name += '.md';
+    }
+
     const oldPathList = oldPath.split('/');
     let oldName = '';
     if (oldPath.endsWith('/')) {
