@@ -28,18 +28,22 @@ export class EditorWebview {
         const menu = new remote.Menu();
         menu.append(new remote.MenuItem({
             label: i18n[lang].cut,
+            id: 'cut',
             role: 'cut'
         }));
         menu.append(new remote.MenuItem({
             label: i18n[lang].copy,
+            id: 'copy',
             role: 'copy',
         }));
         menu.append(new remote.MenuItem({
             label: i18n[lang].paste,
+            id: 'paste',
             role: 'paste',
         }));
         menu.append(new remote.MenuItem({
             label: i18n[lang].pasteAsPlainText,
+            id: 'pasteAsPlainText',
             click: () => {
                 this.vditor.insertValue(clipboard.readText());
             }
@@ -49,13 +53,7 @@ export class EditorWebview {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
                 if (target.tagName === 'PRE') {
-                    if (this.vditor.getSelection() === "") {
-                        menu.items[0].enabled = false;
-                        menu.items[1].enabled = false;
-                    } else {
-                        menu.items[0].enabled = true;
-                        menu.items[1].enabled = true;
-                    }
+                    menu.getMenuItemById('cut').enabled = menu.getMenuItemById('copy').enabled = this.vditor.getSelection() !== "";
                     menu.popup();
                     event.preventDefault();
                     break;
