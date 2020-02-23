@@ -13,12 +13,6 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"os"
-	"path/filepath"
-	"runtime"
-	"strings"
 	"sync"
 	"time"
 
@@ -59,12 +53,6 @@ func checkUpdate(now bool) {
 		newkernel += ".exe"
 	}
 
-	updateDir := filepath.Join(LianDiDir, "update")
-	if gulu.File.IsExist(updateDir) {
-		pushMsg(fmt.Sprintf(Conf.lang(10)), 5000)
-		return
-	}
-
 	result := map[string]interface{}{}
 	request := gorequest.New().TLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 	_, _, errs := request.Get("https://rhythm.b3log.org/version/liandi").
@@ -77,70 +65,16 @@ func checkUpdate(now bool) {
 
 	ver := result["ver"].(string)
 	if ver <= Ver {
-		Logger.Infof(Conf.lang(12)+" v%s", Ver)
+		Logger.Infof(Conf.lang(10)+" v%s", Ver)
 		if now { // 定时检查的话不弹提示，只有用户手动触发更新检查才弹
-			pushMsg(Conf.lang(12), 3000)
+			pushMsg(Conf.lang(10), 3000)
 		}
 		return
 	}
 
 	dl := result["dl"].(string)
-	upgrade := result["upgrade"].(bool)
-	if upgrade {
-		Logger.Infof("需要重新下载进行升级 [dl=%s]", dl)
-		pushMsg(fmt.Sprintf(Conf.lang(9), "<a href=\"" + dl + "\">" + dl + "</a>"), 0)
-		return
-	}
-
-	dl = strings.ReplaceAll(dl, "{os}", runtime.GOOS)
-	request = gorequest.New().TLSClientConfig(&tls.Config{InsecureSkipVerify: true})
-	resp, data, errs := request.Get(dl).Set("User-Agent", UserAgent).Timeout(3 * time.Minute).EndBytes()
-	if nil != errs {
-		Logger.Errorf("下载更新包 [%s] 失败：%s", dl, errs)
-		pushMsg(Conf.lang(11), 0)
-		return
-	}
-	if http.StatusOK != resp.StatusCode {
-		Logger.Errorf("下载更新包 [%s] 失败 [sc=%d]", dl, resp.StatusCode)
-		pushMsg(Conf.lang(11), 0)
-		return
-	}
-
-	file, err := ioutil.TempFile("", "liandi-*.zip")
-	if nil != err {
-		Logger.Errorf("创建更新包临时文件失败：%s", err)
-		pushMsg(Conf.lang(11), 0)
-		return
-	}
-
-	if _, err = file.Write(data); nil != err {
-		Logger.Errorf("写入更新包临时文件失败：%s", err)
-		pushMsg(Conf.lang(11), 0)
-		return
-	}
-	file.Close()
-
-	if err = os.RemoveAll(updateDir); nil != err {
-		Logger.Errorf("清空更新包解压目录失败：%s", err)
-		pushMsg(Conf.lang(11), 0)
-		return
-	}
-
-	if err = os.MkdirAll(updateDir, 0644); nil != err {
-		Logger.Errorf("创建更新包解压目录失败：%s", err)
-		pushMsg(Conf.lang(11), 0)
-		return
-	}
-
-	if err = gulu.Zip.Unzip(file.Name(), updateDir); nil != err {
-		Logger.Errorf("解压更新包失败：%s", err)
-		pushMsg(Conf.lang(11), 0)
-		return
-	}
-
-	Logger.Infof("安装更新包 [%s] 成功", dl)
-	pushMsg(fmt.Sprintf(Conf.lang(10)), 5000)
-	return
+	Logger.Infof("需要重新下载进行升级 [dl=%s]", dl)
+	pushMsg(fmt.Sprintf(Conf.lang(9), "<a href=\""+dl+"\">"+dl+"</a>"), 0)
 }
 
 func pushMsg(msg string, closeTimeout int) {

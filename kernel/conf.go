@@ -316,9 +316,7 @@ var zhCN = map[int]string{
 	7:  "在目录 [%s] 下删除 [%s] 失败：%s",
 	8:  "检查更新失败",
 	9:  "新版本可用 %s",
-	10: "更新补丁已经准备完毕，请重启应用",
-	11: "安装更新包失败",
-	12: "已是最新版",
+	10: "已是最新版",
 }
 
 var enUS = map[int]string{
@@ -332,9 +330,7 @@ var enUS = map[int]string{
 	7:  "Remove dir [%s] path [%s] failed: %s",
 	8:  "Check update failed",
 	9:  "New version is available %s",
-	10: "Update patch already setup, please restart to apply it",
-	11: "Setup update patch failed",
-	12: "Is the latest version",
+	10: "Is the latest version",
 }
 
 var langs = map[string]map[int]string{
