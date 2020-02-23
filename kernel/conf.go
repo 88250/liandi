@@ -25,7 +25,7 @@ import (
 )
 
 const (
-	Ver        = "0.1.0"
+	Ver        = "0.1.1"
 	ServerPort = "6806"
 	UserAgent  = "LianDi/v" + Ver
 )

@@ -1,6 +1,6 @@
 {
   "name": "liandi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "链滴笔记",
   "main": "./electron/main.js",
   "scripts": {
