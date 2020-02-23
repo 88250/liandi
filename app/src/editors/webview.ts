@@ -2,13 +2,14 @@ import '../assets/scss/editor.scss';
 import {Constants} from '../constants';
 import {getPath, urlJoin} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
-import {ipcRenderer, remote} from 'electron';
+import {ipcRenderer, remote, clipboard} from 'electron';
 import {i18n} from '../i18n';
 
 const Vditor = require('vditor');
 
 export class EditorWebview {
     private isInitMenu: boolean
+    private vditor: any
 
     constructor() {
         this.isInitMenu = false;
@@ -27,24 +28,21 @@ export class EditorWebview {
         const menu = new remote.Menu();
         menu.append(new remote.MenuItem({
             label: i18n[lang].cut,
-            id: 'menuItemCut',
             role: 'cut'
         }));
         menu.append(new remote.MenuItem({
             label: i18n[lang].copy,
-            id: 'menuItemCopy',
             role: 'copy',
         }));
         menu.append(new remote.MenuItem({
             label: i18n[lang].paste,
-            id: 'menuItemPaste',
             role: 'paste',
         }));
         menu.append(new remote.MenuItem({
             label: i18n[lang].pasteAsPlainText,
-            id: 'menuItemPasteAsPlainText',
-            click: () => {
-                console.log('Paste as plain text');
+            click: (a, v, c) => {
+                const vditorDomHTML = this.vditor.vditor.lute.Md2VditorDOM(clipboard.readText());
+                //insertHTML(vditorDomHTML, vditor);
             }
         }));
 
@@ -52,6 +50,14 @@ export class EditorWebview {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
                 if (target.tagName === 'PRE') {
+                    const range = getSelection().getRangeAt(0);
+                    if (range.toString() === "") {
+                        menu.items[0].enabled = false;
+                        menu.items[1].enabled = false;
+                    } else {
+                        menu.items[0].enabled = true;
+                        menu.items[1].enabled = true;
+                    }
                     menu.popup();
                     event.preventDefault();
                     break;
@@ -81,7 +87,7 @@ export class EditorWebview {
     private onOpen(liandi: ILiandi, value: string = remote.getGlobal('liandiEditor').editorText) {
         document.getElementById('liandiVditor').innerHTML = '';
         let timeoutId: number;
-        const vditor = new Vditor('liandiVditor', {
+        this.vditor = new Vditor('liandiVditor', {
             typewriterMode: true,
             toolbar: [
                 'emoji',
@@ -115,13 +121,13 @@ export class EditorWebview {
                     click: (isFullscreen: boolean) => {
                         if (isFullscreen) {
                             ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_FULLSCREEN);
-                            vditor.focus();
+                            this.vditor.focus();
                             if (process.platform === 'darwin') {
                                 (document.querySelector('.vditor-toolbar') as HTMLElement).style.paddingLeft = '70px';
                             }
                         } else {
                             ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_RESTORE);
-                            vditor.focus();
+                            this.vditor.focus();
                             if (process.platform === 'darwin') {
                                 (document.querySelector('.vditor-toolbar') as HTMLElement).style.paddingLeft = '0';
                             }
@@ -154,17 +160,17 @@ export class EditorWebview {
                 filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
                 url: Constants.UPLOAD_ADDRESS,
                 file: (files: File[]) => {
-                    vditor.vditor.options.upload.headers = {
+                    this.vditor.vditor.options.upload.headers = {
                         'X-URL': encodeURIComponent(liandi.current.dir.url),
                         'X-PATH': encodeURIComponent(liandi.current.path),
-                        'X-Mode': vditor.vditor.currentMode
+                        'X-Mode': this.vditor.vditor.currentMode
                     };
                     return files;
                 }
             },
             after: () => {
-                vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
-                vditor.setValue(value);
+                this.vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
+                this.vditor.setValue(value);
                 remote.getGlobal('liandiEditor').editorText = value;
                 remote.getGlobal('liandiEditor').saved = true;
             },
