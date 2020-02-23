@@ -1,4 +1,4 @@
-const {app, BrowserWindow, shell, Menu, globalShortcut, screen} = require(
+const {app, BrowserWindow, shell, Menu, globalShortcut, screen, nativeTheme, ipcMain} = require(
   'electron')
 const {spawn} = require('child_process')
 const path = require('path')
@@ -122,6 +122,11 @@ const createWindow = () => {
     editorText: '',
     saved: true,
   }
+
+  // 监听主题切换
+  ipcMain.on('liandi-config-theme', (event, theme) => {
+    nativeTheme.themeSource = theme;
+  })
 }
 
 const applyUpdate = () => {

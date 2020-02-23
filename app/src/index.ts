@@ -54,6 +54,7 @@ class App {
             shell.openExternal(e.url);
         });
 
+        // 监听 webview 发送过来的事件
         editorWebview.addEventListener('ipc-message', (event) => {
             switch (event.channel) {
                 case Constants.LIANDI_EDITOR_FULLSCREEN:
@@ -75,6 +76,7 @@ class App {
     }
 
     private onIpc() {
+        // 监听主线程发送的消息
         ipcRenderer.on(Constants.LIANDI_FIND_SHOW, () => {
             this.liandi.find.open();
         });

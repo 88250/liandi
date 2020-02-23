@@ -16,4 +16,6 @@ export abstract class Constants {
     public static readonly LIANDI_SEARCH_OPEN: string = 'liandi-search-open';
 
     public static readonly LIANDI_FIND_SHOW: string = 'liandi-find-show';
+
+    public static readonly LIANDI_CONFIG_THEME: string = 'liandi-config-theme';
 }

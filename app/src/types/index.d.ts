@@ -29,7 +29,7 @@ declare interface IMD {
 declare interface ILiandi {
     config?: {
         lang: keyof II18n
-        theme: 'white' | 'dark',
+        theme: 'light' | 'dark',
         markdown: IMD
     };
     componentCSS: string;

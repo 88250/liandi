@@ -8,8 +8,8 @@ import {i18n} from '../i18n';
 const Vditor = require('vditor');
 
 export class EditorWebview {
-    private isInitMenu: boolean
-    private vditor: any
+    private isInitMenu: boolean;
+    private vditor: any;
 
     constructor() {
         this.isInitMenu = false;
@@ -22,7 +22,7 @@ export class EditorWebview {
 
     private initMenu(lang: keyof II18n) {
         if (this.isInitMenu) {
-            return
+            return;
         }
 
         const menu = new remote.Menu();
@@ -53,7 +53,7 @@ export class EditorWebview {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
                 if (target.tagName === 'PRE') {
-                    menu.getMenuItemById('cut').enabled = menu.getMenuItemById('copy').enabled = this.vditor.getSelection() !== "";
+                    menu.getMenuItemById('cut').enabled = menu.getMenuItemById('copy').enabled = this.vditor.getSelection() !== '';
                     menu.popup();
                     event.preventDefault();
                     return;
@@ -62,7 +62,7 @@ export class EditorWebview {
             }
         });
 
-        this.isInitMenu = true
+        this.isInitMenu = true;
     }
 
     private onMessage() {
