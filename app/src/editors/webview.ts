@@ -2,7 +2,7 @@ import '../assets/scss/editor.scss';
 import {Constants} from '../constants';
 import {getPath, urlJoin} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
-import {ipcRenderer, remote, Menu, MenuItem} from 'electron';
+import {ipcRenderer, remote} from 'electron';
 import {i18n} from '../i18n';
 
 const Vditor = require('vditor');
@@ -19,24 +19,24 @@ export class EditorWebview {
             document.body.classList.add('body--win32')
         }
 
-        const menu = new Menu()
+        const menu = new remote.Menu()
         const win = remote.getCurrentWindow()
-        menu.append(new MenuItem({
+        menu.append(new remote.MenuItem({
             label: '剪切',
             id: 'menuItemCut',
             role: 'cut'
         }))
-        menu.append(new MenuItem({
+        menu.append(new remote.MenuItem({
             label: '复制',
             id: 'menuItemCopy',
             role: 'copy',
         }))
-        menu.append(new MenuItem({
+        menu.append(new remote.MenuItem({
             label: '粘贴',
             id: 'menuItemPaste',
             role: 'paste',
         }))
-        menu.append(new MenuItem({
+        menu.append(new remote.MenuItem({
             label: '粘贴为纯文本',
             id: 'menuItemPasteAsPlainText',
             click: () => {
@@ -44,12 +44,16 @@ export class EditorWebview {
             }
         }))
 
-        this.editorElement.addEventListener('mousedown', event => {
-            if (2 !== event.button) { // 仅绑定右键
-                return
+        window.addEventListener('contextmenu', (event) => {
+            let target = event.target as HTMLElement;
+            while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
+                if (target.tagName === 'PRE') {
+                    menu.popup();
+                    event.preventDefault();
+                    break;
+                }
             }
-            menu.popup({window: win, x: event.x, y: event.y})
-        })
+        });
     }
 
     private onMessage() {
