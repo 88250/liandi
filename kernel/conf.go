@@ -46,7 +46,7 @@ func Close() {
 }
 
 func InitConf() {
-	Conf = &AppConf{LogLevel: "debug", Theme: "white", Lang: "zh_CN", Dirs: []*Dir{}}
+	Conf = &AppConf{LogLevel: "debug", Theme: "light", Lang: "zh_CN", Dirs: []*Dir{}}
 	if gulu.File.IsExist(ConfPath) {
 		data, err := ioutil.ReadFile(ConfPath)
 		if nil != err {
@@ -72,6 +72,10 @@ func InitConf() {
 		Conf.Markdown = newMarkdown()
 	}
 
+	if "white" == Conf.Theme { // v0.1.0 -> v0.1.1 兼容处理
+		Conf.Theme = "light"
+	}
+
 	Conf.Save()
 	Conf.InitClient()
 
@@ -82,7 +86,7 @@ func InitConf() {
 type AppConf struct {
 	LogLevel string    `json:"logLevel"` // 日志级别：Off, Trace, Debug, Info, Warn, Error, Fatal
 	Dirs     []*Dir    `json:"dirs"`     // 已经打开的文件夹
-	Theme    string    `json:"theme"`    // 界面主题
+	Theme    string    `json:"theme"`    // 界面主题：light, dark
 	Lang     string    `json:"lang"`     // 界面语言
 	Markdown *Markdown `json:"markdown"` // Markdown 引擎配置
 }
