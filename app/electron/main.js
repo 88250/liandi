@@ -129,7 +129,7 @@ const createWindow = () => {
 }
 
 const startKernel = () => {
-  kernelPath = path.join('..', kernelName)
+  kernelPath = path.join(appDir, kernelName)
   if (isDevEnv) {
     kernelPath = path.join('..', 'kernel', kernelName)
   }
