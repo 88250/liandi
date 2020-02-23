@@ -56,7 +56,7 @@ export class EditorWebview {
                     menu.getMenuItemById('cut').enabled = menu.getMenuItemById('copy').enabled = this.vditor.getSelection() !== "";
                     menu.popup();
                     event.preventDefault();
-                    break;
+                    return;
                 }
                 target = target.parentElement;
             }
