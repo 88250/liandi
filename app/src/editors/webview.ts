@@ -49,7 +49,7 @@ export class EditorWebview {
             }
         }));
 
-        window.addEventListener('contextmenu', (event) => {
+        window.addEventListener('contextmenu', event => {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
                 if (target.tagName === 'PRE') {
