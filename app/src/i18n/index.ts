@@ -33,7 +33,11 @@ export const i18n: II18n = {
         checkUpdate: 'Check update',
         currentVer: 'Current ver',
         themeWhite: 'White',
-        themeDark: 'Dark'
+        themeDark: 'Dark',
+        cut: 'Cut',
+        copy: 'Copy',
+        paste: 'Paste',
+        pasteAsPlainText: 'Paste As Plain Text',
     },
     zh_CN: {
         title: '链滴笔记',
@@ -69,6 +73,10 @@ export const i18n: II18n = {
         checkUpdate: '检查更新',
         currentVer: '当前版本',
         themeWhite: '明亮',
-        themeDark: '暗黑'
+        themeDark: '暗黑',
+        cut: '剪切',
+        copy: '复制',
+        paste: '粘贴',
+        pasteAsPlainText: '粘贴为纯文本',
     },
 };

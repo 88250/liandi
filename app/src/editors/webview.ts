@@ -3,6 +3,7 @@ import {Constants} from '../constants';
 import {getPath, urlJoin} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
 import {ipcRenderer, remote} from 'electron';
+import {i18n} from '../i18n';
 
 const {Menu, MenuItem} = remote
 const Vditor = require('vditor');
@@ -37,7 +38,7 @@ export class EditorWebview {
             role: 'paste',
         }))
         menu.append(new MenuItem({
-            label: '粘贴为纯文本',
+            label: i18n[liandi.config.lang].pasteAsPlainText,
             id: 'menuItemPasteAsPlainText',
             click: () => {
                 console.log('Paste as plain text')
