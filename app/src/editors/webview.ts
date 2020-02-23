@@ -8,36 +8,40 @@ import {i18n} from '../i18n';
 const Vditor = require('vditor');
 
 export class EditorWebview {
-    private vditor: any;
-    private editorElement: HTMLElement;
+    private isInitMenu: boolean
 
     constructor() {
-        this.editorElement = document.getElementById('liandiVditor');
+        this.isInitMenu = false;
         initGlobalKeyPress();
         this.onMessage();
         if (process.platform === 'win32') {
             document.body.classList.add('body--win32');
         }
+    }
+
+    private initMenu(lang: keyof II18n) {
+        if (this.isInitMenu) {
+            return
+        }
 
         const menu = new remote.Menu();
-        const win = remote.getCurrentWindow();
         menu.append(new remote.MenuItem({
-            label: '剪切',
+            label: i18n[lang].cut,
             id: 'menuItemCut',
             role: 'cut'
         }));
         menu.append(new remote.MenuItem({
-            label: '复制',
+            label: i18n[lang].copy,
             id: 'menuItemCopy',
             role: 'copy',
         }));
         menu.append(new remote.MenuItem({
-            label: '粘贴',
+            label: i18n[lang].paste,
             id: 'menuItemPaste',
             role: 'paste',
         }));
         menu.append(new remote.MenuItem({
-            label: '粘贴为纯文本',
+            label: i18n[lang].pasteAsPlainText,
             id: 'menuItemPasteAsPlainText',
             click: () => {
                 console.log('Paste as plain text');
@@ -55,6 +59,8 @@ export class EditorWebview {
                 target = target.parentElement;
             }
         });
+
+        this.isInitMenu = true
     }
 
     private onMessage() {
@@ -65,6 +71,7 @@ export class EditorWebview {
                 document.body.classList.remove('theme--dark');
             }
             this.onOpen(data);
+            this.initMenu(data.config.lang);
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_RELOAD, (event, data) => {
             this.onOpen(data);
@@ -72,9 +79,9 @@ export class EditorWebview {
     }
 
     private onOpen(liandi: ILiandi, value: string = remote.getGlobal('liandiEditor').editorText) {
-        this.editorElement.innerHTML = '';
+        document.getElementById('liandiVditor').innerHTML = '';
         let timeoutId: number;
-        this.vditor = new Vditor('liandiVditor', {
+        const vditor = new Vditor('liandiVditor', {
             typewriterMode: true,
             toolbar: [
                 'emoji',
@@ -108,13 +115,13 @@ export class EditorWebview {
                     click: (isFullscreen: boolean) => {
                         if (isFullscreen) {
                             ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_FULLSCREEN);
-                            this.vditor.focus();
+                            vditor.focus();
                             if (process.platform === 'darwin') {
                                 (document.querySelector('.vditor-toolbar') as HTMLElement).style.paddingLeft = '70px';
                             }
                         } else {
                             ipcRenderer.sendToHost(Constants.LIANDI_EDITOR_RESTORE);
-                            this.vditor.focus();
+                            vditor.focus();
                             if (process.platform === 'darwin') {
                                 (document.querySelector('.vditor-toolbar') as HTMLElement).style.paddingLeft = '0';
                             }
@@ -147,17 +154,17 @@ export class EditorWebview {
                 filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
                 url: Constants.UPLOAD_ADDRESS,
                 file: (files: File[]) => {
-                    this.vditor.vditor.options.upload.headers = {
+                    vditor.vditor.options.upload.headers = {
                         'X-URL': encodeURIComponent(liandi.current.dir.url),
                         'X-PATH': encodeURIComponent(liandi.current.path),
-                        'X-Mode': this.vditor.vditor.currentMode
+                        'X-Mode': vditor.vditor.currentMode
                     };
                     return files;
                 }
             },
             after: () => {
-                this.vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
-                this.vditor.setValue(value);
+                vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
+                vditor.setValue(value);
                 remote.getGlobal('liandiEditor').editorText = value;
                 remote.getGlobal('liandiEditor').saved = true;
             },
