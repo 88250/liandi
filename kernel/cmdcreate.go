@@ -36,6 +36,7 @@ func (cmd *create) Exec() {
 		return
 	}
 
+	name := path.Base(p)
 	p = path.Dir(path.Clean(p))
 	if "." == p {
 		p = "/"
@@ -43,6 +44,7 @@ func (cmd *create) Exec() {
 	ret.Data = map[string]interface{}{
 		"url":  url,
 		"path": p,
+		"name": name,
 	}
 	Push(ret.Bytes())
 }
