@@ -59,11 +59,16 @@ export const newFile = (liandi: ILiandi) => {
                 if (!itemData.target) {
                     currentNewPath = getPath(itemData.path) + name;
                 }
+
+                liandi.editors.save(window.liandi.liandi);
+
                 liandi.ws.send('create', {
                     url: itemData.url,
                     path: currentNewPath
 
                 });
+
+                liandi.current.path = currentNewPath.endsWith('.md') ? currentNewPath : currentNewPath + '.md';
                 destroyDialog();
             });
             bindDialogInput(inputElement, () => {

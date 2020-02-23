@@ -130,6 +130,8 @@ export class WebSocketUtil {
                     liandi.files.onRename(liandi, response.data);
                     break;
                 case 'create':
+                    liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, liandi,
+                        {content: "", name: response.data.name});
                 case 'remove':
                 case 'mkdir':
                     window.liandi.liandi.ws.send('ls', {

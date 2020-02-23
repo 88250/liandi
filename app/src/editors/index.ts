@@ -34,7 +34,7 @@ export class Editors {
         this.editorWebviewElement.classList.add('fn__none');
     }
 
-    sendMessage(message: string, liandi: ILiandi, editorData?: any) {
+    sendMessage(message: string, liandi: ILiandi, editorData?: { content: string, name: string }) {
         if (editorData) {
             remote.getGlobal('liandiEditor').editorText = editorData.content;
             this.inputElement.value = editorData.name;
