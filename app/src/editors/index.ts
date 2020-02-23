@@ -1,5 +1,4 @@
 import {rename} from '../util/rename';
-import {Constants} from '../constants';
 import {remote} from 'electron';
 
 export class Editors {

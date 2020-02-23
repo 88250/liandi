@@ -4,6 +4,7 @@ import {getPath, urlJoin} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
 import {ipcRenderer, remote} from 'electron';
 
+const {Menu, MenuItem} = remote
 const Vditor = require('vditor');
 
 export class EditorWebview {
@@ -17,6 +18,25 @@ export class EditorWebview {
         if (process.platform === 'win32') {
             document.body.classList.add('body--win32')
         }
+
+        const menu = new Menu()
+        const win = remote.getCurrentWindow()
+        menu.append(new MenuItem({
+            label: 'Copy',
+            id: 'menuItemCopy',
+            role: 'copy',
+        }))
+        menu.append(new MenuItem({
+            label: 'Paste',
+            id: 'menuItemPaste',
+            role: 'paste',
+        }))
+        this.editorElement.addEventListener('mousedown', event => {
+            if (2 !== event.button) { // 仅绑定右键
+                return
+            }
+            menu.popup({window: win, x: event.x, y: event.y})
+        })
     }
 
     private onMessage() {
@@ -43,7 +63,7 @@ export class EditorWebview {
 
     private onOpen(liandi: ILiandi, value: string = remote.getGlobal('liandiEditor').editorText) {
         this.editorElement.innerHTML = '';
-        let timeoutId:number
+        let timeoutId: number
         this.vditor = new Vditor('liandiVditor', {
             typewriterMode: true,
             toolbar: [
