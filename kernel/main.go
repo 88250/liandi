@@ -42,6 +42,12 @@ func main() {
 	r.Use(gin.Recovery())
 
 	r.GET("/debug/pprof/", gin.WrapF(pprof.Index))
+	r.GET("/debug/pprof/allocs", gin.WrapF(pprof.Index))
+	r.GET("/debug/pprof/block", gin.WrapF(pprof.Index))
+	r.GET("/debug/pprof/goroutine", gin.WrapF(pprof.Index))
+	r.GET("/debug/pprof/heap", gin.WrapF(pprof.Index))
+	r.GET("/debug/pprof/mutex", gin.WrapF(pprof.Index))
+	r.GET("/debug/pprof/threadcreate", gin.WrapF(pprof.Index))
 	r.GET("/debug/pprof/cmdline", gin.WrapF(pprof.Cmdline))
 	r.GET("/debug/pprof/profile", gin.WrapF(pprof.Profile))
 	r.GET("/debug/pprof/symbol", gin.WrapF(pprof.Symbol))
