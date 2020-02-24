@@ -19,6 +19,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/88250/gulu"
 	"github.com/gin-gonic/gin"
 	"github.com/mitchellh/go-ps"
 	"gopkg.in/olahol/melody.v1"
@@ -35,6 +36,10 @@ func init() {
 	go ParentExited()
 	checkUpdatePeriodically()
 }
+
+// Mode 标识了运行模式，默认开发环境。
+// 打包时通过构建参数 -ldflags "-X main.Mode=prod" 注入 prod 生产模式，参考 build 脚本。
+var Mode = "dev"
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
@@ -65,7 +70,7 @@ func main() {
 
 	m.HandleConnect(func(s *melody.Session) {
 		SetPushChan(s)
-		Logger.Debug("WebSocket 已连接")
+		Logger.Debugf("WebSocket 已连接")
 	})
 
 	m.HandleDisconnect(func(s *melody.Session) {
@@ -82,7 +87,7 @@ func main() {
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
-		Logger.Debugf("request [%s]", msg)
+		Logger.Debugf("request [%s]", shortReqMsg(msg))
 		request := map[string]interface{}{}
 		if err := json.Unmarshal(msg, &request); nil != err {
 			result := NewResult()
@@ -140,4 +145,19 @@ func ParentExited() {
 			os.Exit(0)
 		}
 	}
+}
+
+func shortReqMsg(msg []byte) []byte {
+	s := gulu.Str.FromBytes(msg)
+	max := 128
+	if len(s) > max {
+		count := 0
+		for i := range s {
+			count++
+			if count > max {
+				return gulu.Str.ToBytes(s[:i] + "...")
+			}
+		}
+	}
+	return msg
 }

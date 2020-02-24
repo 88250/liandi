@@ -50,8 +50,12 @@ func InitLog() {
 	}
 
 	gulu.Log.SetLevel("trace")
-	Logger = gulu.Log.NewLogger(io.MultiWriter(logFile, os.Stdout))
-
+	if "dev" == Mode {
+		Logger = gulu.Log.NewLogger(io.MultiWriter(logFile, os.Stdout))
+	} else {
+		Logger = gulu.Log.NewLogger(logFile)
+	}
+	Logger.Infof("运行模式 [%s]", Mode)
 	gowebdav.Logger = Logger
 }
 
