@@ -134,7 +134,7 @@ export class EditorWebview {
                 'info',
                 'help',
             ],
-            tab: '/t',
+            tab: '\t',
             theme: liandi.config.theme === 'dark' ? 'dark' : 'classic',
             cache: false,
             cdn: '../node_modules/vditor',
