@@ -1,3 +1,18 @@
+## v0.1.2 / 2020-02-25
+
+### 改进功能
+
+* [文件名移除 .md](https://github.com/88250/liandi/issues/28)
+
+### 开发重构
+
+* [获取内核进程调试信息](https://github.com/88250/liandi/issues/29)
+
+### 修复缺陷
+
+* [无响应问题](https://github.com/88250/liandi/issues/30)
+* [下载太慢，使用自建服务器](https://github.com/88250/liandi/issues/31)
+
 ## v0.1.1 / 2020-02-23
 
 ### 改进功能
