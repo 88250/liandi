@@ -74,6 +74,7 @@
 
 * [GitHub](https://github.com/88250/liandi/releases)
 * [码云](https://gitee.com/dl88250/liandi/releases)
+* [本地下载](https://liandi.b3log.org/releases)
 
 #### 源码构建
 
