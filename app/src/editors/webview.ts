@@ -44,7 +44,7 @@ export class EditorWebview {
         menu.append(new remote.MenuItem({
             label: i18n[lang].pasteAsPlainText,
             id: 'pasteAsPlainText',
-            accelerator: 'CmdOrCtrl+Shift+v',
+            accelerator: 'CmdOrCtrl+Shift+V',
             click: () => {
                 this.vditor.insertValue(clipboard.readText());
             }
@@ -81,6 +81,21 @@ export class EditorWebview {
             this.onOpen(data);
         });
     }
+
+    private isCtrl(event: KeyboardEvent) {
+        if (navigator.platform.toUpperCase().indexOf("MAC") >= 0) {
+            // mac
+            if (event.metaKey && !event.ctrlKey) {
+                return true;
+            }
+            return false;
+        } else {
+            if (!event.metaKey && event.ctrlKey) {
+                return true;
+            }
+            return false;
+        }
+    };
 
     private onOpen(liandi: ILiandi, value: string = remote.getGlobal('liandiEditor').editorText) {
         document.getElementById('liandiVditor').innerHTML = '';
@@ -181,6 +196,13 @@ export class EditorWebview {
                 }, 5000);
             }
         });
+
+        this.vditor.vditor.wysiwyg.element.addEventListener("keydown", (event: KeyboardEvent) => {
+            if (this.isCtrl(event) && event.key.toLowerCase() === 'v' && !event.altKey && event.shiftKey) {
+                this.vditor.insertValue(clipboard.readText());
+                event.preventDefault();
+            }
+        })
     }
 }
 
