@@ -44,6 +44,7 @@ export class EditorWebview {
         menu.append(new remote.MenuItem({
             label: i18n[lang].pasteAsPlainText,
             id: 'pasteAsPlainText',
+            accelerator: 'CmdOrCtrl+Shift+v',
             click: () => {
                 this.vditor.insertValue(clipboard.readText());
             }
@@ -54,9 +55,10 @@ export class EditorWebview {
             while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
                 if (target.tagName === 'PRE') {
                     menu.getMenuItemById('cut').enabled = menu.getMenuItemById('copy').enabled = this.vditor.getSelection() !== '';
+                    menu.getMenuItemById('pasteAsPlainText').enabled = clipboard.readText() !== '';
                     menu.popup();
                     event.preventDefault();
-                    return;
+                    return false;
                 }
                 target = target.parentElement;
             }
