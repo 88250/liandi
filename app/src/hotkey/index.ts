@@ -5,7 +5,7 @@ import {initSearch} from '../search';
 export const initGlobalKeyPress = (liandi?: ILiandi) => {
     let lastKeypressTime = 0;
 
-    window.addEventListener('keydown', (event) => {
+    window.addEventListener('keyup', (event) => {
         // 快捷搜素
         if (event.key === 'Shift') {
             const thisKeypressTime = new Date().getTime();
@@ -19,6 +19,8 @@ export const initGlobalKeyPress = (liandi?: ILiandi) => {
                 }
             }
             lastKeypressTime = thisKeypressTime;
+        } else {
+            lastKeypressTime = 0;
         }
     });
 };
