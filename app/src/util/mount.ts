@@ -68,6 +68,7 @@ export const showMountDialog = (liandi: ILiandi) => {
         title: i18n[liandi.config.lang].slogan,
         content: `<div class="list--signal"><div class="list__item">${i18n[liandi.config.lang].mount}</div>
 <div class="list__item">${i18n[liandi.config.lang].mountWebDAV}</div></div>`,
+        hideBackground: true,
         width: 400,
         destroyDialogCallback: () => {
             if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {

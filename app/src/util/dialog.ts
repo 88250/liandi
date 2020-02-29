@@ -13,13 +13,14 @@ export const dialog = (options: {
     content: string,
     width: number
     height?: number,
+    hideBackground?: boolean,
     destroyDialogCallback?: () => void
 }) => {
     let dialogElement = document.querySelector('#dialog') as HTMLElement;
     if (!dialogElement) {
         document.body.insertAdjacentHTML('beforeend', `
 <div class="dialog" id="dialog">
-    <div class="dialog__bg"></div>
+    ${options.hideBackground ? "" : '<div class="dialog__bg"></div>'}
     <div class="dialog__main fn__layer">
       <svg class="dialog__close"><use xlink:href="#iconClose"></use></svg>
       <div class="dialog__header" onselectstart="return false;">
@@ -31,9 +32,11 @@ export const dialog = (options: {
             destroyDialog(options.destroyDialogCallback);
         });
 
-        document.querySelector('#dialog .dialog__bg').addEventListener('click', () => {
-            destroyDialog(options.destroyDialogCallback);
-        });
+        if (!options.hideBackground) {
+            document.querySelector('#dialog .dialog__bg').addEventListener('click', () => {
+                destroyDialog(options.destroyDialogCallback);
+            });
+        }
         dialogElement = document.querySelector('#dialog') as HTMLElement;
     }
 
