@@ -120,6 +120,7 @@ const createWindow = () => {
   global.liandiEditor = {
     editorText: '',
     saved: true,
+    appDir,
   }
 
   // 监听主题切换
