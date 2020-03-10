@@ -99,6 +99,7 @@ type Markdown struct {
 	ChinesePunct                        bool   `json:"chinesePunct"`
 	InlineMathAllowDigitAfterOpenMarker bool   `json:"inlineMathAllowDigitAfterOpenMarker"`
 	MathEngine                          string `json:"mathEngine"` // KaTeX 或者 MathJax
+	HideToolbar                         bool   `json:"hideToolbar"`
 }
 
 func newMarkdown() *Markdown {
@@ -110,6 +111,7 @@ func newMarkdown() *Markdown {
 		ChinesePunct:                        false,
 		InlineMathAllowDigitAfterOpenMarker: false,
 		MathEngine:                          "KaTeX",
+		HideToolbar:                         false,
 	}
 }
 
