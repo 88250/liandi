@@ -154,7 +154,7 @@ export class EditorWebview {
             tab: '\t',
             theme: liandi.config.theme === 'dark' ? 'dark' : 'classic',
             cache: false,
-            cdn: remote.getGlobal('liandiEditor').appDir,
+            cdn: remote.getGlobal('liandiEditor').appDir + "/node_modules/vditor",
             preview: {
                 markdown: {
                     autoSpace: liandi.config.markdown.autoSpace,
