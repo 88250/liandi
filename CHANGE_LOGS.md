@@ -1,3 +1,17 @@
+## v0.1.3 / 2020-03-10
+
+### 引入特性
+
+* [支持 Graphviz](https://github.com/88250/liandi/issues/35)
+
+### 改进功能
+
+* [支持隐藏编辑器工具栏](https://github.com/88250/liandi/issues/18)
+* [打开选择不挂载，点击关闭按钮失效](https://github.com/88250/liandi/issues/33)
+* [支持本地绝对路径渲染图片](https://github.com/88250/liandi/issues/34)
+* [支持 ToC](https://github.com/88250/liandi/issues/37)
+* [支持脚注](https://github.com/88250/liandi/issues/38)
+
 ## v0.1.2 / 2020-02-25
 
 ### 改进功能
