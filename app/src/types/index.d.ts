@@ -24,6 +24,7 @@ declare interface IMD {
     fixTermTypo: boolean;
     inlineMathAllowDigitAfterOpenMarker: boolean;
     mathEngine: 'KaTeX' | 'MathJax';
+    hideToolbar: boolean;
 }
 
 declare interface ILiandi {

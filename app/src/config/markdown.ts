@@ -31,7 +31,11 @@ export const markdown = {
         <input value="MathJax" name="mathEngine" type="radio"${liandi.config.markdown.mathEngine === 'MathJax' ? ' checked' : ''}/>
         <span class="fn__space"></span>MathJax
     </label>
-</div>`;
+</div>
+<div class="form__item"><label>
+    <input id="hideToolbar" type="checkbox"${liandi.config.markdown.hideToolbar ? ' checked' : ''}/>
+    <span class="fn__space"></span>${i18n[liandi.config.lang].hideToolbar}
+</label></div>`;
     },
     bindEvent: (liandi: ILiandi, element: HTMLElement) => {
         element.querySelectorAll('input').forEach((item) => {
@@ -44,6 +48,7 @@ export const markdown = {
                     mathEngine: (element.querySelector('[name="mathEngine"]:checked') as HTMLInputElement).value,
                     footnotes: false,
                     toc: false,
+                    hideToolbar: (element.querySelector('#hideToolbar') as HTMLInputElement).checked,
                 });
             });
         });

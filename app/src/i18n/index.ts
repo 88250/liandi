@@ -38,6 +38,7 @@ export const i18n: II18n = {
         copy: 'Copy',
         paste: 'Paste',
         pasteAsPlainText: 'Paste As Plain Text',
+        hideToolbar: "Hide Editor's toolbar",
     },
     zh_CN: {
         title: '链滴笔记',
@@ -78,5 +79,6 @@ export const i18n: II18n = {
         copy: '复制',
         paste: '粘贴',
         pasteAsPlainText: '粘贴为纯文本',
+        hideToolbar: '隐藏编辑器工具栏',
     },
 };
