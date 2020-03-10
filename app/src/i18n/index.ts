@@ -39,6 +39,8 @@ export const i18n: II18n = {
         paste: 'Paste',
         pasteAsPlainText: 'Paste As Plain Text',
         hideToolbar: "Hide Editor's toolbar",
+        toc: 'Enable [toc]',
+        footnotes: 'Enable [^footnotes]',
     },
     zh_CN: {
         title: '链滴笔记',
@@ -80,5 +82,7 @@ export const i18n: II18n = {
         paste: '粘贴',
         pasteAsPlainText: '粘贴为纯文本',
         hideToolbar: '隐藏编辑器工具栏',
+        toc: '支持页内目录 [toc]',
+        footnotes: '支持脚注 [^footnotes]',
     },
 };

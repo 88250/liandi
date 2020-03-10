@@ -25,6 +25,8 @@ declare interface IMD {
     inlineMathAllowDigitAfterOpenMarker: boolean;
     mathEngine: 'KaTeX' | 'MathJax';
     hideToolbar: boolean;
+    toc: boolean;
+    footnotes: boolean;
 }
 
 declare interface ILiandi {

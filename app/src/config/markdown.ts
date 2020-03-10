@@ -35,6 +35,14 @@ export const markdown = {
 <div class="form__item"><label>
     <input id="hideToolbar" type="checkbox"${liandi.config.markdown.hideToolbar ? ' checked' : ''}/>
     <span class="fn__space"></span>${i18n[liandi.config.lang].hideToolbar}
+</label></div>
+<div class="form__item"><label>
+    <input id="toc" type="checkbox"${liandi.config.markdown.toc ? ' checked' : ''}/>
+    <span class="fn__space"></span>${i18n[liandi.config.lang].toc}
+</label></div>
+<div class="form__item"><label>
+    <input id="footnotes" type="checkbox"${liandi.config.markdown.footnotes ? ' checked' : ''}/>
+    <span class="fn__space"></span>${i18n[liandi.config.lang].footnotes}
 </label></div>`;
     },
     bindEvent: (liandi: ILiandi, element: HTMLElement) => {
@@ -46,8 +54,8 @@ export const markdown = {
                     fixTermTypo: (element.querySelector('#fixTermTypo') as HTMLInputElement).checked,
                     inlineMathAllowDigitAfterOpenMarker: (element.querySelector('#inlineMathAllowDigitAfterOpenMarker') as HTMLInputElement).checked,
                     mathEngine: (element.querySelector('[name="mathEngine"]:checked') as HTMLInputElement).value,
-                    footnotes: false,
-                    toc: false,
+                    footnotes: (element.querySelector('#footnotes') as HTMLInputElement).checked,
+                    toc: (element.querySelector('#toc') as HTMLInputElement).checked,
                     hideToolbar: (element.querySelector('#hideToolbar') as HTMLInputElement).checked,
                 });
             });
