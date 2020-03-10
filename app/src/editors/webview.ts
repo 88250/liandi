@@ -101,6 +101,7 @@ export class EditorWebview {
         document.getElementById('liandiVditor').innerHTML = '';
         let timeoutId: number;
         this.vditor = new Vditor('liandiVditor', {
+            hideToolbar: liandi.config.markdown.hideToolbar,
             typewriterMode: true,
             toolbar: [
                 'emoji',
@@ -159,7 +160,8 @@ export class EditorWebview {
                 markdown: {
                     autoSpace: liandi.config.markdown.autoSpace,
                     chinesePunct: liandi.config.markdown.chinesePunct,
-                    fixTermTypo: liandi.config.markdown.fixTermTypo
+                    fixTermTypo: liandi.config.markdown.fixTermTypo,
+                    toc: liandi.config.markdown.toc,
                 },
                 math: {
                     inlineDigit: liandi.config.markdown.inlineMathAllowDigitAfterOpenMarker,
@@ -182,6 +184,8 @@ export class EditorWebview {
                 }
             },
             after: () => {
+                // TODO: 升级后移动到配置项中
+                this.vditor.vditor.lute.SetFootnotes(liandi.config.markdown.footnotes);
                 this.vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
                 this.vditor.setValue(value);
                 remote.getGlobal('liandiEditor').editorText = value;
