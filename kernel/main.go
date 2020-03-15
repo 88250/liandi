@@ -67,6 +67,7 @@ func main() {
 	})
 
 	r.POST("/upload", Upload)
+	r.POST("/upload/fetch", UploadFetch)
 
 	m.HandleConnect(func(s *melody.Session) {
 		SetPushChan(s)

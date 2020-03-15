@@ -11,14 +11,18 @@
 package main
 
 import (
+	"crypto/tls"
 	"io/ioutil"
+	"mime"
 	"net/url"
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/88250/gulu"
 	"github.com/gin-gonic/gin"
+	"github.com/parnurzeal/gorequest"
 )
 
 func Upload(c *gin.Context) {
@@ -40,7 +44,7 @@ func Upload(c *gin.Context) {
 		return
 	}
 
-	errFiles := []string{}
+	var errFiles []string
 	succMap := map[string]interface{}{}
 	linkBase := joinUrlPath(u, p)
 	if "markdown" == mode {
@@ -85,6 +89,108 @@ func Upload(c *gin.Context) {
 
 		succMap[file.Filename] = joinUrlPath(linkBase, fname)
 	}
+
+	ret.Data = map[string]interface{}{
+		"errFiles": errFiles,
+		"succMap":  succMap,
+	}
+
+	c.JSON(200, ret)
+}
+
+func UploadFetch(c *gin.Context) {
+	ret := gulu.Ret.NewResult()
+
+	var requestJSON map[string]interface{}
+	if err := c.BindJSON(&requestJSON); nil != err {
+		ret.Code = -1
+		ret.Msg = "Bad request"
+		return
+	}
+
+	originalURL := requestJSON["url"].(string)
+	if !strings.HasPrefix(originalURL, "http") {
+		ret.Code = -1
+		ret.Msg = "Bad request"
+		return
+	}
+
+	u := c.GetHeader("X-URL")
+	u, _ = url.PathUnescape(u)
+	p := c.GetHeader("X-Path")
+	p, _ = url.PathUnescape(p)
+	p = path.Dir(p)
+	p = p[1:]                     // 去掉开头的 /
+	mode := c.GetHeader("X-Mode") // markdown, wysiwyg
+	//dir := Conf.dir(u)
+	//if nil == dir {
+	//	ret.Code = -1
+	//	ret.Msg = Conf.lang(0)
+	//	return
+	//}
+
+	request := gorequest.New().TLSClientConfig(&tls.Config{InsecureSkipVerify: true})
+	request.Header.Set("User-Agent", UserAgent)
+	request.Timeout(7 * time.Second)
+	response, data, errors := request.Get(originalURL).EndBytes()
+	if nil != errors {
+		Logger.Errorf("Fetch image [%s] failed: %s", originalURL, errors)
+		ret.Code = -1
+		return
+	}
+	if 200 != response.StatusCode {
+		Logger.Errorf("Fetch image [%s] failed, status code is [%d]", originalURL, response.StatusCode)
+		ret.Code = -1
+		return
+	}
+
+	contentType := response.Header.Get("Content-Type")
+	exts, err := mime.ExtensionsByType(contentType)
+	if nil != err {
+		Logger.Errorf("Detect image [%s] suffix failed: %s", originalURL, err)
+		ret.Code = -1
+		return
+	}
+	suffix := exts[0]
+
+	errFiles := []string{}
+	succMap := map[string]interface{}{}
+	linkBase := joinUrlPath(u, p)
+	if "markdown" == mode {
+		linkBase = ""
+	}
+
+	fname := gulu.Rand.String(16) + suffix
+	writePath := joinUrlPath(p, fname)
+	exist, err := Exist(u, writePath)
+	if nil != err {
+		errFiles = append(errFiles, fname)
+		ret.Msg = err.Error()
+		ret.Data = map[string]interface{}{
+			"errFiles": errFiles,
+			"succMap":  succMap,
+		}
+		return
+	}
+
+	if exist {
+		ext := filepath.Ext(fname)
+		fname = fname[:len(fname)-len(ext)]
+		fname = fname + "-" + gulu.Rand.String(7) + ext
+		writePath = joinUrlPath(p, fname)
+	}
+
+	if err := Put(u, writePath, data); nil != err {
+		errFiles = append(errFiles, fname)
+		ret.Msg = err.Error()
+		ret.Data = map[string]interface{}{
+			"errFiles": errFiles,
+			"succMap":  succMap,
+		}
+		return
+	}
+
+	succMap[originalURL] = joinUrlPath(linkBase, fname)
 
 	ret.Data = map[string]interface{}{
 		"errFiles": errFiles,
