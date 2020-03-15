@@ -175,14 +175,11 @@ export class EditorWebview {
                 linkToImgUrl: Constants.UPLOAD_FETCH_ADDRESS,
                 filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
                 url: Constants.UPLOAD_ADDRESS,
-                file: (files: File[]) => {
-                    this.vditor.vditor.options.upload.headers = {
-                        'X-URL': encodeURIComponent(liandi.current.dir.url),
-                        'X-PATH': encodeURIComponent(liandi.current.path),
-                        'X-Mode': this.vditor.vditor.currentMode
-                    };
-                    return files;
-                }
+                headers: {
+                    'X-URL': encodeURIComponent(liandi.current.dir.url),
+                    'X-PATH': encodeURIComponent(liandi.current.path),
+                    'X-Mode': this.vditor.vditor.currentMode
+                },
             },
             after: () => {
                 // TODO: 升级后移动到配置项中
