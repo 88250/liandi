@@ -12,11 +12,13 @@ package main
 
 import (
 	"crypto/tls"
+	"fmt"
 	"io/ioutil"
 	"mime"
 	"net/url"
 	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -134,12 +136,16 @@ func UploadFetch(c *gin.Context) {
 	request.Timeout(7 * time.Second)
 	response, data, errors := request.Get(originalURL).EndBytes()
 	if nil != errors {
-		Logger.Errorf("Fetch image [%s] failed: %s", originalURL, errors)
 		ret.Code = -1
+		msg := fmt.Sprintf(Conf.lang(11), errors)
+		Logger.Errorf(msg)
+		ret.Msg = msg
 		return
 	}
 	if 200 != response.StatusCode {
-		Logger.Errorf("Fetch image [%s] failed, status code is [%d]", originalURL, response.StatusCode)
+		msg := fmt.Sprintf(Conf.lang(11), strconv.Itoa(response.StatusCode))
+		Logger.Errorf(msg)
+		ret.Msg = msg
 		ret.Code = -1
 		return
 	}
@@ -147,7 +153,9 @@ func UploadFetch(c *gin.Context) {
 	contentType := response.Header.Get("Content-Type")
 	exts, err := mime.ExtensionsByType(contentType)
 	if nil != err {
-		Logger.Errorf("Detect image [%s] suffix failed: %s", originalURL, err)
+		msg := fmt.Sprintf(Conf.lang(11), strconv.Itoa(response.StatusCode))
+		Logger.Errorf(msg)
+		ret.Msg = msg
 		ret.Code = -1
 		return
 	}
