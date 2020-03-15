@@ -29,6 +29,7 @@ import (
 
 func Upload(c *gin.Context) {
 	ret := gulu.Ret.NewResult()
+	c.JSON(200, ret)
 
 	form, _ := c.MultipartForm()
 	files := form.File["file[]"]
@@ -96,12 +97,11 @@ func Upload(c *gin.Context) {
 		"errFiles": errFiles,
 		"succMap":  succMap,
 	}
-
-	c.JSON(200, ret)
 }
 
 func UploadFetch(c *gin.Context) {
 	ret := gulu.Ret.NewResult()
+	defer c.JSON(200, ret)
 
 	var requestJSON map[string]interface{}
 	if err := c.BindJSON(&requestJSON); nil != err {
@@ -194,8 +194,6 @@ func UploadFetch(c *gin.Context) {
 		"url":         joinUrlPath(linkBase, fname),
 		"originalURL": originalURL,
 	}
-
-	c.JSON(200, ret)
 }
 
 func joinUrlPath(urlPart string, pathParts ...string) string {
