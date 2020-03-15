@@ -26,49 +26,50 @@ func (cmd *BaseCmd) Id() float64 {
 }
 
 func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) (ret Cmd) {
+	baseCmd := &BaseCmd{id: cmdId, param: param}
 	switch cmdStr {
 	case "dirs":
-		return &dirs{&BaseCmd{id: cmdId, param: param}}
+		ret = &dirs{baseCmd}
 	case "mount":
-		return &mount{&BaseCmd{id: cmdId, param: param}}
+		ret = &mount{baseCmd}
 	case "mountremote":
-		return &mountremote{&BaseCmd{id: cmdId, param: param}}
+		ret = &mountremote{baseCmd}
 	case "unmount":
-		return &unmount{&BaseCmd{id: cmdId, param: param}}
+		ret = &unmount{baseCmd}
 	case "ls":
-		return &ls{&BaseCmd{id: cmdId, param: param}}
+		ret = &ls{baseCmd}
 	case "lsd":
-		return &lsd{&BaseCmd{id: cmdId, param: param}}
+		ret = &lsd{baseCmd}
 	case "get":
-		return &get{&BaseCmd{id: cmdId, param: param}}
+		ret = &get{baseCmd}
 	case "put":
-		return &put{&BaseCmd{id: cmdId, param: param}}
+		ret = &put{baseCmd}
 	case "create":
-		return &create{&BaseCmd{id: cmdId, param: param}}
+		ret = &create{baseCmd}
 	case "search":
-		return &search{&BaseCmd{id: cmdId, param: param}}
+		ret = &search{baseCmd}
 	case "rename":
-		return &rename{&BaseCmd{id: cmdId, param: param}}
+		ret = &rename{baseCmd}
 	case "mkdir":
-		return &mkdir{&BaseCmd{id: cmdId, param: param}}
+		ret = &mkdir{baseCmd}
 	case "remove":
-		return &remove{&BaseCmd{id: cmdId, param: param}}
+		ret = &remove{baseCmd}
 	case "getconf":
-		return &getconf{&BaseCmd{id: cmdId, param: param}}
+		ret = &getconf{baseCmd}
 	case "setlang":
-		return &setlang{&BaseCmd{id: cmdId, param: param}}
+		ret = &setlang{baseCmd}
 	case "settheme":
-		return &settheme{&BaseCmd{id: cmdId, param: param}}
+		ret = &settheme{baseCmd}
 	case "setmd":
-		return &setmd{&BaseCmd{id: cmdId, param: param}}
+		ret = &setmd{baseCmd}
 	case "checkupdate":
-		return &checkupdate{&BaseCmd{id: cmdId, param: param}}
+		ret = &checkupdate{baseCmd}
 	case "searchget":
-		return &searchget{&BaseCmd{id: cmdId, param: param}}
+		ret = &searchget{baseCmd}
 	case "setimage":
-		return &setimage{&BaseCmd{id:cmdId, param:param}}
+		ret = &setimage{baseCmd}
 	}
-	return nil
+	return
 }
 
 func Exec(cmd Cmd) {
