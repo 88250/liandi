@@ -25,7 +25,7 @@ func (cmd *BaseCmd) Id() float64 {
 	return cmd.id
 }
 
-func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) Cmd {
+func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) (ret Cmd) {
 	switch cmdStr {
 	case "dirs":
 		return &dirs{&BaseCmd{id: cmdId, param: param}}
@@ -65,6 +65,8 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) Cmd 
 		return &checkupdate{&BaseCmd{id: cmdId, param: param}}
 	case "searchget":
 		return &searchget{&BaseCmd{id: cmdId, param: param}}
+	case "setimage":
+		return &setimage{&BaseCmd{id:cmdId, param:param}}
 	}
 	return nil
 }
