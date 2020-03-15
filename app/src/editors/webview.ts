@@ -162,6 +162,7 @@ export class EditorWebview {
                     chinesePunct: liandi.config.markdown.chinesePunct,
                     fixTermTypo: liandi.config.markdown.fixTermTypo,
                     toc: liandi.config.markdown.toc,
+                    footnotes: liandi.config.markdown.footnotes,
                 },
                 math: {
                     inlineDigit: liandi.config.markdown.inlineMathAllowDigitAfterOpenMarker,
@@ -178,12 +179,9 @@ export class EditorWebview {
                 headers: {
                     'X-URL': encodeURIComponent(liandi.current.dir.url),
                     'X-PATH': encodeURIComponent(liandi.current.path),
-                    'X-Mode': this.vditor.vditor.currentMode
                 },
             },
             after: () => {
-                // TODO: 升级后移动到配置项中
-                this.vditor.vditor.lute.SetFootnotes(liandi.config.markdown.footnotes);
                 this.vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
                 this.vditor.setValue(value);
                 remote.getGlobal('liandiEditor').editorText = value;
