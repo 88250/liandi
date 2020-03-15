@@ -29,7 +29,7 @@ import (
 
 func Upload(c *gin.Context) {
 	ret := gulu.Ret.NewResult()
-	c.JSON(200, ret)
+	defer c.JSON(200, ret)
 
 	form, _ := c.MultipartForm()
 	files := form.File["file[]"]
