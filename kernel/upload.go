@@ -198,6 +198,9 @@ func UploadFetch(c *gin.Context) {
 
 func joinUrlPath(urlPart string, pathParts ...string) string {
 	pathPart := path.Join(pathParts...)
+	if "" == urlPart {
+		return pathPart
+	}
 	if !strings.HasSuffix(urlPart, "/") {
 		return urlPart + "/" + pathPart
 	}
