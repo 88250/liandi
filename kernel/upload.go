@@ -122,12 +122,12 @@ func UploadFetch(c *gin.Context) {
 	p = path.Dir(p)
 	p = p[1:]                     // 去掉开头的 /
 	mode := c.GetHeader("X-Mode") // markdown, wysiwyg
-	//dir := Conf.dir(u)
-	//if nil == dir {
-	//	ret.Code = -1
-	//	ret.Msg = Conf.lang(0)
-	//	return
-	//}
+	dir := Conf.dir(u)
+	if nil == dir {
+		ret.Code = -1
+		ret.Msg = Conf.lang(0)
+		return
+	}
 
 	request := gorequest.New().TLSClientConfig(&tls.Config{InsecureSkipVerify: true})
 	request.Header.Set("User-Agent", UserAgent)
@@ -153,8 +153,6 @@ func UploadFetch(c *gin.Context) {
 	}
 	suffix := exts[0]
 
-	errFiles := []string{}
-	succMap := map[string]interface{}{}
 	linkBase := joinUrlPath(u, p)
 	if "markdown" == mode {
 		linkBase = ""
@@ -164,12 +162,8 @@ func UploadFetch(c *gin.Context) {
 	writePath := joinUrlPath(p, fname)
 	exist, err := Exist(u, writePath)
 	if nil != err {
-		errFiles = append(errFiles, fname)
+		ret.Code = -1
 		ret.Msg = err.Error()
-		ret.Data = map[string]interface{}{
-			"errFiles": errFiles,
-			"succMap":  succMap,
-		}
 		return
 	}
 
@@ -181,20 +175,14 @@ func UploadFetch(c *gin.Context) {
 	}
 
 	if err := Put(u, writePath, data); nil != err {
-		errFiles = append(errFiles, fname)
+		ret.Code = -1
 		ret.Msg = err.Error()
-		ret.Data = map[string]interface{}{
-			"errFiles": errFiles,
-			"succMap":  succMap,
-		}
 		return
 	}
 
-	succMap[originalURL] = joinUrlPath(linkBase, fname)
-
 	ret.Data = map[string]interface{}{
-		"errFiles": errFiles,
-		"succMap":  succMap,
+		"url": joinUrlPath(linkBase, fname),
+		"originalURL":  originalURL,
 	}
 
 	c.JSON(200, ret)
