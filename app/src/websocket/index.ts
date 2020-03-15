@@ -65,7 +65,7 @@ export class WebSocketUtil {
                     onSearch(liandi, response.data);
                     break;
                 case 'setimage':
-                    image.onSetimage();
+                    image.onSetimage(liandi, response.data);
                     break;
                 case 'setlang':
                     lauguage.onSetlang();

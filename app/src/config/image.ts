@@ -16,7 +16,7 @@ export const image = {
             });
         });
     },
-    onSetimage: () => {
-        window.location.reload();
+    onSetimage: (liandi: ILiandi, image: IImage) => {
+        liandi.config.image = image;
     }
 };
