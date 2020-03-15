@@ -127,7 +127,9 @@ func UploadFetch(c *gin.Context) {
 	dir := Conf.dir(u)
 	if nil == dir {
 		ret.Code = -1
-		ret.Msg = Conf.lang(0)
+		msg := Conf.lang(0)
+		Logger.Error(msg)
+		ret.Msg = msg
 		return
 	}
 
@@ -189,8 +191,8 @@ func UploadFetch(c *gin.Context) {
 	}
 
 	ret.Data = map[string]interface{}{
-		"url": joinUrlPath(linkBase, fname),
-		"originalURL":  originalURL,
+		"url":         joinUrlPath(linkBase, fname),
+		"originalURL": originalURL,
 	}
 
 	c.JSON(200, ret)
