@@ -125,7 +125,7 @@ export class EditorWebview {
                 'undo',
                 'redo',
                 '|',
-                'wysiwyg',
+                'edit-mode',
                 'both',
                 'preview',
                 'format',
