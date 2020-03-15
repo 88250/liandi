@@ -72,6 +72,10 @@ func InitConf() {
 		Conf.Markdown = newMarkdown()
 	}
 
+	if nil == Conf.Image {
+		Conf.Image = newImage()
+	}
+
 	if "white" == Conf.Theme { // v0.1.0 -> v0.1.1 兼容处理
 		Conf.Theme = "light"
 	}
@@ -89,6 +93,7 @@ type AppConf struct {
 	Theme    string    `json:"theme"`    // 界面主题：light, dark
 	Lang     string    `json:"lang"`     // 界面语言
 	Markdown *Markdown `json:"markdown"` // Markdown 引擎配置
+	Image    *Image    `json:"image"`    // 图片处理配置
 }
 
 type Markdown struct {
@@ -102,6 +107,10 @@ type Markdown struct {
 	HideToolbar                         bool   `json:"hideToolbar"`
 }
 
+type Image struct {
+	AutoFetch bool `json:"autoFetch"` // 是否自动拉取远程图片到本地
+}
+
 func newMarkdown() *Markdown {
 	return &Markdown{
 		Footnotes:                           false,
@@ -112,6 +121,12 @@ func newMarkdown() *Markdown {
 		InlineMathAllowDigitAfterOpenMarker: false,
 		MathEngine:                          "KaTeX",
 		HideToolbar:                         false,
+	}
+}
+
+func newImage() *Image {
+	return &Image{
+		AutoFetch: false,
 	}
 }
 

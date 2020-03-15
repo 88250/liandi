@@ -7,6 +7,7 @@ import {lauguage} from '../config/language';
 import {theme} from '../config/theme';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
+import {image} from '../config/image';
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -62,6 +63,9 @@ export class WebSocketUtil {
             switch (response.cmd) {
                 case 'search':
                     onSearch(liandi, response.data);
+                    break;
+                case 'setimage':
+                    image.onSetimage();
                     break;
                 case 'setlang':
                     lauguage.onSetlang();

@@ -41,6 +41,8 @@ export const i18n: II18n = {
         hideToolbar: "Hide Editor's toolbar",
         toc: 'Enable [toc]',
         footnotes: 'Enable [^footnotes]',
+        autoFetch: 'Auto fetch remote image to local',
+        image: 'Image',
     },
     zh_CN: {
         title: '链滴笔记',
@@ -84,5 +86,7 @@ export const i18n: II18n = {
         hideToolbar: '隐藏编辑器工具栏',
         toc: '支持页内目录 [toc]',
         footnotes: '支持脚注 [^footnotes]',
+        autoFetch: '自动拉取远程图片到本地',
+        image: '图片',
     },
 };

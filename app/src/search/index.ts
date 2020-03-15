@@ -6,6 +6,7 @@ import {theme} from '../config/theme';
 import {initConfigSearch} from '../config/search';
 import {getPath, removeLastPath} from '../util/path';
 import {markdown} from '../config/markdown';
+import {image} from '../config/image';
 
 export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
@@ -61,11 +62,13 @@ export const initSearch = (liandi: ILiandi) => {
     <tab-panel type="vertical">
       <ul slot="tab" class="tab tab--vertical">
         <li data-name="markdown" class="tab--current fn__pointer">Markdown</li>
+        <li data-name="image" class="fn__pointer">${i18n[liandi.config.lang].image}</li>
         <li data-name="theme" class="fn__pointer">${i18n[liandi.config.lang].theme}</li>
         <li data-name="language" class="fn__pointer">${i18n[liandi.config.lang].language}</li>
         <li data-name="about" class="fn__pointer">${i18n[liandi.config.lang].about}</li>
       </ul>
       <div class="tab__panel" data-name="markdown" slot="panel">${markdown.genHTML(liandi)}</div>
+      <div class="tab__panel" data-name="image">${image.genHTML(liandi)}</div>
       <div class="tab__panel" data-name="theme">${theme.genHTML(liandi)}</div>
       <div class="tab__panel" data-name="language">${lauguage.genHTML(liandi)}</div>
       <div class="tab__panel" data-name="about">${about.genHTML(liandi)}</div>
@@ -151,6 +154,7 @@ export const initSearch = (liandi: ILiandi) => {
     lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'));
     theme.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="theme"]'));
     markdown.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="markdown"]'));
+    image.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="image"]'));
 };
 
 export const onSearch = (liandi: ILiandi, data: {

@@ -29,11 +29,16 @@ declare interface IMD {
     footnotes: boolean;
 }
 
+declare interface IImage {
+    autoFetch: boolean;
+}
+
 declare interface ILiandi {
     config?: {
         lang: keyof II18n
         theme: 'light' | 'dark',
-        markdown: IMD
+        markdown: IMD,
+        image: IImage,
     };
     componentCSS: string;
     ws?: {

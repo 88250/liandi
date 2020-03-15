@@ -9,7 +9,7 @@ export const initConfigSearch = (liandi: ILiandi, element: HTMLElement) => {
             i18n.en_US.mathEngine, i18n.zh_CN.mathEngine, 'katex', 'mathjax'],
         ['light', 'dark', 'theme', '主题'],
         ['zh_CN', 'en_US', 'language', '语言'],
-        ['About', '关于', i18n.zh_CN.checkUpdate, i18n.en_US.checkUpdate]
+        ['about', '关于', i18n.zh_CN.checkUpdate, i18n.en_US.checkUpdate]
     ];
     const inputElement = element.querySelector('.input') as HTMLInputElement;
     const updateTab = () => {
