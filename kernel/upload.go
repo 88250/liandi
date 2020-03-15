@@ -103,6 +103,10 @@ func UploadFetch(c *gin.Context) {
 	ret := gulu.Ret.NewResult()
 	defer c.JSON(200, ret)
 
+	if !Conf.Image.AutoFetch {
+		return
+	}
+
 	var requestJSON map[string]interface{}
 	if err := c.BindJSON(&requestJSON); nil != err {
 		ret.Code = -1
