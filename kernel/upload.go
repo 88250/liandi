@@ -12,11 +12,13 @@ package main
 
 import (
 	"crypto/tls"
+	"fmt"
 	"io/ioutil"
 	"mime"
 	"net/url"
 	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -27,6 +29,7 @@ import (
 
 func Upload(c *gin.Context) {
 	ret := gulu.Ret.NewResult()
+	defer c.JSON(200, ret)
 
 	form, _ := c.MultipartForm()
 	files := form.File["file[]"]
@@ -94,12 +97,15 @@ func Upload(c *gin.Context) {
 		"errFiles": errFiles,
 		"succMap":  succMap,
 	}
-
-	c.JSON(200, ret)
 }
 
 func UploadFetch(c *gin.Context) {
 	ret := gulu.Ret.NewResult()
+	defer c.JSON(200, ret)
+
+	if !Conf.Image.AutoFetch {
+		return
+	}
 
 	var requestJSON map[string]interface{}
 	if err := c.BindJSON(&requestJSON); nil != err {
@@ -125,7 +131,9 @@ func UploadFetch(c *gin.Context) {
 	dir := Conf.dir(u)
 	if nil == dir {
 		ret.Code = -1
-		ret.Msg = Conf.lang(0)
+		msg := Conf.lang(0)
+		Logger.Error(msg)
+		ret.Msg = msg
 		return
 	}
 
@@ -134,12 +142,16 @@ func UploadFetch(c *gin.Context) {
 	request.Timeout(7 * time.Second)
 	response, data, errors := request.Get(originalURL).EndBytes()
 	if nil != errors {
-		Logger.Errorf("Fetch image [%s] failed: %s", originalURL, errors)
 		ret.Code = -1
+		msg := fmt.Sprintf(Conf.lang(11), errors)
+		Logger.Errorf(msg)
+		ret.Msg = msg
 		return
 	}
 	if 200 != response.StatusCode {
-		Logger.Errorf("Fetch image [%s] failed, status code is [%d]", originalURL, response.StatusCode)
+		msg := fmt.Sprintf(Conf.lang(11), strconv.Itoa(response.StatusCode))
+		Logger.Errorf(msg)
+		ret.Msg = msg
 		ret.Code = -1
 		return
 	}
@@ -147,7 +159,9 @@ func UploadFetch(c *gin.Context) {
 	contentType := response.Header.Get("Content-Type")
 	exts, err := mime.ExtensionsByType(contentType)
 	if nil != err {
-		Logger.Errorf("Detect image [%s] suffix failed: %s", originalURL, err)
+		msg := fmt.Sprintf(Conf.lang(11), strconv.Itoa(response.StatusCode))
+		Logger.Errorf(msg)
+		ret.Msg = msg
 		ret.Code = -1
 		return
 	}
@@ -181,15 +195,16 @@ func UploadFetch(c *gin.Context) {
 	}
 
 	ret.Data = map[string]interface{}{
-		"url": joinUrlPath(linkBase, fname),
-		"originalURL":  originalURL,
+		"url":         joinUrlPath(linkBase, fname),
+		"originalURL": originalURL,
 	}
-
-	c.JSON(200, ret)
 }
 
 func joinUrlPath(urlPart string, pathParts ...string) string {
 	pathPart := path.Join(pathParts...)
+	if "" == urlPart {
+		return pathPart
+	}
 	if !strings.HasSuffix(urlPart, "/") {
 		return urlPart + "/" + pathPart
 	}

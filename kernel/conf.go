@@ -334,6 +334,7 @@ var zhCN = map[int]string{
 	8:  "检查更新失败",
 	9:  "新版本可用 %s",
 	10: "已是最新版",
+	11: "拉取远程图片失败：%s",
 }
 
 var enUS = map[int]string{
@@ -348,6 +349,7 @@ var enUS = map[int]string{
 	8:  "Check update failed",
 	9:  "New version is available %s",
 	10: "Is the latest version",
+	11: "Fetch remote image failed: %s",
 }
 
 var langs = map[string]map[int]string{
