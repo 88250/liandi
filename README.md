@@ -26,7 +26,7 @@
 
 链滴笔记是一款开源的桌面端笔记应用，支持 Windows、Mac 和 Linux。
 
-欢迎关注 B3log 开源社区微信公众号 `B3log开源`
+欢迎到 [链滴笔记官方讨论区](https://hacpai.com/tag/liandi-biji)了解更多。同时也欢迎关注 B3log 开源社区微信公众号 `B3log开源`：
 
 ![b3logos.png](https://img.hacpai.com/file/2019/10/image-d3c00d78.png)
 
@@ -112,7 +112,7 @@
 ## 🏘️ 社区
 
 * [讨论区](https://hacpai.com/tag/liandi-biji)
-* [报告问题](https://github.com/88250/liandi/issues/new)
+* [报告问题](https://github.com/88250/liandi/issues/new/choose)
 
 ## 📄 开源协议
 
