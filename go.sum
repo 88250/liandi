@@ -1,7 +1,5 @@
-github.com/88250/gowebdav v0.0.0-20200130141223-09487aa5b19f h1:FQrBkPdn3q8inhMDpiFqtVKEufMHE2PH6IHiblxH/8I=
-github.com/88250/gowebdav v0.0.0-20200130141223-09487aa5b19f/go.mod h1:RwOJcas/Iq8Luo0ilF9yPiyegDBjPUV1ldMT6gC2k00=
-github.com/88250/gulu v1.0.0 h1:aTUuoVlZhzN8M1bmqvySJBP7GxGwRiayaCCi94KualI=
-github.com/88250/gulu v1.0.0/go.mod h1:a2POIziN+QFeNT4Mj7FHH2lz1HEaFlMRF6wPE0NHM4U=
+github.com/88250/gowebdav v1.0.0 h1:aaqQX1cxQdktcTRAEKsbB6WTegaPNkVNLPahZsG8Jl4=
+github.com/88250/gowebdav v1.0.0/go.mod h1:Llj0QxGOI0aXCcQM86ysL7llMtAYAiv8SnsbdeiA5Yo=
 github.com/88250/gulu v1.1.0 h1:aU8HncW1XNssT1insCOz6rvmTUDrtsDwSnzeqTEqNFA=
 github.com/88250/gulu v1.1.0/go.mod h1:a2POIziN+QFeNT4Mj7FHH2lz1HEaFlMRF6wPE0NHM4U=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=

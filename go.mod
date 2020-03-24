@@ -3,7 +3,7 @@ module github.com/88250/liandi
 go 1.12
 
 require (
-	github.com/88250/gowebdav v0.0.0-20200130141223-09487aa5b19f
+	github.com/88250/gowebdav v1.0.0
 	github.com/88250/gulu v1.1.0
 	github.com/elazarl/goproxy v0.0.0-20200315184450-1f3cb6622dad // indirect
 	github.com/elazarl/goproxy/ext v0.0.0-20200315184450-1f3cb6622dad // indirect
@@ -27,3 +27,5 @@ require (
 	gopkg.in/olahol/melody.v1 v1.0.0-20170518105555-d52139073376
 	moul.io/http2curl v1.0.0 // indirect
 )
+
+//replace github.com/88250/gowebdav => D:\88250\gowebdav
