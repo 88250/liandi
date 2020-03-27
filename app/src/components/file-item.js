@@ -85,7 +85,10 @@ customElements.define('file-item',
 
     attributeChangedCallback (name, oldValue, newValue) {
       if (name === 'name' && oldValue) {
-        this.shadowRoot.querySelector('div span').innerHTML = newValue
+        this.shadowRoot.querySelector(
+          'div span').innerHTML = decodeURIComponent(newValue).
+          replace(/&/g, '&amp;').
+          replace(/</g, '&lt;')
       }
     }
   },

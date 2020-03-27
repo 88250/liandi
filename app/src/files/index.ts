@@ -32,15 +32,15 @@ export class Files {
             this.element.firstElementChild.innerHTML = '';
         } else {
             this.element.firstElementChild.innerHTML =
-                `<file-item name="${i18n[liandi.config.lang].back}" path="${removeLastPath(data.path)}"></file-item>
+                `<file-item name="${i18n[liandi.config.lang].back}" path="${encodeURIComponent(removeLastPath(data.path))}"></file-item>
 <div class="files__path">${liandi.current.path}</div>`;
         }
     }
 
     public onRename(liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) {
-        const fileItemElement = this.listElement.querySelector(`file-item[path="${data.oldPath}"]`);
-        fileItemElement.setAttribute('path', data.newPath);
-        fileItemElement.setAttribute('name', data.newName);
+        const fileItemElement = this.listElement.querySelector(`file-item[path="${encodeURIComponent(data.oldPath)}"]`);
+        fileItemElement.setAttribute('path', encodeURIComponent(data.newPath));
+        fileItemElement.setAttribute('name', encodeURIComponent(data.newName));
 
         if (fileItemElement.getAttribute('current') === 'true') {
             liandi.current.path = data.newPath;

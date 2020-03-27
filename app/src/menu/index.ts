@@ -46,9 +46,9 @@ export class Menus {
                 if (target.tagName === 'FILE-ITEM') {
                     this.itemData = {
                         target,
-                        name: target.getAttribute('name'),
+                        name: decodeURIComponent(target.getAttribute('name')).replace(/&/g, '&amp;').replace(/</g, '&lt;'),
                         url: liandi.current.dir.url,
-                        path: target.getAttribute('path'),
+                        path: decodeURIComponent(target.getAttribute('path')),
                     };
 
                     filesMenu.popup({
