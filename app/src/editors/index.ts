@@ -17,7 +17,7 @@ export class Editors {
     }
 
     save(liandi: ILiandi) {
-        if (remote.getGlobal('liandiEditor').saved) {
+        if (remote.getGlobal('liandiEditor').saved || !liandi.current.dir) {
             return;
         }
         liandi.ws.send('put', {

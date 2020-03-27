@@ -41,7 +41,7 @@ export class EditorWebview {
             id: 'copyAsPlainText',
             accelerator: 'CmdOrCtrl+Shift+C',
             click: () => {
-                this.vditor.insertValue(clipboard.readText());
+                clipboard.writeText(getSelection().getRangeAt(0).toString().replace(/​/g, ""));
             }
         }));
         menu.append(new remote.MenuItem({
@@ -210,6 +210,11 @@ export class EditorWebview {
                 const range = getSelection().getRangeAt(0)
                 range.extractContents();
                 this.vditor.insertValue(clipboard.readText());
+                event.preventDefault();
+            }
+
+            if (this.isCtrl(event) && event.key.toLowerCase() === 'c' && !event.altKey && event.shiftKey) {
+                clipboard.writeText(getSelection().getRangeAt(0).toString().replace(/​/g, ""));
                 event.preventDefault();
             }
         })
