@@ -199,6 +199,8 @@ export class EditorWebview {
 
         this.vditor.vditor.wysiwyg.element.addEventListener("keydown", (event: KeyboardEvent) => {
             if (this.isCtrl(event) && event.key.toLowerCase() === 'v' && !event.altKey && event.shiftKey) {
+                const range = getSelection().getRangeAt(0)
+                range.extractContents();
                 this.vditor.insertValue(clipboard.readText());
                 event.preventDefault();
             }
