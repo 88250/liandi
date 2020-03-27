@@ -20,7 +20,9 @@ customElements.define('file-item',
         divElement.classList.add('list__item--current')
       }
       divElement.innerHTML = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${pathHTML}</svg>
-<span>${this.getAttribute('name')}</span>`
+<span>${decodeURIComponent(this.getAttribute('name')).
+        replace(/&/g, '&amp;').
+        replace(/</g, '&lt;')}</span>`
 
       const that = this
       divElement.addEventListener('click', function () {
@@ -28,7 +30,7 @@ customElements.define('file-item',
           return
         }
 
-        const path = that.getAttribute('path')
+        const path = decodeURIComponent(that.getAttribute('path'))
         const url = window.liandi.liandi.current.dir.url
 
         window.liandi.liandi.files.listElement.querySelectorAll('file-item').

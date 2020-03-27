@@ -24,7 +24,7 @@ export class Files {
             if (data.url === liandi.current.dir.url && item.path === liandi.current.path) {
                 current = 'true';
             }
-            filesHTML += `<file-item current="${current}" path="${item.path}" name="${item.name}"></file-item>`;
+            filesHTML += `<file-item current="${current}" path="${encodeURIComponent(item.path)}" name="${encodeURIComponent(item.name)}"></file-item>`;
         });
         this.listElement.innerHTML = filesHTML;
 
