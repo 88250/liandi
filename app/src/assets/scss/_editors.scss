@@ -1,4 +1,21 @@
 .editors {
+  position: relative;
+
+  &__loading {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--background-color);
+    opacity: 0.8;
+    svg {
+      height: 128px;
+      width: 128px;
+    }
+  }
+
   &__drag {
     -webkit-app-region: drag;
     height: 20px;
