@@ -137,10 +137,8 @@ func UploadFetch(c *gin.Context) {
 		return
 	}
 
-	request := gorequest.New().TLSClientConfig(&tls.Config{InsecureSkipVerify: true})
-	request.Header.Set("User-Agent", UserAgent)
-	request.Timeout(7 * time.Second)
-	response, data, errors := request.Get(originalURL).EndBytes()
+	response, data, errors := gorequest.New().Get(originalURL).TLSClientConfig(&tls.Config{InsecureSkipVerify: true}).
+		Set("User-Agent", UserAgent).Timeout(7 * time.Second).EndBytes()
 	if nil != errors {
 		ret.Code = -1
 		msg := fmt.Sprintf(Conf.lang(11), errors)
