@@ -37,6 +37,14 @@ export class EditorWebview {
             role: 'copy',
         }));
         menu.append(new remote.MenuItem({
+            label: i18n[lang].copyAsPlainText,
+            id: 'copyAsPlainText',
+            accelerator: 'CmdOrCtrl+Shift+C',
+            click: () => {
+                this.vditor.insertValue(clipboard.readText());
+            }
+        }));
+        menu.append(new remote.MenuItem({
             label: i18n[lang].paste,
             id: 'paste',
             role: 'paste',
