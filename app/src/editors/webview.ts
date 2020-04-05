@@ -162,7 +162,9 @@ export class EditorWebview {
             ],
             tab: '\t',
             theme: liandi.config.theme === 'dark' ? 'dark' : 'classic',
-            cache: false,
+            cache: {
+                enable: false
+            },
             cdn: remote.getGlobal('liandiEditor').appDir + "/node_modules/vditor",
             preview: {
                 markdown: {
@@ -184,10 +186,14 @@ export class EditorWebview {
                 linkToImgUrl: Constants.UPLOAD_FETCH_ADDRESS,
                 filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
                 url: Constants.UPLOAD_ADDRESS,
-                headers: {
-                    'X-URL': encodeURIComponent(liandi.current.dir.url),
-                    'X-PATH': encodeURIComponent(liandi.current.path),
-                },
+                file: (files: File[]) => {
+                    this.vditor.vditor.options.upload.headers = {
+                        'X-URL': encodeURIComponent(liandi.current.dir.url),
+                        'X-PATH': encodeURIComponent(liandi.current.path),
+                        'X-Mode': this.vditor.getCurrentMode()
+                    };
+                    return files;
+                }
             },
             after: () => {
                 this.vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
