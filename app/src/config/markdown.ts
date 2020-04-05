@@ -4,6 +4,23 @@ import {Constants} from '../constants';
 export const markdown = {
     genHTML: (liandi: ILiandi) => {
         return `
+<div class="form__item">
+    ${i18n[liandi.config.lang].editMode}<span class="fn__space"></span><span class="fn__space"></span>
+    <label>
+        <input value="wysiwyg" type="radio" name="editMode"${liandi.config.markdown.editorMode === 'wysiwyg' ? ' checked' : ''}/>
+        <span class="fn__space"></span>${i18n[liandi.config.lang].wysiwyg}
+    </label>
+    <span class="fn__space"></span><span class="fn__space"></span>
+    <label>
+        <input value="ir" name="editMode" type="radio"${liandi.config.markdown.editorMode === 'ir' ? ' checked' : ''}/>
+        <span class="fn__space"></span>${i18n[liandi.config.lang].ir}
+    </label>  
+    <span class="fn__space"></span><span class="fn__space"></span>
+    <label>
+        <input value="sv" name="editMode" type="radio"${liandi.config.markdown.editorMode === 'sv' ? ' checked' : ''}/>
+        <span class="fn__space"></span>${i18n[liandi.config.lang].sv}
+    </label>
+</div>
 <div class="form__item"><label>
     <input id="autoSpace" type="checkbox"${liandi.config.markdown.autoSpace ? ' checked' : ''}/>
     <span class="fn__space"></span>${i18n[liandi.config.lang].autoSpace}
@@ -53,7 +70,8 @@ export const markdown = {
                     chinesePunct: (element.querySelector('#chinesePunct') as HTMLInputElement).checked,
                     fixTermTypo: (element.querySelector('#fixTermTypo') as HTMLInputElement).checked,
                     inlineMathAllowDigitAfterOpenMarker: (element.querySelector('#inlineMathAllowDigitAfterOpenMarker') as HTMLInputElement).checked,
-                    mathEngine: (element.querySelector('[name="mathEngine"]:checked') as HTMLInputElement).value,
+                    editorMode: (element.querySelector('[name="editMode"]:checked') as HTMLInputElement).value,
+                    mathEngine: (element.querySelector('[name="editMode"]:checked') as HTMLInputElement).value,
                     footnotes: (element.querySelector('#footnotes') as HTMLInputElement).checked,
                     toc: (element.querySelector('#toc') as HTMLInputElement).checked,
                     hideToolbar: (element.querySelector('#hideToolbar') as HTMLInputElement).checked,

@@ -109,6 +109,7 @@ export class EditorWebview {
         document.getElementById('liandiVditor').innerHTML = '';
         let timeoutId: number;
         this.vditor = new Vditor('liandiVditor', {
+            mode: liandi.config.markdown.editorMode,
             hideToolbar: liandi.config.markdown.hideToolbar,
             typewriterMode: true,
             toolbar: [
