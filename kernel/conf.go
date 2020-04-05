@@ -71,6 +71,9 @@ func InitConf() {
 	if nil == Conf.Markdown {
 		Conf.Markdown = newMarkdown()
 	}
+	if "" == Conf.Markdown.EditorMode {
+		Conf.Markdown.EditorMode = "wysiwyg"
+	}
 
 	if nil == Conf.Image {
 		Conf.Image = newImage()
@@ -97,13 +100,14 @@ type AppConf struct {
 }
 
 type Markdown struct {
+	EditorMode                          string `json:"editorMode"` // wysiwyg / ir / sv
 	Footnotes                           bool   `json:"footnotes"`
 	ToC                                 bool   `json:"toc"`
 	AutoSpace                           bool   `json:"autoSpace"`
 	FixTermTypo                         bool   `json:"fixTermTypo"`
 	ChinesePunct                        bool   `json:"chinesePunct"`
 	InlineMathAllowDigitAfterOpenMarker bool   `json:"inlineMathAllowDigitAfterOpenMarker"`
-	MathEngine                          string `json:"mathEngine"` // KaTeX 或者 MathJax
+	MathEngine                          string `json:"mathEngine"` // KaTeX / MathJax
 	HideToolbar                         bool   `json:"hideToolbar"`
 }
 
@@ -113,6 +117,7 @@ type Image struct {
 
 func newMarkdown() *Markdown {
 	return &Markdown{
+		EditorMode:                          "wysiwyg",
 		Footnotes:                           false,
 		ToC:                                 false,
 		AutoSpace:                           true,
