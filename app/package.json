@@ -1,6 +1,6 @@
 {
   "name": "liandi",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "链滴笔记",
   "main": "./electron/main.js",
   "scripts": {
@@ -18,7 +18,23 @@
     "webdav",
     "b3log"
   ],
-  "author": "Vanessa <v@b3log.org> (http://vanessa.b3log.org)",
+  "author": {
+    "name": "B3log 开源社区",
+    "email": "os@b3log.org",
+    "url": "https://b3log.org"
+  },
+  "maintainers": [
+    {
+      "name": "Liang Ding",
+      "email": "d@b3log.org",
+      "url": "http://88250.b3log.org"
+    },
+    {
+      "name": "Liyuan Li",
+      "email": "v@b3log.org",
+      "url": "http://vanessa.b3log.org"
+    }
+  ],
   "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^9.7.4",

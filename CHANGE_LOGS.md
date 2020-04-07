@@ -1,3 +1,20 @@
+## v0.1.4 / 2020-04-07
+
+### 引入特性
+
+* [可配置是否自动拉取图片到本地](https://github.com/88250/liandi/issues/39)
+
+### 改进功能
+
+* [所见即所得模式下链接为空时会变为 http://127.0.0.1:6807/webdav/xxx](https://github.com/88250/liandi/issues/40)
+* [复制为纯文本](https://github.com/88250/liandi/issues/41)
+
+### 修复缺陷
+
+* [文件名中 + 会变为空格](https://github.com/88250/liandi/issues/42)
+* [带 HTML 标签的文件名打不开](https://github.com/88250/liandi/issues/43)
+* [选中文字后 ctrl+shift+v，选中的文字没有被删除](https://github.com/88250/liandi/issues/44)
+
 ## v0.1.3 / 2020-03-10
 
 ### 引入特性
