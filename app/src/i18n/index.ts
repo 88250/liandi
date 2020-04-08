@@ -48,6 +48,7 @@ export const i18n: II18n = {
         footnotes: 'Enable [^footnotes]',
         autoFetch: 'Auto fetch remote image to local',
         image: 'Image',
+        setext: 'Parse Setext Heading',
     },
     zh_CN: {
         editMode: '编辑模式',
@@ -98,5 +99,6 @@ export const i18n: II18n = {
         footnotes: '支持脚注 [^footnotes]',
         autoFetch: '自动拉取远程图片到本地',
         image: '图片',
+        setext: '解析 Setext 风格的标题',
     },
 };

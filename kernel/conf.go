@@ -109,6 +109,7 @@ type Markdown struct {
 	InlineMathAllowDigitAfterOpenMarker bool   `json:"inlineMathAllowDigitAfterOpenMarker"`
 	MathEngine                          string `json:"mathEngine"` // KaTeX / MathJax
 	HideToolbar                         bool   `json:"hideToolbar"`
+	Setext                              bool   `json:"setext"`
 }
 
 type Image struct {
@@ -126,6 +127,7 @@ func newMarkdown() *Markdown {
 		InlineMathAllowDigitAfterOpenMarker: false,
 		MathEngine:                          "KaTeX",
 		HideToolbar:                         false,
+		Setext:                              true,
 	}
 }
 
