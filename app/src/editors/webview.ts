@@ -174,6 +174,7 @@ export class EditorWebview {
                     fixTermTypo: liandi.config.markdown.fixTermTypo,
                     toc: liandi.config.markdown.toc,
                     footnotes: liandi.config.markdown.footnotes,
+                    setext: liandi.config.markdown.setext
                 },
                 math: {
                     inlineDigit: liandi.config.markdown.inlineMathAllowDigitAfterOpenMarker,
