@@ -30,7 +30,7 @@
 
 ![b3logos.png](https://img.hacpai.com/file/2019/10/image-d3c00d78.png)
 
-### ✨  特性
+## ✨  特性
 
 * **为 Markdown 而生** 
   * 支持三种编辑模式
@@ -99,7 +99,7 @@
 * [码云](https://gitee.com/dl88250/liandi/releases)
 * [本地下载](https://liandi.b3log.org/releases)
 
-#### 源码构建
+### 源码构建
 
 1. 安装 Go、Node 环境
 2. 运行项目根目录下的 build 脚本
