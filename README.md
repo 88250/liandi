@@ -1,7 +1,7 @@
 <p align="center">
 <img alt="LianDi" src="https://b3log.org/images/brand/liandi-128.png">
 <br>
-<em>LianDi Notes, connect every bits</em>
+<em>LianDi Note, connect every bits</em>
 <br><br>
 <a title="Build Status" target="_blank" href="https://travis-ci.org/88250/liandi"><img src="https://img.shields.io/travis/88250/liandi.svg?style=flat-square"></a>
 <a title="Code Size" target="_blank" href="https://github.com/88250/liandi"><img src="https://img.shields.io/github/languages/code-size/88250/liandi.svg?style=flat-square"></a>
@@ -28,9 +28,9 @@
 
 ## 💡 Introduction
 
-LianDi Notes is an open source desktop note application that supports Windows, Mac and Linux.
+LianDi Note is an open source desktop note application that supports Windows, Mac and Linux.
 
-Welcome to [LianDi Notes Official Discussion Area](https://hacpai.com/tag/liandi-biji) to learn more.
+Welcome to [LianDi Note Official Discussion Area](https://hacpai.com/tag/liandi-biji) to learn more.
 
 ## ✨  Features
 
@@ -128,8 +128,8 @@ If you want to modify the source code, please set up the development environment
 
 ## 📜 Documentation
 
-* [LianDi Notes - an open source desktop note application that supports Windows, Mac and Linux](https://hacpai.com/article/1582274499427)
-* [LianDi Notes roadmap](https://hacpai.com/article/1579786655216)
+* [LianDi Note - an open source desktop note application that supports Windows, Mac and Linux](https://hacpai.com/article/1582274499427)
+* [LianDi Note roadmap](https://hacpai.com/article/1579786655216)
 
 ## 🏘️ Community
 
@@ -138,7 +138,7 @@ If you want to modify the source code, please set up the development environment
 
 ## 📄 License
 
-LianDi Notes uses the [Mulan Permissive Software License，Version 2](http://license.coscl.org.cn/MulanPSL2) open source license.
+LianDi Note uses the [Mulan Permissive Software License，Version 2](http://license.coscl.org.cn/MulanPSL2) open source license.
 
 ## 🙏 Acknowledgement
 
