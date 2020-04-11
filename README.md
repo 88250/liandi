@@ -111,8 +111,8 @@ If you want to modify the source code, please set up the development environment
 
 1. Build the kernel under the kernel directory and start 
    * Windows: `go build -o kernel.exe && kernel.exe`
-   * Mac: `go build -o kernel-darwin &&. / Kernel-darwin`
-   * Linux: `go build -o kernel-linux &&. / Kernel-linux`
+   * Mac: `go build -o kernel-darwin &&. / Kernel-darwin`
+   * Linux: `go build -o kernel-linux &&. / Kernel-linux`
 2. Build the frontend `npm run dev` in the app directory and start the main process` npm run start`
 
 ## 🏗️ Technology Architecture
