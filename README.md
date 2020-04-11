@@ -34,7 +34,7 @@ Welcome to [LianDi Notes Official Discussion Area](https://hacpai.com/tag/liandi
 
 ## ✨  Features
 
-* ** Born for Markdown **
+* **Born for Markdown**
   * Support three editing modes
     * WYSIWYG: It is more friendly to users who are not familiar with Markdown, and you can use it seamlessly if you are familiar with Markdown
     * Instant Rendering: users familiar with Typora should not be unfamiliar, in theory this is the most elegant Markdown editing method
