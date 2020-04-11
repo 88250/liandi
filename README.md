@@ -35,21 +35,21 @@ Welcome to [LianDi Note Official Discussion Area](https://hacpai.com/tag/liandi-
 ## ✨  Features
 
 * **Born for Markdown**
-  * Support three editing modes
-    * WYSIWYG: It is more friendly to users who are not familiar with Markdown, and you can use it seamlessly if you are familiar with Markdown
-    * Instant Rendering: users familiar with Typora should not be unfamiliar, in theory this is the most elegant Markdown editing method
-    * Split View: suitable for Markdown editing on large screen
-  * Support mathematical formulas, charts, flowcharts, Gantt charts, timing charts, staffs, etc.
-  * Markdown text formatting
-  * Paste HTML automatically converted to Markdown
-  * Configure Markdown to analyze detailed rendering parameters
-    * Whether to enable footnote support
-    * Whether to enable [ToC] support
-    * Do you need to insert spaces between Chinese and Western languages ​​automatically
-    * Whether to perform automatic term correction
-    * Punctuation such as Chinese followed by English comma period is automatically replaced with Chinese corresponding punctuation
-    * Does inline math formula allow starting $ followed by numbers
-    * Math formula engine switching MathJax, KaTeX
+  * Support three editing modes
+    * WYSIWYG: It is more friendly to users who are not familiar with Markdown, and you can use it seamlessly if you are familiar with Markdown
+    * Instant Rendering: users familiar with Typora should not be unfamiliar, in theory this is the most elegant Markdown editing method
+    * Split View: suitable for Markdown editing on large screen
+  * Support mathematical formulas, charts, flowcharts, Gantt charts, timing charts, staffs, etc.
+  * Markdown text formatting
+  * Paste HTML automatically converted to Markdown
+  * Configure Markdown to analyze detailed rendering parameters
+    * Whether to enable footnote support
+    * Whether to enable [ToC] support
+    * Do you need to insert spaces between Chinese and Western languages ​​automatically
+    * Whether to perform automatic term correction
+    * Punctuation such as Chinese followed by English comma period is automatically replaced with Chinese corresponding punctuation
+    * Does inline math formula allow starting $ followed by numbers
+    * Math formula engine switching MathJax, KaTeX
 * WebDAV mount remote directory
 * Double Shift quick navigation
 * Fulltext search
