@@ -33,9 +33,10 @@
 ### ✨  特性
 
 * **为 Markdown 而生** 
-  * 支持传统的分屏编辑预览模式
-  * 支持类似 Typora 保留标记符的即时渲染模式
-  * 支持所见即所得编辑模式
+  * 支持三种编辑模式
+    * 所见即所得：对不熟悉 Markdown 的用户较为友好，熟悉 Markdown 的话也可以无缝使用
+    * 即时渲染：对熟悉 Typora 的用户应该不会感到陌生，理论上这是最优雅的 Markdown 编辑方式
+    * 分屏预览：适合大屏下的 Markdown 编辑
   * 支持数学公式、图表、流程图、甘特图、时序图、五线谱等
   * Markdown 文本格式化
   * 粘贴 HTML 自动转换为 Markdown
@@ -55,6 +56,24 @@
 * 导出静态站点，内置多套主题 `TBD`
 
 ## 📸 截图
+
+### 所见即所得
+
+*所见即所得*模式对不熟悉 Markdown 的用户较为友好，熟悉 Markdown 的话也可以无缝使用。
+
+![vditor-wysiwyg](https://img.hacpai.com/file/2020/03/wysiwyg-94c13d78.gif)
+
+### 即时渲染
+
+*即时渲染*模式对熟悉 Typora 的用户应该不会感到陌生，理论上这是最优雅的 Markdown 编辑方式。
+
+![vditor-ir](https://img.hacpai.com/file/2020/03/ir-6d784c1f.gif)
+
+### 分屏预览
+
+传统的*分屏预览*模式适合大屏下的 Markdown 编辑。
+
+![vditor-sv](https://img.hacpai.com/file/2020/03/sv-776055ce.gif)
 
 ### 明亮主题
 
