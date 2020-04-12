@@ -3,10 +3,19 @@ import {i18n} from '../i18n';
 
 export const initConfigSearch = (liandi: ILiandi, element: HTMLElement) => {
     const configIndex = [
-        ['markdown', i18n.zh_CN.config, i18n.en_US.config, i18n.en_US.autoSpace, i18n.zh_CN.autoSpace,
-            i18n.en_US.fixTermTypo, i18n.zh_CN.fixTermTypo, i18n.en_US.chinesePunctuation,
-            i18n.zh_CN.chinesePunctuation, i18n.en_US.inlineMathDigit, i18n.zh_CN.inlineMathDigit,
-            i18n.en_US.mathEngine, i18n.zh_CN.mathEngine, 'katex', 'mathjax'],
+        ['markdown', i18n.zh_CN.config, i18n.en_US.config,
+            i18n.zh_CN.editMode, i18n.en_US.editMode, i18n.zh_CN.wysiwyg, i18n.en_US.wysiwyg, i18n.zh_CN.sv, i18n.en_US.sv, i18n.zh_CN.ir, i18n.en_US.ir,
+            i18n.en_US.autoSpace, i18n.zh_CN.autoSpace,
+            i18n.en_US.fixTermTypo, i18n.zh_CN.fixTermTypo,
+            i18n.en_US.chinesePunctuation, i18n.zh_CN.chinesePunctuation,
+            i18n.en_US.inlineMathDigit, i18n.zh_CN.inlineMathDigit,
+            i18n.en_US.mathEngine, i18n.zh_CN.mathEngine, 'katex', 'mathjax',
+            i18n.en_US.hideToolbar, i18n.zh_CN.hideToolbar,
+            i18n.en_US.toc, i18n.zh_CN.toc,
+            i18n.en_US.footnotes, i18n.zh_CN.footnotes,
+            i18n.en_US.setext, i18n.zh_CN.setext,
+        ],
+        ['Image', i18n.zh_CN.autoFetch, i18n.en_US.autoFetch],
         ['light', 'dark', 'theme', '主题'],
         ['zh_CN', 'en_US', 'language', '语言'],
         ['about', '关于', i18n.zh_CN.checkUpdate, i18n.en_US.checkUpdate]
