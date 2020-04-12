@@ -110,18 +110,23 @@ export class EditorWebview {
         let timeoutId: number;
         this.vditor = new Vditor('liandiVditor', {
             mode: liandi.config.markdown.editorMode,
-            hideToolbar: liandi.config.markdown.hideToolbar,
+            toolbarConfig: {
+                hide: liandi.config.markdown.hideToolbar,
+            },
             typewriterMode: true,
             toolbar: [
                 'emoji',
                 'headings',
                 'bold',
                 'italic',
+                'strike',
                 'link',
                 '|',
                 'list',
                 'ordered-list',
                 'check',
+                'outdent',
+                'indent',
                 '|',
                 'quote',
                 'line',
