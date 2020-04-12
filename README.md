@@ -1,7 +1,7 @@
 <p align="center">
 <img alt="LianDi" src="https://b3log.org/images/brand/liandi-128.png">
 <br>
-<em>LianDi Note, connect every bits</em>
+<em>LianDi Note, connect every bit</em>
 <br><br>
 <a title="Build Status" target="_blank" href="https://travis-ci.org/88250/liandi"><img src="https://img.shields.io/travis/88250/liandi.svg?style=flat-square"></a>
 <a title="Code Size" target="_blank" href="https://github.com/88250/liandi"><img src="https://img.shields.io/github/languages/code-size/88250/liandi.svg?style=flat-square"></a>
