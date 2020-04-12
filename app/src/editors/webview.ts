@@ -190,17 +190,16 @@ export class EditorWebview {
                 }
             },
             upload: {
-                linkToImgUrl: Constants.UPLOAD_FETCH_ADDRESS,
-                filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
-                url: Constants.UPLOAD_ADDRESS,
-                file: (files: File[]) => {
-                    this.vditor.vditor.options.upload.headers = {
+                setHeaders: () => {
+                    return {
                         'X-URL': encodeURIComponent(liandi.current.dir.url),
                         'X-PATH': encodeURIComponent(liandi.current.path),
                         'X-Mode': this.vditor.getCurrentMode()
-                    };
-                    return files;
-                }
+                    }
+                },
+                linkToImgUrl: Constants.UPLOAD_FETCH_ADDRESS,
+                filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
+                url: Constants.UPLOAD_ADDRESS,
             },
             after: () => {
                 this.vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
