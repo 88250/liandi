@@ -162,6 +162,7 @@ export class EditorWebview {
                         }
                     },
                 },
+                'outline',
                 'devtools',
                 'info',
                 'help',
@@ -170,6 +171,9 @@ export class EditorWebview {
             theme: liandi.config.theme === 'dark' ? 'dark' : 'classic',
             cache: {
                 enable: false
+            },
+            counter: {
+              enable: true
             },
             cdn: remote.getGlobal('liandiEditor').appDir + "/node_modules/vditor",
             preview: {
@@ -189,6 +193,7 @@ export class EditorWebview {
                     style: liandi.config.theme === 'dark' ? 'native' : 'github'
                 }
             },
+            height: window.innerHeight - 20,
             upload: {
                 setHeaders: () => {
                     return {
