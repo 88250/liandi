@@ -132,6 +132,8 @@ export class EditorWebview {
                 'line',
                 'code',
                 'inline-code',
+                'insert-before',
+                'insert-after',
                 '|',
                 'upload',
                 'table',
