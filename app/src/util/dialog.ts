@@ -20,7 +20,7 @@ export const dialog = (options: {
     if (!dialogElement) {
         document.body.insertAdjacentHTML('beforeend', `
 <div class="dialog" id="dialog">
-    ${options.hideBackground ? "" : '<div class="dialog__bg"></div>'}
+    ${options.hideBackground ? '' : '<div class="dialog__bg"></div>'}
     <div class="dialog__main fn__layer">
       <svg class="dialog__close"><use xlink:href="#iconClose"></use></svg>
       <div class="dialog__header" onselectstart="return false;">

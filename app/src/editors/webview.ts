@@ -43,7 +43,7 @@ export class EditorWebview {
             id: 'copyAsPlainText',
             accelerator: 'CmdOrCtrl+Shift+C',
             click: () => {
-                clipboard.writeText(getSelection().getRangeAt(0).toString().replace(/​/g, ""));
+                clipboard.writeText(getSelection().getRangeAt(0).toString().replace(/​/g, ''));
             }
         }));
         menu.append(new remote.MenuItem({
@@ -98,7 +98,7 @@ export class EditorWebview {
     }
 
     private isCtrl(event: KeyboardEvent) {
-        if (navigator.platform.toUpperCase().indexOf("MAC") >= 0) {
+        if (navigator.platform.toUpperCase().indexOf('MAC') >= 0) {
             // mac
             if (event.metaKey && !event.ctrlKey) {
                 return true;
@@ -110,7 +110,7 @@ export class EditorWebview {
             }
             return false;
         }
-    };
+    }
 
     private onOpen(liandi: ILiandi, value: string = remote.getGlobal('liandiEditor').editorText) {
         document.getElementById('liandiVditor').innerHTML = '';
@@ -184,7 +184,7 @@ export class EditorWebview {
             counter: {
               enable: true
             },
-            cdn: remote.getGlobal('liandiEditor').appDir + "/node_modules/vditor",
+            cdn: remote.getGlobal('liandiEditor').appDir + '/node_modules/vditor',
             preview: {
                 markdown: {
                     autoSpace: liandi.config.markdown.autoSpace,
@@ -210,7 +210,7 @@ export class EditorWebview {
                         'X-URL': encodeURIComponent(liandi.current.dir.url),
                         'X-PATH': encodeURIComponent(liandi.current.path),
                         'X-Mode': this.vditor.getCurrentMode()
-                    }
+                    };
                 },
                 linkToImgUrl: Constants.UPLOAD_FETCH_ADDRESS,
                 filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
@@ -233,19 +233,19 @@ export class EditorWebview {
             }
         });
 
-        this.vditor.vditor.wysiwyg.element.addEventListener("keydown", (event: KeyboardEvent) => {
+        this.vditor.vditor.wysiwyg.element.addEventListener('keydown', (event: KeyboardEvent) => {
             if (this.isCtrl(event) && event.key.toLowerCase() === 'v' && !event.altKey && event.shiftKey) {
-                const range = getSelection().getRangeAt(0)
+                const range = getSelection().getRangeAt(0);
                 range.extractContents();
                 this.vditor.insertValue(clipboard.readText());
                 event.preventDefault();
             }
 
             if (this.isCtrl(event) && event.key.toLowerCase() === 'c' && !event.altKey && event.shiftKey) {
-                clipboard.writeText(getSelection().getRangeAt(0).toString().replace(/​/g, ""));
+                clipboard.writeText(getSelection().getRangeAt(0).toString().replace(/​/g, ''));
                 event.preventDefault();
             }
-        })
+        });
     }
 }
 

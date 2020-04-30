@@ -13,7 +13,7 @@ export const initGlobalKeyPress = (liandi: ILiandi | any) => {
                 && thisKeypressTime - lastKeypressTime >= 50) { // 防止 win32 长按
                 lastKeypressTime = 0;
                 if (liandi.range) {
-                    liandi.range = getSelection().getRangeAt(0)
+                    liandi.range = getSelection().getRangeAt(0);
                     ipcRenderer.sendToHost(Constants.LIANDI_SEARCH_OPEN);
                 } else {
                     initSearch(liandi);

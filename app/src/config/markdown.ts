@@ -14,7 +14,7 @@ export const markdown = {
     <label>
         <input value="ir" name="editMode" type="radio"${liandi.config.markdown.editorMode === 'ir' ? ' checked' : ''}/>
         <span class="fn__space"></span>${i18n[liandi.config.lang].ir}
-    </label>  
+    </label>
     <span class="fn__space"></span><span class="fn__space"></span>
     <label>
         <input value="sv" name="editMode" type="radio"${liandi.config.markdown.editorMode === 'sv' ? ' checked' : ''}/>
