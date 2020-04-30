@@ -43,7 +43,7 @@ export const i18n: II18n = {
         copyAsPlainText: 'Copy As Plain Text',
         paste: 'Paste',
         pasteAsPlainText: 'Paste As Plain Text',
-        hideToolbar: "Hide Editor's toolbar",
+        hideToolbar: 'Hide Editor\'s toolbar',
         toc: 'Enable [toc]',
         footnotes: 'Enable [^footnotes]',
         autoFetch: 'Auto fetch remote image to local',

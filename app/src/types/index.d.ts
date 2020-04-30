@@ -59,6 +59,7 @@ declare interface ILiandi {
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
     };
     editors?: {
+        focus: () => void;
         save: (liandi:ILiandi) => void;
         close: (liandi:ILiandi) => void;
         sendMessage: (message: string, liandi: ILiandi, editorData?: { content: string, name: string }) => void;

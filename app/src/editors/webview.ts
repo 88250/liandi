@@ -10,10 +10,12 @@ const Vditor = require('vditor');
 export class EditorWebview {
     private isInitMenu: boolean;
     private vditor: any;
+    private range: Range;
 
     constructor() {
         this.isInitMenu = false;
-        initGlobalKeyPress();
+        this.range = document.createRange();
+        initGlobalKeyPress(this);
         this.onMessage();
         if (process.platform === 'win32') {
             document.body.classList.add('body--win32');
@@ -41,7 +43,7 @@ export class EditorWebview {
             id: 'copyAsPlainText',
             accelerator: 'CmdOrCtrl+Shift+C',
             click: () => {
-                clipboard.writeText(getSelection().getRangeAt(0).toString().replace(/​/g, ""));
+                clipboard.writeText(getSelection().getRangeAt(0).toString().replace(/​/g, ''));
             }
         }));
         menu.append(new remote.MenuItem({
@@ -88,10 +90,15 @@ export class EditorWebview {
         ipcRenderer.on(Constants.LIANDI_EDITOR_RELOAD, (event, data) => {
             this.onOpen(data);
         });
+        ipcRenderer.on(Constants.LIANDI_EDITOR_CURSOR, (event, data) => {
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(this.range);
+        });
     }
 
     private isCtrl(event: KeyboardEvent) {
-        if (navigator.platform.toUpperCase().indexOf("MAC") >= 0) {
+        if (navigator.platform.toUpperCase().indexOf('MAC') >= 0) {
             // mac
             if (event.metaKey && !event.ctrlKey) {
                 return true;
@@ -103,7 +110,7 @@ export class EditorWebview {
             }
             return false;
         }
-    };
+    }
 
     private onOpen(liandi: ILiandi, value: string = remote.getGlobal('liandiEditor').editorText) {
         document.getElementById('liandiVditor').innerHTML = '';
@@ -132,6 +139,8 @@ export class EditorWebview {
                 'line',
                 'code',
                 'inline-code',
+                'insert-before',
+                'insert-after',
                 '|',
                 'upload',
                 'table',
@@ -162,6 +171,7 @@ export class EditorWebview {
                         }
                     },
                 },
+                'outline',
                 'devtools',
                 'info',
                 'help',
@@ -171,12 +181,16 @@ export class EditorWebview {
             cache: {
                 enable: false
             },
-            cdn: remote.getGlobal('liandiEditor').appDir + "/node_modules/vditor",
+            counter: {
+              enable: true
+            },
+            cdn: remote.getGlobal('liandiEditor').appDir + '/node_modules/vditor',
             preview: {
                 markdown: {
                     autoSpace: liandi.config.markdown.autoSpace,
                     chinesePunct: liandi.config.markdown.chinesePunct,
                     fixTermTypo: liandi.config.markdown.fixTermTypo,
+                    theme: liandi.config.theme,
                     toc: liandi.config.markdown.toc,
                     footnotes: liandi.config.markdown.footnotes,
                     setext: liandi.config.markdown.setext
@@ -189,13 +203,14 @@ export class EditorWebview {
                     style: liandi.config.theme === 'dark' ? 'native' : 'github'
                 }
             },
+            height: window.innerHeight - 20,
             upload: {
                 setHeaders: () => {
                     return {
                         'X-URL': encodeURIComponent(liandi.current.dir.url),
                         'X-PATH': encodeURIComponent(liandi.current.path),
                         'X-Mode': this.vditor.getCurrentMode()
-                    }
+                    };
                 },
                 linkToImgUrl: Constants.UPLOAD_FETCH_ADDRESS,
                 filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
@@ -206,6 +221,7 @@ export class EditorWebview {
                 this.vditor.setValue(value);
                 remote.getGlobal('liandiEditor').editorText = value;
                 remote.getGlobal('liandiEditor').saved = true;
+                this.vditor.focus();
             },
             input: (textContent: string) => {
                 remote.getGlobal('liandiEditor').editorText = textContent;
@@ -217,19 +233,19 @@ export class EditorWebview {
             }
         });
 
-        this.vditor.vditor.wysiwyg.element.addEventListener("keydown", (event: KeyboardEvent) => {
+        this.vditor.vditor.wysiwyg.element.addEventListener('keydown', (event: KeyboardEvent) => {
             if (this.isCtrl(event) && event.key.toLowerCase() === 'v' && !event.altKey && event.shiftKey) {
-                const range = getSelection().getRangeAt(0)
+                const range = getSelection().getRangeAt(0);
                 range.extractContents();
                 this.vditor.insertValue(clipboard.readText());
                 event.preventDefault();
             }
 
             if (this.isCtrl(event) && event.key.toLowerCase() === 'c' && !event.altKey && event.shiftKey) {
-                clipboard.writeText(getSelection().getRangeAt(0).toString().replace(/​/g, ""));
+                clipboard.writeText(getSelection().getRangeAt(0).toString().replace(/​/g, ''));
                 event.preventDefault();
             }
-        })
+        });
     }
 }
 

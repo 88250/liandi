@@ -114,6 +114,7 @@ export class WebSocketUtil {
                     liandi.files.onLs(liandi, response.data);
                     break;
                 case 'get':
+                    liandi.editors.focus();
                     liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, liandi, response.data);
                     break;
                 case 'searchget':

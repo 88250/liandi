@@ -1,5 +1,6 @@
 import {rename} from '../util/rename';
 import {remote} from 'electron';
+import {Constants} from '../constants';
 
 export class Editors {
     private inputElement: HTMLInputElement;
@@ -34,10 +35,15 @@ export class Editors {
         this.editorWebviewElement.classList.add('fn__none');
     }
 
-    sendMessage(message: string, liandi: ILiandi, editorData?: { content: string, name: string }) {
+    focus() {
+        this.editorWebviewElement.focus();
+        this.sendMessage(Constants.LIANDI_EDITOR_CURSOR);
+    }
+
+    sendMessage(message: string, liandi?: ILiandi, editorData?: { content: string, name: string }) {
         if (editorData) {
             remote.getGlobal('liandiEditor').editorText = editorData.content;
-            this.inputElement.value = editorData.name.replace(".md", "");
+            this.inputElement.value = editorData.name.replace('.md', '');
             this.inputElement.classList.remove('fn__none');
             this.editorWebviewElement.classList.remove('fn__none');
         }
