@@ -5,7 +5,7 @@ import {initSearch} from '../search';
 export const initGlobalKeyPress = (liandi?: ILiandi) => {
     let lastKeypressTime = 0;
 
-    window.addEventListener('keyup', (event) => {
+    window.addEventListener('keydown', (event) => {
         // 快捷搜素
         if (event.key === 'Shift') {
             const thisKeypressTime = new Date().getTime();
