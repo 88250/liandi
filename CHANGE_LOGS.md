@@ -1,3 +1,23 @@
+## v1.0.0 / 2020-04-30
+
+### 引入特性
+
+* [支持类似 Typora 的即时渲染模式（保留 Markdown 标记符）](https://github.com/88250/liandi/issues/10)
+
+### 改进功能
+
+* [Double Shift 快捷键容易误触](https://github.com/88250/liandi/issues/45)
+* [增加 Setext 标题解析开关](https://github.com/88250/liandi/issues/46)
+* [光标位置保留](https://github.com/88250/liandi/issues/49)
+
+### 文档相关
+
+* [Add README in English](https://github.com/88250/liandi/issues/48)
+
+### 修复缺陷
+
+* [自动拉取图片报错](https://github.com/88250/liandi/issues/47)
+
 ## v0.1.4 / 2020-04-07
 
 ### 引入特性
