@@ -183,6 +183,7 @@ export class EditorWebview {
                     autoSpace: liandi.config.markdown.autoSpace,
                     chinesePunct: liandi.config.markdown.chinesePunct,
                     fixTermTypo: liandi.config.markdown.fixTermTypo,
+                    theme: liandi.config.theme,
                     toc: liandi.config.markdown.toc,
                     footnotes: liandi.config.markdown.footnotes,
                     setext: liandi.config.markdown.setext
