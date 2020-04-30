@@ -7,6 +7,7 @@ import {initConfigSearch} from '../config/search';
 import {getPath, removeLastPath} from '../util/path';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
+import {Constants} from "../constants";
 
 export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
@@ -76,7 +77,10 @@ export const initSearch = (liandi: ILiandi) => {
   </div>
 </tab-panel>`,
         width: Math.max(window.innerWidth - 520, 600),
-        height: 520
+        height: 520,
+        destroyDialogCallback: () => {
+            liandi.editors.focus();
+        }
     });
 
     const dialogElement = document.querySelector('#dialog');
@@ -102,7 +106,9 @@ export const initSearch = (liandi: ILiandi) => {
             return;
         }
         if (event.key === 'Escape') {
-            destroyDialog();
+            destroyDialog(() => {
+                liandi.editors.focus();
+            });
             event.preventDefault();
         }
         let currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');

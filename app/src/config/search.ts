@@ -69,7 +69,9 @@ export const initConfigSearch = (liandi: ILiandi, element: HTMLElement) => {
             return;
         }
         if (event.key === 'Escape') {
-            destroyDialog();
+            destroyDialog(() => {
+                liandi.editors.focus();
+            });
             event.preventDefault();
         }
     });

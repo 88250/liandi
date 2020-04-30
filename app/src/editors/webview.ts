@@ -10,10 +10,12 @@ const Vditor = require('vditor');
 export class EditorWebview {
     private isInitMenu: boolean;
     private vditor: any;
+    private range: Range;
 
     constructor() {
         this.isInitMenu = false;
-        initGlobalKeyPress();
+        this.range = document.createRange();
+        initGlobalKeyPress(this);
         this.onMessage();
         if (process.platform === 'win32') {
             document.body.classList.add('body--win32');
@@ -87,6 +89,11 @@ export class EditorWebview {
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_RELOAD, (event, data) => {
             this.onOpen(data);
+        });
+        ipcRenderer.on(Constants.LIANDI_EDITOR_CURSOR, (event, data) => {
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(this.range);
         });
     }
 
@@ -214,6 +221,7 @@ export class EditorWebview {
                 this.vditor.setValue(value);
                 remote.getGlobal('liandiEditor').editorText = value;
                 remote.getGlobal('liandiEditor').saved = true;
+                this.vditor.focus();
             },
             input: (textContent: string) => {
                 remote.getGlobal('liandiEditor').editorText = textContent;
