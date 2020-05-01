@@ -30,7 +30,7 @@
 
 LianDi Note is an open source desktop note application that supports Windows, Mac and Linux.
 
-Welcome to [LianDi Note Official Discussion Area](https://hacpai.com/tag/liandi-biji) to learn more.
+Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi-biji) to learn more.
 
 ## ✨  Features
 
