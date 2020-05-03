@@ -149,10 +149,6 @@ export class EditorWebview {
                 'redo',
                 '|',
                 'edit-mode',
-                'both',
-                'preview',
-                'format',
-                '|',
                 {
                     name: 'fullscreen',
                     click: (isFullscreen: boolean) => {
@@ -171,18 +167,28 @@ export class EditorWebview {
                         }
                     },
                 },
-                'outline',
-                'devtools',
-                'info',
-                'help',
-            ],
+                {
+                    name: 'more',
+                    toolbar: [
+                        'both',
+                        'code-theme',
+                        'content-theme',
+                        'export',
+                        'outline',
+                        'preview',
+                        'format',
+                        'devtools',
+                        'info',
+                        'help',
+                    ],
+                }],
             tab: '\t',
             theme: liandi.config.theme === 'dark' ? 'dark' : 'classic',
             cache: {
                 enable: false
             },
             counter: {
-              enable: true
+                enable: true
             },
             cdn: remote.getGlobal('liandiEditor').appDir + '/node_modules/vditor',
             preview: {
@@ -203,7 +209,6 @@ export class EditorWebview {
                     style: liandi.config.theme === 'dark' ? 'native' : 'github'
                 }
             },
-            height: window.innerHeight - 20,
             upload: {
                 setHeaders: () => {
                     return {
