@@ -112,6 +112,20 @@ export class EditorWebview {
         }
     }
 
+    private hotkey (event: KeyboardEvent) {
+        if (this.isCtrl(event) && event.key.toLowerCase() === 'v' && !event.altKey && event.shiftKey) {
+            const range = getSelection().getRangeAt(0);
+            range.extractContents();
+            this.vditor.insertValue(clipboard.readText());
+            event.preventDefault();
+        }
+
+        if (this.isCtrl(event) && event.key.toLowerCase() === 'c' && !event.altKey && event.shiftKey) {
+            clipboard.writeText(getSelection().getRangeAt(0).toString().replace(/​/g, ''));
+            event.preventDefault();
+        }
+    }
+
     private onOpen(liandi: ILiandi, value: string = remote.getGlobal('liandiEditor').editorText) {
         document.getElementById('liandiVditor').innerHTML = '';
         let timeoutId: number;
@@ -239,17 +253,13 @@ export class EditorWebview {
         });
 
         this.vditor.vditor.wysiwyg.element.addEventListener('keydown', (event: KeyboardEvent) => {
-            if (this.isCtrl(event) && event.key.toLowerCase() === 'v' && !event.altKey && event.shiftKey) {
-                const range = getSelection().getRangeAt(0);
-                range.extractContents();
-                this.vditor.insertValue(clipboard.readText());
-                event.preventDefault();
-            }
-
-            if (this.isCtrl(event) && event.key.toLowerCase() === 'c' && !event.altKey && event.shiftKey) {
-                clipboard.writeText(getSelection().getRangeAt(0).toString().replace(/​/g, ''));
-                event.preventDefault();
-            }
+           this.hotkey(event)
+        });
+        this.vditor.vditor.sv.element.addEventListener('keydown', (event: KeyboardEvent) => {
+           this.hotkey(event)
+        });
+        this.vditor.vditor.ir.element.addEventListener('keydown', (event: KeyboardEvent) => {
+           this.hotkey(event)
         });
     }
 }
