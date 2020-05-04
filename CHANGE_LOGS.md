@@ -1,3 +1,14 @@
+## v1.1.0 / 2020-05-04
+
+### 引入特性
+
+* [支持导出 PDF、HTML 和微信公众号编辑器](https://github.com/88250/liandi/issues/52)
+
+### 修复缺陷
+
+* [编辑器即时渲染、分屏预览模式粘贴为纯文本失效](https://github.com/88250/liandi/issues/50)
+* [搜索框切换 bug](https://github.com/88250/liandi/issues/51)
+
 ## v1.0.0 / 2020-04-30
 
 ### 引入特性
