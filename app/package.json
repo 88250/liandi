@@ -54,6 +54,6 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "vditor": "^3.2.0"
+    "vditor": "^3.2.3"
   }
 }
