@@ -110,6 +110,7 @@ type Markdown struct {
 	MathEngine                          string `json:"mathEngine"` // KaTeX / MathJax
 	HideToolbar                         bool   `json:"hideToolbar"`
 	Setext                              bool   `json:"setext"`
+	Outline                             bool   `json:"outline"`
 }
 
 type Image struct {
@@ -128,6 +129,7 @@ func newMarkdown() *Markdown {
 		MathEngine:                          "KaTeX",
 		HideToolbar:                         false,
 		Setext:                              true,
+		Outline:                             false,
 	}
 }
 
