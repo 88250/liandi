@@ -7,7 +7,6 @@ import {initConfigSearch} from '../config/search';
 import {getPath, removeLastPath} from '../util/path';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
-import {Constants} from '../constants';
 
 export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');

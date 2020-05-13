@@ -16,7 +16,7 @@ export const theme = {
             });
         });
     },
-    onSettheme: (liandi: ILiandi, themeName: 'light' | 'dark') => {
+    onSetTheme: (liandi: ILiandi, themeName: 'light' | 'dark') => {
         liandi.config.theme = themeName;
         ipcRenderer.send(Constants.LIANDI_CONFIG_THEME, themeName);
         if (themeName === 'dark') {

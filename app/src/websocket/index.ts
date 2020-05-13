@@ -1,6 +1,6 @@
 import {Constants} from '../constants';
 import {hideMessage, showMessage} from '../util/message';
-import {destroyDialog} from '../util/dialog';
+import {destroyDialog, dialog} from '../util/dialog';
 import {i18n} from '../i18n';
 import {showMountDialog} from '../util/mount';
 import {lauguage} from '../config/language';
@@ -74,20 +74,48 @@ export class WebSocketUtil {
                     markdown.onSetmd(liandi, response.data);
                     break;
                 case 'settheme':
-                    theme.onSettheme(liandi, response.data);
+                    theme.onSetTheme(liandi, response.data);
                     break;
                 case 'getconf':
                     if (this.isFirst) {
                         liandi.config = response.data;
-                        document.title = i18n[liandi.config.lang].slogan;
+                    }
+
+                    if (!liandi.config.lang) {
+                        dialog({
+                            hideBackground: true,
+                            content: `<select class="input">
+    <option value="en_US" selected>English</option>
+    <option value="zh_CN">简体中文</option>
+</select>`,
+                            width: 400,
+                            height: 60,
+                            destroyDialogCallback: () => {
+                                liandi.ws.send('setlang', {
+                                    lang: "en_US"
+                                });
+                            }
+                        });
+                        document.querySelector('select').addEventListener('change', (event) => {
+                            liandi.ws.send('setlang', {
+                                lang: (event.target as HTMLSelectElement).value
+                            });
+                        });
+                        return;
+                    }
+
+                    if (this.isFirst) {
+                        document.title = i18n[liandi.config.lang || 'en_US'].slogan;
                         callback();
-                        theme.onSettheme(liandi, response.data.theme);
+                        theme.onSetTheme(liandi, response.data.theme);
                         this.isFirst = false;
                     }
+
                     if (response.data.dirs.length === 0) {
                         showMountDialog(liandi);
                         return;
                     }
+
                     liandi.navigation.element.innerHTML = '';
                     response.data.dirs.map((item: IDir) => {
                         liandi.navigation.onMount({dir: item});
