@@ -1,5 +1,6 @@
 export const i18n: II18n = {
     en_US: {
+        outline: 'Outline',
         editMode: 'Edit Mode',
         ir: 'Instant Rendering',
         wysiwyg: 'WYSIWYG',
@@ -51,6 +52,7 @@ export const i18n: II18n = {
         setext: 'Parse Setext Heading',
     },
     zh_CN: {
+        outline: '大纲',
         editMode: '编辑模式',
         ir: '即时渲染',
         wysiwyg: '所见即所得',

@@ -26,6 +26,10 @@ export const markdown = {
     <span class="fn__space"></span>${i18n[liandi.config.lang].autoSpace}
 </label></div>
 <div class="form__item"><label>
+    <input id="outline" type="checkbox"${liandi.config.markdown.outline ? ' checked' : ''}/>
+    <span class="fn__space"></span>${i18n[liandi.config.lang].outline}
+</label></div>
+<div class="form__item"><label>
     <input id="fixTermTypo" type="checkbox"${liandi.config.markdown.fixTermTypo ? ' checked' : ''}/>
     <span class="fn__space"></span>${i18n[liandi.config.lang].fixTermTypo}
 </label></div>
@@ -75,11 +79,12 @@ export const markdown = {
                     fixTermTypo: (element.querySelector('#fixTermTypo') as HTMLInputElement).checked,
                     inlineMathAllowDigitAfterOpenMarker: (element.querySelector('#inlineMathAllowDigitAfterOpenMarker') as HTMLInputElement).checked,
                     editorMode: (element.querySelector('[name="editMode"]:checked') as HTMLInputElement).value,
-                    mathEngine: (element.querySelector('[name="editMode"]:checked') as HTMLInputElement).value,
+                    mathEngine: (element.querySelector('[name="mathEngine"]:checked') as HTMLInputElement).value,
                     footnotes: (element.querySelector('#footnotes') as HTMLInputElement).checked,
                     toc: (element.querySelector('#toc') as HTMLInputElement).checked,
                     hideToolbar: (element.querySelector('#hideToolbar') as HTMLInputElement).checked,
                     setext: (element.querySelector('#setext') as HTMLInputElement).checked,
+                    outline: (element.querySelector('#outline') as HTMLInputElement).checked,
                 });
             });
         });

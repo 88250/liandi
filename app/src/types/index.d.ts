@@ -29,6 +29,7 @@ declare interface IMD {
     toc: boolean;
     footnotes: boolean;
     setext: boolean;
+    outline: boolean;
 }
 
 declare interface IImage {
