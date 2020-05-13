@@ -22,12 +22,12 @@ export const markdown = {
     </label>
 </div>
 <div class="form__item"><label>
-    <input id="autoSpace" type="checkbox"${liandi.config.markdown.autoSpace ? ' checked' : ''}/>
-    <span class="fn__space"></span>${i18n[liandi.config.lang].autoSpace}
-</label></div>
-<div class="form__item"><label>
     <input id="outline" type="checkbox"${liandi.config.markdown.outline ? ' checked' : ''}/>
     <span class="fn__space"></span>${i18n[liandi.config.lang].outline}
+</label></div>
+<div class="form__item"><label>
+    <input id="autoSpace" type="checkbox"${liandi.config.markdown.autoSpace ? ' checked' : ''}/>
+    <span class="fn__space"></span>${i18n[liandi.config.lang].autoSpace}
 </label></div>
 <div class="form__item"><label>
     <input id="fixTermTypo" type="checkbox"${liandi.config.markdown.fixTermTypo ? ' checked' : ''}/>
