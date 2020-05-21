@@ -1,3 +1,14 @@
+## v1.1.1 / 2020-05-21
+
+### 改进功能
+
+* [是否默认展示大纲](https://github.com/88250/liandi/issues/57)
+* [Add language config option in the first screen](https://github.com/88250/liandi/issues/58)
+
+### 修复缺陷
+
+* [修复 XSS 漏洞](https://github.com/88250/liandi/issues/56)
+
 ## v1.1.0 / 2020-05-04
 
 ### 引入特性
