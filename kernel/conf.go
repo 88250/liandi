@@ -79,7 +79,7 @@ func InitConf() {
 		Conf.Image = newImage()
 	}
 
-	if "white" == Conf.Theme { // v0.1.0 -> v0.1.1 兼容处理
+	if "white" == Conf.Theme { // v0.1.1 兼容处理
 		Conf.Theme = "light"
 	}
 
@@ -111,6 +111,7 @@ type Markdown struct {
 	HideToolbar                         bool   `json:"hideToolbar"`
 	Setext                              bool   `json:"setext"`
 	Outline                             bool   `json:"outline"`
+	ParagraphBeginningSpace             bool   `json:"paragraphBeginningSpace"`
 }
 
 type Image struct {
@@ -130,6 +131,7 @@ func newMarkdown() *Markdown {
 		HideToolbar:                         false,
 		Setext:                              true,
 		Outline:                             false,
+		ParagraphBeginningSpace:             false,
 	}
 }
 
