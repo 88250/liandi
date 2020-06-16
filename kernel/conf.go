@@ -71,10 +71,6 @@ func InitConf() {
 	if nil == Conf.Markdown {
 		Conf.Markdown = newMarkdown()
 	}
-	if "" == Conf.Markdown.EditorMode {
-		Conf.Markdown.EditorMode = "wysiwyg"
-	}
-
 	if nil == Conf.Image {
 		Conf.Image = newImage()
 	}
