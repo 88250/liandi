@@ -79,10 +79,6 @@ func InitConf() {
 		Conf.Image = newImage()
 	}
 
-	if "white" == Conf.Theme { // v0.1.1 兼容处理
-		Conf.Theme = "light"
-	}
-
 	Conf.Save()
 	Conf.InitClient()
 
