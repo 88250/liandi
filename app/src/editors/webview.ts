@@ -20,6 +20,9 @@ export class EditorWebview {
         if (process.platform === 'win32') {
             document.body.classList.add('body--win32');
         }
+        window.onresize = (event: Event) => {
+            document.getElementById('liandiVditor').style.height = (window.innerHeight - 20) + 'px'
+        }
     }
 
     private initMenu(lang: keyof II18n) {
@@ -132,6 +135,7 @@ export class EditorWebview {
         this.vditor = new Vditor('liandiVditor', {
             outline: liandi.config.markdown.outline,
             mode: liandi.config.markdown.editorMode,
+            height: window.innerHeight - 20,
             toolbarConfig: {
                 hide: liandi.config.markdown.hideToolbar,
             },
