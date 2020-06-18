@@ -92,13 +92,13 @@ export class WebSocketUtil {
                             height: 60,
                             destroyDialogCallback: () => {
                                 liandi.ws.send('setlang', {
-                                    lang: "en_US"
+                                    lang: 'en_US'
                                 });
                             }
                         });
-                        document.querySelector('select').addEventListener('change', (event) => {
+                        document.querySelector('select').addEventListener('change', (selectEvent) => {
                             liandi.ws.send('setlang', {
-                                lang: (event.target as HTMLSelectElement).value
+                                lang: (selectEvent.target as HTMLSelectElement).value
                             });
                         });
                         return;

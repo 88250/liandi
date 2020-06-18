@@ -1,5 +1,6 @@
 export const i18n: II18n = {
     en_US: {
+        paragraphBeginningSpace: 'Two empty spaces at the beginning of the paragraph',
         outline: 'Outline',
         editMode: 'Edit Mode',
         ir: 'Instant Rendering',
@@ -52,6 +53,7 @@ export const i18n: II18n = {
         setext: 'Parse Setext Heading',
     },
     zh_CN: {
+        paragraphBeginningSpace: '段落开头空两格',
         outline: '大纲',
         editMode: '编辑模式',
         ir: '即时渲染',
