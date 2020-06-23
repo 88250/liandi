@@ -38,6 +38,9 @@ export const markdown = {
     <span class="fn__space"></span>${i18n[liandi.config.lang].chinesePunctuation}
 </label></div>
 <div class="form__item"><label>
+    <input id="paragraphBeginningSpace" type="checkbox"${liandi.config.markdown.paragraphBeginningSpace ? ' checked' : ''}/>
+    <span class="fn__space"></span>${i18n[liandi.config.lang].paragraphBeginningSpace}
+</label></div><div class="form__item"><label>
     <input id="inlineMathAllowDigitAfterOpenMarker" type="checkbox"${liandi.config.markdown.inlineMathAllowDigitAfterOpenMarker ? ' checked' : ''}/>
     <span class="fn__space"></span>${i18n[liandi.config.lang].inlineMathDigit}
 </label></div>
@@ -77,6 +80,7 @@ export const markdown = {
                     autoSpace: (element.querySelector('#autoSpace') as HTMLInputElement).checked,
                     chinesePunct: (element.querySelector('#chinesePunct') as HTMLInputElement).checked,
                     fixTermTypo: (element.querySelector('#fixTermTypo') as HTMLInputElement).checked,
+                    paragraphBeginningSpace: (element.querySelector('#paragraphBeginningSpace') as HTMLInputElement).checked,
                     inlineMathAllowDigitAfterOpenMarker: (element.querySelector('#inlineMathAllowDigitAfterOpenMarker') as HTMLInputElement).checked,
                     editorMode: (element.querySelector('[name="editMode"]:checked') as HTMLInputElement).value,
                     mathEngine: (element.querySelector('[name="mathEngine"]:checked') as HTMLInputElement).value,

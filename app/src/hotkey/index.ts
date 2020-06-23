@@ -19,7 +19,7 @@ export const initGlobalKeyPress = (liandi: ILiandi | any) => {
                     } else {
                         initSearch(liandi);
                     }
-                }, 200)
+                }, 200);
             }
             lastKeypressTime = thisKeypressTime;
         } else {

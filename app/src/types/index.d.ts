@@ -30,6 +30,7 @@ declare interface IMD {
     footnotes: boolean;
     setext: boolean;
     outline: boolean;
+    paragraphBeginningSpace: boolean;
 }
 
 declare interface IImage {

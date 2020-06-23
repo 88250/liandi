@@ -2,18 +2,18 @@ import {destroyDialog} from '../util/dialog';
 import {i18n} from '../i18n';
 
 const getLang = (keys: string[]) => {
-    const langArray: string[] = []
+    const langArray: string[] = [];
     keys.forEach((key) => {
-        langArray.push(i18n.zh_CN[key])
-        langArray.push(i18n.en_US[key])
-    })
+        langArray.push(i18n.zh_CN[key]);
+        langArray.push(i18n.en_US[key]);
+    });
     return langArray;
-}
+};
 export const initConfigSearch = (liandi: ILiandi, element: HTMLElement) => {
     const configIndex = [
         ['markdown', 'katex', 'mathjax'].concat(getLang(['config', 'editMode', 'wysiwyg', 'ir', 'sv', 'outline',
             'autoSpace', 'fixTermTypo', 'chinesePunctuation', 'inlineMathDigit', 'mathEngine', 'hideToolbar', 'toc',
-            'footnotes', 'setext'
+            'footnotes', 'setext', 'paragraphBeginningSpace'
         ])),
         getLang(['autoFetch', 'image']),
         getLang(['theme', 'themeLight', 'themeDark']),

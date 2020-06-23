@@ -20,6 +20,9 @@ export class EditorWebview {
         if (process.platform === 'win32') {
             document.body.classList.add('body--win32');
         }
+        window.onresize = (event: Event) => {
+            document.getElementById('liandiVditor').style.height = (window.innerHeight - 20) + 'px'
+        }
     }
 
     private initMenu(lang: keyof II18n) {
@@ -112,7 +115,7 @@ export class EditorWebview {
         }
     }
 
-    private hotkey (event: KeyboardEvent) {
+    private hotkey(event: KeyboardEvent) {
         if (this.isCtrl(event) && event.key.toLowerCase() === 'v' && !event.altKey && event.shiftKey) {
             const range = getSelection().getRangeAt(0);
             range.extractContents();
@@ -132,6 +135,7 @@ export class EditorWebview {
         this.vditor = new Vditor('liandiVditor', {
             outline: liandi.config.markdown.outline,
             mode: liandi.config.markdown.editorMode,
+            height: window.innerHeight - 20,
             toolbarConfig: {
                 hide: liandi.config.markdown.hideToolbar,
             },
@@ -214,7 +218,8 @@ export class EditorWebview {
                     theme: liandi.config.theme,
                     toc: liandi.config.markdown.toc,
                     footnotes: liandi.config.markdown.footnotes,
-                    setext: liandi.config.markdown.setext
+                    setext: liandi.config.markdown.setext,
+                    paragraphBeginningSpace: liandi.config.markdown.paragraphBeginningSpace
                 },
                 math: {
                     inlineDigit: liandi.config.markdown.inlineMathAllowDigitAfterOpenMarker,
@@ -254,13 +259,13 @@ export class EditorWebview {
         });
 
         this.vditor.vditor.wysiwyg.element.addEventListener('keydown', (event: KeyboardEvent) => {
-           this.hotkey(event)
+            this.hotkey(event);
         });
         this.vditor.vditor.sv.element.addEventListener('keydown', (event: KeyboardEvent) => {
-           this.hotkey(event)
+            this.hotkey(event);
         });
         this.vditor.vditor.ir.element.addEventListener('keydown', (event: KeyboardEvent) => {
-           this.hotkey(event)
+            this.hotkey(event);
         });
     }
 }
