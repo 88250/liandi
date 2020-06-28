@@ -237,6 +237,7 @@ export class EditorWebview {
                         'X-Mode': this.vditor.getCurrentMode()
                     };
                 },
+                max: 128 * 1024 * 1024,
                 linkToImgUrl: Constants.UPLOAD_FETCH_ADDRESS,
                 filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
                 url: Constants.UPLOAD_ADDRESS,
