@@ -1,3 +1,14 @@
+## v1.1.2 / 2020-06-28
+
+### 改进功能
+
+* [Markdown 中文排版段首缩进配置开关](https://github.com/88250/liandi/issues/73)
+
+### 修复缺陷
+
+* [编辑器插入文件时的检查问题](https://github.com/88250/liandi/issues/67)
+* [链滴中点击大纲中的标题，编辑器正文和预览无法跳转到相应位置](https://github.com/88250/liandi/issues/68)
+
 ## v1.1.1 / 2020-05-21
 
 ### 改进功能
