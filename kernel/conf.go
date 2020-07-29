@@ -101,7 +101,6 @@ type Markdown struct {
 	InlineMathAllowDigitAfterOpenMarker bool   `json:"inlineMathAllowDigitAfterOpenMarker"`
 	MathEngine                          string `json:"mathEngine"` // KaTeX / MathJax
 	HideToolbar                         bool   `json:"hideToolbar"`
-	Setext                              bool   `json:"setext"`
 	Outline                             bool   `json:"outline"`
 	ParagraphBeginningSpace             bool   `json:"paragraphBeginningSpace"`
 }
@@ -121,7 +120,6 @@ func newMarkdown() *Markdown {
 		InlineMathAllowDigitAfterOpenMarker: false,
 		MathEngine:                          "KaTeX",
 		HideToolbar:                         false,
-		Setext:                              true,
 		Outline:                             false,
 		ParagraphBeginningSpace:             false,
 	}
