@@ -1,3 +1,17 @@
+## v1.1.3 / 2020-07-30
+
+### 引入特性
+
+* [分屏预览模式支持语法高亮](https://github.com/88250/liandi/issues/77)
+
+### 改进功能
+
+* [重写编辑器分屏预览模式](https://github.com/88250/liandi/issues/62)
+
+### 开发重构
+
+* [去除 Setext 标题解析开关](https://github.com/88250/liandi/issues/86)
+
 ## v1.1.2 / 2020-06-28
 
 ### 改进功能
