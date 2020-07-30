@@ -28,7 +28,6 @@ declare interface IMD {
     hideToolbar: boolean;
     toc: boolean;
     footnotes: boolean;
-    setext: boolean;
     outline: boolean;
     paragraphBeginningSpace: boolean;
 }

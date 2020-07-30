@@ -67,10 +67,6 @@ export const markdown = {
 <div class="form__item"><label>
     <input id="footnotes" type="checkbox"${liandi.config.markdown.footnotes ? ' checked' : ''}/>
     <span class="fn__space"></span>${i18n[liandi.config.lang].footnotes}
-</label></div>
-<div class="form__item"><label>
-    <input id="setext" type="checkbox"${liandi.config.markdown.setext ? ' checked' : ''}/>
-    <span class="fn__space"></span>${i18n[liandi.config.lang].setext}
 </label></div>`;
     },
     bindEvent: (liandi: ILiandi, element: HTMLElement) => {
@@ -87,7 +83,6 @@ export const markdown = {
                     footnotes: (element.querySelector('#footnotes') as HTMLInputElement).checked,
                     toc: (element.querySelector('#toc') as HTMLInputElement).checked,
                     hideToolbar: (element.querySelector('#hideToolbar') as HTMLInputElement).checked,
-                    setext: (element.querySelector('#setext') as HTMLInputElement).checked,
                     outline: (element.querySelector('#outline') as HTMLInputElement).checked,
                 });
             });
