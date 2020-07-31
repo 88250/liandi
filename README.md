@@ -56,6 +56,9 @@
 * Double Shift 快速导航
 * 全文搜索
 * 明亮、暗黑两套主题
+* 块模式 `TBD`
+  * 块级双向链接
+  * 文档块关系图
 * 标签聚合分类 `TBD`
 * 导出静态站点，内置多套主题 `TBD`
 
@@ -65,19 +68,19 @@
 
 *所见即所得*模式对不熟悉 Markdown 的用户较为友好，熟悉 Markdown 的话也可以无缝使用。
 
-![vditor-wysiwyg](https://img.hacpai.com/file/2020/03/wysiwyg-94c13d78.gif)
+![vditor-wysiwyg](https://b3logfile.com/file/2020/07/wysiwyg-4f216b9b.gif)
 
 ### 即时渲染
 
 *即时渲染*模式对熟悉 Typora 的用户应该不会感到陌生，理论上这是最优雅的 Markdown 编辑方式。
 
-![vditor-ir](https://img.hacpai.com/file/2020/03/ir-6d784c1f.gif)
+![vditor-ir](https://b3logfile.com/file/2020/07/ir-67cd956c.gif)
 
 ### 分屏预览
 
 传统的*分屏预览*模式适合大屏下的 Markdown 编辑。
 
-![vditor-sv](https://img.hacpai.com/file/2020/03/sv-776055ce.gif)
+![vditor-sv](https://b3logfile.com/file/2020/07/sv-595dcb28.gif)
 
 ### 明亮主题
 
