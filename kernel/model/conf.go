@@ -22,6 +22,9 @@ import (
 
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
+	"github.com/88250/lute"
+	"github.com/88250/lute/parse"
+	"github.com/88250/lute/util"
 )
 
 // Mode 标识了运行模式，默认开发环境。
@@ -42,6 +45,7 @@ var (
 )
 
 var Conf *AppConf
+var Lute *lute.Lute
 
 func Close() {
 	Conf.Close()
@@ -51,6 +55,7 @@ func Close() {
 
 func InitConf() {
 	Conf = &AppConf{LogLevel: "debug", Theme: "light", Dirs: []*Dir{}}
+	Lute = lute.New()
 	if gulu.File.IsExist(ConfPath) {
 		data, err := ioutil.ReadFile(ConfPath)
 		if nil != err {
@@ -75,6 +80,7 @@ func InitConf() {
 	if nil == Conf.Markdown {
 		Conf.Markdown = newMarkdown()
 	}
+	ConfLute()
 	if nil == Conf.Image {
 		Conf.Image = newImage()
 	}
@@ -129,6 +135,17 @@ func newMarkdown() *Markdown {
 	}
 }
 
+func ConfLute() {
+	Lute.Footnotes = Conf.Markdown.Footnotes
+	Lute.ToC = Conf.Markdown.ToC
+	Lute.AutoSpace = Conf.Markdown.AutoSpace
+	Lute.FixTermTypo = Conf.Markdown.FixTermTypo
+	Lute.ChinesePunct = Conf.Markdown.ChinesePunct
+	Lute.InlineMathAllowDigitAfterOpenMarker = Conf.Markdown.InlineMathAllowDigitAfterOpenMarker
+	Lute.InlineMathAllowDigitAfterOpenMarker = Conf.Markdown.InlineMathAllowDigitAfterOpenMarker
+	Lute.ChineseParagraphBeginningSpace = Conf.Markdown.ParagraphBeginningSpace
+}
+
 func newImage() *Image {
 	return &Image{
 		AutoFetch: false,
@@ -176,7 +193,7 @@ type Dir struct {
 	Password  string `json:"password"` // WebDAV 密码
 	LocalPath string `json:"path"`     // 本地文件系统文件夹路径，远程 WebDAV 的话该字段为空
 
-	client *gowebdav.Client `json:"-"` // WebDAV 客户端
+	client *gowebdav.Client // WebDAV 客户端
 }
 
 func (dir *Dir) IsRemote() bool {
@@ -275,6 +292,9 @@ func (dir *Dir) Index() {
 		if content, err := dir.Get(p); nil == err {
 			doc := newDoc(dir.URL, p, content)
 			docs = append(docs, doc)
+
+			tree := parse.Parse("", util.StrToBytes(content), Lute.Options)
+			trees = append(trees, tree)
 		}
 	}
 	Logger.Debugf("索引目录 [%s] 完毕", dir.URL)

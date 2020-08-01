@@ -40,6 +40,7 @@ func (cmd *setmd) Exec() {
 	}
 
 	model.Conf.Markdown = md
+	model.ConfLute()
 	model.Conf.Save()
 
 	ret.Data = model.Conf.Markdown
