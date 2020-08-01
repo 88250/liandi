@@ -13,7 +13,7 @@ package cmd
 import (
 	"path"
 
-	"github.com/88250/liandi/kernel/conf"
+	"github.com/88250/liandi/kernel/model"
 )
 
 type get struct {
@@ -21,11 +21,11 @@ type get struct {
 }
 
 func (cmd *get) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = conf.NormalizeURL(url)
+	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
-	content, err := conf.Get(url, p)
+	content, err := model.Get(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
@@ -38,7 +38,7 @@ func (cmd *get) Exec() {
 			"path":    p,
 		}
 	}
-	conf.Push(ret.Bytes())
+	model.Push(ret.Bytes())
 }
 
 func (cmd *get) Name() string {

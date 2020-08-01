@@ -11,7 +11,7 @@
 package cmd
 
 import (
-	"github.com/88250/liandi/kernel/conf"
+	"github.com/88250/liandi/kernel/model"
 )
 
 type settheme struct {
@@ -19,12 +19,12 @@ type settheme struct {
 }
 
 func (cmd *settheme) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	theme := cmd.param["theme"].(string)
-	conf.Conf.Theme = theme
-	conf.Conf.Save()
+	model.Conf.Theme = theme
+	model.Conf.Save()
 	ret.Data = theme
-	conf.Push(ret.Bytes())
+	model.Push(ret.Bytes())
 }
 
 func (cmd *settheme) Name() string {

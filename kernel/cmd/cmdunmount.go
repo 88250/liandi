@@ -10,19 +10,19 @@
 
 package cmd
 
-import "github.com/88250/liandi/kernel/conf"
+import "github.com/88250/liandi/kernel/model"
 
 type unmount struct {
 	*BaseCmd
 }
 
 func (cmd *unmount) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = conf.NormalizeURL(url)
-	conf.Unmount(url)
-	conf.RestartServeWebDAV()
-	conf.Push(ret.Bytes())
+	url = model.NormalizeURL(url)
+	model.Unmount(url)
+	model.RestartServeWebDAV()
+	model.Push(ret.Bytes())
 }
 
 func (cmd *unmount) Name() string {

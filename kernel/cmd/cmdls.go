@@ -11,7 +11,7 @@
 package cmd
 
 import (
-	"github.com/88250/liandi/kernel/conf"
+	"github.com/88250/liandi/kernel/model"
 )
 
 type ls struct {
@@ -19,11 +19,11 @@ type ls struct {
 }
 
 func (cmd *ls) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = conf.NormalizeURL(url)
+	url = model.NormalizeURL(url)
 	path := cmd.param["path"].(string)
-	files, err := conf.Ls(url, path)
+	files, err := model.Ls(url, path)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
@@ -35,7 +35,7 @@ func (cmd *ls) Exec() {
 			"files": files,
 		}
 	}
-	conf.Push(ret.Bytes())
+	model.Push(ret.Bytes())
 }
 
 func (cmd *ls) Name() string {

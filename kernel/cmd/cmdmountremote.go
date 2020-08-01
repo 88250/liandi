@@ -10,21 +10,21 @@
 
 package cmd
 
-import "github.com/88250/liandi/kernel/conf"
+import "github.com/88250/liandi/kernel/model"
 
 type mountremote struct {
 	*BaseCmd
 }
 
 func (cmd *mountremote) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = conf.NormalizeURL(url)
+	url = model.NormalizeURL(url)
 	user := cmd.param["user"].(string)
 	password := cmd.param["password"].(string)
-	conf.MountRemote(url, user, password)
-	conf.RestartServeWebDAV()
-	conf.Push(ret.Bytes())
+	model.MountRemote(url, user, password)
+	model.RestartServeWebDAV()
+	model.Push(ret.Bytes())
 }
 
 func (cmd *mountremote) Name() string {

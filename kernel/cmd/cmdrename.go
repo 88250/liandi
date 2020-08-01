@@ -13,7 +13,7 @@ package cmd
 import (
 	"path"
 
-	"github.com/88250/liandi/kernel/conf"
+	"github.com/88250/liandi/kernel/model"
 )
 
 type rename struct {
@@ -21,16 +21,16 @@ type rename struct {
 }
 
 func (cmd *rename) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = conf.NormalizeURL(url)
+	url = model.NormalizeURL(url)
 	oldPath := cmd.param["oldPath"].(string)
 	newPath := cmd.param["newPath"].(string)
-	err := conf.Rename(url, oldPath, newPath)
+	err := model.Rename(url, oldPath, newPath)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		conf.Push(ret.Bytes())
+		model.Push(ret.Bytes())
 		return
 	}
 
@@ -40,7 +40,7 @@ func (cmd *rename) Exec() {
 		"newPath": newPath,
 		"newName": path.Base(newPath),
 	}
-	conf.Push(ret.Bytes())
+	model.Push(ret.Bytes())
 }
 
 func (cmd *rename) Name() string {

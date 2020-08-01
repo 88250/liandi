@@ -11,7 +11,7 @@
 package cmd
 
 import (
-	"github.com/88250/liandi/kernel/conf"
+	"github.com/88250/liandi/kernel/model"
 )
 
 type getconf struct {
@@ -19,9 +19,9 @@ type getconf struct {
 }
 
 func (cmd *getconf) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
-	ret.Data = conf.Conf
-	conf.Push(ret.Bytes())
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret.Data = model.Conf
+	model.Push(ret.Bytes())
 }
 
 func (cmd *getconf) Name() string {

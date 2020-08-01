@@ -13,7 +13,7 @@ package cmd
 import (
 	"encoding/json"
 
-	"github.com/88250/liandi/kernel/conf"
+	"github.com/88250/liandi/kernel/model"
 )
 
 type setmd struct {
@@ -21,29 +21,29 @@ type setmd struct {
 }
 
 func (cmd *setmd) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 
 	param, err := json.Marshal(cmd.param)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		conf.Push(ret.Bytes())
+		model.Push(ret.Bytes())
 		return
 	}
 
-	md := &conf.Markdown{}
+	md := &model.Markdown{}
 	if err = json.Unmarshal(param, md); nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		conf.Push(ret.Bytes())
+		model.Push(ret.Bytes())
 		return
 	}
 
-	conf.Conf.Markdown = md
-	conf.Conf.Save()
+	model.Conf.Markdown = md
+	model.Conf.Save()
 
-	ret.Data = conf.Conf.Markdown
-	conf.Push(ret.Bytes())
+	ret.Data = model.Conf.Markdown
+	model.Push(ret.Bytes())
 }
 
 func (cmd *setmd) Name() string {

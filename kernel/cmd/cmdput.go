@@ -12,7 +12,7 @@ package cmd
 
 import (
 	"github.com/88250/gulu"
-	"github.com/88250/liandi/kernel/conf"
+	"github.com/88250/liandi/kernel/model"
 )
 
 type put struct {
@@ -20,17 +20,17 @@ type put struct {
 }
 
 func (cmd *put) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = conf.NormalizeURL(url)
+	url = model.NormalizeURL(url)
 	path := cmd.param["path"].(string)
 	content := cmd.param["content"].(string)
-	err := conf.Put(url, path, gulu.Str.ToBytes(content))
+	err := model.Put(url, path, gulu.Str.ToBytes(content))
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
 	}
-	conf.Push(ret.Bytes())
+	model.Push(ret.Bytes())
 }
 
 func (cmd *put) Name() string {

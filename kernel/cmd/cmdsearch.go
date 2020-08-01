@@ -10,18 +10,18 @@
 
 package cmd
 
-import "github.com/88250/liandi/kernel/conf"
+import "github.com/88250/liandi/kernel/model"
 
 type search struct {
 	*BaseCmd
 }
 
 func (cmd *search) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	keyword := cmd.param["k"].(string)
-	result := conf.Search(keyword)
+	result := model.Search(keyword)
 	ret.Data = result
-	conf.Push(ret.Bytes())
+	model.Push(ret.Bytes())
 }
 
 func (cmd *search) Name() string {

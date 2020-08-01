@@ -11,7 +11,7 @@
 package cmd
 
 import (
-	"github.com/88250/liandi/kernel/conf"
+	"github.com/88250/liandi/kernel/model"
 )
 
 type dirs struct {
@@ -19,16 +19,16 @@ type dirs struct {
 }
 
 func (cmd *dirs) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 
 	data := []map[string]interface{}{}
-	for _, dir := range conf.Conf.Dirs {
+	for _, dir := range model.Conf.Dirs {
 		data = append(data, map[string]interface{}{
 			"dir": dir,
 		})
 	}
 	ret.Data = data
-	conf.Push(ret.Bytes())
+	model.Push(ret.Bytes())
 }
 
 func (cmd *dirs) Name() string {

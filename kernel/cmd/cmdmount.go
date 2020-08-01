@@ -10,20 +10,20 @@
 
 package cmd
 
-import "github.com/88250/liandi/kernel/conf"
+import "github.com/88250/liandi/kernel/model"
 
 type mount struct {
 	*BaseCmd
 }
 
 func (cmd *mount) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	p := cmd.param["path"].(string)
 	url := cmd.param["url"].(string)
-	url = conf.NormalizeURL(url)
-	conf.Mount(url, p)
-	conf.RestartServeWebDAV()
-	conf.Push(ret.Bytes())
+	url = model.NormalizeURL(url)
+	model.Mount(url, p)
+	model.RestartServeWebDAV()
+	model.Push(ret.Bytes())
 }
 
 func (cmd *mount) Name() string {

@@ -13,7 +13,7 @@ package cmd
 import (
 	"encoding/json"
 
-	"github.com/88250/liandi/kernel/conf"
+	"github.com/88250/liandi/kernel/model"
 )
 
 type setimage struct {
@@ -21,29 +21,29 @@ type setimage struct {
 }
 
 func (cmd *setimage) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 
 	param, err := json.Marshal(cmd.param)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		conf.Push(ret.Bytes())
+		model.Push(ret.Bytes())
 		return
 	}
 
-	image := &conf.Image{}
+	image := &model.Image{}
 	if err = json.Unmarshal(param, image); nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		conf.Push(ret.Bytes())
+		model.Push(ret.Bytes())
 		return
 	}
 
-	conf.Conf.Image = image
-	conf.Conf.Save()
+	model.Conf.Image = image
+	model.Conf.Save()
 
-	ret.Data = conf.Conf.Image
-	conf.Push(ret.Bytes())
+	ret.Data = model.Conf.Image
+	model.Push(ret.Bytes())
 }
 
 func (cmd *setimage) Name() string {

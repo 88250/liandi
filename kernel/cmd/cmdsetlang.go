@@ -11,7 +11,7 @@
 package cmd
 
 import (
-	"github.com/88250/liandi/kernel/conf"
+	"github.com/88250/liandi/kernel/model"
 )
 
 type setlang struct {
@@ -19,11 +19,11 @@ type setlang struct {
 }
 
 func (cmd *setlang) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	lang := cmd.param["lang"].(string)
-	conf.Conf.Lang = lang
-	conf.Conf.Save()
-	conf.Push(ret.Bytes())
+	model.Conf.Lang = lang
+	model.Conf.Save()
+	model.Push(ret.Bytes())
 }
 
 func (cmd *setlang) Name() string {

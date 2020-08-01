@@ -14,7 +14,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/88250/liandi/kernel/conf"
+	"github.com/88250/liandi/kernel/model"
 )
 
 type create struct {
@@ -22,19 +22,19 @@ type create struct {
 }
 
 func (cmd *create) Exec() {
-	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = conf.NormalizeURL(url)
+	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
 	if !strings.HasSuffix(p, ".md") {
 		p += ".md"
 	}
 
-	err := conf.Create(url, p)
+	err := model.Create(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		conf.Push(ret.Bytes())
+		model.Push(ret.Bytes())
 		return
 	}
 
@@ -48,7 +48,7 @@ func (cmd *create) Exec() {
 		"path": p,
 		"name": name,
 	}
-	conf.Push(ret.Bytes())
+	model.Push(ret.Bytes())
 }
 
 func (cmd *create) Name() string {

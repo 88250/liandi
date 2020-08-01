@@ -11,7 +11,7 @@
 package cmd
 
 import (
-	"github.com/88250/liandi/kernel/conf"
+	"github.com/88250/liandi/kernel/model"
 )
 
 type Cmd interface {
@@ -78,7 +78,7 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) (ret
 
 func Exec(cmd Cmd) {
 	go func() {
-		defer conf.Recover()
+		defer model.Recover()
 		cmd.Exec()
 	}()
 }

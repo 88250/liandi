@@ -10,14 +10,14 @@
 
 package cmd
 
-import "github.com/88250/liandi/kernel/conf"
+import "github.com/88250/liandi/kernel/model"
 
 type checkupdate struct {
 	*BaseCmd
 }
 
 func (cmd *checkupdate) Exec() {
-	conf.CheckUpdate(true)
+	model.CheckUpdate(true)
 }
 
 func (cmd *checkupdate) Name() string {
