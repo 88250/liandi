@@ -8,38 +8,44 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
 import (
-	"path"
+	"encoding/json"
+
+	"github.com/88250/liandi/kernel/conf"
 )
 
-type remove struct {
+type setimage struct {
 	*BaseCmd
 }
 
-func (cmd *remove) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-	url := cmd.param["url"].(string)
-	url = NormalizeURL(url)
-	p := cmd.param["path"].(string)
-	err := Remove(url, p)
+func (cmd *setimage) Exec() {
+	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+
+	param, err := json.Marshal(cmd.param)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+		conf.Push(ret.Bytes())
+		return
 	}
 
-	p = path.Dir(path.Clean(p))
-	if "." == p {
-		p = "/"
+	image := &conf.Image{}
+	if err = json.Unmarshal(param, image); nil != err {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		conf.Push(ret.Bytes())
+		return
 	}
-	ret.Data = map[string]interface{}{
-		"url":  url,
-		"path": p,
-	}
-	Push(ret.Bytes())
+
+	conf.Conf.Image = image
+	conf.Conf.Save()
+
+	ret.Data = conf.Conf.Image
+	conf.Push(ret.Bytes())
 }
 
-func (cmd *remove) Name() string {
-	return "remove"
+func (cmd *setimage) Name() string {
+	return "setimage"
 }

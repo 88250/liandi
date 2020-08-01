@@ -8,40 +8,22 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-import "encoding/json"
+import "github.com/88250/liandi/kernel/conf"
 
-type setimage struct {
+type search struct {
 	*BaseCmd
 }
 
-func (cmd *setimage) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-
-	param, err := json.Marshal(cmd.param)
-	if nil != err {
-		ret.Code = -1
-		ret.Msg = err.Error()
-		Push(ret.Bytes())
-		return
-	}
-
-	image := &Image{}
-	if err = json.Unmarshal(param, image); nil != err {
-		ret.Code = -1
-		ret.Msg = err.Error()
-		Push(ret.Bytes())
-		return
-	}
-
-	Conf.Image = image
-	Conf.Save()
-
-	ret.Data = Conf.Image
-	Push(ret.Bytes())
+func (cmd *search) Exec() {
+	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	keyword := cmd.param["k"].(string)
+	result := conf.Search(keyword)
+	ret.Data = result
+	conf.Push(ret.Bytes())
 }
 
-func (cmd *setimage) Name() string {
-	return "setimage"
+func (cmd *search) Name() string {
+	return "search"
 }

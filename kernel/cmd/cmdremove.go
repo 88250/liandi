@@ -8,20 +8,40 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-type setlang struct {
+import (
+	"path"
+
+	"github.com/88250/liandi/kernel/conf"
+)
+
+type remove struct {
 	*BaseCmd
 }
 
-func (cmd *setlang) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-	lang := cmd.param["lang"].(string)
-	Conf.Lang = lang
-	Conf.Save()
-	Push(ret.Bytes())
+func (cmd *remove) Exec() {
+	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	url := cmd.param["url"].(string)
+	url = conf.NormalizeURL(url)
+	p := cmd.param["path"].(string)
+	err := conf.Remove(url, p)
+	if nil != err {
+		ret.Code = -1
+		ret.Msg = err.Error()
+	}
+
+	p = path.Dir(path.Clean(p))
+	if "." == p {
+		p = "/"
+	}
+	ret.Data = map[string]interface{}{
+		"url":  url,
+		"path": p,
+	}
+	conf.Push(ret.Bytes())
 }
 
-func (cmd *setlang) Name() string {
-	return "setlang"
+func (cmd *remove) Name() string {
+	return "remove"
 }

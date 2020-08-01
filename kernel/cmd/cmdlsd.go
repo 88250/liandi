@@ -8,40 +8,36 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-import "encoding/json"
+import (
+	"github.com/88250/liandi/kernel/conf"
+)
 
-type setmd struct {
+type lsd struct {
 	*BaseCmd
 }
 
-func (cmd *setmd) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-
-	param, err := json.Marshal(cmd.param)
+func (cmd *lsd) Exec() {
+	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	url := cmd.param["url"].(string)
+	url = conf.NormalizeURL(url)
+	path := cmd.param["path"].(string)
+	files, err := conf.Lsd(url, path)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		Push(ret.Bytes())
 		return
+	} else {
+		ret.Data = map[string]interface{}{
+			"url":   url,
+			"path":  path,
+			"files": files,
+		}
 	}
-
-	md := &Markdown{}
-	if err = json.Unmarshal(param, md); nil != err {
-		ret.Code = -1
-		ret.Msg = err.Error()
-		Push(ret.Bytes())
-		return
-	}
-
-	Conf.Markdown = md
-	Conf.Save()
-
-	ret.Data = Conf.Markdown
-	Push(ret.Bytes())
+	conf.Push(ret.Bytes())
 }
 
-func (cmd *setmd) Name() string {
-	return "setmd"
+func (cmd *lsd) Name() string {
+	return "lsd"
 }

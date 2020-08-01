@@ -8,20 +8,25 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-type search struct {
+import (
+	"github.com/88250/liandi/kernel/conf"
+)
+
+type settheme struct {
 	*BaseCmd
 }
 
-func (cmd *search) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-	keyword := cmd.param["k"].(string)
-	result := Search(keyword)
-	ret.Data = result
-	Push(ret.Bytes())
+func (cmd *settheme) Exec() {
+	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	theme := cmd.param["theme"].(string)
+	conf.Conf.Theme = theme
+	conf.Conf.Save()
+	ret.Data = theme
+	conf.Push(ret.Bytes())
 }
 
-func (cmd *search) Name() string {
-	return "search"
+func (cmd *settheme) Name() string {
+	return "settheme"
 }

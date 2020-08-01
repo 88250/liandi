@@ -8,23 +8,29 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-type mountremote struct {
+import (
+	"github.com/88250/liandi/kernel/conf"
+)
+
+type dirs struct {
 	*BaseCmd
 }
 
-func (cmd *mountremote) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-	url := cmd.param["url"].(string)
-	url = NormalizeURL(url)
-	user := cmd.param["user"].(string)
-	password := cmd.param["password"].(string)
-	MountRemote(url, user, password)
-	RestartServeWebDAV()
-	Push(ret.Bytes())
+func (cmd *dirs) Exec() {
+	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+
+	data := []map[string]interface{}{}
+	for _, dir := range conf.Conf.Dirs {
+		data = append(data, map[string]interface{}{
+			"dir": dir,
+		})
+	}
+	ret.Data = data
+	conf.Push(ret.Bytes())
 }
 
-func (cmd *mountremote) Name() string {
-	return "mountremote"
+func (cmd *dirs) Name() string {
+	return "dirs"
 }

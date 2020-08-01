@@ -8,30 +8,36 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
 import (
-	"github.com/88250/gulu"
+	"github.com/88250/liandi/kernel/conf"
 )
 
-type put struct {
+type ls struct {
 	*BaseCmd
 }
 
-func (cmd *put) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
+func (cmd *ls) Exec() {
+	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = NormalizeURL(url)
+	url = conf.NormalizeURL(url)
 	path := cmd.param["path"].(string)
-	content := cmd.param["content"].(string)
-	err := Put(url, path, gulu.Str.ToBytes(content))
+	files, err := conf.Ls(url, path)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+		return
+	} else {
+		ret.Data = map[string]interface{}{
+			"url":   url,
+			"path":  path,
+			"files": files,
+		}
 	}
-	Push(ret.Bytes())
+	conf.Push(ret.Bytes())
 }
 
-func (cmd *put) Name() string {
-	return "put"
+func (cmd *ls) Name() string {
+	return "ls"
 }

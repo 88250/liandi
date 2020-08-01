@@ -8,32 +8,49 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-type ls struct {
+import (
+	"path"
+	"strings"
+
+	"github.com/88250/liandi/kernel/conf"
+)
+
+type create struct {
 	*BaseCmd
 }
 
-func (cmd *ls) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
+func (cmd *create) Exec() {
+	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = NormalizeURL(url)
-	path := cmd.param["path"].(string)
-	files, err := Ls(url, path)
+	url = conf.NormalizeURL(url)
+	p := cmd.param["path"].(string)
+	if !strings.HasSuffix(p, ".md") {
+		p += ".md"
+	}
+
+	err := conf.Create(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+		conf.Push(ret.Bytes())
 		return
-	} else {
-		ret.Data = map[string]interface{}{
-			"url":   url,
-			"path":  path,
-			"files": files,
-		}
 	}
-	Push(ret.Bytes())
+
+	name := path.Base(p)
+	p = path.Dir(path.Clean(p))
+	if "." == p {
+		p = "/"
+	}
+	ret.Data = map[string]interface{}{
+		"url":  url,
+		"path": p,
+		"name": name,
+	}
+	conf.Push(ret.Bytes())
 }
 
-func (cmd *ls) Name() string {
-	return "ls"
+func (cmd *create) Name() string {
+	return "create"
 }

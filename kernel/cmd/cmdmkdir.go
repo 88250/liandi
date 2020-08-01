@@ -8,32 +8,40 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-type lsd struct {
+import (
+	"path"
+
+	"github.com/88250/liandi/kernel/conf"
+)
+
+type mkdir struct {
 	*BaseCmd
 }
 
-func (cmd *lsd) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
+func (cmd *mkdir) Exec() {
+	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = NormalizeURL(url)
-	path := cmd.param["path"].(string)
-	files, err := Lsd(url, path)
+	url = conf.NormalizeURL(url)
+	p := cmd.param["path"].(string)
+	err := conf.Mkdir(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		return
-	} else {
-		ret.Data = map[string]interface{}{
-			"url":   url,
-			"path":  path,
-			"files": files,
-		}
 	}
-	Push(ret.Bytes())
+
+	p = path.Dir(path.Clean(p))
+	if "." == p {
+		p = "/"
+	}
+	ret.Data = map[string]interface{}{
+		"url":  url,
+		"path": p,
+	}
+	conf.Push(ret.Bytes())
 }
 
-func (cmd *lsd) Name() string {
-	return "lsd"
+func (cmd *mkdir) Name() string {
+	return "mkdir"
 }

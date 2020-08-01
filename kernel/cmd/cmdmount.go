@@ -8,16 +8,24 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-type checkupdate struct {
+import "github.com/88250/liandi/kernel/conf"
+
+type mount struct {
 	*BaseCmd
 }
 
-func (cmd *checkupdate) Exec() {
-	checkUpdate(true)
+func (cmd *mount) Exec() {
+	ret := conf.NewCmdResult(cmd.Name(), cmd.id)
+	p := cmd.param["path"].(string)
+	url := cmd.param["url"].(string)
+	url = conf.NormalizeURL(url)
+	conf.Mount(url, p)
+	conf.RestartServeWebDAV()
+	conf.Push(ret.Bytes())
 }
 
-func (cmd *checkupdate) Name() string {
-	return "checkupdate"
+func (cmd *mount) Name() string {
+	return "mount"
 }

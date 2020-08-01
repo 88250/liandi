@@ -8,25 +8,36 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package conf
 
-type dirs struct {
-	*BaseCmd
+import (
+	"encoding/json"
+
+	"github.com/88250/gulu"
+)
+
+type Result struct {
+	Cmd   string  `json:"cmd"`
+	ReqId float64 `json:"reqId"`
+	*gulu.Result
 }
 
-func (cmd *dirs) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
+func NewResult() *Result {
+	return &Result{"", 0, &gulu.Result{Code: 0, Msg: "", Data: nil}}
+}
 
-	data := []map[string]interface{}{}
-	for _, dir := range Conf.Dirs {
-		data = append(data, map[string]interface{}{
-			"dir": dir,
-		})
+func NewCmdResult(cmdName string, cmdId float64) *Result {
+	ret := NewResult()
+	ret.Cmd = cmdName
+	ret.ReqId = cmdId
+	return ret
+}
+
+func (r *Result) Bytes() []byte {
+	ret, err := json.Marshal(r)
+	if nil != err {
+		Logger.Errorf("marshal result [%+v] failed [%s]", r, err)
 	}
-	ret.Data = data
-	Push(ret.Bytes())
-}
 
-func (cmd *dirs) Name() string {
-	return "dirs"
+	return ret
 }

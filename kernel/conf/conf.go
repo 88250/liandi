@@ -8,7 +8,7 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package conf
 
 import (
 	"encoding/json"
@@ -23,6 +23,10 @@ import (
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
 )
+
+// Mode 标识了运行模式，默认开发环境。
+// 打包时通过构建参数 -ldflags "-X conf.Mode=prod" 注入 prod 生产模式，参考 build 脚本。
+var Mode = "dev"
 
 const (
 	Ver        = "1.1.3"
