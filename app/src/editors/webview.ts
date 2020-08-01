@@ -132,6 +132,7 @@ export class EditorWebview {
         document.getElementById('liandiVditor').innerHTML = '';
         let timeoutId: number;
         this.vditor = new Vditor('liandiVditor', {
+            debugger: true,
             _lutePath: `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}`,
             outline: liandi.config.markdown.outline,
             height: window.innerHeight - 20,

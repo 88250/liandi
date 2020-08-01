@@ -46,6 +46,8 @@ class App {
 
     private initWebview() {
         const editorWebview = document.querySelector('.editors__webview') as Electron.WebviewTag;
+        editorWebview.openDevTools();
+
         // 在编辑器内打开链接的处理
         editorWebview.addEventListener('will-navigate', e => {
             e.preventDefault();
@@ -94,7 +96,6 @@ class App {
         currentWindow.on('focus', () => {
             document.body.classList.remove('body--blur');
         });
-
 
         // window action
         if (process.platform === 'darwin') {
