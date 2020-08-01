@@ -307,7 +307,7 @@ class Vditor {
                 enableInput: false,
             });
         } else {
-            this.vditor.ir.element.innerHTML = this.vditor.lute.Md2VditorIRDOM(markdown);
+            this.vditor.ir.element.innerHTML = this.vditor.lute.Md2VditorIRBlockDOM(markdown);
             this.vditor.ir.element.querySelectorAll('.vditor-ir__preview[data-render=\'2\']').forEach(
                 (item: HTMLElement) => {
                     processCodeRender(item, this.vditor);

@@ -158,9 +158,9 @@ export const input = (vditor: IVditor, range: Range, ignoreSpace = false) => {
         html = blockElement.innerHTML;
     }
 
-    log('SpinVditorIRDOM', html, 'argument', vditor.options.debugger);
-    html = vditor.lute.SpinVditorIRDOM(html);
-    log('SpinVditorIRDOM', html, 'result', vditor.options.debugger);
+    log('SpinVditorIRBlockDOM', html, 'argument', vditor.options.debugger);
+    html = vditor.lute.SpinVditorIRBlockDOM(html);
+    log('SpinVditorIRBlockDOM', html, 'result', vditor.options.debugger);
 
     if (isIRElement) {
         blockElement.innerHTML = html;

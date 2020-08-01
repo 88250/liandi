@@ -1,3 +1,5 @@
+import {remote} from "electron";
+
 export abstract class Constants {
     public static readonly VERSION: string = '4.0.0';
     public static readonly ZWSP: string = '\u200b';
@@ -16,7 +18,7 @@ export abstract class Constants {
         'makefile', 'markdown', 'nginx', 'objectivec', 'php', 'perl', 'properties', 'python', 'ruby', 'sql', 'shell',
         'dart', 'erb', 'go', 'gradle', 'julia', 'kotlin', 'less', 'lua', 'matlab', 'rust', 'scss', 'typescript', 'ts',
         'yaml'];
-    public static readonly CDN = `https://cdn.jsdelivr.net/npm/vditor@${Constants.VERSION}`;
+    public static readonly CDN = remote.getGlobal('liandiEditor').appDir + '/src/vditor';
     public static readonly MARKDOWN_OPTIONS = {
         autoSpace: false,
         chinesePunct: false,

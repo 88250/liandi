@@ -2,10 +2,6 @@ export const i18n: II18n = {
     en_US: {
         paragraphBeginningSpace: 'Two empty spaces at the beginning of the paragraph',
         outline: 'Outline',
-        editMode: 'Edit Mode',
-        ir: 'Instant Rendering',
-        wysiwyg: 'WYSIWYG',
-        sv: 'Split View',
         title: 'LianDi',
         newFile: 'New Doc',
         newFolder: 'New Folder',
@@ -54,10 +50,6 @@ export const i18n: II18n = {
     zh_CN: {
         paragraphBeginningSpace: '段落开头空两格',
         outline: '大纲',
-        editMode: '编辑模式',
-        ir: '即时渲染',
-        wysiwyg: '所见即所得',
-        sv: '分屏预览',
         title: '链滴笔记',
         newFile: '新建文档',
         newFolder: '新建文件夹',

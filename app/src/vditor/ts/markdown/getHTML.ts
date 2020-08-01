@@ -6,6 +6,6 @@ export const getHTML = (vditor: IVditor) => {
     } else if (vditor.currentMode === 'wysiwyg') {
         return vditor.lute.VditorDOM2HTML(vditor.wysiwyg.element.innerHTML);
     } else if (vditor.currentMode === 'ir') {
-        return vditor.lute.VditorIRDOM2HTML(vditor.ir.element.innerHTML);
+        return vditor.lute.VditorIRBlockDOM2HTML(vditor.ir.element.innerHTML);
     }
 };

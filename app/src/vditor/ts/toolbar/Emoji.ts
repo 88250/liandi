@@ -48,7 +48,7 @@ data-value=":${key}: " data-key=":${key}:" class="vditor-emojis__icon" src="${em
                 if (vditor.currentMode === 'wysiwyg') {
                     html = vditor.lute.SpinVditorDOM(value);
                 } else if (vditor.currentMode === 'ir') {
-                    html = vditor.lute.SpinVditorIRDOM(value);
+                    html = vditor.lute.SpinVditorIRBlockDOM(value);
                 }
                 if (value.indexOf(':') > -1 && vditor.currentMode !== 'sv') {
                     const tempElement = document.createElement('div');

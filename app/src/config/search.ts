@@ -11,7 +11,7 @@ const getLang = (keys: string[]) => {
 };
 export const initConfigSearch = (liandi: ILiandi, element: HTMLElement) => {
     const configIndex = [
-        ['markdown', 'katex', 'mathjax'].concat(getLang(['config', 'editMode', 'wysiwyg', 'ir', 'sv', 'outline',
+        ['markdown', 'katex', 'mathjax'].concat(getLang(['config', 'outline',
             'autoSpace', 'fixTermTypo', 'chinesePunctuation', 'inlineMathDigit', 'mathEngine', 'hideToolbar', 'toc',
             'footnotes', 'paragraphBeginningSpace'
         ])),

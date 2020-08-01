@@ -254,7 +254,7 @@ export const listIndent = (vditor: IVditor, liElement: HTMLElement, range: Range
         if (vditor.currentMode === 'wysiwyg') {
             liParentElement.outerHTML = vditor.lute.SpinVditorDOM(liParentElement.outerHTML);
         } else {
-            liParentElement.outerHTML = vditor.lute.SpinVditorIRDOM(liParentElement.outerHTML);
+            liParentElement.outerHTML = vditor.lute.SpinVditorIRBlockDOM(liParentElement.outerHTML);
         }
 
         setRangeByWbr(vditor[vditor.currentMode].element, range);
@@ -309,7 +309,7 @@ export const listOutdent = (vditor: IVditor, liElement: HTMLElement, range: Rang
         if (vditor.currentMode === 'wysiwyg') {
             topListElement.outerHTML = vditor.lute.SpinVditorDOM(topListElement.outerHTML);
         } else {
-            topListElement.outerHTML = vditor.lute.SpinVditorIRDOM(topListElement.outerHTML);
+            topListElement.outerHTML = vditor.lute.SpinVditorIRBlockDOM(topListElement.outerHTML);
         }
 
         setRangeByWbr(vditor[vditor.currentMode].element, range);
@@ -567,7 +567,7 @@ export const fixMarkdown = (event: KeyboardEvent, vditor: IVditor, pElement: HTM
             if (vditor.currentMode === 'wysiwyg') {
                 pElement.outerHTML = vditor.lute.SpinVditorDOM(pElement.innerHTML + '<p data-block="0"><wbr>\n</p>');
             } else {
-                pElement.outerHTML = vditor.lute.SpinVditorIRDOM(pElement.innerHTML + '<p data-block="0"><wbr>\n</p>');
+                pElement.outerHTML = vditor.lute.SpinVditorIRBlockDOM(pElement.innerHTML + '<p data-block="0"><wbr>\n</p>');
             }
             setRangeByWbr(vditor[vditor.currentMode].element, range);
             execAfterRender(vditor);
@@ -1194,9 +1194,9 @@ export const paste = (vditor: IVditor, event: ClipboardEvent & { target: HTMLEle
     let textPlain = event.clipboardData.getData('text/plain');
     const renderers: {
         HTML2VditorDOM?: ILuteRender,
-        HTML2VditorIRDOM?: ILuteRender,
+        HTML2VditorIRBlockDOM?: ILuteRender,
         Md2VditorDOM?: ILuteRender,
-        Md2VditorIRDOM?: ILuteRender,
+        Md2VditorIRBlockDOM?: ILuteRender,
         Md2VditorSVDOM?: ILuteRender,
     } = {};
     const renderLinkDest: ILuteRenderCallback = (node) => {
@@ -1304,9 +1304,9 @@ export const paste = (vditor: IVditor, event: ClipboardEvent & { target: HTMLEle
                 e.remove();
             });
             if (vditor.currentMode === 'ir') {
-                renderers.HTML2VditorIRDOM = {renderLinkDest};
+                renderers.HTML2VditorIRBlockDOM = {renderLinkDest};
                 vditor.lute.SetJSRenderers({renderers});
-                insertHTML(vditor.lute.HTML2VditorIRDOM(tempElement.innerHTML), vditor);
+                insertHTML(vditor.lute.HTML2VditorIRBlockDOM(tempElement.innerHTML), vditor);
             } else if (vditor.currentMode === 'wysiwyg') {
                 renderers.HTML2VditorDOM = {renderLinkDest};
                 vditor.lute.SetJSRenderers({renderers});
@@ -1321,9 +1321,9 @@ export const paste = (vditor: IVditor, event: ClipboardEvent & { target: HTMLEle
             uploadFiles(vditor, event.clipboardData.files);
         } else if (textPlain.trim() !== '' && event.clipboardData.files.length === 0) {
             if (vditor.currentMode === 'ir') {
-                renderers.Md2VditorIRDOM = {renderLinkDest};
+                renderers.Md2VditorIRBlockDOM = {renderLinkDest};
                 vditor.lute.SetJSRenderers({renderers});
-                insertHTML(vditor.lute.Md2VditorIRDOM(textPlain), vditor);
+                insertHTML(vditor.lute.Md2VditorIRBlockDOM(textPlain), vditor);
             } else if (vditor.currentMode === 'wysiwyg') {
                 renderers.Md2VditorDOM = {renderLinkDest};
                 vditor.lute.SetJSRenderers({renderers});
@@ -1348,7 +1348,7 @@ export const paste = (vditor: IVditor, event: ClipboardEvent & { target: HTMLEle
             if (vditor.currentMode === 'wysiwyg') {
                 blockElement.outerHTML = vditor.lute.SpinVditorDOM(blockElement.outerHTML);
             } else {
-                blockElement.outerHTML = vditor.lute.SpinVditorIRDOM(blockElement.outerHTML);
+                blockElement.outerHTML = vditor.lute.SpinVditorIRBlockDOM(blockElement.outerHTML);
             }
             setRangeByWbr(vditor[vditor.currentMode].element, range);
         }

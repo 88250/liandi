@@ -6,7 +6,7 @@ export const getMarkdown = (vditor: IVditor) => {
     } else if (vditor.currentMode === 'wysiwyg') {
         return vditor.lute.VditorDOM2Md(vditor.wysiwyg.element.innerHTML);
     } else if (vditor.currentMode === 'ir') {
-        return vditor.lute.VditorIRDOM2Md(vditor.ir.element.innerHTML);
+        return vditor.lute.VditorIRBlockDOM2Md(vditor.ir.element.innerHTML);
     }
     return '';
 };

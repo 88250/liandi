@@ -58,7 +58,7 @@ class IR {
         const tempElement = document.createElement('div');
         tempElement.appendChild(range.cloneContents());
 
-        event.clipboardData.setData('text/plain', vditor.lute.VditorIRDOM2Md(tempElement.innerHTML).trim());
+        event.clipboardData.setData('text/plain', vditor.lute.VditorIRBlockDOM2Md(tempElement.innerHTML).trim());
         event.clipboardData.setData('text/html', '');
     }
 

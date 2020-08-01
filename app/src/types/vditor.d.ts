@@ -117,11 +117,11 @@ interface ILute {
     SetJSRenderers(options?: {
         renderers: {
             HTML2VditorDOM?: ILuteRender,
-            HTML2VditorIRDOM?: ILuteRender,
+            HTML2VditorIRBlockDOM?: ILuteRender,
             HTML2Md?: ILuteRender,
             Md2HTML?: ILuteRender,
             Md2VditorDOM?: ILuteRender,
-            Md2VditorIRDOM?: ILuteRender,
+            Md2VditorIRBlockDOM?: ILuteRender,
             Md2VditorSVDOM?: ILuteRender,
         },
     }): void;
@@ -185,19 +185,19 @@ interface ILute {
     Md2VditorDOM(markdown: string): string;
 
     // ir 输入渲染
-    SpinVditorIRDOM(markdown: string): string;
+    SpinVditorIRBlockDOM(markdown: string): string;
 
     // ir 获取 md
-    VditorIRDOM2Md(html: string): string;
+    VditorIRBlockDOM2Md(html: string): string;
 
     // md 转换为 ir
-    Md2VditorIRDOM(text: string): string;
+    Md2VditorIRBlockDOM(text: string): string;
 
     // 获取 HTML
-    VditorIRDOM2HTML(html: string): string;
+    VditorIRBlockDOM2HTML(html: string): string;
 
     // 粘贴时将 html 转换为 sv
-    HTML2VditorIRDOM(html: string): string;
+    HTML2VditorIRBlockDOM(html: string): string;
 
     // sv 输入渲染
     SpinVditorSVDOM(text: string): string;
