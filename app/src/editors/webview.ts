@@ -3,9 +3,8 @@ import {Constants} from '../constants';
 import {getPath, urlJoin} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
 import {ipcRenderer, remote, clipboard} from 'electron';
+import Vditor from '../vditor';
 import {i18n} from '../i18n';
-
-const Vditor = require('vditor');
 
 export class EditorWebview {
     private isInitMenu: boolean;
@@ -21,8 +20,8 @@ export class EditorWebview {
             document.body.classList.add('body--win32');
         }
         window.onresize = (event: Event) => {
-            document.getElementById('liandiVditor').style.height = (window.innerHeight - 20) + 'px'
-        }
+            document.getElementById('liandiVditor').style.height = (window.innerHeight - 20) + 'px';
+        };
     }
 
     private initMenu(lang: keyof II18n) {
@@ -208,7 +207,7 @@ export class EditorWebview {
             counter: {
                 enable: true
             },
-            cdn: remote.getGlobal('liandiEditor').appDir + '/node_modules/vditor',
+            cdn: remote.getGlobal('liandiEditor').appDir + '/src/vditor',
             preview: {
                 markdown: {
                     autoSpace: liandi.config.markdown.autoSpace,
