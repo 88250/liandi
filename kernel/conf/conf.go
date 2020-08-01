@@ -25,7 +25,7 @@ import (
 )
 
 // Mode 标识了运行模式，默认开发环境。
-// 打包时通过构建参数 -ldflags "-X conf.Mode=prod" 注入 prod 生产模式，参考 build 脚本。
+// 打包时通过构建参数 -ldflags "-X github.com/88250/liandi/kernel/conf.Mode=prod" 注入 prod 生产模式，参考 build 脚本。
 var Mode = "dev"
 
 const (

@@ -6,17 +6,17 @@ set GOPROXY=https://goproxy.io
 
 set GOOS=windows
 set GOARCH=amd64
-go build -v -o kernel/kernel.exe -ldflags "-s -w -H=windowsgui -X conf.Mode=prod" ./kernel
+go build -v -o kernel/kernel.exe -ldflags "-s -w -H=windowsgui -X github.com/88250/liandi/kernel/conf.Mode=prod" ./kernel
 if "%errorlevel%" == "1" goto :errorend
 
 set GOOS=darwin
 set GOARCH=amd64
-go build -v -o kernel/kernel-darwin -ldflags "-s -w -X conf.Mode=prod" ./kernel
+go build -v -o kernel/kernel-darwin -ldflags "-s -w -X github.com/88250/liandi/kernel/conf.Mode=prod" ./kernel
 if "%errorlevel%" == "1" goto :errorend
 
 set GOOS=linux
 set GOARCH=amd64
-go build -v -o kernel/kernel-linux -ldflags "-s -w -X conf.Mode=prod" ./kernel
+go build -v -o kernel/kernel-linux -ldflags "-s -w -X github.com/88250/liandi/kernel/conf.Mode=prod" ./kernel
 if "%errorlevel%" == "1" goto :errorend
 
 echo Building UI
