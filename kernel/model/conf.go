@@ -102,7 +102,6 @@ type AppConf struct {
 }
 
 type Markdown struct {
-	EditorMode                          string `json:"editorMode"` // wysiwyg / ir / sv
 	Footnotes                           bool   `json:"footnotes"`
 	ToC                                 bool   `json:"toc"`
 	AutoSpace                           bool   `json:"autoSpace"`
@@ -121,7 +120,6 @@ type Image struct {
 
 func newMarkdown() *Markdown {
 	return &Markdown{
-		EditorMode:                          "wysiwyg",
 		Footnotes:                           false,
 		ToC:                                 false,
 		AutoSpace:                           true,
@@ -201,7 +199,6 @@ func (dir *Dir) IsRemote() bool {
 }
 
 func (dir *Dir) InitClient() {
-	// 初始化 WebDAV 客户端
 	dir.client = gowebdav.NewClient(dir.URL, dir.User, dir.Password)
 	dir.client.SetTimeout(7 * time.Second)
 }

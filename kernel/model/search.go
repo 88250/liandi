@@ -23,11 +23,13 @@ func InitSearch() {
 	}
 }
 
-// trees 用于维护所有已挂载的文档抽象语法树。
-var trees []*parse.Tree
+var (
+	// trees 用于维护所有已挂载的文档抽象语法树。
+	trees []*parse.Tree
 
-// docs 用于维护所有已挂载的文档。
-var docs []*Doc
+	// docs 用于维护所有已挂载的文档。
+	docs []*Doc
+)
 
 type Doc struct {
 	URL     string
