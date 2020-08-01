@@ -8,10 +8,12 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
 import (
 	"path"
+
+	"github.com/88250/liandi/kernel/model"
 )
 
 type rename struct {
@@ -19,16 +21,16 @@ type rename struct {
 }
 
 func (cmd *rename) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = NormalizeURL(url)
+	url = model.NormalizeURL(url)
 	oldPath := cmd.param["oldPath"].(string)
 	newPath := cmd.param["newPath"].(string)
-	err := Rename(url, oldPath, newPath)
+	err := model.Rename(url, oldPath, newPath)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		Push(ret.Bytes())
+		model.Push(ret.Bytes())
 		return
 	}
 
@@ -38,7 +40,7 @@ func (cmd *rename) Exec() {
 		"newPath": newPath,
 		"newName": path.Base(newPath),
 	}
-	Push(ret.Bytes())
+	model.Push(ret.Bytes())
 }
 
 func (cmd *rename) Name() string {

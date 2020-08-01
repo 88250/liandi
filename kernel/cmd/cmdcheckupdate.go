@@ -8,20 +8,18 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-type setlang struct {
+import "github.com/88250/liandi/kernel/model"
+
+type checkupdate struct {
 	*BaseCmd
 }
 
-func (cmd *setlang) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-	lang := cmd.param["lang"].(string)
-	Conf.Lang = lang
-	Conf.Save()
-	Push(ret.Bytes())
+func (cmd *checkupdate) Exec() {
+	model.CheckUpdate(true)
 }
 
-func (cmd *setlang) Name() string {
-	return "setlang"
+func (cmd *checkupdate) Name() string {
+	return "checkupdate"
 }

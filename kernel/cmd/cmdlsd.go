@@ -8,18 +8,36 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
 import (
-	"gopkg.in/olahol/melody.v1"
+	"github.com/88250/liandi/kernel/model"
 )
 
-var s *melody.Session
-
-func SetPushChan(session *melody.Session) {
-	s = session
+type lsd struct {
+	*BaseCmd
 }
 
-func Push(msg []byte) {
-	s.Write(msg)
+func (cmd *lsd) Exec() {
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	url := cmd.param["url"].(string)
+	url = model.NormalizeURL(url)
+	path := cmd.param["path"].(string)
+	files, err := model.Lsd(url, path)
+	if nil != err {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	} else {
+		ret.Data = map[string]interface{}{
+			"url":   url,
+			"path":  path,
+			"files": files,
+		}
+	}
+	model.Push(ret.Bytes())
+}
+
+func (cmd *lsd) Name() string {
+	return "lsd"
 }

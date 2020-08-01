@@ -8,20 +8,39 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-type search struct {
+import (
+	"path"
+
+	"github.com/88250/liandi/kernel/model"
+)
+
+type get struct {
 	*BaseCmd
 }
 
-func (cmd *search) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-	keyword := cmd.param["k"].(string)
-	result := Search(keyword)
-	ret.Data = result
-	Push(ret.Bytes())
+func (cmd *get) Exec() {
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	url := cmd.param["url"].(string)
+	url = model.NormalizeURL(url)
+	p := cmd.param["path"].(string)
+	content, err := model.Get(url, p)
+	if nil != err {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		return
+	} else {
+		ret.Data = map[string]interface{}{
+			"name":    path.Base(p),
+			"content": content,
+			"url":     url,
+			"path":    p,
+		}
+	}
+	model.Push(ret.Bytes())
 }
 
-func (cmd *search) Name() string {
-	return "search"
+func (cmd *get) Name() string {
+	return "get"
 }

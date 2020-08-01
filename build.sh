@@ -8,15 +8,15 @@ export GOPROXY=https://goproxy.io
 
 export GOOS=windows
 export GOARCH=amd64
-go build -v -o kernel/kernel.exe -ldflags "-s -w -H=windowsgui -X main.Mode=prod" ./kernel
+go build -v -o kernel/kernel.exe -ldflags "-s -w -H=windowsgui -X github.com/88250/liandi/kernel/model.Mode=prod" ./kernel
 
 export GOOS=darwin
 export GOARCH=amd64
-go build -v -o kernel/kernel-darwin -ldflags "-s -w -X main.Mode=prod" ./kernel
+go build -v -o kernel/kernel-darwin -ldflags "-s -w -X github.com/88250/liandi/kernel/model.Mode=prod" ./kernel
 
 export GOOS=linux
 export GOARCH=amd64
-go build -v -o kernel/kernel-linux -ldflags "-s -w -X main.Mode=prod" ./kernel
+go build -v -o kernel/kernel-linux -ldflags "-s -w -X github.com/88250/liandi/kernel/model.Mode=prod" ./kernel
 
 echo Building UI
 cd app

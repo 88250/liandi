@@ -8,21 +8,18 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package model
 
-type unmount struct {
-	*BaseCmd
+import (
+	"gopkg.in/olahol/melody.v1"
+)
+
+var s *melody.Session
+
+func SetPushChan(session *melody.Session) {
+	s = session
 }
 
-func (cmd *unmount) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-	url := cmd.param["url"].(string)
-	url = NormalizeURL(url)
-	Unmount(url)
-	RestartServeWebDAV()
-	Push(ret.Bytes())
-}
-
-func (cmd *unmount) Name() string {
-	return "unmount"
+func Push(msg []byte) {
+	s.Write(msg)
 }

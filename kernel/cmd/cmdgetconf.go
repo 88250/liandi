@@ -8,22 +8,22 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-type mount struct {
+import (
+	"github.com/88250/liandi/kernel/model"
+)
+
+type getconf struct {
 	*BaseCmd
 }
 
-func (cmd *mount) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-	p := cmd.param["path"].(string)
-	url := cmd.param["url"].(string)
-	url = NormalizeURL(url)
-	Mount(url, p)
-	RestartServeWebDAV()
-	Push(ret.Bytes())
+func (cmd *getconf) Exec() {
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret.Data = model.Conf
+	model.Push(ret.Bytes())
 }
 
-func (cmd *mount) Name() string {
-	return "mount"
+func (cmd *getconf) Name() string {
+	return "getconf"
 }

@@ -8,11 +8,13 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package model
 
 import (
 	"path/filepath"
 	"strings"
+
+	"github.com/88250/lute/parse"
 )
 
 func InitSearch() {
@@ -21,6 +23,10 @@ func InitSearch() {
 	}
 }
 
+// trees 用于维护所有已挂载的文档抽象语法树。
+var trees []*parse.Tree
+
+// docs 用于维护所有已挂载的文档。
 var docs []*Doc
 
 type Doc struct {
@@ -53,6 +59,8 @@ func (dir *Dir) RemoveIndexDoc(url, path string) {
 			break
 		}
 	}
+
+	// TODO: tree
 }
 
 func (dir *Dir) IndexDoc(doc *Doc) {
@@ -63,6 +71,8 @@ func (dir *Dir) IndexDoc(doc *Doc) {
 		}
 	}
 	docs = append(docs, doc)
+
+	// TODO: tree
 }
 
 func Search(keyword string) (ret []*Snippet) {

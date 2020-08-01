@@ -8,38 +8,42 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/88250/liandi/kernel/model"
+)
 
 type setimage struct {
 	*BaseCmd
 }
 
 func (cmd *setimage) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 
 	param, err := json.Marshal(cmd.param)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		Push(ret.Bytes())
+		model.Push(ret.Bytes())
 		return
 	}
 
-	image := &Image{}
+	image := &model.Image{}
 	if err = json.Unmarshal(param, image); nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		Push(ret.Bytes())
+		model.Push(ret.Bytes())
 		return
 	}
 
-	Conf.Image = image
-	Conf.Save()
+	model.Conf.Image = image
+	model.Conf.Save()
 
-	ret.Data = Conf.Image
-	Push(ret.Bytes())
+	ret.Data = model.Conf.Image
+	model.Push(ret.Bytes())
 }
 
 func (cmd *setimage) Name() string {

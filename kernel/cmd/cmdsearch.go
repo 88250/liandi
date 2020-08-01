@@ -8,18 +8,22 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-type getconf struct {
+import "github.com/88250/liandi/kernel/model"
+
+type search struct {
 	*BaseCmd
 }
 
-func (cmd *getconf) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-	ret.Data = Conf
-	Push(ret.Bytes())
+func (cmd *search) Exec() {
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	keyword := cmd.param["k"].(string)
+	result := model.Search(keyword)
+	ret.Data = result
+	model.Push(ret.Bytes())
 }
 
-func (cmd *getconf) Name() string {
-	return "getconf"
+func (cmd *search) Name() string {
+	return "search"
 }

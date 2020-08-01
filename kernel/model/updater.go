@@ -8,7 +8,7 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package model
 
 import (
 	"crypto/tls"
@@ -20,17 +20,17 @@ import (
 	"github.com/parnurzeal/gorequest"
 )
 
-func checkUpdatePeriodically() {
+func CheckUpdatePeriodically() {
 	go func() {
 		for range time.Tick(time.Minute * 30) {
-			checkUpdate(false)
+			CheckUpdate(false)
 		}
 	}()
 }
 
 var checkUpdateLock = &sync.Mutex{}
 
-func checkUpdate(now bool) {
+func CheckUpdate(now bool) {
 	defer gulu.Panic.Recover(nil)
 	checkUpdateLock.Lock()
 	defer checkUpdateLock.Unlock()

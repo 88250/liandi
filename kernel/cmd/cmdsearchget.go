@@ -8,30 +8,41 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
 import (
-	"github.com/88250/gulu"
+	"path"
+
+	"github.com/88250/liandi/kernel/model"
 )
 
-type put struct {
+type searchget struct {
 	*BaseCmd
 }
 
-func (cmd *put) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
+func (cmd *searchget) Exec() {
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = NormalizeURL(url)
-	path := cmd.param["path"].(string)
-	content := cmd.param["content"].(string)
-	err := Put(url, path, gulu.Str.ToBytes(content))
+	url = model.NormalizeURL(url)
+	p := cmd.param["path"].(string)
+	content, err := model.Get(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+		return
+	} else {
+		ret.Data = map[string]interface{}{
+			"name":    path.Base(p),
+			"content": content,
+			"url":     url,
+			"path":    p,
+			"index":   cmd.param["index"],
+			"key":     cmd.param["key"],
+		}
 	}
-	Push(ret.Bytes())
+	model.Push(ret.Bytes())
 }
 
-func (cmd *put) Name() string {
-	return "put"
+func (cmd *searchget) Name() string {
+	return "searchget"
 }

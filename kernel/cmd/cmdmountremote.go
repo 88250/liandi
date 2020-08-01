@@ -8,39 +8,25 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
-import (
-	"path"
-)
+import "github.com/88250/liandi/kernel/model"
 
-type searchget struct {
+type mountremote struct {
 	*BaseCmd
 }
 
-func (cmd *searchget) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
+func (cmd *mountremote) Exec() {
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
-	url = NormalizeURL(url)
-	p := cmd.param["path"].(string)
-	content, err := Get(url, p)
-	if nil != err {
-		ret.Code = -1
-		ret.Msg = err.Error()
-		return
-	} else {
-		ret.Data = map[string]interface{}{
-			"name":    path.Base(p),
-			"content": content,
-			"url":     url,
-			"path":    p,
-			"index":   cmd.param["index"],
-			"key":     cmd.param["key"],
-		}
-	}
-	Push(ret.Bytes())
+	url = model.NormalizeURL(url)
+	user := cmd.param["user"].(string)
+	password := cmd.param["password"].(string)
+	model.MountRemote(url, user, password)
+	model.RestartServeWebDAV()
+	model.Push(ret.Bytes())
 }
 
-func (cmd *searchget) Name() string {
-	return "searchget"
+func (cmd *mountremote) Name() string {
+	return "mountremote"
 }

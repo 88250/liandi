@@ -8,23 +8,36 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package model
 
-type mountremote struct {
-	*BaseCmd
+import (
+	"encoding/json"
+
+	"github.com/88250/gulu"
+)
+
+type Result struct {
+	Cmd   string  `json:"cmd"`
+	ReqId float64 `json:"reqId"`
+	*gulu.Result
 }
 
-func (cmd *mountremote) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-	url := cmd.param["url"].(string)
-	url = NormalizeURL(url)
-	user := cmd.param["user"].(string)
-	password := cmd.param["password"].(string)
-	MountRemote(url, user, password)
-	RestartServeWebDAV()
-	Push(ret.Bytes())
+func NewResult() *Result {
+	return &Result{"", 0, &gulu.Result{Code: 0, Msg: "", Data: nil}}
 }
 
-func (cmd *mountremote) Name() string {
-	return "mountremote"
+func NewCmdResult(cmdName string, cmdId float64) *Result {
+	ret := NewResult()
+	ret.Cmd = cmdName
+	ret.ReqId = cmdId
+	return ret
+}
+
+func (r *Result) Bytes() []byte {
+	ret, err := json.Marshal(r)
+	if nil != err {
+		Logger.Errorf("marshal result [%+v] failed [%s]", r, err)
+	}
+
+	return ret
 }

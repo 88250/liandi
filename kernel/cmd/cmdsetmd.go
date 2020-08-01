@@ -8,38 +8,45 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package main
+package cmd
 
 import (
-	"path"
+	"encoding/json"
+
+	"github.com/88250/liandi/kernel/model"
 )
 
-type remove struct {
+type setmd struct {
 	*BaseCmd
 }
 
-func (cmd *remove) Exec() {
-	ret := NewCmdResult(cmd.Name(), cmd.id)
-	url := cmd.param["url"].(string)
-	url = NormalizeURL(url)
-	p := cmd.param["path"].(string)
-	err := Remove(url, p)
+func (cmd *setmd) Exec() {
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+
+	param, err := json.Marshal(cmd.param)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+		model.Push(ret.Bytes())
+		return
 	}
 
-	p = path.Dir(path.Clean(p))
-	if "." == p {
-		p = "/"
+	md := &model.Markdown{}
+	if err = json.Unmarshal(param, md); nil != err {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		model.Push(ret.Bytes())
+		return
 	}
-	ret.Data = map[string]interface{}{
-		"url":  url,
-		"path": p,
-	}
-	Push(ret.Bytes())
+
+	model.Conf.Markdown = md
+	model.ConfLute()
+	model.Conf.Save()
+
+	ret.Data = model.Conf.Markdown
+	model.Push(ret.Bytes())
 }
 
-func (cmd *remove) Name() string {
-	return "remove"
+func (cmd *setmd) Name() string {
+	return "setmd"
 }
