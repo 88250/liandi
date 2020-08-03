@@ -12,6 +12,7 @@ package model
 
 import (
 	"encoding/json"
+	"path"
 	"strconv"
 
 	"github.com/88250/lute/ast"
@@ -40,7 +41,7 @@ func ParseJSON(jsonStr string) (ret *parse.Tree) {
 	return
 }
 
-func  genASTByJSON(jsonNode interface{}, tree *parse.Tree) {
+func genASTByJSON(jsonNode interface{}, tree *parse.Tree) {
 	n := jsonNode.(map[string]interface{})
 	typ := n["Type"].(string)
 	node := &ast.Node{Type: ast.Str2NodeType(typ)}
@@ -83,10 +84,23 @@ func  genASTByJSON(jsonNode interface{}, tree *parse.Tree) {
 }
 
 // RenderJSON 用于渲染 JSON 格式数据。
-func  RenderJSON(markdown string) (retJSON string) {
+func RenderJSON(markdown string) (retJSON string) {
 	tree := parse.Parse("", []byte(markdown), Lute.Options)
 	renderer := NewJSONRenderer(tree)
 	output := renderer.Render()
 	retJSON = string(output)
 	return
+}
+
+func writeJSON(tree *parse.Tree) error {
+	renderer := NewJSONRenderer(tree)
+	output := renderer.Render()
+
+	dir := Conf.dir(tree.Dir)
+	p := path.Dir(tree.Path)
+	p = path.Join(p, "ast.json")
+	if err := dir.Put(p, output); nil != err {
+		return err
+	}
+	return nil
 }

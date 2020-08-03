@@ -134,8 +134,16 @@ func Put(url, path string, content []byte) error {
 		return err
 	}
 
-	doc := newDoc(url, path, gulu.Str.FromBytes(content))
+	contentStr := gulu.Str.FromBytes(content)
+	doc := newDoc(url, path, contentStr)
 	dir.IndexDoc(doc)
+
+	tree := newTree(url, path, contentStr)
+	dir.IndexTree(tree)
+
+	if err := writeJSON(tree); nil != err {
+		return err
+	}
 	return nil
 }
 
@@ -183,6 +191,7 @@ func Rename(url, oldPath, newPath string) error {
 	}
 
 	dir.RemoveIndexDoc(url, oldPath)
+	dir.RemoveTree(url, oldPath)
 	return nil
 }
 
@@ -200,5 +209,6 @@ func Remove(url, path string) error {
 		return errors.New(Conf.lang(0))
 	}
 	dir.RemoveIndexDoc(url, path)
+	dir.RemoveTree(url, path)
 	return dir.Remove(path)
 }

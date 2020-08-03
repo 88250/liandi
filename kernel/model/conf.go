@@ -288,6 +288,7 @@ func (dir *Dir) Index() {
 			doc := newDoc(dir.URL, p, content)
 			docs = append(docs, doc)
 
+			// TODO: 使用 ast.json
 			tree := newTree(dir.URL, p, content)
 			trees = append(trees, tree)
 		}
@@ -301,6 +302,7 @@ func (dir *Dir) Unindex() {
 	for _, file := range files {
 		p := file.(*gowebdav.File).Path()
 		dir.RemoveIndexDoc(dir.URL, p)
+		dir.RemoveTree(dir.URL, p)
 	}
 }
 
