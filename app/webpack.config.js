@@ -1,4 +1,6 @@
 const path = require('path')
+const webpack = require('webpack')
+const pkg = require('./package.json')
 
 module.exports = (env, argv) => {
   const config = []
@@ -31,7 +33,7 @@ module.exports = (env, argv) => {
         },
         {
           test: /\.ts(x?)$/,
-          include: [path.resolve(__dirname, 'src')],
+          include: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'vditor')],
           use: [
             {
               loader: 'ts-loader',
@@ -67,6 +69,11 @@ module.exports = (env, argv) => {
         },
       ],
     },
+    plugins: [
+      new webpack.DefinePlugin({
+        VDITOR_VERSION: JSON.stringify(pkg.version),
+      }),
+    ],
   })
 
   return config
