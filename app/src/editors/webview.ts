@@ -148,7 +148,7 @@ export class EditorWebview {
                             if ('vditor'.indexOf(key.toLocaleLowerCase()) > -1) {
                                 return [
                                     {
-                                        value: '((Vditor',
+                                        value: '((1596452954774))',
                                         html: '<span style="color: #999;">#Vditor</span> ♏ 一款浏览器端的 Markdown 编辑器，支持所见即所得（富文本）、即时渲染（类似 Typora）和分屏预览模式。',
                                     }]
                             }
