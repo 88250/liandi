@@ -3,8 +3,9 @@ import {Constants} from '../constants';
 import {getPath, urlJoin} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
 import {ipcRenderer, remote, clipboard} from 'electron';
-import Vditor from '../vditor';
 import {i18n} from '../i18n';
+
+const Vditor = require('vditor');
 
 export class EditorWebview {
     private isInitMenu: boolean;
@@ -132,8 +133,6 @@ export class EditorWebview {
         document.getElementById('liandiVditor').innerHTML = '';
         let timeoutId: number;
         this.vditor = new Vditor('liandiVditor', {
-            debugger: true,
-            _lutePath: `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}`,
             outline: liandi.config.markdown.outline,
             height: window.innerHeight - 20,
             toolbarConfig: {
