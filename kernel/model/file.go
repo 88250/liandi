@@ -141,7 +141,7 @@ func Put(url, path string, content []byte) error {
 	tree := newTree(url, path, contentStr)
 	dir.IndexTree(tree)
 
-	if err := writeJSON(tree); nil != err {
+	if err := writeASTJSON(tree); nil != err {
 		return err
 	}
 	return nil

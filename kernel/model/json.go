@@ -21,11 +21,11 @@ import (
 )
 
 // ParseJSON 用于解析 jsonStr 生成 Markdown 抽象语法树。
-func ParseJSON(jsonStr string) (ret *parse.Tree) {
+func ParseJSON(jsonStr string) (ret *parse.Tree, err error) {
 	var root map[string]interface{}
-	err := json.Unmarshal(util.StrToBytes(jsonStr), &root)
+	err = json.Unmarshal(util.StrToBytes(jsonStr), &root)
 	if nil != err {
-		return
+		return nil, err
 	}
 
 	ret = &parse.Tree{Name: "", Root: &ast.Node{Type: ast.NodeDocument}, Context: &parse.Context{Option: Lute.Options}}
@@ -92,15 +92,32 @@ func RenderJSON(markdown string) (retJSON string) {
 	return
 }
 
-func writeJSON(tree *parse.Tree) error {
+func writeASTJSON(tree *parse.Tree) error {
 	renderer := NewJSONRenderer(tree)
 	output := renderer.Render()
 
 	dir := Conf.dir(tree.Dir)
+	name := path.Base(tree.Path) + ".json"
 	p := path.Dir(tree.Path)
-	p = path.Join(p, "ast.json")
+	p = path.Join(p, name)
 	if err := dir.Put(p, output); nil != err {
 		return err
 	}
 	return nil
+}
+
+func astJSON(url, p string) (jsonStr string, err error) {
+	dir := Conf.dir(url)
+	name := path.Base(p) + ".json"
+	p = path.Dir(p)
+	p = path.Join(p, name)
+	exist, err := dir.Exist(p)
+	if nil != err {
+		return
+	}
+	if !exist {
+		return
+	}
+	jsonStr, err = dir.Get(p)
+	return
 }
