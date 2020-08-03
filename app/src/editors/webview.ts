@@ -4,8 +4,7 @@ import {getPath, urlJoin} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
 import {ipcRenderer, remote, clipboard} from 'electron';
 import {i18n} from '../i18n';
-
-const Vditor = require('vditor');
+import Vditor from '../../vditor/src';
 
 export class EditorWebview {
     private isInitMenu: boolean;
@@ -133,6 +132,7 @@ export class EditorWebview {
         document.getElementById('liandiVditor').innerHTML = '';
         let timeoutId: number;
         this.vditor = new Vditor('liandiVditor', {
+            _lutePath: `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}`,
             outline: liandi.config.markdown.outline,
             height: window.innerHeight - 20,
             toolbarConfig: {
@@ -206,7 +206,7 @@ export class EditorWebview {
             counter: {
                 enable: true
             },
-            cdn: remote.getGlobal('liandiEditor').appDir + '/src/vditor',
+            cdn: remote.getGlobal('liandiEditor').appDir + '/vditor',
             preview: {
                 markdown: {
                     autoSpace: liandi.config.markdown.autoSpace,
@@ -224,7 +224,8 @@ export class EditorWebview {
                     style: liandi.config.theme === 'dark' ? 'native' : 'github'
                 },
                 theme: {
-                    current: liandi.config.theme
+                    current: liandi.config.theme,
+                    path:  remote.getGlobal('liandiEditor').appDir + '/vditor/dist/css/content-theme',
                 },
             },
             upload: {
