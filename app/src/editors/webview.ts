@@ -4,7 +4,7 @@ import {getPath, urlJoin} from '../util/path';
 import {initGlobalKeyPress} from '../hotkey';
 import {ipcRenderer, remote, clipboard} from 'electron';
 import {i18n} from '../i18n';
-import Vditor from '../../vditor/src';
+import Vditor from '../../vditore/src';
 
 export class EditorWebview {
     private isInitMenu: boolean;
@@ -139,6 +139,23 @@ export class EditorWebview {
                 hide: liandi.config.markdown.hideToolbar,
             },
             typewriterMode: true,
+            hint: {
+                extend: [
+                    {
+                        key: '((',
+                        hint: (key) => {
+                            console.log(key)
+                            if ('vditor'.indexOf(key.toLocaleLowerCase()) > -1) {
+                                return [
+                                    {
+                                        value: '((Vditor',
+                                        html: '<span style="color: #999;">#Vditor</span> ♏ 一款浏览器端的 Markdown 编辑器，支持所见即所得（富文本）、即时渲染（类似 Typora）和分屏预览模式。',
+                                    }]
+                            }
+                            return []
+                        },
+                    }],
+            },
             toolbar: [
                 'emoji',
                 'headings',
@@ -225,7 +242,7 @@ export class EditorWebview {
                 },
                 theme: {
                     current: liandi.config.theme,
-                    path:  remote.getGlobal('liandiEditor').appDir + '/vditor/dist/css/content-theme',
+                    path: remote.getGlobal('liandiEditor').appDir + '/vditor/dist/css/content-theme',
                 },
             },
             upload: {

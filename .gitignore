@@ -6,7 +6,7 @@
 app/node_modules
 app/dist
 app/build
-app/vditor
+app/vditore
 header
 kernel/kernel
 kernel.exe

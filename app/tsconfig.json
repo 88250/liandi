@@ -9,7 +9,7 @@
     ],
     "types": [
       "./src/types",
-      "./vditor/types",
+      "./vditore/types",
       "node"
     ]
   },
