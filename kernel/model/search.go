@@ -14,6 +14,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
 )
 
@@ -98,4 +99,25 @@ func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
 		}
 	}
 	return ret
+}
+
+func SearchBlock(keyword string) (blocks []*ast.Node) {
+	for _, tree := range trees {
+		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+			if !entering {
+				return ast.WalkContinue
+			}
+
+			if ast.NodeHeading != n.Type && ast.NodeParagraph != n.Type {
+				return ast.WalkContinue
+			}
+
+			text := n.Text()
+			if strings.Contains(text, keyword) {
+				blocks = append(blocks, n)
+			}
+			return ast.WalkSkipChildren
+		})
+	}
+	return
 }
