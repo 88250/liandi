@@ -11,6 +11,7 @@
 package model
 
 import (
+	"github.com/88250/lute/util"
 	"path/filepath"
 	"strings"
 
@@ -51,8 +52,15 @@ func genDocId(url, path string) string {
 	return url + path
 }
 
-func newDoc(url, path, content string) (doc *Doc) {
+func newDoc(url, path, content string) *Doc {
 	return &Doc{URL: url, Path: path, Content: content}
+}
+
+func newTree(url, path, content string) (ret *parse.Tree) {
+	ret = parse.Parse("", util.StrToBytes(content), Lute.Options)
+	ret.Dir = url
+	ret.Path = path
+	return
 }
 
 func (dir *Dir) RemoveIndexDoc(url, path string) {
@@ -63,7 +71,12 @@ func (dir *Dir) RemoveIndexDoc(url, path string) {
 		}
 	}
 
-	// TODO: tree
+	for i, tree := range trees {
+		if tree.Dir == url && tree.Path == path {
+			trees = trees[:i+copy(trees[i:], trees[i+1:])]
+			break
+		}
+	}
 }
 
 func (dir *Dir) IndexDoc(doc *Doc) {
@@ -75,7 +88,14 @@ func (dir *Dir) IndexDoc(doc *Doc) {
 	}
 	docs = append(docs, doc)
 
-	// TODO: tree
+	for i, t := range trees {
+		if doc.URL == t.Dir && doc.Path == t.Path {
+			trees = trees[:i+copy(trees[i:], trees[i+1:])]
+			break
+		}
+	}
+	tree := newTree(doc.URL, doc.Path, doc.Content)
+	trees = append(trees, tree)
 }
 
 func Search(keyword string) (ret []*Snippet) {

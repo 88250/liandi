@@ -23,8 +23,6 @@ import (
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
 	"github.com/88250/lute"
-	"github.com/88250/lute/parse"
-	"github.com/88250/lute/util"
 )
 
 // Mode 标识了运行模式，默认开发环境。
@@ -290,7 +288,7 @@ func (dir *Dir) Index() {
 			doc := newDoc(dir.URL, p, content)
 			docs = append(docs, doc)
 
-			tree := parse.Parse("", util.StrToBytes(content), Lute.Options)
+			tree := newTree(dir.URL, p, content)
 			trees = append(trees, tree)
 		}
 	}
