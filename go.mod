@@ -5,7 +5,7 @@ go 1.12
 require (
 	github.com/88250/gowebdav v1.0.0
 	github.com/88250/gulu v1.1.0
-	github.com/88250/lute v1.6.1-0.20200803025539-8a3959dc191a
+	github.com/88250/lute v1.6.1-0.20200803102545-593cf4268809
 	github.com/elazarl/goproxy v0.0.0-20200315184450-1f3cb6622dad // indirect
 	github.com/elazarl/goproxy/ext v0.0.0-20200315184450-1f3cb6622dad // indirect
 	github.com/gin-gonic/gin v1.6.3
@@ -20,7 +20,7 @@ require (
 	github.com/smartystreets/assertions v1.0.1 // indirect
 	github.com/smartystreets/goconvey v1.6.4 // indirect
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381
-	golang.org/x/sys v0.0.0-20200728102440-3e129f6d46b1 // indirect
+	golang.org/x/sys v0.0.0-20200802091954-4b90ce9b60b3 // indirect
 	golang.org/x/text v0.3.3 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/olahol/melody.v1 v1.0.0-20170518105555-d52139073376
