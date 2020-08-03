@@ -51,7 +51,7 @@ Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi
 * Double Shift quick navigation
 * Fulltext search
 * Light and dark themes
-* Block mode `TBD`
+* Block mode `WIP`
   * Block-level bidirectional link
   * Document block diagram
 * Tag aggregation category `TBD`
