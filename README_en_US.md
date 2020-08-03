@@ -35,10 +35,7 @@ Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi
 ## ✨  Features
 
 * **Born for Markdown**
-  * Support three editing modes
-    * WYSIWYG: It is more friendly to users who are not familiar with Markdown, and you can use it seamlessly if you are familiar with Markdown
-    * Instant Rendering: users familiar with Typora should not be unfamiliar, in theory this is the most elegant Markdown editing method
-    * Split View: suitable for Markdown editing on large screen
+  * Support Instant Rendering, users familiar with Typora should not be unfamiliar, in theory this is the most elegant Markdown editing method
   * Support mathematical formulas, charts, flowcharts, Gantt charts, timing charts, staffs, etc.
   * Markdown text formatting
   * Paste HTML automatically converted to Markdown
@@ -62,23 +59,11 @@ Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi
 
 ## 📸 Screenshots
 
-### WYSIWYG
-
-*WYSIWYG* mode is more friendly to users who are not familiar with Markdown, and you can use it seamlessly if you are familiar with Markdown.
-
-![vditor-wysiwyg](https://b3logfile.com/file/2020/07/wysiwyg-4f216b9b.gif)
-
 ### Instant Rendering
 
 *Instant Rendering* mode should not be unfamiliar to users who are familiar with Typora. In theory, this is the most elegant Markdown editing method.
 
 ![vditor-ir](https://b3logfile.com/file/2020/07/ir-67cd956c.gif)
-
-### Split View
-
-The traditional *Split View* mode is suitable for Markdown editing on a large screen.
-
-![vditor-sv](https://b3logfile.com/file/2020/07/sv-595dcb28.gif)
 
 ### Light theme
 
@@ -127,7 +112,7 @@ If you want to modify the source code, please set up the development environment
 * The kernel implements WebDAV server and client
 * File access (including operation of local files) through WebDAV client
 * Markdown files are loaded into memory when starting and mounting to achieve full-text search
-* Achieve Markdown WYSIWYG editing mode with Vditor editor
+* Achieve Markdown Instant Rendering editing mode with Vditor editor
 
 ## 📜 Documentation
 
