@@ -223,7 +223,7 @@ export class EditorWebview {
             counter: {
                 enable: true
             },
-            cdn: remote.getGlobal('liandiEditor').appDir + '/vditor',
+            cdn: remote.getGlobal('liandiEditor').appDir + '/vditore',
             preview: {
                 markdown: {
                     autoSpace: liandi.config.markdown.autoSpace,
@@ -242,7 +242,7 @@ export class EditorWebview {
                 },
                 theme: {
                     current: liandi.config.theme,
-                    path: remote.getGlobal('liandiEditor').appDir + '/vditor/dist/css/content-theme',
+                    path: remote.getGlobal('liandiEditor').appDir + '/vditore/dist/css/content-theme',
                 },
             },
             upload: {
