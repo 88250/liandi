@@ -52,21 +52,28 @@ func genDocId(url, path string) string {
 	return url + path
 }
 
-func newDoc(url, path, content string) *Doc {
-	return &Doc{URL: url, Path: path, Content: content}
-}
-
-func newTree(url, path, content string) (ret *parse.Tree) {
-	ret = parse.Parse("", util.StrToBytes(content), Lute.Options)
-	ret.Dir = url
-	ret.Path = path
-	return
+func (dir *Dir) MoveIndexDoc(url, path, newPath string) {
+	for _, d := range docs {
+		if url == d.URL && path == d.Path {
+			d.Path = newPath
+			break
+		}
+	}
 }
 
 func (dir *Dir) RemoveIndexDoc(url, path string) {
 	for i, doc := range docs {
 		if doc.URL == url && doc.Path == path {
 			docs = docs[:i+copy(docs[i:], docs[i+1:])]
+			break
+		}
+	}
+}
+
+func (dir *Dir) MoveTree(url, path, newPath string) {
+	for _, tree := range trees {
+		if tree.Dir == url && tree.Path == path {
+			tree.Path = newPath
 			break
 		}
 	}
@@ -81,7 +88,8 @@ func (dir *Dir) RemoveTree(url, path string) {
 	}
 }
 
-func (dir *Dir) IndexDoc(doc *Doc) {
+func (dir *Dir) IndexDoc(url, path, content string) {
+	doc := &Doc{URL: url, Path: path, Content: content}
 	for i, d := range docs {
 		if doc.URL == d.URL && doc.Path == d.Path {
 			docs = docs[:i+copy(docs[i:], docs[i+1:])]
@@ -89,6 +97,13 @@ func (dir *Dir) IndexDoc(doc *Doc) {
 		}
 	}
 	docs = append(docs, doc)
+}
+
+func (dir *Dir) ParseIndexTree(url, path, markdown string) {
+	tree := parse.Parse("", util.StrToBytes(markdown), Lute.Options)
+	tree.Dir = url
+	tree.Path = path
+	dir.IndexTree(tree)
 }
 
 func (dir *Dir) IndexTree(tree *parse.Tree) {

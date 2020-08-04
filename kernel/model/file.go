@@ -132,25 +132,24 @@ func Get(url, path string) (ret string, err error) {
 	return
 }
 
-func Put(url, path string, content []byte) error {
+func Put(url, path string, dom []byte) error {
 	dir := Conf.dir(url)
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
 
-	contentStr := gulu.Str.FromBytes(content)
+	domStr := gulu.Str.FromBytes(dom)
 
 	// DOM 转 Markdown
-	markdown := Lute.VditorIRBlockDOM2Md(contentStr)
+	markdown := Lute.VditorIRBlockDOM2Md(domStr)
 
 	if err := dir.Put(path, gulu.Str.ToBytes(markdown)); nil != err {
 		return err
 	}
 
-	doc := newDoc(url, path, contentStr)
-	dir.IndexDoc(doc)
+	dir.IndexDoc(url, path, markdown)
 
-	tree, err := Lute.VditorIRBlockDOM2Tree(contentStr)
+	tree, err := Lute.VditorIRBlockDOM2Tree(domStr)
 	if nil != err {
 		msg := fmt.Sprintf(Conf.lang(12), err)
 		Logger.Errorf(msg)
@@ -160,7 +159,7 @@ func Put(url, path string, content []byte) error {
 	tree.Path = path
 	dir.IndexTree(tree)
 
-	if err := writeASTJSON(tree); nil != err {
+	if err := WriteASTJSON(tree); nil != err {
 		return err
 	}
 	return nil
@@ -219,9 +218,9 @@ func Rename(url, oldPath, newPath string) error {
 		return err
 	}
 
-	dir.RemoveIndexDoc(url, oldPath)
-	dir.RemoveTree(url, oldPath)
-	return nil
+	dir.MoveIndexDoc(url, oldPath, newPath)
+	dir.MoveTree(url, oldPath, newPath)
+	return MoveASTJSON(url, oldPath, newPath)
 }
 
 func Mkdir(url, path string) error {
@@ -239,5 +238,10 @@ func Remove(url, path string) error {
 	}
 	dir.RemoveIndexDoc(url, path)
 	dir.RemoveTree(url, path)
-	return dir.Remove(path)
+	err := dir.Remove(path)
+	if nil != err {
+		return err
+	}
+
+	return RemoveASTJSON(url, path)
 }
