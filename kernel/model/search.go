@@ -19,7 +19,7 @@ import (
 	"github.com/88250/lute/parse"
 )
 
-func InitSearch() {
+func InitIndex() {
 	for _, dir := range Conf.Dirs {
 		go dir.Index()
 	}
