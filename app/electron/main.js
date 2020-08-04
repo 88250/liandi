@@ -6,7 +6,6 @@ const os = require('os')
 const fs = require('fs')
 process.noAsar = true
 const homedir = os.homedir()
-const liandi = path.join(homedir, '.liandi')
 const appDir = path.dirname(app.getAppPath())
 const getKernelName = () => {
   let ret = 'kernel.exe'

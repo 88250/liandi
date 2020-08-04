@@ -134,6 +134,7 @@ export class EditorWebview {
         this.vditor = new Vditor('liandiVditor', {
             _lutePath: `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}`,
             outline: liandi.config.markdown.outline,
+            debugger: true,
             height: window.innerHeight - 20,
             toolbarConfig: {
                 hide: liandi.config.markdown.hideToolbar,
@@ -144,15 +145,15 @@ export class EditorWebview {
                     {
                         key: '((',
                         hint: (key) => {
-                            console.log(key)
+                            console.log(key);
                             if ('vditor'.indexOf(key.toLocaleLowerCase()) > -1) {
                                 return [
                                     {
                                         value: '((1596452954774))',
                                         html: '<span style="color: #999;">#Vditor</span> ♏ 一款浏览器端的 Markdown 编辑器，支持所见即所得（富文本）、即时渲染（类似 Typora）和分屏预览模式。',
-                                    }]
+                                    }];
                             }
-                            return []
+                            return [];
                         },
                     }],
             },
@@ -260,26 +261,19 @@ export class EditorWebview {
             },
             after: () => {
                 this.vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
-                this.vditor.setValue(value);
+                this.vditor.setHTML(value);
                 remote.getGlobal('liandiEditor').editorText = value;
                 remote.getGlobal('liandiEditor').saved = true;
                 this.vditor.focus();
             },
-            input: (textContent: string) => {
-                remote.getGlobal('liandiEditor').editorText = textContent;
+            input: (textContent: string, html: string) => {
+                remote.getGlobal('liandiEditor').editorText = html;
                 remote.getGlobal('liandiEditor').saved = false;
                 clearTimeout(timeoutId);
                 timeoutId = window.setTimeout(() => {
                     ipcRenderer.sendToHost(Constants.LIANDI_WEBSOCKET_PUT);
                 }, 5000);
             }
-        });
-
-        this.vditor.vditor.wysiwyg.element.addEventListener('keydown', (event: KeyboardEvent) => {
-            this.hotkey(event);
-        });
-        this.vditor.vditor.sv.element.addEventListener('keydown', (event: KeyboardEvent) => {
-            this.hotkey(event);
         });
         this.vditor.vditor.ir.element.addEventListener('keydown', (event: KeyboardEvent) => {
             this.hotkey(event);
