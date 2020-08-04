@@ -5,13 +5,7 @@ export abstract class Constants {
     public static readonly UPLOAD_FETCH_ADDRESS: string = 'http://127.0.0.1:6806/upload/fetch';
     public static readonly DOUBLE_DELTA: number = 500;
 
-
     public static readonly LIANDI_EDITOR_SAVE: string = 'liandi-editor-save';
-    public static readonly LIANDI_EDITOR_RELOAD: string = 'liandi-editor-reload';
-    public static readonly LIANDI_EDITOR_OPEN: string = 'liandi-editor-open';
-    public static readonly LIANDI_EDITOR_FULLSCREEN: string = 'liandi-editor-fullscreen';
-    public static readonly LIANDI_EDITOR_RESTORE: string = 'liandi-editor-restore';
-    public static readonly LIANDI_EDITOR_CURSOR: string = 'liandi-editor-cursor';
 
     public static readonly LIANDI_WEBSOCKET_PUT: string = 'liandi-websocket-put';
 

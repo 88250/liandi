@@ -2,21 +2,8 @@ const {app, BrowserWindow, shell, Menu, globalShortcut, screen, nativeTheme, ipc
   'electron')
 const {spawn} = require('child_process')
 const path = require('path')
-const os = require('os')
-const fs = require('fs')
 process.noAsar = true
-const homedir = os.homedir()
 const appDir = path.dirname(app.getAppPath())
-const getKernelName = () => {
-  let ret = 'kernel.exe'
-  if (process.platform === 'darwin') {
-    ret = 'kernel-darwin'
-  } else if (process.platform === 'linux') {
-    ret = 'kernel-linux'
-  }
-  return ret
-}
-const kernelName = getKernelName()
 const isDevEnv = process.env.NODE_ENV === 'development'
 
 const createWindow = () => {
@@ -116,29 +103,32 @@ const createWindow = () => {
   })
 
   // 全局对象
-  global.liandiEditor = {
-    editorText: '',
-    saved: true,
-    appDir,
-  }
+  // global.liandiEditor = {
+  //   editorText: '',
+  //   saved: true,
+  //   appDir,
+  // }
 
   // 监听主题切换
   ipcMain.on('liandi-config-theme', (event, theme) => {
-    nativeTheme.themeSource = theme;
+    nativeTheme.themeSource = theme
   })
-}
-
-const startKernel = () => {
-  kernelPath = path.join(appDir, kernelName)
-  if (isDevEnv) {
-    kernelPath = path.join('..', 'kernel', kernelName)
-  }
-  spawn(kernelPath)
 }
 
 app.whenReady().then(() => {
   createWindow()
-  startKernel()
+
+  let kernelName = 'kernel.exe'
+  if (process.platform === 'darwin') {
+    kernelName = 'kernel-darwin'
+  } else if (process.platform === 'linux') {
+    kernelName = 'kernel-linux'
+  }
+  let kernelPath = path.join(appDir, kernelName)
+  if (isDevEnv) {
+    kernelPath = path.join('..', 'kernel', kernelName)
+  }
+  spawn(kernelPath)
 })
 
 app.on('window-all-closed', () => {
@@ -159,11 +149,11 @@ app.on('will-quit', () => {
 })
 
 // 在编辑器内打开链接的处理
-app.on('web-contents-created', (webContentsCreatedEvent, contents) => {
-  if (contents.getType() === 'webview') {
-    contents.on('new-window', (newWindowEvent, url) => {
-      newWindowEvent.preventDefault()
-      shell.openExternal(url)
-    })
-  }
-})
+// app.on('web-contents-created', (webContentsCreatedEvent, contents) => {
+//   if (contents.getType() === 'webview') {
+//     contents.on('new-window', (newWindowEvent, url) => {
+//       newWindowEvent.preventDefault()
+//       shell.openExternal(url)
+//     })
+//   }
+// })

@@ -1,0 +1,15 @@
+.editor {
+  &__input {
+    font-size: 18px;
+    border: 0;
+    padding: 0 20px;
+    background-color: var(--background-color);
+    color: var(--textarea-text-color);
+  }
+
+  &__vditor {
+    border-width: 0;
+    border-top-width: 1px;
+    border-radius: 0;
+  }
+}

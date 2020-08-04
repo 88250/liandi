@@ -21,10 +21,8 @@ export const theme = {
         ipcRenderer.send(Constants.LIANDI_CONFIG_THEME, themeName);
         if (themeName === 'dark') {
             document.body.classList.add('theme--dark');
-            liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, liandi);
         } else {
             document.body.classList.remove('theme--dark');
-            liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, liandi);
         }
     }
 };

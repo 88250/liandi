@@ -71,7 +71,7 @@ export class WebSocketUtil {
                     lauguage.onSetlang();
                     break;
                 case 'setmd':
-                    markdown.onSetmd(liandi, response.data);
+                    markdown.onSetMD(liandi, response.data);
                     break;
                 case 'settheme':
                     theme.onSetTheme(liandi, response.data);
@@ -142,11 +142,10 @@ export class WebSocketUtil {
                     liandi.files.onLs(liandi, response.data);
                     break;
                 case 'get':
-                    liandi.editors.focus();
-                    liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, liandi, response.data);
+                    liandi.editors.open(liandi, response.data);
                     break;
                 case 'searchget':
-                    liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, liandi, response.data);
+                    liandi.editors.open(liandi, response.data);
                     liandi.find.open(response.data.key, parseInt(response.data.index, 10));
                     break;
                 case 'dirs':
@@ -163,8 +162,7 @@ export class WebSocketUtil {
                     liandi.files.onRename(liandi, response.data);
                     break;
                 case 'create':
-                    liandi.editors.sendMessage(Constants.LIANDI_EDITOR_OPEN, liandi,
-                        {content: '', name: response.data.name});
+                    liandi.editors.open(liandi, {content: '', name: response.data.name});
                 case 'remove':
                 case 'mkdir':
                     window.liandi.liandi.ws.send('ls', {

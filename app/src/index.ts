@@ -29,7 +29,7 @@ class App {
         this.liandi.ws = new WebSocketUtil(this.liandi, () => {
             this.liandi.navigation = new Navigation();
             this.liandi.files = new Files();
-            this.liandi.editors = new Editors(this.liandi);
+            this.liandi.editors = new Editors();
             this.liandi.menus = new Menus(this.liandi);
             this.liandi.find = new Find();
 
@@ -40,7 +40,7 @@ class App {
 
             this.onIpc();
             this.initWindow();
-            this.initWebview();
+            // this.initWebview();
         });
     }
 
@@ -59,12 +59,6 @@ class App {
         // 监听 webview 发送过来的事件
         editorWebview.addEventListener('ipc-message', (event) => {
             switch (event.channel) {
-                case Constants.LIANDI_EDITOR_FULLSCREEN:
-                    editorWebview.classList.add('editors__webview--fullscreen');
-                    break;
-                case Constants.LIANDI_EDITOR_RESTORE:
-                    editorWebview.classList.remove('editors__webview--fullscreen');
-                    break;
                 case Constants.LIANDI_WEBSOCKET_PUT:
                     this.liandi.editors.save(this.liandi);
                     break;
@@ -99,7 +93,7 @@ class App {
 
         // window action
         if (process.platform === 'darwin') {
-            document.querySelector('.editors__drag').addEventListener('dblclick', () => {
+            document.querySelector('.drag').addEventListener('dblclick', () => {
                 if (currentWindow.isMaximized()) {
                     currentWindow.setSize(1024, 768);
                 } else {
