@@ -286,8 +286,7 @@ func (dir *Dir) Index() {
 	for _, file := range files {
 		p := file.(*gowebdav.File).Path()
 		if content, err := dir.Get(p); nil == err {
-			doc := newDoc(dir.URL, p, content)
-			docs = append(docs, doc)
+			dir.IndexDoc(dir.URL, p, content)
 
 			astJSONStr, err := ReadASTJSON(dir.URL, p)
 			if nil != err {

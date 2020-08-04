@@ -147,8 +147,7 @@ func Put(url, path string, content []byte) error {
 		return err
 	}
 
-	doc := newDoc(url, path, contentStr)
-	dir.IndexDoc(doc)
+	dir.IndexDoc(url, path, contentStr)
 
 	tree, err := Lute.VditorIRBlockDOM2Tree(contentStr)
 	if nil != err {
@@ -219,8 +218,8 @@ func Rename(url, oldPath, newPath string) error {
 		return err
 	}
 
-	dir.RemoveIndexDoc(url, oldPath)
-	dir.RemoveTree(url, oldPath)
+	dir.MoveIndexDoc(url, oldPath, url, newPath)
+	dir.MoveTree(url, oldPath, url, newPath)
 	return nil
 }
 
