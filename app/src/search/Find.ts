@@ -1,7 +1,8 @@
 import {EventEmitter} from 'events';
+import {remote} from 'electron';
 
 export class Find extends EventEmitter {
-    private webContents: Electron.WebviewTag;
+    private webContent: Electron.webContents;
     private inputElement: HTMLInputElement;
     private textElement: HTMLElement;
 
@@ -9,10 +10,9 @@ export class Find extends EventEmitter {
         super();
         this.inputElement = document.querySelector('.find input') as HTMLInputElement;
         this.textElement = document.querySelector('.find__text') as HTMLElement;
-
-        this.webContents = document.querySelector('.editors__webview') as Electron.WebviewTag;
-        this.webContents.addEventListener('found-in-page', (result) => {
-            this.textElement.innerHTML = `${result.result.activeMatchOrdinal}/${result.result.matches}`;
+        this.webContent = remote.getCurrentWindow().webContents
+        this.webContent.on('found-in-page', (event, result) => {
+             this.textElement.innerHTML = `${result.activeMatchOrdinal}/${result.matches}`;
         });
 
         this.inputElement.addEventListener('keydown', (event: KeyboardEvent) => {
@@ -56,19 +56,19 @@ export class Find extends EventEmitter {
     }
 
     private closeEvent() {
-        this.webContents.stopFindInPage('keepSelection');
+        this.webContent.stopFindInPage('keepSelection');
         (document.querySelector('.find') as HTMLElement).style.display = 'none';
-        (document.querySelector('.editors__drag') as HTMLElement).style.marginRight = '96px';
+        (document.querySelector('.drag') as HTMLElement).style.marginRight = '96px';
     }
 
     private nextEvent(forward = true, findNext = false) {
         const text = this.inputElement.value;
         if (text.trim() === '') {
-            this.webContents.stopFindInPage('keepSelection');
+            this.webContent.stopFindInPage('keepSelection');
             this.textElement.innerText = '';
             return;
         }
-        this.webContents.findInPage(text, {
+        this.webContent.findInPage(text, {
             forward,
             findNext,
         });
@@ -79,7 +79,7 @@ export class Find extends EventEmitter {
         findElement.style.display = 'flex';
         this.inputElement.value = key;
         this.inputElement.focus();
-        (document.querySelector('.editors__drag') as HTMLElement).style.marginRight = '408px';
+        (document.querySelector('.drag') as HTMLElement).style.marginRight = '408px';
 
         if (typeof index === 'number') {
             for (let i = 0; i <= index; i++) {

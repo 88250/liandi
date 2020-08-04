@@ -70,8 +70,8 @@ export const markdown = {
             });
         });
     },
-    onSetmd: (liandi: ILiandi, md: IMD) => {
+    onSetMD: (liandi: ILiandi, md: IMD) => {
         liandi.config.markdown = md;
-        liandi.editors.sendMessage(Constants.LIANDI_EDITOR_RELOAD, liandi);
+        liandi.editors.reloadEditor(liandi);
     }
 };

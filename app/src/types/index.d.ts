@@ -18,6 +18,14 @@ declare interface IDir {
     user: string;
 }
 
+declare interface IEditor {
+    inputElement: HTMLInputElement;
+    editorElement: HTMLElement;
+    saved: boolean;
+    active: boolean;
+    vditor?: any;
+}
+
 declare interface IMD {
     autoSpace: boolean;
     chinesePunct: boolean;
@@ -60,9 +68,10 @@ declare interface ILiandi {
     };
     editors?: {
         focus: () => void;
-        save: (liandi:ILiandi) => void;
-        close: (liandi:ILiandi) => void;
-        sendMessage: (message: string, liandi: ILiandi, editorData?: { content: string, name: string }) => void;
+        save: (liandi: ILiandi) => void;
+        close: (liandi: ILiandi) => void;
+        reloadEditor: (liandi: ILiandi) => void;
+        open: (liandi: ILiandi, editorData?: { content: string, name: string }) => void;
     };
     menus?: {
         itemData: {

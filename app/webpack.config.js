@@ -16,7 +16,6 @@ module.exports = (env, argv) => {
     target: 'electron-renderer',
     entry: {
       'main': './src/index.ts',
-      'editor': './src/editors/webview.ts',
     },
     resolve: {
       extensions: ['.ts', '.scss', '.js', '.css'],

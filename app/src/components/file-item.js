@@ -65,9 +65,9 @@ customElements.define('file-item',
             path,
           })
         } else {
-          document.querySelector('.editors__loading').style.display = "flex"
+          document.querySelector('.loading').style.display = "flex"
           await new Promise(resolve => setTimeout(resolve, 800))
-          document.querySelector('.editors__loading').style.display = "none"
+          document.querySelector('.loading').style.display = "none"
           window.liandi.liandi.editors.save(window.liandi.liandi)
           window.liandi.liandi.ws.send('get', {
             url,

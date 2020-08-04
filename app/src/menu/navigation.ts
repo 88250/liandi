@@ -1,6 +1,5 @@
 import {remote} from 'electron';
 import {i18n} from '../i18n';
-import {Constants} from '../constants';
 import {showInFolder} from './commonMenuItem';
 
 export const initNavigationMenu = (liandi: ILiandi) => {
