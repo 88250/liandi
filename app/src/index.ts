@@ -1,7 +1,6 @@
 import './assets/scss/base.scss';
 import {Navigation} from './navigation';
 import {WebSocketUtil} from './websocket';
-import './components/file-item';
 import './components/tree-list';
 import './components/tab-panel';
 import './icons/index';

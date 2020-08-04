@@ -9,7 +9,7 @@ export class Navigation {
     }
 
     public onRename(liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) {
-        const fileItemElement = this.element.querySelector(`file-item[path="${encodeURIComponent(data.oldPath)}"]`);
+        const fileItemElement = this.element.querySelector(`.file[path="${encodeURIComponent(data.oldPath)}"]`);
         fileItemElement.setAttribute('path', encodeURIComponent(data.newPath));
         fileItemElement.setAttribute('name', encodeURIComponent(data.newName));
 
@@ -25,10 +25,10 @@ export class Navigation {
     onLs(liandi: ILiandi, data: { files: IFile[], url: string, path: string }) {
         if (data.files.length > 0) {
             const arrowElement = this.element.querySelector(`tree-list[url="${data.url}"]`).shadowRoot
-                .querySelector(`.tree-list__arrow[path="${data.path}"]`);
+                .querySelector(`.item__arrow[path="${data.path}"]`);
             arrowElement.setAttribute('has-file', 'true');
             arrowElement.setAttribute('files', JSON.stringify(data.files));
-            arrowElement.innerHTML = '<path d="M9.875 0l16 16-16 16-3.75-3.75 12.25-12.25-12.25-12.25z"></path>';
+            arrowElement.innerHTML = '<path d="M6.125 28.25l12.25-12.25-12.25-12.25 3.75-3.75 16 16-16 16z"></path>';
         }
     }
 
