@@ -52,13 +52,6 @@ func genDocId(url, path string) string {
 	return url + path
 }
 
-func newTree(url, path, content string) (ret *parse.Tree) {
-	ret = parse.Parse("", util.StrToBytes(content), Lute.Options)
-	ret.Dir = url
-	ret.Path = path
-	return
-}
-
 func (dir *Dir) MoveIndexDoc(url, path, newURL, newPath string) {
 	for _, d := range docs {
 		if url == d.URL && path == d.Path {
@@ -106,6 +99,13 @@ func (dir *Dir) IndexDoc(url, path, content string) {
 		}
 	}
 	docs = append(docs, doc)
+}
+
+func (dir *Dir) ParseIndexTree(url, path, markdown string) {
+	tree := parse.Parse("", util.StrToBytes(markdown), Lute.Options)
+	tree.Dir = url
+	tree.Path = path
+	dir.IndexTree(tree)
 }
 
 func (dir *Dir) IndexTree(tree *parse.Tree) {

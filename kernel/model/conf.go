@@ -23,7 +23,6 @@ import (
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
 	"github.com/88250/lute"
-	"github.com/88250/lute/parse"
 )
 
 // Mode 标识了运行模式，默认开发环境。
@@ -285,23 +284,22 @@ func (dir *Dir) Index() {
 	files := dir.Files("/")
 	for _, file := range files {
 		p := file.(*gowebdav.File).Path()
-		if content, err := dir.Get(p); nil == err {
-			dir.IndexDoc(dir.URL, p, content)
+		if markdown, err := dir.Get(p); nil == err {
+			dir.IndexDoc(dir.URL, p, markdown)
 
 			astJSONStr, err := ReadASTJSON(dir.URL, p)
 			if nil != err {
 				Logger.Fatalf("读取元数据失败：%s", err)
 			}
-			var tree *parse.Tree
 			if "" != astJSONStr {
-				tree, err = ParseJSON(astJSONStr)
+				tree, err := ParseJSON(astJSONStr)
 				if nil != err {
 					Logger.Fatalf("解析元数据失败：%s", err)
 				}
+				dir.IndexTree(tree)
 			} else {
-				tree = newTree(dir.URL, p, content)
+				dir.ParseIndexTree(dir.URL, p, markdown)
 			}
-			trees = append(trees, tree)
 		}
 	}
 	Logger.Debugf("索引目录 [%s] 完毕", dir.URL)

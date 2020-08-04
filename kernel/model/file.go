@@ -132,24 +132,24 @@ func Get(url, path string) (ret string, err error) {
 	return
 }
 
-func Put(url, path string, content []byte) error {
+func Put(url, path string, dom []byte) error {
 	dir := Conf.dir(url)
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
 
-	contentStr := gulu.Str.FromBytes(content)
+	domStr := gulu.Str.FromBytes(dom)
 
 	// DOM 转 Markdown
-	markdown := Lute.VditorIRBlockDOM2Md(contentStr)
+	markdown := Lute.VditorIRBlockDOM2Md(domStr)
 
 	if err := dir.Put(path, gulu.Str.ToBytes(markdown)); nil != err {
 		return err
 	}
 
-	dir.IndexDoc(url, path, contentStr)
+	dir.IndexDoc(url, path, markdown)
 
-	tree, err := Lute.VditorIRBlockDOM2Tree(contentStr)
+	tree, err := Lute.VditorIRBlockDOM2Tree(domStr)
 	if nil != err {
 		msg := fmt.Sprintf(Conf.lang(12), err)
 		Logger.Errorf(msg)
