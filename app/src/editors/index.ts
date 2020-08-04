@@ -4,7 +4,7 @@ import {Constants} from '../constants';
 import {getPath, urlJoin} from '../util/path';
 import {remote} from 'electron';
 
-const appDir = remote.app.getAppPath().replace(/\/electron$/, '');
+const appDir = remote.app.getAppPath().replace(/\/electron$/, '').replace(/\\electron$/, '');
 
 export class Editors {
     private editors: IEditor[] = [];
