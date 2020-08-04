@@ -11,6 +11,7 @@
 package model
 
 import (
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -29,13 +30,15 @@ type Block struct {
 	URL     string `json:"url"`
 	Path    string `json:"path"`
 	ID      string `json:"id"`
+	Type    string `json:"type"`
 	Content string `json:"content"`
 }
 
-func (dir *Dir) MoveTree(url, path, newPath string) {
+func (dir *Dir) MoveTree(url, p, newPath string) {
 	for _, tree := range trees {
-		if tree.URL == url && tree.Path == path {
+		if tree.URL == url && tree.Path == p {
 			tree.Path = newPath
+			tree.Name = filepath.Base(p)
 			break
 		}
 	}
@@ -50,11 +53,11 @@ func (dir *Dir) RemoveTree(url, path string) {
 	}
 }
 
-func (dir *Dir) ParseIndexTree(url, path, markdown string) {
+func (dir *Dir) ParseIndexTree(url, p, markdown string) {
 	tree := parse.Parse("", util.StrToBytes(markdown), Lute.Options)
 	tree.URL = url
-	tree.Path = path
-
+	tree.Path = p
+	tree.Name = filepath.Base(p)
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		if !entering {
 			return ast.WalkContinue
@@ -95,17 +98,43 @@ func SearchBlock(keyword string) (ret []*Block) {
 				return ast.WalkContinue
 			}
 
-			if ast.NodeHeading != n.Type && ast.NodeParagraph != n.Type {
+			if ast.NodeDocument == n.Type {
+				block := &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Type: n.Type.String(), Content: tree.Name}
+				ret = append(ret, block)
 				return ast.WalkContinue
+			}
+
+			if ast.NodeDocument != n.Parent.Type {
+				return ast.WalkContinue
+			}
+
+			if isSearchBlockSkipNode(n) {
+				return ast.WalkStop
 			}
 
 			text := n.Text()
 			if strings.Contains(text, keyword) {
-				block := &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Content: text}
+				//block := &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Content: text}
+				block := &Block{ID: n.ID, Type: n.Type.String(), Content: text}
 				ret = append(ret, block)
 			}
-			return ast.WalkSkipChildren
+
+			if 64 <= len(ret) { // TODO: 这里需要按树分组优化
+				return ast.WalkStop
+			}
+
+			if ast.NodeList == n.Type {
+				return ast.WalkSkipChildren
+			}
+			return ast.WalkContinue
 		})
 	}
 	return
+}
+
+func isSearchBlockSkipNode(node *ast.Node) bool {
+	return ast.NodeText == node.Type || ast.NodeThematicBreak == node.Type ||
+		ast.NodeHTMLBlock == node.Type || ast.NodeInlineHTML == node.Type || ast.NodeCodeBlock == node.Type ||
+		ast.NodeCodeSpan == node.Type || ast.NodeHardBreak == node.Type || ast.NodeSoftBreak == node.Type ||
+		ast.NodeHTMLEntity == node.Type
 }

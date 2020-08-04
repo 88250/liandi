@@ -11,7 +11,7 @@
 package cmd
 
 import (
-	"path"
+	"path/filepath"
 
 	"github.com/88250/liandi/kernel/model"
 )
@@ -31,7 +31,7 @@ func (cmd *get) Exec() {
 		ret.Msg = err.Error()
 	} else {
 		ret.Data = map[string]interface{}{
-			"name":    path.Base(p),
+			"name":    filepath.Base(p),
 			"content": content,
 			"url":     url,
 			"path":    p,

@@ -13,6 +13,7 @@ package model
 import (
 	"encoding/json"
 	"path"
+	"path/filepath"
 	"strconv"
 
 	"github.com/88250/lute/ast"
@@ -153,7 +154,7 @@ func RemoveASTJSON(url, p string) error {
 }
 
 func path2jsonName(p string) string {
-	name := path.Base(p) + ".json"
-	p = path.Dir(p)
+	name := filepath.Base(p) + ".json"
+	p = filepath.Dir(p)
 	return path.Join(p, name)
 }
