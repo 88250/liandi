@@ -10,33 +10,20 @@
 
 package cmd
 
-import (
-	"github.com/88250/liandi/kernel/model"
-)
+import "github.com/88250/liandi/kernel/model"
 
-type lsd struct {
+type searchblock struct {
 	*BaseCmd
 }
 
-func (cmd *lsd) Exec() {
+func (cmd *searchblock) Exec() {
 	ret := model.NewCmdResult(cmd.Name(), cmd.id)
-	url := cmd.param["url"].(string)
-	url = model.NormalizeURL(url)
-	path := cmd.param["path"].(string)
-	files, err := model.Lsd(url, path)
-	if nil != err {
-		ret.Code = -1
-		ret.Msg = err.Error()
-	} else {
-		ret.Data = map[string]interface{}{
-			"url":   url,
-			"path":  path,
-			"files": files,
-		}
-	}
+	keyword := cmd.param["k"].(string)
+	result := model.SearchBlock(keyword)
+	ret.Data = result
 	model.Push(ret.Bytes())
 }
 
-func (cmd *lsd) Name() string {
-	return "lsd"
+func (cmd *searchblock) Name() string {
+	return "searchblock"
 }

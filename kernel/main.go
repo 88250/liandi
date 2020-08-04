@@ -33,7 +33,7 @@ func init() {
 	model.InitLog()
 	model.InitConf()
 	model.InitMount()
-	model.InitSearch()
+	model.InitIndex()
 
 	go ParentExited()
 	model.CheckUpdatePeriodically()

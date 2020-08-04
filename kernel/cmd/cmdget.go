@@ -29,7 +29,6 @@ func (cmd *get) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		return
 	} else {
 		ret.Data = map[string]interface{}{
 			"name":    path.Base(p),

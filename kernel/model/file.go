@@ -155,7 +155,7 @@ func Put(url, path string, dom []byte) error {
 		Logger.Errorf(msg)
 		return errors.New(msg)
 	}
-	tree.Dir = url
+	tree.URL = url
 	tree.Path = path
 	dir.IndexTree(tree)
 

@@ -296,6 +296,8 @@ func (dir *Dir) Index() {
 				if nil != err {
 					Logger.Fatalf("解析元数据失败：%s", err)
 				}
+				tree.URL = dir.URL
+				tree.Path = p
 				dir.IndexTree(tree)
 			} else {
 				dir.ParseIndexTree(dir.URL, p, markdown)
