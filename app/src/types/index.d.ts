@@ -10,6 +10,13 @@ declare interface IFile {
     isdir: boolean;
 }
 
+declare interface IBlock {
+    url: string
+    path: string
+    id: string
+    content: string
+}
+
 declare interface IDir {
     auth: string;
     password: string;
