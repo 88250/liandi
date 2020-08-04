@@ -52,6 +52,8 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) (ret
 		ret = &create{baseCmd}
 	case "search":
 		ret = &search{baseCmd}
+	case "searchblock":
+		ret = &searchblock{baseCmd}
 	case "rename":
 		ret = &rename{baseCmd}
 	case "mkdir":
