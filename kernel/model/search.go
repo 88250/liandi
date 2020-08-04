@@ -52,10 +52,9 @@ func genDocId(url, path string) string {
 	return url + path
 }
 
-func (dir *Dir) MoveIndexDoc(url, path, newURL, newPath string) {
+func (dir *Dir) MoveIndexDoc(url, path, newPath string) {
 	for _, d := range docs {
 		if url == d.URL && path == d.Path {
-			d.URL = newURL
 			d.Path = newPath
 			break
 		}
@@ -71,10 +70,9 @@ func (dir *Dir) RemoveIndexDoc(url, path string) {
 	}
 }
 
-func (dir *Dir) MoveTree(url, path, newURL, newPath string) {
+func (dir *Dir) MoveTree(url, path, newPath string) {
 	for _, tree := range trees {
 		if tree.Dir == url && tree.Path == path {
-			tree.Dir = newURL
 			tree.Path = newPath
 			break
 		}

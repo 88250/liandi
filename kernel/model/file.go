@@ -159,7 +159,7 @@ func Put(url, path string, dom []byte) error {
 	tree.Path = path
 	dir.IndexTree(tree)
 
-	if err := writeASTJSON(tree); nil != err {
+	if err := WriteASTJSON(tree); nil != err {
 		return err
 	}
 	return nil
@@ -218,9 +218,9 @@ func Rename(url, oldPath, newPath string) error {
 		return err
 	}
 
-	dir.MoveIndexDoc(url, oldPath, url, newPath)
-	dir.MoveTree(url, oldPath, url, newPath)
-	return nil
+	dir.MoveIndexDoc(url, oldPath, newPath)
+	dir.MoveTree(url, oldPath, newPath)
+	return MoveASTJSON(url, oldPath, newPath)
 }
 
 func Mkdir(url, path string) error {
@@ -238,5 +238,10 @@ func Remove(url, path string) error {
 	}
 	dir.RemoveIndexDoc(url, path)
 	dir.RemoveTree(url, path)
-	return dir.Remove(path)
+	err := dir.Remove(path)
+	if nil != err {
+		return err
+	}
+
+	return RemoveASTJSON(url, path)
 }

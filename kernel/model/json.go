@@ -92,14 +92,12 @@ func RenderJSON(markdown string) (retJSON string) {
 	return
 }
 
-func writeASTJSON(tree *parse.Tree) error {
+func WriteASTJSON(tree *parse.Tree) error {
 	renderer := NewJSONRenderer(tree)
 	output := renderer.Render()
 
 	dir := Conf.dir(tree.Dir)
-	name := path.Base(tree.Path) + ".json"
-	p := path.Dir(tree.Path)
-	p = path.Join(p, name)
+	p := path2jsonName(tree.Path)
 	if err := dir.Put(p, output); nil != err {
 		return err
 	}
@@ -108,9 +106,7 @@ func writeASTJSON(tree *parse.Tree) error {
 
 func ReadASTJSON(url, p string) (jsonStr string, err error) {
 	dir := Conf.dir(url)
-	name := path.Base(p) + ".json"
-	p = path.Dir(p)
-	p = path.Join(p, name)
+	p = path2jsonName(p)
 	exist, err := dir.Exist(p)
 	if nil != err {
 		return
@@ -120,4 +116,44 @@ func ReadASTJSON(url, p string) (jsonStr string, err error) {
 	}
 	jsonStr, err = dir.Get(p)
 	return
+}
+
+func MoveASTJSON(url, p, newPath string) error {
+	dir := Conf.dir(url)
+	p = path2jsonName(p)
+	exist, err := dir.Exist(p)
+	if nil != err {
+		return err
+	}
+	if !exist {
+		return nil
+	}
+	newPath = path2jsonName(newPath)
+	exist, err = dir.Exist(newPath)
+	if nil != err {
+		return err
+	}
+	if exist {
+		return nil
+	}
+	return dir.Rename(p, newPath)
+}
+
+func RemoveASTJSON(url, p string) error {
+	dir := Conf.dir(url)
+	p = path2jsonName(p)
+	exist, err := dir.Exist(p)
+	if nil != err {
+		return err
+	}
+	if !exist {
+		return nil
+	}
+	return dir.Remove(p)
+}
+
+func path2jsonName(p string) string {
+	name := path.Base(p) + ".json"
+	p = path.Dir(p)
+	return path.Join(p, name)
 }
