@@ -84,7 +84,7 @@ func Upload(c *gin.Context) {
 			writePath = joinUrlPath(p, fname)
 		}
 
-		if err := Put(u, writePath, data); nil != err {
+		if err := PutBlob(u, writePath, data); nil != err {
 			errFiles = append(errFiles, fname)
 			ret.Msg = err.Error()
 			break
@@ -186,7 +186,7 @@ func UploadFetch(c *gin.Context) {
 		writePath = joinUrlPath(p, fname)
 	}
 
-	if err := Put(u, writePath, data); nil != err {
+	if err := PutBlob(u, writePath, data); nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
 		return

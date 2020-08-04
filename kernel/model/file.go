@@ -165,6 +165,16 @@ func Put(url, path string, content []byte) error {
 	return nil
 }
 
+func PutBlob(url, path string, data []byte) (err error) {
+	dir := Conf.dir(url)
+	if nil == dir {
+		return errors.New(Conf.lang(0))
+	}
+
+	err = dir.Put(path, data)
+	return
+}
+
 func Create(url, path string) error {
 	exist, err := Exist(url, path)
 	if nil != err {
