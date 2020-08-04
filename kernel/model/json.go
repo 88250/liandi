@@ -106,7 +106,7 @@ func writeASTJSON(tree *parse.Tree) error {
 	return nil
 }
 
-func astJSON(url, p string) (jsonStr string, err error) {
+func ReadASTJSON(url, p string) (jsonStr string, err error) {
 	dir := Conf.dir(url)
 	name := path.Base(p) + ".json"
 	p = path.Dir(p)

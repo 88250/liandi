@@ -289,7 +289,7 @@ func (dir *Dir) Index() {
 			doc := newDoc(dir.URL, p, content)
 			docs = append(docs, doc)
 
-			astJSONStr, err := astJSON(dir.URL, p)
+			astJSONStr, err := ReadASTJSON(dir.URL, p)
 			if nil != err {
 				Logger.Fatalf("读取元数据失败：%s", err)
 			}
@@ -369,6 +369,8 @@ var zhCN = map[int]string{
 	9:  "新版本可用 %s",
 	10: "已是最新版",
 	11: "拉取远程图片失败：%s",
+	12: "解析失败：%s",
+	13: "查询文件失败",
 }
 
 var enUS = map[int]string{
@@ -384,6 +386,8 @@ var enUS = map[int]string{
 	9:  "New version is available %s",
 	10: "Is the latest version",
 	11: "Fetch remote image failed: %s",
+	12: "Parse failed: %s",
+	13: "Query file failed",
 }
 
 var langs = map[string]map[int]string{

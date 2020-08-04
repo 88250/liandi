@@ -101,6 +101,15 @@ func (dir *Dir) IndexTree(tree *parse.Tree) {
 	trees = append(trees, tree)
 }
 
+func (dir *Dir) queryTree(url, path string) *parse.Tree {
+	for _, t := range trees {
+		if url == t.Dir && path == t.Path {
+			return t
+		}
+	}
+	return nil
+}
+
 func Search(keyword string) (ret []*Snippet) {
 	ret = []*Snippet{}
 	for _, doc := range docs {

@@ -12,6 +12,7 @@ package model
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
@@ -121,7 +122,13 @@ func Get(url, path string) (ret string, err error) {
 	if nil == dir {
 		return "", errors.New(Conf.lang(0))
 	}
-	ret, err = dir.Get(path)
+
+	tree := dir.queryTree(url, path)
+	if nil == tree {
+		return "", errors.New(Conf.lang(13))
+	}
+
+	ret = Lute.Tree2VditorIRBlockDOM(tree)
 	return
 }
 
@@ -130,15 +137,26 @@ func Put(url, path string, content []byte) error {
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
-	if err := dir.Put(path, content); nil != err {
+
+	contentStr := gulu.Str.FromBytes(content)
+
+	// DOM 转 Markdown
+	markdown := Lute.VditorIRBlockDOM2Md(contentStr)
+
+	if err := dir.Put(path, gulu.Str.ToBytes(markdown)); nil != err {
 		return err
 	}
 
-	contentStr := gulu.Str.FromBytes(content)
 	doc := newDoc(url, path, contentStr)
 	dir.IndexDoc(doc)
 
-	tree := newTree(url, path, contentStr)
+	tree, err := Lute.VditorIRBlockDOM2Tree(contentStr)
+	if nil != err {
+		msg := fmt.Sprintf(Conf.lang(12), err)
+		Logger.Errorf(msg)
+		return errors.New(msg)
+	}
+
 	dir.IndexTree(tree)
 
 	if err := writeASTJSON(tree); nil != err {
