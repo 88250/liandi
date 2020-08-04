@@ -36,6 +36,9 @@ export class Editors {
                     {
                         key: '((',
                         hint: (key) => {
+                            liandi.ws.send('searchblock', {
+                                k: key,
+                            })
                             console.log(key);
                             if ('vditor'.indexOf(key.toLocaleLowerCase()) > -1) {
                                 return [
@@ -209,5 +212,9 @@ export class Editors {
             this.newEditor(liandi, editorData.content);
         }
         this.currentEditor.inputElement.value = editorData.name.replace('.md', '');
+    }
+
+    showSearchBlock(liandi: ILiandi, data: any) {
+        this.currentEditor.vditor.vditor.hint.genHTML(data, 1, this.currentEditor.vditor.vditor)
     }
 }

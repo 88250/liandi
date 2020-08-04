@@ -1,4 +1,123 @@
-document.body.insertAdjacentHTML('afterbegin', `
+<html>
+<head>
+    <style>
+        .fn__clear > div {
+            float: left;
+            width: 150px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        svg {
+            display: block;
+            height: 20px;
+            width: 20px;
+            margin: 0 auto;
+        }
+
+        .fn__clear:before, .fn__clear:after {
+            display: table;
+            content: "";
+        }
+
+        .fn__clear:after {
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+<h2>liandi</h2>
+<div class="fn__clear">
+    <div>
+        <svg>
+            <use xlink:href="#iconClose"></use>
+        </svg>
+        iconClose
+    </div>
+    <div>
+        <svg>
+            <use xlink:href="#iconRestore"></use>
+        </svg>
+        iconRestore
+    </div>
+    <div>
+        <svg>
+            <use xlink:href="#iconMax"></use>
+        </svg>
+        iconMax
+    </div>
+    <div>
+        <svg>
+            <use xlink:href="#iconMin"></use>
+        </svg>
+        iconMin
+    </div>
+    <div>
+        <svg>
+            <use xlink:href="#iconUp"></use>
+        </svg>
+        iconUp
+    </div>
+    <div>
+        <svg>
+            <use xlink:href="#iconKeyboard"></use>
+        </svg>
+        iconKeyboard
+    </div>
+    <div>
+        <svg>
+            <use xlink:href="#iconSettings"></use>
+        </svg>
+        iconSettings
+    </div>
+    <div>
+        <svg>
+            <use xlink:href="#iconLink"></use>
+        </svg>
+        iconLink
+    </div>
+    <div>
+        <svg>
+            <use xlink:href="#iconDown"></use>
+        </svg>
+        iconDown
+    </div>
+    <div>
+        <svg>
+            <use xlink:href="#iconFolder"></use>
+        </svg>
+        iconFolder
+    </div>
+</div>
+<h2>components</h2>
+<div class="fn__clear">
+    <div>
+        <svg>
+            <use xlink:href="#iconFolder"></use>
+        </svg>
+        iconFolder
+    </div>
+    <div>
+        <svg>
+            <use xlink:href="#iconRight"></use>
+        </svg>
+        iconRight
+    </div>
+    <div>
+        <svg>
+            <use xlink:href="#iconMD"></use>
+        </svg>
+        iconMD
+    </div>
+    <div>
+        <svg>
+            <use xlink:href="#iconCloud"></use>
+        </svg>
+        iconCloud
+    </div>
+</div>
+<script>
+  document.body.insertAdjacentHTML('afterbegin', `
 <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg"><defs>
   <symbol id="iconClose" viewBox="0 0 32 32">
     <path d="M32 3.221l-12.779 12.779 12.779 12.779-3.221 3.221-12.779-12.779-12.779 12.779-3.221-3.221 12.779-12.779-12.779-12.779 3.221-3.221 12.779 12.779 12.779-12.779z"></path>
@@ -28,7 +147,25 @@ document.body.insertAdjacentHTML('afterbegin', `
   <symbol id="iconLink" viewBox="0 0 32 32">
     <path d="M32 11.977l-4.585-4.585-10.573 10.573h-16.842v-3.93h15.158l9.45-9.45-4.585-4.585h11.977v11.977zM32 20.023v11.977h-11.977l4.585-4.585-5.801-5.801 2.807-2.807 5.801 5.801z"></path>
   </symbol>
+
+
+
+
+
+
+  <symbol id="iconMD" viewBox="0 0 32 32">
+    <path d="M29.693 25.847h-27.386c-1.274 0-2.307-1.033-2.307-2.307v0-15.081c0-1.274 1.033-2.307 2.307-2.307h27.386c1.274 0 2.307 1.033 2.307 2.307v15.079c0 0.001 0 0.002 0 0.003 0 1.274-1.033 2.307-2.307 2.307 0 0 0 0 0 0v0zM7.691 21.231v-6l3.078 3.847 3.076-3.847v6.001h3.078v-10.461h-3.078l-3.076 3.847-3.078-3.847h-3.078v10.464zM28.309 16h-3.078v-5.231h-3.076v5.231h-3.078l4.615 5.386z"></path>
+  </symbol>
   <symbol id="iconFolder" viewBox="0 0 32 32">
     <path d="M12.77 3.155l3.23 3.23h12.845q1.277 0 2.216 0.977t0.939 2.254v16q0 1.277-0.939 2.254t-2.216 0.977h-25.69q-1.277 0-2.216-0.977t-0.939-2.254v-19.23q0-1.277 0.939-2.254t2.216-0.977h9.615z"></path>
   </symbol>
-</defs></svg>`);
+  <symbol id="iconCloud" viewBox="0 0 32 32">
+    <path d="M25.813 13.375q2.563 0.188 4.375 2.094t1.813 4.531q0 2.75-1.969 4.719t-4.719 1.969h-17.313q-3.313 0-5.656-2.344t-2.344-5.656q0-2.938 2.094-5.281t5.031-2.656q1.313-2.438 3.688-3.938t5.188-1.5q3.625 0 6.375 2.281t3.438 5.781z"></path>
+  </symbol>
+  <symbol id="iconRight" viewBox="0 0 32 32">
+    <path d="M6.125 28.25l12.25-12.25-12.25-12.25 3.75-3.75 16 16-16 16z"></path>
+  </symbol>
+</defs></svg>`)
+</script>
+</body>
+</html>

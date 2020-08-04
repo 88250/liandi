@@ -64,6 +64,9 @@ export class WebSocketUtil {
                 case 'search':
                     onSearch(liandi, response.data);
                     break;
+                case 'searchblock':
+                    liandi.editors.showSearchBlock(liandi, response.data);
+                    break;
                 case 'setimage':
                     image.onSetimage(liandi, response.data);
                     break;

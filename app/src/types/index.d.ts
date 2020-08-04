@@ -67,6 +67,7 @@ declare interface ILiandi {
         close: (liandi: ILiandi) => void;
         reloadEditor: (liandi: ILiandi) => void;
         open: (liandi: ILiandi, editorData?: { content: string, name: string }) => void;
+        showSearchBlock: (liandi: ILiandi, editorData?: { content: string, name: string }) => void;
     };
     menus?: {
         itemData: {
