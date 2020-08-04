@@ -15,9 +15,9 @@ customElements.define('file-item',
         pathHTML = '<path d="M32 11.692v13.538c0 2.365-1.942 4.308-4.308 4.308h-23.385c-2.365 0-4.308-1.942-4.308-4.308v-18.462c0-2.365 1.942-4.308 4.308-4.308h6.154c2.365 0 4.308 1.942 4.308 4.308v0.615h12.923c2.365 0 4.308 1.942 4.308 4.308z"></path>'
       }
       const divElement = document.createElement('div')
-      divElement.className = 'list__item file-item'
+      divElement.className = 'fn__flex'
       if (this.getAttribute('current') === 'true') {
-        divElement.classList.add('list__item--current')
+        divElement.classList.add('item--current')
       }
       divElement.innerHTML = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${pathHTML}</svg>
 <span>${decodeURIComponent(this.getAttribute('name')).
@@ -26,7 +26,7 @@ customElements.define('file-item',
 
       const that = this
       divElement.addEventListener('click', async function () {
-        if (this.classList.contains('list__item--current')) {
+        if (this.classList.contains('item--current')) {
           return
         }
 
@@ -37,11 +37,11 @@ customElements.define('file-item',
           forEach((item) => {
             item.shadowRoot.querySelector('.list__item').
               classList.
-              remove('list__item--current')
+              remove('item--current')
             item.setAttribute('current', 'false')
           })
 
-        this.classList.add('list__item--current')
+        this.classList.add('item--current')
         that.setAttribute('current', 'true')
 
         if (path.endsWith('/')) {
@@ -49,14 +49,14 @@ customElements.define('file-item',
           const treeListElement = window.liandi.liandi.navigation.element.querySelector(
             `tree-list[url="${window.liandi.liandi.current.dir.url}"]`).shadowRoot
           const treeCurrentElement = treeListElement.querySelector(
-            '.list__item--current')
+            '.item--current')
           if (treeCurrentElement) {
-            treeCurrentElement.classList.remove('list__item--current')
+            treeCurrentElement.classList.remove('item--current')
           }
           const treePathElement = treeListElement.querySelector(
             `.tree-list__folder[path="${path}"]`)
           if (treePathElement) {
-            treePathElement.parentElement.classList.add('list__item--current')
+            treePathElement.parentElement.classList.add('item--current')
           }
 
           window.liandi.liandi.editors.close(window.liandi.liandi)
