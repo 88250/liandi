@@ -10,8 +10,6 @@ export const initNavigationMenu = (liandi: ILiandi) => {
         click: () => {
             const itemData = liandi.menus.itemData;
             if (itemData.target.shadowRoot.querySelector('.list__item').classList.contains('list__item--current')) {
-                liandi.files.listElement.innerHTML = '';
-                liandi.files.element.firstElementChild.innerHTML = '';
                 liandi.editors.close(liandi);
                 liandi.current = {
                     path: '',

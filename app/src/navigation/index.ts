@@ -1,3 +1,6 @@
+import {i18n} from '../i18n';
+import {removeLastPath} from '../util/path';
+
 export class Navigation {
     public element: HTMLElement;
 
@@ -5,7 +8,21 @@ export class Navigation {
         this.element = document.getElementById('navigation');
     }
 
-    public onLsd(liandi: ILiandi, data: { files: IFile[], url: string, path: string }) {
+    public onRename(liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) {
+        const fileItemElement = this.element.querySelector(`file-item[path="${encodeURIComponent(data.oldPath)}"]`);
+        fileItemElement.setAttribute('path', encodeURIComponent(data.newPath));
+        fileItemElement.setAttribute('name', encodeURIComponent(data.newName));
+
+        if (fileItemElement.getAttribute('current') === 'true') {
+            liandi.current.path = data.newPath;
+
+            if (!data.newPath.endsWith('/')) {
+                (document.querySelector('.editors__input') as HTMLInputElement).value = data.newName.replace('.md', '');
+            }
+        }
+    }
+
+    onLs(liandi: ILiandi, data: { files: IFile[], url: string, path: string }) {
         if (data.files.length > 0) {
             const arrowElement = this.element.querySelector(`tree-list[url="${data.url}"]`).shadowRoot
                 .querySelector(`.tree-list__arrow[path="${data.path}"]`);

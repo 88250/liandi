@@ -1,5 +1,5 @@
 import {i18n} from '../i18n';
-const packageJSON = require('../../package.json');
+import {VDITOR_VERSION} from '../../vditore/src/ts/constants';
 
 export const about = {
     genHTML: (liandi: ILiandi) => {
@@ -9,7 +9,7 @@ export const about = {
     <strong class="fn__flex-center">${i18n[liandi.config.lang].slogan}</strong>
 </div>
 <div class="about__item">
-    <div>${i18n[liandi.config.lang].currentVer} v${packageJSON.version}</div>
+    <div>${i18n[liandi.config.lang].currentVer} v${VDITOR_VERSION}</div>
     <div class="fn__hr--s"></div>
     <button class="button">${i18n[liandi.config.lang].checkUpdate}</button>
 </div>

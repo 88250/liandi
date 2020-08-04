@@ -33,7 +33,7 @@ customElements.define('file-item',
         const path = decodeURIComponent(that.getAttribute('path'))
         const url = window.liandi.liandi.current.dir.url
 
-        window.liandi.liandi.files.listElement.querySelectorAll('file-item').
+        window.liandi.liandi.navigation.element.querySelectorAll('file-item').
           forEach((item) => {
             item.shadowRoot.querySelector('.list__item').
               classList.

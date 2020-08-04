@@ -6,6 +6,7 @@
   overflow: auto;
   padding-top: $barHeight;
   box-sizing: border-box;
+  background-color: var(--focus-background-color);
 
   &--win32 {
     padding-top: 0;

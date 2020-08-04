@@ -124,9 +124,6 @@ export class WebSocketUtil {
                 case 'put':
                     showMessage(i18n[liandi.config.lang].saveSuccess);
                     break;
-                case 'lsd':
-                    liandi.navigation.onLsd(liandi, response.data);
-                    break;
                 case 'unmount':
                     if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {
                         showMountDialog(liandi);
@@ -139,7 +136,7 @@ export class WebSocketUtil {
                     destroyDialog();
                     break;
                 case 'ls':
-                    liandi.files.onLs(liandi, response.data);
+                    liandi.navigation.onLs(liandi, response.data);
                     break;
                 case 'get':
                     liandi.editors.open(liandi, response.data);
@@ -159,7 +156,7 @@ export class WebSocketUtil {
                     });
                     break;
                 case 'rename':
-                    liandi.files.onRename(liandi, response.data);
+                    liandi.navigation.onRename(liandi, response.data);
                     break;
                 case 'create':
                     liandi.editors.open(liandi, {content: '', name: response.data.name});

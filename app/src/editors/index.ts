@@ -4,7 +4,7 @@ import {Constants} from '../constants';
 import {getPath, urlJoin} from '../util/path';
 import {remote} from 'electron';
 
-const appDir = remote.app.getAppPath().replace(/\/electron$/, "");
+const appDir = remote.app.getAppPath().replace(/\/electron$/, '');
 
 export class Editors {
     private editors: IEditor[] = [];
@@ -139,7 +139,7 @@ export class Editors {
                 editor.vditor.focus();
             },
             input: (textContent: string, textHtml: string) => {
-                editor.saved = false
+                editor.saved = false;
                 // TODO auto save
             }
         });

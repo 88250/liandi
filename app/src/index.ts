@@ -1,6 +1,5 @@
 import './assets/scss/base.scss';
 import {Navigation} from './navigation';
-import {Files} from './files';
 import {WebSocketUtil} from './websocket';
 import './components/file-item';
 import './components/tree-list';
@@ -13,7 +12,6 @@ import {initGlobalKeyPress} from './hotkey';
 import {ipcRenderer, remote, shell} from 'electron';
 import {Find} from './search/Find';
 import {Constants} from './constants';
-import {initSearch} from './search';
 
 class App {
     public liandi: ILiandi;
@@ -28,46 +26,17 @@ class App {
 
         this.liandi.ws = new WebSocketUtil(this.liandi, () => {
             this.liandi.navigation = new Navigation();
-            this.liandi.files = new Files();
             this.liandi.editors = new Editors();
             this.liandi.menus = new Menus(this.liandi);
             this.liandi.find = new Find();
 
             resize('resize');
-            resize('resize2');
+            // resize('resize2');
 
             initGlobalKeyPress(this.liandi);
 
             this.onIpc();
             this.initWindow();
-            // this.initWebview();
-        });
-    }
-
-    private initWebview() {
-        const editorWebview = document.querySelector('.editors__webview') as Electron.WebviewTag;
-        editorWebview.openDevTools();
-
-        // 在编辑器内打开链接的处理
-        editorWebview.addEventListener('will-navigate', e => {
-            e.preventDefault();
-            editorWebview.stop();
-            editorWebview.getWebContents().stop();
-            shell.openExternal(e.url);
-        });
-
-        // 监听 webview 发送过来的事件
-        editorWebview.addEventListener('ipc-message', (event) => {
-            switch (event.channel) {
-                case Constants.LIANDI_WEBSOCKET_PUT:
-                    this.liandi.editors.save(this.liandi);
-                    break;
-                case Constants.LIANDI_SEARCH_OPEN:
-                    initSearch(this.liandi);
-                    break;
-                default:
-                    break;
-            }
         });
     }
 

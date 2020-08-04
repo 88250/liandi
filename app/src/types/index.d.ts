@@ -57,13 +57,8 @@ declare interface ILiandi {
     };
     navigation?: {
         element: HTMLElement
-        onLsd: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
-        onMount: (data: { dir: object }) => void
-    };
-    files?: {
-        listElement: HTMLElement
-        element: HTMLElement
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
+        onMount: (data: { dir: object }) => void
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
     };
     editors?: {

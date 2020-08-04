@@ -2,6 +2,7 @@ import {initGlobalKeyPress} from '../hotkey';
 import { remote, clipboard} from 'electron';
 import {i18n} from '../i18n';
 
+// TODO remove
 export class EditorWebview {
     private isInitMenu: boolean;
     private vditor: any;

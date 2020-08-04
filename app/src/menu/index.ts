@@ -58,7 +58,7 @@ export class Menus {
                     });
 
                     if (!target.shadowRoot.querySelector('.list__item').classList.contains('list__item--current')) {
-                        liandi.files.listElement.querySelectorAll('file-item').forEach(item => {
+                        liandi.navigation.element.querySelectorAll('file-item').forEach(item => {
                             item.shadowRoot.querySelector('.list__item').classList.remove('list__item--focus');
                         });
                         target.shadowRoot.querySelector('.list__item').classList.add('list__item--focus');

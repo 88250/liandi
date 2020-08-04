@@ -10,7 +10,7 @@ export class Find extends EventEmitter {
         super();
         this.inputElement = document.querySelector('.find input') as HTMLInputElement;
         this.textElement = document.querySelector('.find__text') as HTMLElement;
-        this.webContent = remote.getCurrentWindow().webContents
+        this.webContent = remote.getCurrentWindow().webContents;
         this.webContent.on('found-in-page', (event, result) => {
              this.textElement.innerHTML = `${result.activeMatchOrdinal}/${result.matches}`;
         });

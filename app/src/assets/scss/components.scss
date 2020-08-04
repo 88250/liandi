@@ -2,7 +2,6 @@
 @import "mixin";
 @import "reset";
 @import "function";
-@import "list";
 
 .tree-list {
   &__arrow {
@@ -35,6 +34,7 @@
   cursor: pointer;
   padding: 5px 10px;
   user-select: none;
+  white-space: nowrap;
 
   svg {
     float: left;

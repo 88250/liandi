@@ -14,7 +14,7 @@ customElements.define('tree-list',
       }
       const ulElement = document.createElement('ul')
       ulElement.className = 'tree-list'
-      ulElement.innerHTML = `<li class="list__item fn__flex">
+      ulElement.innerHTML = `<li class="fn__flex">
 <svg class="fn__flex-shrink0 tree-list__arrow" path="/" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
 <span class="tree-list__folder fn__ellipsis" path="/">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${pathHTML}</svg>
@@ -22,7 +22,7 @@ customElements.define('tree-list',
 </span>
 </li>`
 
-      window.liandi.liandi.ws.send('lsd', {
+      window.liandi.liandi.ws.send('ls', {
         url: dir.url,
         path: '/',
       }, true)
@@ -43,21 +43,34 @@ customElements.define('tree-list',
         const files = JSON.parse(filesString)
         let fileHTML = ''
         files.forEach((item) => {
-          fileHTML += `<li class="list__item fn__flex${item.path ===
-          window.liandi.liandi.current.path
-            ? ' list__item--current'
-            : ''}" style="padding-left: ${(item.path.split(
-            '/').length - 2) * 13}px">
+          const style = ` style="padding-left: ${(item.path.split('/').length -
+            (item.isdir ? 2 : 1)) * 13}px"`
+          if (item.isdir) {
+            fileHTML += `<li class="fn__flex${item.path ===
+            window.liandi.liandi.current.path
+              ? ' list__item--current'
+              : ''}"${style}>
 <svg class="fn__flex-shrink0 tree-list__arrow" path="${item.path}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
 <span class="tree-list__folder fn__ellipsis" path="${item.path}">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${pathHTML}</svg>
   <span>${item.name}</span>
 </span>
 </li>`
-          window.liandi.liandi.ws.send('lsd', {
-            url: dir.url,
-            path: item.path,
-          }, true)
+            window.liandi.liandi.ws.send('ls', {
+              url: dir.url,
+              path: item.path,
+            }, true)
+          } else {
+            let current = 'false'
+            if (window.liandi.liandi.current.dir && dir.url ===
+              window.liandi.liandi.current.dir.url &&
+              item.path === window.liandi.liandi.current.path) {
+              current = 'true'
+            }
+            fileHTML += `<li${style}><file-item current="${current}" path="${encodeURIComponent(
+              item.path)}" name="${encodeURIComponent(
+              item.name)}"></file-item></li>`
+          }
         })
         target.parentElement.insertAdjacentHTML('afterend',
           `<ul>${fileHTML}</ul>`)
@@ -66,6 +79,7 @@ customElements.define('tree-list',
       let timeoutId
       ulElement.addEventListener('click', (event) => {
         let target = event.target
+        window.liandi.liandi.current.dir = dir;
         if (event.detail === 1) {
           timeoutId = setTimeout(() => {
             while (target && !target.parentElement.isEqualNode(ulElement)) {
@@ -83,17 +97,8 @@ customElements.define('tree-list',
                 })
 
                 target.parentElement.classList.add('list__item--current')
-                window.liandi.liandi.editors.close(window.liandi.liandi)
 
-                window.liandi.liandi.ws.send('ls', {
-                  url: dir.url,
-                  path: target.getAttribute('path'),
-                })
-
-                window.liandi.liandi.current = {
-                  dir,
-                  path: target.getAttribute('path'),
-                }
+                window.liandi.liandi.current.path =  target.getAttribute('path')
                 event.preventDefault()
                 event.stopPropagation()
                 break
@@ -101,6 +106,7 @@ customElements.define('tree-list',
 
               if (target.classList.contains('tree-list__arrow')) {
                 getLeaf(target)
+                window.liandi.liandi.current.path =  target.nextElementSibling.getAttribute('path')
                 event.preventDefault()
                 event.stopPropagation()
                 break
@@ -111,8 +117,9 @@ customElements.define('tree-list',
           }, 300)
         } else if (event.detail === 2) {
           while (target && !target.isEqualNode(ulElement)) {
-            if (target.classList.contains('list__item')) {
+            if (target.classList.contains('fn__flex')) {
               getLeaf(target.querySelector('.tree-list__arrow'))
+              window.liandi.liandi.current.path =  target.lastElementChild.getAttribute('path')
               event.preventDefault()
               event.stopPropagation()
             }
