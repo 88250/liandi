@@ -94,6 +94,7 @@ func (dir *Dir) queryTree(url, path string) *parse.Tree {
 }
 
 func SearchBlock(keyword string) (ret []*Block) {
+	ret = []*Block{}
 	keyword = strings.TrimSpace(keyword)
 	if "" == keyword {
 		return
