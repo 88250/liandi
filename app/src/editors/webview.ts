@@ -10,9 +10,6 @@ export class EditorWebview {
     constructor() {
         this.isInitMenu = false;
         initGlobalKeyPress(this);
-        if (process.platform === 'win32') {
-            document.body.classList.add('body--win32');
-        }
     }
 
     private initMenu(lang: keyof II18n) {

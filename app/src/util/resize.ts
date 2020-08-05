@@ -1,17 +1,23 @@
-export const resize = (id: string) => {
+export const resize = (id: string, next = false) => {
     const resizeElement = document.getElementById(id);
     resizeElement.addEventListener('mousedown', (event: MouseEvent) => {
 
         const documentSelf = document;
-        const previousElement = resizeElement.previousElementSibling as HTMLElement;
+        const sideElement = next ? resizeElement.nextElementSibling : resizeElement.previousElementSibling;
         const x = event.clientX;
-        const width = previousElement.clientWidth;
+        const width = sideElement.clientWidth;
         document.body.style.userSelect = 'none';
 
         documentSelf.ondragstart = () => false;
 
         documentSelf.onmousemove = (moveEvent: MouseEvent) => {
-            previousElement.style.width = (width + (moveEvent.clientX - x)) + 'px';
+            let widthTemp = 0
+            if (next) {
+                widthTemp = (width - (moveEvent.clientX - x));
+            } else {
+                widthTemp = (width + (moveEvent.clientX - x));
+            }
+            (sideElement as HTMLElement).style.width = widthTemp + 'px'
         };
 
         documentSelf.onmouseup = () => {
@@ -21,6 +27,7 @@ export const resize = (id: string) => {
             documentSelf.ondragstart = null;
             documentSelf.onselectstart = null;
             documentSelf.onselect = null;
+            window.dispatchEvent(new CustomEvent("resize"));
         };
     });
 };

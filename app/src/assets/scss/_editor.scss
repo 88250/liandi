@@ -2,15 +2,24 @@
   &__input {
     font-size: 18px;
     border: 0;
-    padding: 0 20px;
-    background-color: var(--background-color);
+    padding: 10px 20px;
+    background-color: var(--panel-background-color);
     color: var(--textarea-text-color);
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 20px;
+
+    &:focus {
+      background-color: var(--textarea-background-color);
+    }
   }
+
   &__empty {
     display: flex;
     height: 100%;
     align-items: center;
     justify-content: center;
+
     .item {
       padding: 10px;
       cursor: pointer;

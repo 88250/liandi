@@ -34,7 +34,7 @@ class App {
             this.liandi.backlinks = new Backlinks();
 
             resize('resize');
-            resize('resize2');
+            resize('resize2', true);
 
             initGlobalKeyPress(this.liandi);
 
@@ -53,6 +53,7 @@ class App {
                 this.liandi.navigation.element.classList.add("fn__none")
                 document.getElementById('resize').classList.add("fn__none")
             }
+            window.dispatchEvent(new CustomEvent("resize"));
         })
         document.getElementById('barBacklinks').addEventListener("click", () => {
             if (this.liandi.backlinks.element.classList.contains("fn__none")) {
@@ -62,6 +63,7 @@ class App {
                 this.liandi.backlinks.element.classList.add("fn__none")
                 document.getElementById('resize2').classList.add("fn__none")
             }
+            window.dispatchEvent(new CustomEvent("resize"));
         })
         document.getElementById("barSettings").addEventListener("click", () => {
             initSearch(this.liandi, "settings")
@@ -110,7 +112,6 @@ class App {
             document.body.classList.add('body--win32');
         }
 
-        document.querySelector('.navigation').classList.add('navigation--win32');
         const maxBtnElement = document.getElementById('maxWindow');
         const restoreBtnElement = document.getElementById('restoreWindow');
         const minBtnElement = document.getElementById('minWindow');

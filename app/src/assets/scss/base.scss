@@ -15,9 +15,8 @@
 .window-controls {
   position: fixed;
   top: 0;
-  right: 0;
+  left: 0;
   height: $barHeight;
-  width: #{32*3}px;
   z-index: 1;
 
   &__item {
