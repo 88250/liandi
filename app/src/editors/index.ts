@@ -13,6 +13,11 @@ export class Editors {
 
     constructor() {
         this.editorsElement = document.getElementById('editors');
+        window.onresize = (event: Event) => {
+            if (this.currentEditor?.vditor) {
+                this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + 'px';
+            }
+        };
     }
 
     private initVditor(liandi: ILiandi, editor: IEditor, html?: string) {
@@ -75,7 +80,6 @@ export class Editors {
                 {
                     name: 'more',
                     toolbar: [
-                        'both',
                         'code-theme',
                         'content-theme',
                         'export',
