@@ -298,6 +298,7 @@ func (dir *Dir) Index() {
 				}
 				tree.URL = dir.URL
 				tree.Path = p
+				tree.Name = filepath.Base(p)
 				dir.IndexTree(tree)
 			} else {
 				dir.ParseIndexTree(dir.URL, p, markdown)

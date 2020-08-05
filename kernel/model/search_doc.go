@@ -11,12 +11,8 @@
 package model
 
 import (
-	"github.com/88250/lute/util"
 	"path/filepath"
 	"strings"
-
-	"github.com/88250/lute/ast"
-	"github.com/88250/lute/parse"
 )
 
 func InitIndex() {
@@ -26,9 +22,6 @@ func InitIndex() {
 }
 
 var (
-	// trees 用于维护所有已挂载的文档抽象语法树。
-	trees []*parse.Tree
-
 	// docs 用于维护所有已挂载的文档。
 	docs []*Doc
 )
@@ -45,13 +38,6 @@ type Snippet struct {
 	Ln      int    `json:"ln"`
 	Col     int    `json:"col"`
 	Index   int    `json:"index"`
-	Content string `json:"content"`
-}
-
-type Block struct {
-	URL     string `json:"url"`
-	Path    string `json:"path"`
-	ID      string `json:"id"`
 	Content string `json:"content"`
 }
 
@@ -73,24 +59,6 @@ func (dir *Dir) RemoveIndexDoc(url, path string) {
 	}
 }
 
-func (dir *Dir) MoveTree(url, path, newPath string) {
-	for _, tree := range trees {
-		if tree.URL == url && tree.Path == path {
-			tree.Path = newPath
-			break
-		}
-	}
-}
-
-func (dir *Dir) RemoveTree(url, path string) {
-	for i, tree := range trees {
-		if tree.URL == url && tree.Path == path {
-			trees = trees[:i+copy(trees[i:], trees[i+1:])]
-			break
-		}
-	}
-}
-
 func (dir *Dir) IndexDoc(url, path, content string) {
 	doc := &Doc{URL: url, Path: path, Content: content}
 	for i, d := range docs {
@@ -100,32 +68,6 @@ func (dir *Dir) IndexDoc(url, path, content string) {
 		}
 	}
 	docs = append(docs, doc)
-}
-
-func (dir *Dir) ParseIndexTree(url, path, markdown string) {
-	tree := parse.Parse("", util.StrToBytes(markdown), Lute.Options)
-	tree.URL = url
-	tree.Path = path
-	dir.IndexTree(tree)
-}
-
-func (dir *Dir) IndexTree(tree *parse.Tree) {
-	for i, t := range trees {
-		if tree.URL == t.URL && tree.Path == t.Path {
-			trees = trees[:i+copy(trees[i:], trees[i+1:])]
-			break
-		}
-	}
-	trees = append(trees, tree)
-}
-
-func (dir *Dir) queryTree(url, path string) *parse.Tree {
-	for _, t := range trees {
-		if url == t.URL && path == t.Path {
-			return t
-		}
-	}
-	return nil
 }
 
 func Search(keyword string) (ret []*Snippet) {
@@ -149,26 +91,4 @@ func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
 		}
 	}
 	return ret
-}
-
-func SearchBlock(keyword string) (ret []*Block) {
-	for _, tree := range trees {
-		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
-			if !entering {
-				return ast.WalkContinue
-			}
-
-			if ast.NodeHeading != n.Type && ast.NodeParagraph != n.Type {
-				return ast.WalkContinue
-			}
-
-			text := n.Text()
-			if strings.Contains(text, keyword) {
-				block := &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Content: text}
-				ret = append(ret, block)
-			}
-			return ast.WalkSkipChildren
-		})
-	}
-	return
 }

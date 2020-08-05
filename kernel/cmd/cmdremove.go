@@ -11,7 +11,7 @@
 package cmd
 
 import (
-	"path"
+	"path/filepath"
 
 	"github.com/88250/liandi/kernel/model"
 )
@@ -31,7 +31,7 @@ func (cmd *remove) Exec() {
 		ret.Msg = err.Error()
 	}
 
-	p = path.Dir(path.Clean(p))
+	p = filepath.Dir(filepath.Clean(p))
 	if "." == p {
 		p = "/"
 	}
