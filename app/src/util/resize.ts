@@ -11,13 +11,13 @@ export const resize = (id: string, next = false) => {
         documentSelf.ondragstart = () => false;
 
         documentSelf.onmousemove = (moveEvent: MouseEvent) => {
-            let widthTemp = 0
+            let widthTemp = 0;
             if (next) {
                 widthTemp = (width - (moveEvent.clientX - x));
             } else {
                 widthTemp = (width + (moveEvent.clientX - x));
             }
-            (sideElement as HTMLElement).style.width = widthTemp + 'px'
+            (sideElement as HTMLElement).style.width = widthTemp + 'px';
         };
 
         documentSelf.onmouseup = () => {
@@ -27,7 +27,7 @@ export const resize = (id: string, next = false) => {
             documentSelf.ondragstart = null;
             documentSelf.onselectstart = null;
             documentSelf.onselect = null;
-            window.dispatchEvent(new CustomEvent("resize"));
+            window.dispatchEvent(new CustomEvent('resize'));
         };
     });
 };

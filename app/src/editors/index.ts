@@ -13,7 +13,7 @@ export class Editors {
 
     constructor() {
         this.editorsElement = document.getElementById('editors');
-        window.onresize = (event: Event) => {
+        window.onresize = () => {
             if (this.currentEditor?.vditor) {
                 this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + 'px';
             }
@@ -30,7 +30,7 @@ export class Editors {
         editor.vditor = new Vditor(editor.editorElement, {
             _lutePath: `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}`,
             debugger: true,
-            icon: "material",
+            icon: 'material',
             outline: liandi.config.markdown.outline,
             toolbarConfig: {
                 hide: liandi.config.markdown.hideToolbar,
@@ -44,7 +44,7 @@ export class Editors {
                         hint: (key) => {
                             liandi.ws.send('searchblock', {
                                 k: key,
-                            })
+                            });
                             return [];
                         },
                     }],
@@ -136,7 +136,7 @@ export class Editors {
                 editor.vditor.setHTML(html);
                 editor.vditor.focus();
             },
-            input: (textContent: string, textHtml: string) => {
+            input: () => {
                 editor.saved = false;
                 // TODO auto save
             }
@@ -216,8 +216,8 @@ export class Editors {
                 value: `((${item.id}))`,
                 html: `<span class="fn__flex"><span>${item.content} </span>
 <span class="fn__flex-1 ft__smaller">${item.path}</span><span class="ft__smaller ft__secondary">${item.url}</span></span>`,
-            })
-        })
-        this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor)
+            });
+        });
+        this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);
     }
 }

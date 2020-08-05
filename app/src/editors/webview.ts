@@ -95,13 +95,4 @@ export class EditorWebview {
             event.preventDefault();
         }
     }
-
-    private onOpen(liandi: ILiandi, value: string = remote.getGlobal('liandiEditor').editorText) {
-        document.getElementById('liandiVditor').innerHTML = '';
-        this.vditor.vditor.ir.element.addEventListener('keydown', (event: KeyboardEvent) => {
-            this.hotkey(event);
-        });
-    }
 }
-
-const editor = new EditorWebview();
