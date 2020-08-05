@@ -11,7 +11,7 @@
 package model
 
 import (
-	"path/filepath"
+	"path"
 	"strings"
 	"time"
 
@@ -38,7 +38,7 @@ func (dir *Dir) MoveTree(url, p, newPath string) {
 	for _, tree := range trees {
 		if tree.URL == url && tree.Path == p {
 			tree.Path = newPath
-			tree.Name = filepath.Base(p)
+			tree.Name = path.Base(p)
 			break
 		}
 	}
@@ -57,7 +57,7 @@ func (dir *Dir) ParseIndexTree(url, p, markdown string) {
 	tree := parse.Parse("", util.StrToBytes(markdown), Lute.Options)
 	tree.URL = url
 	tree.Path = p
-	tree.Name = filepath.Base(p)
+	tree.Name = path.Base(p)
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		if !entering {
 			return ast.WalkContinue
@@ -105,6 +105,7 @@ func SearchBlock(keyword string) (ret []*Block) {
 			}
 
 			if ast.NodeDocument != n.Parent.Type {
+				// 仅支持根节点的直接子节点
 				return ast.WalkContinue
 			}
 

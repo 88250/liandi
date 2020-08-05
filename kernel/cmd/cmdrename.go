@@ -11,7 +11,7 @@
 package cmd
 
 import (
-	"path/filepath"
+	"path"
 
 	"github.com/88250/liandi/kernel/model"
 )
@@ -38,7 +38,7 @@ func (cmd *rename) Exec() {
 		"url":     url,
 		"oldPath": oldPath,
 		"newPath": newPath,
-		"newName": filepath.Base(newPath),
+		"newName": path.Base(newPath),
 	}
 	model.Push(ret.Bytes())
 }

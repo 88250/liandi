@@ -11,7 +11,7 @@
 package cmd
 
 import (
-	"path/filepath"
+	"path"
 	"strings"
 
 	"github.com/88250/liandi/kernel/model"
@@ -38,8 +38,8 @@ func (cmd *create) Exec() {
 		return
 	}
 
-	name := filepath.Base(p)
-	p = filepath.Dir(filepath.Clean(p))
+	name := path.Base(p)
+	p = path.Dir(path.Clean(p))
 	if "." == p {
 		p = "/"
 	}

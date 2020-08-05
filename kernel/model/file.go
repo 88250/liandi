@@ -14,12 +14,13 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
+	"path"
 	"sort"
 	"strings"
 
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
+	"github.com/88250/lute/ast"
 )
 
 type File struct {
@@ -44,7 +45,7 @@ func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 }
 
 func isMarkdown(fileInfo os.FileInfo) bool {
-	fname := strings.ToLower(filepath.Ext(fileInfo.Name()))
+	fname := strings.ToLower(path.Ext(fileInfo.Name()))
 	return ".md" == fname
 }
 
@@ -132,37 +133,38 @@ func Get(url, path string) (ret string, err error) {
 	return
 }
 
-func Put(url, path string, dom []byte) error {
+func Put(url, path string, domStr string) (backlinks []*ast.Node, err error) {
 	dir := Conf.dir(url)
 	if nil == dir {
-		return errors.New(Conf.lang(0))
+		return nil, errors.New(Conf.lang(0))
 	}
-
-	domStr := gulu.Str.FromBytes(dom)
 
 	// DOM 转 Markdown
 	markdown := Lute.VditorIRBlockDOM2Md(domStr)
-
-	if err := dir.Put(path, gulu.Str.ToBytes(markdown)); nil != err {
-		return err
+	if err = dir.Put(path, gulu.Str.ToBytes(markdown)); nil != err {
+		return nil, err
 	}
-
 	dir.IndexDoc(url, path, markdown)
 
+	// DOM 转树
 	tree, err := Lute.VditorIRBlockDOM2Tree(domStr)
 	if nil != err {
 		msg := fmt.Sprintf(Conf.lang(12), err)
 		Logger.Errorf(msg)
-		return errors.New(msg)
+		return nil, errors.New(msg)
 	}
 	tree.URL = url
 	tree.Path = path
 	dir.IndexTree(tree)
 
-	if err := WriteASTJSON(tree); nil != err {
-		return err
+	// 构建双链
+	backlinks = dir.IndexLink(tree)
+
+	// 持久化数据
+	if err = WriteASTJSON(tree); nil != err {
+		return nil, err
 	}
-	return nil
+	return
 }
 
 func PutBlob(url, path string, data []byte) (err error) {
@@ -175,7 +177,7 @@ func PutBlob(url, path string, data []byte) (err error) {
 	return
 }
 
-func Create(url, path string) error {
+func Create(url, path string) (err error) {
 	exist, err := Exist(url, path)
 	if nil != err {
 		return err
@@ -183,7 +185,8 @@ func Create(url, path string) error {
 	if exist {
 		return errors.New(Conf.lang(1))
 	}
-	return Put(url, path, []byte(""))
+	_, err = Put(url, path, "")
+	return
 }
 
 func Exist(url, path string) (bool, error) {
