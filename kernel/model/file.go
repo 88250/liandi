@@ -20,7 +20,6 @@ import (
 
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
-	"github.com/88250/lute/ast"
 )
 
 type File struct {
@@ -133,7 +132,7 @@ func Get(url, path string) (ret string, err error) {
 	return
 }
 
-func Put(url, path string, domStr string) (backlinks []*ast.Node, err error) {
+func Put(url, path string, domStr string) (backlinks [][]*Block, err error) {
 	dir := Conf.dir(url)
 	if nil == dir {
 		return nil, errors.New(Conf.lang(0))

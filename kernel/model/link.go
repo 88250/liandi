@@ -17,11 +17,15 @@ import (
 )
 
 var (
-	forwardlinks = map[*ast.Node][]*ast.Node{} // 正向链接关系：块用了哪些块
-	backlinks    = map[*ast.Node][]*ast.Node{} // 反向链接关系：块被哪些块用了
+	backlinks = map[*ast.Node][]*BacklinkRef{} // 反向链接关系：块被哪些块用了
 )
 
-func (dir *Dir) IndexLink(tree *parse.Tree) (currentBacklinks []*ast.Node) {
+type BacklinkRef struct {
+	URL, Path string
+	RefNodes  []*ast.Node
+}
+
+func (dir *Dir) IndexLink(tree *parse.Tree) (ret [][]*Block) {
 	// 找到当前块列表
 	var currentBlocks []*ast.Node
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
@@ -43,36 +47,41 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (currentBacklinks []*ast.Node) {
 
 	// 清理当前块的链接关系
 	for _, currentBlock := range currentBlocks {
-		delete(forwardlinks, currentBlock)
 		delete(backlinks, currentBlock)
 	}
 
 	// 构建链接关系
-	for _, tree := range trees {
-		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
-			if !entering {
-				return ast.WalkStop
-			}
-
-			if ast.NodeBlockRefID != n.Type {
-				return ast.WalkContinue
-			}
-
-			for _, currentBlock := range currentBlocks {
-				if bytes.Equal(currentBlock.Tokens, n.Tokens) {
-					backlinks[currentBlock] = append(backlinks[currentBlock], n)
+	for _, currentBlock := range currentBlocks {
+		for _, tree := range trees {
+			var refNodes []*ast.Node
+			ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+				if !entering {
+					return ast.WalkStop
 				}
-			}
 
-			// TODO: 正向链接
+				if ast.NodeBlockRefID != n.Type {
+					return ast.WalkContinue
+				}
 
-			return ast.WalkContinue
-		})
+				if bytes.Equal(currentBlock.Tokens, n.Tokens) {
+					refNodes = append(refNodes, n)
+				}
+				return ast.WalkContinue
+			})
+			backlinks[currentBlock] = append(backlinks[currentBlock], &BacklinkRef{URL: tree.URL, Path: tree.Path, RefNodes: refNodes})
+		}
 	}
 
 	// 组装当前块的反链列表
 	for _, currentBlock := range currentBlocks {
-		currentBacklinks = append(currentBacklinks, backlinks[currentBlock]...)
+		for _, backlinkRef := range backlinks[currentBlock] {
+			var blocks []*Block
+			for _, refNode := range backlinkRef.RefNodes {
+				block := &Block{URL: backlinkRef.URL, Path: backlinkRef.Path, ID: refNode.ID, Type: refNode.Type.String(), Content: refNode.Text()}
+				blocks = append(blocks, block)
+			}
+			ret = append(ret, [][]*Block{blocks}...)
+		}
 	}
 	return
 }
