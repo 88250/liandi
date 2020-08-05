@@ -290,12 +290,12 @@ func (dir *Dir) Index() {
 
 			astJSONStr, err := ReadASTJSON(dir.URL, p)
 			if nil != err {
-				Logger.Fatalf("读取元数据失败：%s", err)
+				Logger.Fatalf("读取目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
 			}
 			if "" != astJSONStr {
 				tree, err := ParseJSON(astJSONStr)
 				if nil != err {
-					Logger.Fatalf("解析元数据失败：%s", err)
+					Logger.Fatalf("解析目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
 				}
 				tree.URL = dir.URL
 				tree.Path = p

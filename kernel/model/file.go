@@ -132,7 +132,7 @@ func Get(url, path string) (ret string, err error) {
 	return
 }
 
-func Put(url, path string, domStr string) (backlinks [][]*Block, err error) {
+func Put(url, path string, domStr string) (backlinks []*BacklinkRefBlock, err error) {
 	dir := Conf.dir(url)
 	if nil == dir {
 		return nil, errors.New(Conf.lang(0))
