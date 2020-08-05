@@ -3,6 +3,7 @@ import Vditor from '../../vditore/src';
 import {Constants} from '../constants';
 import {getPath, urlJoin} from '../util/path';
 import {remote} from 'electron';
+import * as path from 'path';
 
 const appDir = remote.app.getAppPath().replace(/\/electron$/, '').replace(/\\electron$/, '');
 
@@ -212,10 +213,11 @@ export class Editors {
     showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[] }) {
         const dataList: IHintData[] = [];
         data.blocks.forEach(item => {
+            const dirName = path.dirname(item.path);
             dataList.push({
                 value: `((${item.id}))`,
-                html: `<span class="fn__flex"><span>${item.content} </span>
-<span class="fn__flex-1 ft__smaller">${item.path}</span><span class="ft__smaller ft__secondary">${item.url}</span></span>`,
+                html: `<span class="fn__flex"><span style="width: 150px" class="fn__ellipsis fn__flex-shrink0 fn__a">${item.content}</span><span class="fn__flex-1 fn__flex-shrink0"><span class="fn__space"></span></span>
+<span class="ft__smaller ft__secondary">${path.basename(item.url) + (dirName === "/" ? "" : dirName)}</span></span>`,
             });
         });
         this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);

@@ -1,3 +1,4 @@
+import * as path from 'path';
 export class Backlinks {
     public element: HTMLElement;
 
@@ -10,8 +11,8 @@ export class Backlinks {
         backlinks.forEach((files) => {
             backlinksHTML += "<h2>${files.path}</h2>"
             files.blocks.forEach(item => {
-                backlinksHTML += `<div><span class="fn__flex"><span>${item.content} </span>
-                <span class="fn__flex-1 ft__smaller">${item.path}</span><span class="ft__smaller ft__secondary">${item.url}</span></span></div>`
+                backlinksHTML += `<div><span class="fn__flex"><span class="fn__flex-1 fn__a">${item.content}</span><span class="fn__space--s"></span>
+<span class="ft__smaller ft__secondary">${path.join(path.basename(item.url), item.path)}</span></span></div>`
             })
         })
         this.element.innerHTML = backlinksHTML;
