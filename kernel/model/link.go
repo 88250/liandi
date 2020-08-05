@@ -12,6 +12,8 @@ package model
 
 import (
 	"bytes"
+	"strings"
+
 	"github.com/88250/gulu"
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
@@ -38,7 +40,7 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret [][]*Block) {
 			return ast.WalkContinue
 		}
 
-		if "" ==  n.ID {
+		if "" == n.ID {
 			return ast.WalkStop
 		}
 
@@ -68,8 +70,9 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret [][]*Block) {
 					return ast.WalkContinue
 				}
 
-				if bytes.Equal(gulu.Str.ToBytes(currentBlock.ID), n.Tokens) && currentBlock != n {
-					refNodes = append(refNodes, n)
+				if bytes.Equal(gulu.Str.ToBytes(currentBlock.ID), n.Tokens) {
+					block := refParentBlock(n)
+					refNodes = append(refNodes, block)
 				}
 				return ast.WalkContinue
 			})
@@ -80,9 +83,15 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret [][]*Block) {
 	// 组装当前块的反链列表
 	for _, currentBlock := range currentBlocks {
 		for _, backlinkRef := range backlinks[currentBlock] {
+			if tree.URL == backlinkRef.URL && tree.Path == backlinkRef.Path {
+				// 排除当前树
+				continue
+			}
+
 			var blocks []*Block
 			for _, refNode := range backlinkRef.RefNodes {
-				block := &Block{URL: backlinkRef.URL, Path: backlinkRef.Path, ID: refNode.ID, Type: refNode.Type.String(), Content: refNode.Text()}
+				text := strings.TrimSpace(refNode.Text())
+				block := &Block{URL: backlinkRef.URL, Path: backlinkRef.Path, ID: refNode.ID, Type: refNode.Type.String(), Content: text}
 				blocks = append(blocks, block)
 			}
 			if nil != blocks {
@@ -91,4 +100,13 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret [][]*Block) {
 		}
 	}
 	return
+}
+
+func refParentBlock(ref *ast.Node) *ast.Node {
+	for p := ref.Parent; nil != p; p = p.Parent {
+		if "" != p.ID {
+			return p
+		}
+	}
+	return nil
 }
