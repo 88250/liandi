@@ -65,7 +65,7 @@ declare interface ILiandi {
     navigation?: {
         element: HTMLElement
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
-        onMount: (data: { dir: object }) => void
+        onMount: (data: { dir: IDir }) => void
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
     };
     backlinks?: {
