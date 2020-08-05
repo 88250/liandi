@@ -7,6 +7,7 @@ import {initConfigSearch} from '../config/search';
 import {getPath, removeLastPath} from '../util/path';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
+import {help} from "../config/help";
 
 export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
@@ -41,21 +42,21 @@ export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     destroyDialog();
 };
 
-export const initSearch = (liandi: ILiandi) => {
+export const initSearch = (liandi: ILiandi, type = "search") => {
     dialog({
         content: `<tab-panel>
   <ul slot="tab" class="tab fn__flex">
-    <li data-name="search" class="tab--current fn__pointer">${i18n[liandi.config.lang].search}</li>
-    <li data-name="config" class="fn__pointer">${i18n[liandi.config.lang].config}</li>
+    <li data-name="search" class="${type === "search" ? "tab--current " : ""}fn__pointer">${i18n[liandi.config.lang].search}</li>
+    <li data-name="config" class="${type !== "search" ? "tab--current " : ""}fn__pointer">${i18n[liandi.config.lang].config}</li>
     <li class="fn__flex-1"></li>
   </ul>
-  <div data-name="search" slot="panel">
+  <div data-name="search"${type === "search" ? ' slot="panel"' : ""}>
     <div class="fn__hr"></div>
     <input class="input">
     <div class="fn__hr"></div>
     <div class="list--signal" style="height: 403px"></div>
   </div>
-  <div data-name="config">
+  <div data-name="config"${type !== "search" ? ' slot="panel"' : ""}>
     <div class="fn__hr"></div>
     <input class="input">
     <div class="fn__hr"></div>
@@ -66,12 +67,14 @@ export const initSearch = (liandi: ILiandi) => {
         <li data-name="theme" class="fn__pointer">${i18n[liandi.config.lang].theme}</li>
         <li data-name="language" class="fn__pointer">${i18n[liandi.config.lang].language}</li>
         <li data-name="about" class="fn__pointer">${i18n[liandi.config.lang].about}</li>
+        <li data-name="help" class="fn__pointer">${i18n[liandi.config.lang].help}</li>
       </ul>
       <div class="tab__panel" data-name="markdown" slot="panel">${markdown.genHTML(liandi)}</div>
       <div class="tab__panel" data-name="image">${image.genHTML(liandi)}</div>
       <div class="tab__panel" data-name="theme">${theme.genHTML(liandi)}</div>
       <div class="tab__panel" data-name="language">${lauguage.genHTML(liandi)}</div>
       <div class="tab__panel" data-name="about">${about.genHTML(liandi)}</div>
+      <div class="tab__panel" data-name="help">${help.genHTML(liandi)}</div>
     </tab-panel>
   </div>
 </tab-panel>`,

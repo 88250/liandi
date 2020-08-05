@@ -68,6 +68,9 @@ declare interface ILiandi {
         onMount: (data: { dir: object }) => void
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
     };
+    backlinks?: {
+        element: HTMLElement
+    };
     editors?: {
         focus: () => void;
         save: (liandi: ILiandi) => void;
