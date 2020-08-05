@@ -7,7 +7,7 @@ import {initConfigSearch} from '../config/search';
 import {getPath, removeLastPath} from '../util/path';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
-import {help} from "../config/help";
+import {help} from '../config/help';
 
 export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
@@ -42,21 +42,21 @@ export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     destroyDialog();
 };
 
-export const initSearch = (liandi: ILiandi, type = "search") => {
+export const initSearch = (liandi: ILiandi, type = 'search') => {
     dialog({
         content: `<tab-panel>
   <ul slot="tab" class="tab fn__flex">
-    <li data-name="search" class="${type === "search" ? "tab--current " : ""}fn__pointer">${i18n[liandi.config.lang].search}</li>
-    <li data-name="config" class="${type !== "search" ? "tab--current " : ""}fn__pointer">${i18n[liandi.config.lang].config}</li>
+    <li data-name="search" class="${type === 'search' ? 'tab--current ' : ''}fn__pointer">${i18n[liandi.config.lang].search}</li>
+    <li data-name="config" class="${type !== 'search' ? 'tab--current ' : ''}fn__pointer">${i18n[liandi.config.lang].config}</li>
     <li class="fn__flex-1"></li>
   </ul>
-  <div data-name="search"${type === "search" ? ' slot="panel"' : ""}>
+  <div data-name="search"${type === 'search' ? ' slot="panel"' : ''}>
     <div class="fn__hr"></div>
     <input class="input">
     <div class="fn__hr"></div>
     <div class="list--signal" style="height: 403px"></div>
   </div>
-  <div data-name="config"${type !== "search" ? ' slot="panel"' : ""}>
+  <div data-name="config"${type !== 'search' ? ' slot="panel"' : ''}>
     <div class="fn__hr"></div>
     <input class="input">
     <div class="fn__hr"></div>

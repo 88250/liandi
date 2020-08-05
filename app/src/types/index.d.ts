@@ -11,10 +11,10 @@ declare interface IFile {
 }
 
 declare interface IBlock {
-    url: string
-    path: string
-    id: string
-    content: string
+    url: string;
+    path: string;
+    id: string;
+    content: string;
 }
 
 declare interface IDir {

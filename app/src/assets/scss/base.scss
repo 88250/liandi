@@ -90,9 +90,12 @@
 
 .drag {
   -webkit-app-region: drag;
-  height: 20px;
-  background-color: var(--background-color);
-  margin-right: 96px;
+  height: 10px;
+  left: 96px;
+  position: absolute;
+  top: 0;
+  z-index: 100;
+  width: 100%;
 }
 
 .loading {

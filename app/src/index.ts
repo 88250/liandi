@@ -11,9 +11,9 @@ import {initGlobalKeyPress} from './hotkey';
 import {ipcRenderer, remote, shell} from 'electron';
 import {Find} from './search/Find';
 import {Constants} from './constants';
-import {mountFile, mountWebDAV} from "./util/mount";
-import {initSearch} from "./search";
-import {Backlinks} from "./backlinks";
+import {mountFile, mountWebDAV} from './util/mount';
+import {initSearch} from './search';
+import {Backlinks} from './backlinks';
 
 class App {
     public liandi: ILiandi;
@@ -45,35 +45,35 @@ class App {
     }
 
     private initBar() {
-        document.getElementById('barNavigation').addEventListener("click", () => {
-            if (this.liandi.navigation.element.classList.contains("fn__none")) {
-                this.liandi.navigation.element.classList.remove("fn__none")
-                document.getElementById('resize').classList.remove("fn__none")
+        document.getElementById('barNavigation').addEventListener('click', () => {
+            if (this.liandi.navigation.element.classList.contains('fn__none')) {
+                this.liandi.navigation.element.classList.remove('fn__none');
+                document.getElementById('resize').classList.remove('fn__none');
             } else {
-                this.liandi.navigation.element.classList.add("fn__none")
-                document.getElementById('resize').classList.add("fn__none")
+                this.liandi.navigation.element.classList.add('fn__none');
+                document.getElementById('resize').classList.add('fn__none');
             }
-            window.dispatchEvent(new CustomEvent("resize"));
-        })
-        document.getElementById('barBacklinks').addEventListener("click", () => {
-            if (this.liandi.backlinks.element.classList.contains("fn__none")) {
-                this.liandi.backlinks.element.classList.remove("fn__none")
-                document.getElementById('resize2').classList.remove("fn__none")
+            window.dispatchEvent(new CustomEvent('resize'));
+        });
+        document.getElementById('barBacklinks').addEventListener('click', () => {
+            if (this.liandi.backlinks.element.classList.contains('fn__none')) {
+                this.liandi.backlinks.element.classList.remove('fn__none');
+                document.getElementById('resize2').classList.remove('fn__none');
             } else {
-                this.liandi.backlinks.element.classList.add("fn__none")
-                document.getElementById('resize2').classList.add("fn__none")
+                this.liandi.backlinks.element.classList.add('fn__none');
+                document.getElementById('resize2').classList.add('fn__none');
             }
-            window.dispatchEvent(new CustomEvent("resize"));
-        })
-        document.getElementById("barSettings").addEventListener("click", () => {
-            initSearch(this.liandi, "settings")
-        })
-        document.getElementById("editorEmptyMount").addEventListener("click", () => {
-           mountFile(this.liandi)
-        })
-        document.getElementById("editorEmptyMountDAV").addEventListener("click", () => {
-           mountWebDAV(this.liandi)
-        })
+            window.dispatchEvent(new CustomEvent('resize'));
+        });
+        document.getElementById('barSettings').addEventListener('click', () => {
+            initSearch(this.liandi, 'settings');
+        });
+        document.getElementById('editorEmptyMount').addEventListener('click', () => {
+           mountFile(this.liandi);
+        });
+        document.getElementById('editorEmptyMountDAV').addEventListener('click', () => {
+           mountWebDAV(this.liandi);
+        });
     }
 
     private onIpc() {
