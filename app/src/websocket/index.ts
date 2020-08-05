@@ -163,6 +163,7 @@ export class WebSocketUtil {
                     break;
                 case 'create':
                     liandi.editors.open(liandi, {content: '', name: response.data.name});
+                    break;
                 case 'remove':
                 case 'mkdir':
                     window.liandi.liandi.ws.send('ls', {
