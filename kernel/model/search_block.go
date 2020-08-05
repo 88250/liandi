@@ -105,7 +105,10 @@ func SearchBlock(keyword string) (ret []*Block) {
 			}
 
 			if ast.NodeDocument == n.Type {
-				block := &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Type: n.Type.String(), Content: tree.Name}
+				u := html.EscapeString(tree.URL)
+				p := html.EscapeString(tree.Path)
+				c := html.EscapeString(tree.Name)
+				block := &Block{URL: u, Path: p, ID: n.ID, Type: n.Type.String(), Content: c}
 				ret = append(ret, block)
 				return ast.WalkContinue
 			}
