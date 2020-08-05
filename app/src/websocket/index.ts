@@ -126,6 +126,7 @@ export class WebSocketUtil {
                     break;
                 case 'put':
                     showMessage(i18n[liandi.config.lang].saveSuccess);
+                    liandi.backlinks.onBacklinks(response.data.backlinks);
                     break;
                 case 'unmount':
                     if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {

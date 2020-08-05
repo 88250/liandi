@@ -14,7 +14,14 @@ declare interface IBlock {
     url: string;
     path: string;
     id: string;
+    type?: string;
     content: string;
+}
+
+declare interface IBacklinks {
+    url: string;
+    path: string;
+    blocks: IBlock[];
 }
 
 declare interface IDir {
@@ -70,6 +77,7 @@ declare interface ILiandi {
     };
     backlinks?: {
         element: HTMLElement
+        onBacklinks: (backlinks: IBacklinks[]) => void
     };
     editors?: {
         focus: () => void;
