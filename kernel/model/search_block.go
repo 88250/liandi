@@ -11,6 +11,7 @@
 package model
 
 import (
+	"github.com/88250/lute/html"
 	"path"
 	"strings"
 	"time"
@@ -70,6 +71,7 @@ func (dir *Dir) ParseIndexTree(url, p, markdown string) {
 	})
 
 	dir.IndexTree(tree)
+	WriteASTJSON(tree)
 }
 
 func (dir *Dir) IndexTree(tree *parse.Tree) {
@@ -119,8 +121,10 @@ func SearchBlock(keyword string) (ret []*Block) {
 
 			text := n.Text()
 			if strings.Contains(text, keyword) {
-				//block := &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Content: text}
-				block := &Block{ID: n.ID, Type: n.Type.String(), Content: text}
+				u := html.EscapeString(tree.URL)
+				p := html.EscapeString(tree.Path)
+				c := html.EscapeString(text)
+				block := &Block{URL: u, Path: p, ID: n.ID, Content: c}
 				ret = append(ret, block)
 			}
 
