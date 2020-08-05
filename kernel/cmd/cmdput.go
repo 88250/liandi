@@ -11,7 +11,6 @@
 package cmd
 
 import (
-	"github.com/88250/gulu"
 	"github.com/88250/liandi/kernel/model"
 )
 
@@ -25,7 +24,7 @@ func (cmd *put) Exec() {
 	url = model.NormalizeURL(url)
 	path := cmd.param["path"].(string)
 	content := cmd.param["content"].(string)
-	err := model.Put(url, path, gulu.Str.ToBytes(content))
+	err := model.Put(url, path, content)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()

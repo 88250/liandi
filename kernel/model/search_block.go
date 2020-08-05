@@ -105,6 +105,7 @@ func SearchBlock(keyword string) (ret []*Block) {
 			}
 
 			if ast.NodeDocument != n.Parent.Type {
+				// 仅支持根节点的直接子节点
 				return ast.WalkContinue
 			}
 

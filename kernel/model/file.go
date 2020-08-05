@@ -132,23 +132,20 @@ func Get(url, path string) (ret string, err error) {
 	return
 }
 
-func Put(url, path string, dom []byte) error {
+func Put(url, path string, domStr string) error {
 	dir := Conf.dir(url)
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
 
-	domStr := gulu.Str.FromBytes(dom)
-
 	// DOM 转 Markdown
 	markdown := Lute.VditorIRBlockDOM2Md(domStr)
-
 	if err := dir.Put(path, gulu.Str.ToBytes(markdown)); nil != err {
 		return err
 	}
-
 	dir.IndexDoc(url, path, markdown)
 
+	// DOM 转树
 	tree, err := Lute.VditorIRBlockDOM2Tree(domStr)
 	if nil != err {
 		msg := fmt.Sprintf(Conf.lang(12), err)
@@ -159,6 +156,10 @@ func Put(url, path string, dom []byte) error {
 	tree.Path = path
 	dir.IndexTree(tree)
 
+	// 构建双链
+	dir.IndexLink(tree)
+
+	// 持久化数据
 	if err := WriteASTJSON(tree); nil != err {
 		return err
 	}
@@ -183,7 +184,7 @@ func Create(url, path string) error {
 	if exist {
 		return errors.New(Conf.lang(1))
 	}
-	return Put(url, path, []byte(""))
+	return Put(url, path, "")
 }
 
 func Exist(url, path string) (bool, error) {
