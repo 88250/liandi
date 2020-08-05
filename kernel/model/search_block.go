@@ -92,6 +92,10 @@ func (dir *Dir) queryTree(url, path string) *parse.Tree {
 }
 
 func SearchBlock(keyword string) (ret []*Block) {
+	keyword = strings.TrimSpace(keyword)
+	if "" == keyword {
+		return
+	}
 	for _, tree := range trees {
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			if !entering {
@@ -137,5 +141,5 @@ func isSearchBlockSkipNode(node *ast.Node) bool {
 	return ast.NodeText == node.Type || ast.NodeThematicBreak == node.Type ||
 		ast.NodeHTMLBlock == node.Type || ast.NodeInlineHTML == node.Type || ast.NodeCodeBlock == node.Type ||
 		ast.NodeCodeSpan == node.Type || ast.NodeHardBreak == node.Type || ast.NodeSoftBreak == node.Type ||
-		ast.NodeHTMLEntity == node.Type || ast.NodeBlockRef == node.Type
+		ast.NodeHTMLEntity == node.Type
 }

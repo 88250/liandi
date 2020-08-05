@@ -12,6 +12,7 @@ package model
 
 import (
 	"bytes"
+	"github.com/88250/gulu"
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
 )
@@ -35,6 +36,10 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret [][]*Block) {
 
 		if ast.NodeDocument == n.Type {
 			return ast.WalkContinue
+		}
+
+		if "" ==  n.ID {
+			return ast.WalkStop
 		}
 
 		if isSearchBlockSkipNode(n) {
@@ -63,7 +68,7 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret [][]*Block) {
 					return ast.WalkContinue
 				}
 
-				if bytes.Equal(currentBlock.Tokens, n.Tokens) {
+				if bytes.Equal(gulu.Str.ToBytes(currentBlock.ID), n.Tokens) && currentBlock != n {
 					refNodes = append(refNodes, n)
 				}
 				return ast.WalkContinue
@@ -80,7 +85,9 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret [][]*Block) {
 				block := &Block{URL: backlinkRef.URL, Path: backlinkRef.Path, ID: refNode.ID, Type: refNode.Type.String(), Content: refNode.Text()}
 				blocks = append(blocks, block)
 			}
-			ret = append(ret, [][]*Block{blocks}...)
+			if nil != blocks {
+				ret = append(ret, [][]*Block{blocks}...)
+			}
 		}
 	}
 	return
