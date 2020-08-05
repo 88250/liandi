@@ -92,6 +92,10 @@ func (dir *Dir) queryTree(url, path string) *parse.Tree {
 }
 
 func SearchBlock(keyword string) (ret []*Block) {
+	keyword = strings.TrimSpace(keyword)
+	if "" == keyword {
+		return
+	}
 	for _, tree := range trees {
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			if !entering {
