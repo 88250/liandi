@@ -88,16 +88,16 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 
 	// 组装当前块的反链列表
 	for _, currentBlock := range currentBlocks {
-		var blocks []*Block
 		for _, backlinkRef := range backlinks[currentBlock] {
+			var blocks []*Block
 			for _, refNode := range backlinkRef.RefNodes {
 				text := strings.TrimSpace(refNode.Text())
 				block := &Block{URL: backlinkRef.URL, Path: backlinkRef.Path, ID: refNode.ID, Type: refNode.Type.String(), Content: text}
 				blocks = append(blocks, block)
 			}
-		}
-		if nil != blocks {
-			ret = append(ret, &BacklinkRefBlock{URL: tree.URL, Path: tree.Path, Blocks: blocks})
+			if nil != blocks {
+				ret = append(ret, &BacklinkRefBlock{URL: backlinkRef.URL, Path: backlinkRef.Path, Blocks: blocks})
+			}
 		}
 	}
 	return
