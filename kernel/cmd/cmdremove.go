@@ -12,7 +12,6 @@ package cmd
 
 import (
 	"path"
-	"path/filepath"
 
 	"github.com/88250/liandi/kernel/model"
 )
