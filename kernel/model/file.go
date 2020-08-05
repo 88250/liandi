@@ -14,7 +14,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
+	"path"
 	"sort"
 	"strings"
 
@@ -45,7 +45,7 @@ func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 }
 
 func isMarkdown(fileInfo os.FileInfo) bool {
-	fname := strings.ToLower(filepath.Ext(fileInfo.Name()))
+	fname := strings.ToLower(path.Ext(fileInfo.Name()))
 	return ".md" == fname
 }
 

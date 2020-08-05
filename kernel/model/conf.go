@@ -16,6 +16,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -298,7 +299,7 @@ func (dir *Dir) Index() {
 				}
 				tree.URL = dir.URL
 				tree.Path = p
-				tree.Name = filepath.Base(p)
+				tree.Name = path.Base(p)
 				dir.IndexTree(tree)
 			} else {
 				dir.ParseIndexTree(dir.URL, p, markdown)

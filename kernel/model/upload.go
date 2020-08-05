@@ -78,7 +78,7 @@ func Upload(c *gin.Context) {
 		}
 
 		if exist {
-			ext := filepath.Ext(fname)
+			ext := path.Ext(fname)
 			fname = fname[:len(fname)-len(ext)]
 			fname = fname + "-" + gulu.Rand.String(7) + ext
 			writePath = joinUrlPath(p, fname)
@@ -125,7 +125,7 @@ func UploadFetch(c *gin.Context) {
 	u, _ = url.PathUnescape(u)
 	p := c.GetHeader("X-Path")
 	p, _ = url.PathUnescape(p)
-	p = filepath.Dir(p)
+	p = path.Dir(p)
 	p = p[1:]                     // 去掉开头的 /
 	mode := c.GetHeader("X-Mode") // markdown, wysiwyg
 	dir := Conf.dir(u)
@@ -180,7 +180,7 @@ func UploadFetch(c *gin.Context) {
 	}
 
 	if exist {
-		ext := filepath.Ext(fname)
+		ext := path.Ext(fname)
 		fname = fname[:len(fname)-len(ext)]
 		fname = fname + "-" + gulu.Rand.String(7) + ext
 		writePath = joinUrlPath(p, fname)
