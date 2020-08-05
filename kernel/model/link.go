@@ -28,7 +28,12 @@ type BacklinkRef struct {
 	RefNodes  []*ast.Node
 }
 
-func (dir *Dir) IndexLink(tree *parse.Tree) (ret [][]*Block) {
+type BacklinkRefBlock struct {
+	URL, Path string
+	Blocks    []*Block
+}
+
+func (dir *Dir) IndexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 	// 找到当前块列表
 	var currentBlocks []*ast.Node
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
@@ -83,11 +88,6 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret [][]*Block) {
 	// 组装当前块的反链列表
 	for _, currentBlock := range currentBlocks {
 		for _, backlinkRef := range backlinks[currentBlock] {
-			if tree.URL == backlinkRef.URL && tree.Path == backlinkRef.Path {
-				// 排除当前树
-				continue
-			}
-
 			var blocks []*Block
 			for _, refNode := range backlinkRef.RefNodes {
 				text := strings.TrimSpace(refNode.Text())
@@ -95,7 +95,7 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret [][]*Block) {
 				blocks = append(blocks, block)
 			}
 			if nil != blocks {
-				ret = append(ret, [][]*Block{blocks}...)
+				ret = append(ret, &BacklinkRefBlock{URL: tree.URL, Path: tree.Path, Blocks: blocks})
 			}
 		}
 	}

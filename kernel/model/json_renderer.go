@@ -11,6 +11,7 @@
 package model
 
 import (
+	"github.com/88250/lute/lex"
 	"github.com/88250/lute/render"
 	"strconv"
 	"strings"
@@ -105,7 +106,31 @@ func NewJSONRenderer(tree *parse.Tree) render.Renderer {
 	ret.RendererFuncs[ast.NodeYamlFrontMatterOpenMarker] = ret.renderYamlFrontMatterOpenMarker
 	ret.RendererFuncs[ast.NodeYamlFrontMatterContent] = ret.renderYamlFrontMatterContent
 	ret.RendererFuncs[ast.NodeYamlFrontMatterCloseMarker] = ret.renderYamlFrontMatterCloseMarker
+	ret.RendererFuncs[ast.NodeBlockRef] = ret.renderBlockRef
+	ret.RendererFuncs[ast.NodeBlockRefID] = ret.renderBlockRefID
+	ret.RendererFuncs[ast.NodeBlockRefSpace] = ret.renderBlockRefSpace
+	ret.RendererFuncs[ast.NodeBlockRefText] = ret.renderBlockRefText
 	return ret
+}
+
+func (r *JSONRenderer) renderBlockRef(node *ast.Node, entering bool) ast.WalkStatus {
+	r.renderNode(node, entering)
+	return ast.WalkContinue
+}
+
+func (r *JSONRenderer) renderBlockRefID(node *ast.Node, entering bool) ast.WalkStatus {
+	r.leaf(util.BytesToStr(node.Tokens), node)
+	return ast.WalkStop
+}
+
+func (r *JSONRenderer) renderBlockRefSpace(node *ast.Node, entering bool) ast.WalkStatus {
+	r.WriteByte(lex.ItemSpace)
+	return ast.WalkStop
+}
+
+func (r *JSONRenderer) renderBlockRefText(node *ast.Node, entering bool) ast.WalkStatus {
+	r.leaf(util.BytesToStr(node.Tokens), node)
+	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderYamlFrontMatter(node *ast.Node, entering bool) ast.WalkStatus {
