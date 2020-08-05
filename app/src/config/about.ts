@@ -25,7 +25,7 @@ export const about = {
 </div>`;
     },
     bindEvent: (liandi: ILiandi, element: HTMLElement) => {
-        element.querySelector('button').addEventListener('click', event => {
+        element.querySelector('button').addEventListener('click', () => {
             liandi.ws.send('checkupdate', {});
         });
     },

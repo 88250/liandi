@@ -13,7 +13,7 @@ export class Editors {
 
     constructor() {
         this.editorsElement = document.getElementById('editors');
-        window.onresize = (event: Event) => {
+        window.onresize = () => {
             if (this.currentEditor?.vditor) {
                 this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + 'px';
             }
@@ -136,7 +136,7 @@ export class Editors {
                 editor.vditor.setHTML(html);
                 editor.vditor.focus();
             },
-            input: (textContent: string, textHtml: string) => {
+            input: () => {
                 editor.saved = false;
                 // TODO auto save
             }

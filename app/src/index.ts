@@ -8,7 +8,7 @@ import {Editors} from './editors';
 import {Menus} from './menu';
 import {resize} from './util/resize';
 import {initGlobalKeyPress} from './hotkey';
-import {ipcRenderer, remote, shell} from 'electron';
+import {ipcRenderer, remote} from 'electron';
 import {Find} from './search/Find';
 import {Constants} from './constants';
 import {mountFile, mountWebDAV} from './util/mount';
@@ -117,20 +117,20 @@ class App {
         const minBtnElement = document.getElementById('minWindow');
         const closeBtnElement = document.getElementById('closeWindow');
 
-        minBtnElement.addEventListener('click', event => {
+        minBtnElement.addEventListener('click', () => {
             currentWindow.minimize();
         });
         minBtnElement.style.display = 'block';
 
-        maxBtnElement.addEventListener('click', event => {
+        maxBtnElement.addEventListener('click', () => {
             currentWindow.maximize();
         });
 
-        restoreBtnElement.addEventListener('click', event => {
+        restoreBtnElement.addEventListener('click', () => {
             currentWindow.unmaximize();
         });
 
-        closeBtnElement.addEventListener('click', event => {
+        closeBtnElement.addEventListener('click', () => {
             currentWindow.close();
         });
         closeBtnElement.style.display = 'block';

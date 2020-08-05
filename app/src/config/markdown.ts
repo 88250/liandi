@@ -1,5 +1,4 @@
 import {i18n} from '../i18n';
-import {Constants} from '../constants';
 
 export const markdown = {
     genHTML: (liandi: ILiandi) => {
@@ -54,7 +53,7 @@ export const markdown = {
     },
     bindEvent: (liandi: ILiandi, element: HTMLElement) => {
         element.querySelectorAll('input').forEach((item) => {
-            item.addEventListener('change', (event) => {
+            item.addEventListener('change', () => {
                 liandi.ws.send('setmd', {
                     autoSpace: (element.querySelector('#autoSpace') as HTMLInputElement).checked,
                     chinesePunct: (element.querySelector('#chinesePunct') as HTMLInputElement).checked,
