@@ -1,5 +1,11 @@
 export const i18n: II18n = {
     en_US: {
+        help: "Help",
+        help1: "Grammar Quick Reference Manual",
+        help2: "Basic grammar",
+        help3: "Extended Syntax",
+        help4: "Official discussion",
+        help5: "Issues",
         paragraphBeginningSpace: 'Two empty spaces at the beginning of the paragraph',
         outline: 'Outline',
         title: 'LianDi',
@@ -48,6 +54,12 @@ export const i18n: II18n = {
         image: 'Image',
     },
     zh_CN: {
+        help: "帮助",
+        help1: "语法速查手册",
+        help2: "基础语法",
+        help3: "扩展语法",
+        help4: "官方讨论区",
+        help5: "建议/反馈",
         paragraphBeginningSpace: '段落开头空两格',
         outline: '大纲',
         title: '链滴笔记',

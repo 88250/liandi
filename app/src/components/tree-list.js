@@ -13,7 +13,7 @@ customElements.define('tree-list',
       }
       const ulElement = document.createElement('ul')
       ulElement.className = 'tree-list'
-      ulElement.innerHTML = `<li class="fn__flex">
+      ulElement.innerHTML = `<li class="fn__flex fn__a">
 <svg class="item__arrow" path="/" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
 <span class="item__name" path="/">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${pathHTML}</svg>
@@ -45,10 +45,7 @@ customElements.define('tree-list',
           const style = ` style="padding-left: ${(item.path.split('/').length -
             (item.isdir ? 2 : 1)) * 13}px"`
           if (item.isdir) {
-            fileHTML += `<li class="fn__flex${item.path ===
-            window.liandi.liandi.current.path
-              ? ' item--current'
-              : ''}"${style}>
+            fileHTML += `<li class="fn__a fn__flex"${style}>
 <svg class="item__arrow" path="${item.path}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
 <span class="item__name" path="${item.path}">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${pathHTML}</svg>
@@ -60,10 +57,11 @@ customElements.define('tree-list',
               path: item.path,
             }, true)
           } else {
-            fileHTML += `<li${style} class="item__name--md item__name" data-path="${encodeURIComponent(
+            fileHTML += `<li${style} class="item__name--md item__name fn__a" data-path="${encodeURIComponent(
               item.path)}">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M29.693 25.847h-27.386c-1.274 0-2.307-1.033-2.307-2.307v0-15.081c0-1.274 1.033-2.307 2.307-2.307h27.386c1.274 0 2.307 1.033 2.307 2.307v15.079c0 0.001 0 0.002 0 0.003 0 1.274-1.033 2.307-2.307 2.307 0 0 0 0 0 0v0zM7.691 21.231v-6l3.078 3.847 3.076-3.847v6.001h3.078v-10.461h-3.078l-3.076 3.847-3.078-3.847h-3.078v10.464zM28.309 16h-3.078v-5.231h-3.076v5.231h-3.078l4.615 5.386z"></path></svg>
-<span class="fn__ellipsis">${item.name.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span></li>`
+<span class="fn__ellipsis">${item.name.replace(/&/g, '&amp;').
+              replace(/</g, '&lt;')}</span></li>`
           }
         })
         target.parentElement.insertAdjacentHTML('afterend',
@@ -99,10 +97,12 @@ customElements.define('tree-list',
               if (target.classList.contains('item__name--md')) {
                 setCurrent(target)
                 window.liandi.liandi.editors.save(window.liandi.liandi)
-                const path = decodeURIComponent(target.getAttribute('data-path'))
+                document.querySelector('.editor__empty').style.display = 'none'
+                const path = decodeURIComponent(
+                  target.getAttribute('data-path'))
                 window.liandi.liandi.ws.send('get', {
                   url: dir.url,
-                  path
+                  path,
                 })
                 window.liandi.liandi.current.path = path
                 event.preventDefault()

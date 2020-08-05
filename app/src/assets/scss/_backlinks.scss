@@ -1,0 +1,10 @@
+.backlinks {
+  max-width: 495px;
+  min-width: 200px;
+  width: 200px;
+  overflow: auto;
+  padding-top: $barHeight;
+  box-sizing: border-box;
+  background-color: var(--focus-background-color);
+  border-left: 1px solid var(--border-color);
+}

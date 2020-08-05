@@ -25,6 +25,7 @@ export class Editors {
         editor.vditor = new Vditor(editor.editorElement, {
             _lutePath: `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}`,
             debugger: true,
+            icon: "material",
             outline: liandi.config.markdown.outline,
             toolbarConfig: {
                 hide: liandi.config.markdown.hideToolbar,
@@ -81,8 +82,6 @@ export class Editors {
                         'outline',
                         'preview',
                         'devtools',
-                        'info',
-                        'help',
                     ],
                 }],
             tab: '\t',
@@ -190,7 +189,7 @@ export class Editors {
     }
 
     focus() {
-        this.currentEditor.vditor.focus();
+        this.currentEditor?.vditor?.focus();
     }
 
     reloadEditor(liandi: ILiandi) {

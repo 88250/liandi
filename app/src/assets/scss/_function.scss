@@ -34,6 +34,7 @@
   &__hr {
     height: 10px;
     display: block;
+
     &--s {
       height: 5px;
     }
@@ -118,6 +119,14 @@
 
     &::-webkit-scrollbar {
       display: none;
+    }
+  }
+
+  &__a {
+    color: var(--text-color);
+
+    &:hover {
+      color: var(--text-secondary-color);
     }
   }
 }

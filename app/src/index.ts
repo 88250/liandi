@@ -11,6 +11,9 @@ import {initGlobalKeyPress} from './hotkey';
 import {ipcRenderer, remote, shell} from 'electron';
 import {Find} from './search/Find';
 import {Constants} from './constants';
+import {mountFile, mountWebDAV} from "./util/mount";
+import {initSearch} from "./search";
+import {Backlinks} from "./backlinks";
 
 class App {
     public liandi: ILiandi;
@@ -28,15 +31,47 @@ class App {
             this.liandi.editors = new Editors();
             this.liandi.menus = new Menus(this.liandi);
             this.liandi.find = new Find();
+            this.liandi.backlinks = new Backlinks();
 
             resize('resize');
-            // resize('resize2');
+            resize('resize2');
 
             initGlobalKeyPress(this.liandi);
 
             this.onIpc();
             this.initWindow();
+            this.initBar();
         });
+    }
+
+    private initBar() {
+        document.getElementById('barNavigation').addEventListener("click", () => {
+            if (this.liandi.navigation.element.classList.contains("fn__none")) {
+                this.liandi.navigation.element.classList.remove("fn__none")
+                document.getElementById('resize').classList.remove("fn__none")
+            } else {
+                this.liandi.navigation.element.classList.add("fn__none")
+                document.getElementById('resize').classList.add("fn__none")
+            }
+        })
+        document.getElementById('barBacklinks').addEventListener("click", () => {
+            if (this.liandi.backlinks.element.classList.contains("fn__none")) {
+                this.liandi.backlinks.element.classList.remove("fn__none")
+                document.getElementById('resize2').classList.remove("fn__none")
+            } else {
+                this.liandi.backlinks.element.classList.add("fn__none")
+                document.getElementById('resize2').classList.add("fn__none")
+            }
+        })
+        document.getElementById("barSettings").addEventListener("click", () => {
+            initSearch(this.liandi, "settings")
+        })
+        document.getElementById("editorEmptyMount").addEventListener("click", () => {
+           mountFile(this.liandi)
+        })
+        document.getElementById("editorEmptyMountDAV").addEventListener("click", () => {
+           mountWebDAV(this.liandi)
+        })
     }
 
     private onIpc() {

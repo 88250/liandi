@@ -9,7 +9,8 @@
 @import "navigation";
 @import "editor";
 @import "list";
-@import "menu";
+@import "bar";
+@import "backlinks";
 
 .window-controls {
   position: fixed;
@@ -159,5 +160,12 @@ tab-panel {
     height: 24px;
     width: 24px;
     margin-right: 10px;
+  }
+}
+
+.help {
+  list-style: none;
+  li {
+    padding: 5px 10px;
   }
 }
