@@ -29,8 +29,7 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (currentBacklinks []*ast.Node) {
 			return ast.WalkStop
 		}
 
-		if ast.NodeDocument == n.Type || ast.NodeDocument != n.Parent.Type {
-			// 仅支持根节点的直接子节点
+		if ast.NodeDocument == n.Type {
 			return ast.WalkContinue
 		}
 
