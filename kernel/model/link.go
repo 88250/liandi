@@ -21,7 +21,7 @@ var (
 	backlinks    = map[*ast.Node][]*ast.Node{} // 反向链接关系：块被哪些块用了
 )
 
-func (dir *Dir) IndexLink(tree *parse.Tree) {
+func (dir *Dir) IndexLink(tree *parse.Tree) (currentBacklinks []*ast.Node) {
 	// 找到当前块列表
 	var currentBlocks []*ast.Node
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
@@ -70,4 +70,10 @@ func (dir *Dir) IndexLink(tree *parse.Tree) {
 			return ast.WalkContinue
 		})
 	}
+
+	// 组装当前块的反链列表
+	for _, currentBlock := range currentBlocks {
+		currentBacklinks = append(currentBacklinks, backlinks[currentBlock]...)
+	}
+	return
 }

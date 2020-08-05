@@ -24,10 +24,13 @@ func (cmd *put) Exec() {
 	url = model.NormalizeURL(url)
 	path := cmd.param["path"].(string)
 	content := cmd.param["content"].(string)
-	err := model.Put(url, path, content)
+	backlinks, err := model.Put(url, path, content)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+	}
+	ret.Data = map[string]interface{}{
+		"backlinks": backlinks,
 	}
 	model.Push(ret.Bytes())
 }
