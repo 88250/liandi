@@ -106,14 +106,6 @@ func WriteASTJSON(tree *parse.Tree) error {
 
 func ReadASTJSON(url, p string) (jsonStr string, err error) {
 	dir := Conf.dir(url)
-	p = path2jsonName(p)
-	exist, err := dir.Exist(p)
-	if nil != err {
-		return
-	}
-	if !exist {
-		return
-	}
 	jsonStr, err = dir.Get(p)
 	return
 }
@@ -156,4 +148,8 @@ func path2jsonName(p string) string {
 	name := path.Base(p) + ".json"
 	p = path.Dir(p)
 	return path.Join(p, name)
+}
+
+func jsonName2Path(p string) string {
+	return p[:len(p)-len(".json")]
 }

@@ -17,9 +17,6 @@ import (
 	"path"
 	"sort"
 	"strings"
-
-	"github.com/88250/gowebdav"
-	"github.com/88250/gulu"
 )
 
 type File struct {
@@ -32,23 +29,16 @@ type File struct {
 	HMtime string `json:"hMtime"`
 }
 
-func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
-	ret = &File{}
-	f := fileInfo.(*gowebdav.File)
-	ret.Path = f.Path()
-	ret.Name = f.Name()
-	ret.IsDir = f.IsDir()
-	ret.Size = f.Size()
-	ret.Mtime = f.ModTime().Unix()
-	return
-}
-
 func isMarkdown(fileInfo os.FileInfo) bool {
 	fname := strings.ToLower(path.Ext(fileInfo.Name()))
-	return ".md" == fname
+	return ".md" == fname || ".markdown" == fname
 }
 
-func Ls(url, path string) (ret []*File, err error) {
+func isJSON(fileInfo os.FileInfo) bool {
+	return strings.HasSuffix(fileInfo.Name(), ".md.json")
+}
+
+func Ls(url, p string) (ret []*File, err error) {
 	ret = []*File{}
 
 	dir := Conf.dir(url)
@@ -56,26 +46,26 @@ func Ls(url, path string) (ret []*File, err error) {
 		return nil, errors.New(Conf.lang(0))
 	}
 
-	files, err := dir.Ls(path)
-	if nil != err {
-		return nil, err
-	}
-
 	var dirs, docs []*File
 
-	for _, f := range files {
-		if strings.HasPrefix(f.Name(), ".") || dir.isSkipDir(f.Name()) {
+	for _, tree := range trees {
+		if tree.URL != dir.URL {
 			continue
 		}
-
-		if f.IsDir() {
-			dirs = append(dirs, fromFileInfo(f))
-			continue
-		}
-
-		if isMarkdown(f) {
-			docs = append(docs, fromFileInfo(f))
-			continue
+		treeDir := path.Dir(tree.Path)
+		if p == treeDir {
+			docs = append(docs, &File{Path: tree.Path, Name: path.Base(tree.Path)})
+		} else if p == path.Dir(treeDir) {
+			var existDir bool
+			for _, dir := range dirs {
+				if dir.Path == treeDir {
+					existDir = true
+					break
+				}
+			}
+			if !existDir {
+				dirs = append(dirs, &File{Path: treeDir, Name: path.Base(treeDir), IsDir: true})
+			}
 		}
 	}
 
@@ -83,37 +73,6 @@ func Ls(url, path string) (ret []*File, err error) {
 	ret = append(ret, dirs...)
 	sort.Slice(docs, func(i, j int) bool { return docs[i].Name < docs[j].Name })
 	ret = append(ret, docs...)
-	return
-}
-
-func Lsd(url, path string) (ret []*File, err error) {
-	ret = []*File{}
-
-	dir := Conf.dir(url)
-	if nil == dir {
-		return nil, errors.New(Conf.lang(0))
-	}
-
-	files, err := dir.Ls(path)
-	if nil != err {
-		return nil, err
-	}
-
-	for _, f := range files {
-		if strings.HasPrefix(f.Name(), ".") || dir.isSkipDir(f.Name()) {
-			continue
-		}
-
-		if !f.IsDir() {
-			continue
-		}
-
-		file := fromFileInfo(f)
-		ret = append(ret, file)
-	}
-
-	sort.Slice(ret, func(i, j int) bool { return ret[i].Name < ret[j].Name })
-
 	return
 }
 
@@ -132,7 +91,7 @@ func Get(url, path string) (ret string, err error) {
 	return
 }
 
-func Put(url, path string, domStr string) (backlinks []*BacklinkRefBlock, err error) {
+func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error) {
 	dir := Conf.dir(url)
 	if nil == dir {
 		return nil, errors.New(Conf.lang(0))
@@ -140,10 +99,7 @@ func Put(url, path string, domStr string) (backlinks []*BacklinkRefBlock, err er
 
 	// DOM 转 Markdown
 	markdown := Lute.VditorIRBlockDOM2Md(domStr)
-	if err = dir.Put(path, gulu.Str.ToBytes(markdown)); nil != err {
-		return nil, err
-	}
-	dir.IndexDoc(path, markdown)
+	dir.IndexDoc(p, markdown)
 
 	// DOM 转树
 	tree, err := Lute.VditorIRBlockDOM2Tree(domStr)
@@ -153,7 +109,7 @@ func Put(url, path string, domStr string) (backlinks []*BacklinkRefBlock, err er
 		return nil, errors.New(msg)
 	}
 	tree.URL = url
-	tree.Path = path
+	tree.Path = p
 	dir.IndexTree(tree)
 
 	// 构建双链
@@ -197,26 +153,12 @@ func Exist(url, path string) (bool, error) {
 	return dir.Exist(path)
 }
 
-func Stat(url, path string) (ret *File, err error) {
-	dir := Conf.dir(url)
-	if nil == dir {
-		return nil, errors.New(Conf.lang(0))
-	}
-
-	var f os.FileInfo
-	if f, err = dir.Stat(path); nil != err {
-		return nil, err
-	}
-	ret = fromFileInfo(f)
-	return
-}
-
 func Rename(url, oldPath, newPath string) error {
 	dir := Conf.dir(url)
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
-	if err := dir.Rename(oldPath, newPath); nil != err {
+	if err := dir.Rename(oldPath+".json", newPath+".json"); nil != err {
 		return err
 	}
 
@@ -240,10 +182,9 @@ func Remove(url, path string) error {
 	}
 	dir.RemoveIndexDoc(path)
 	dir.RemoveTree(path)
-	err := dir.Remove(path)
+	err := dir.Remove(path + ".json")
 	if nil != err {
 		return err
 	}
-
 	return RemoveASTJSON(url, path)
 }
