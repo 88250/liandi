@@ -1,5 +1,3 @@
-import { getName } from '../util/path'
-
 customElements.define('tree-list',
   class extends HTMLElement {
     constructor () {
@@ -17,7 +15,7 @@ customElements.define('tree-list',
 <svg class="item__arrow" path="/" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
 <span class="item__name" path="/">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${pathHTML}</svg>
-  <span class="fn__ellipsis">${getName(dir.url)}</span>
+  <span class="fn__ellipsis">${path.basename(dir.url)}</span>
 </span>
 </li>`
 

@@ -5,6 +5,10 @@ export class Navigation {
         this.element = document.getElementById('navigation');
     }
 
+    private newTree () {
+
+    }
+
     public onRename(liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) {
         const fileItemElement = this.element.querySelector(`.file[path="${encodeURIComponent(data.oldPath)}"]`);
         fileItemElement.setAttribute('path', encodeURIComponent(data.newPath));
