@@ -26,6 +26,8 @@
 <a href="https://github.com/88250/liandi/blob/master/README_en_US.md">English</a>
 </p>
 
+**状态：我们正在开发 Markdown 块级双向链接特性，请到[这里](https://github.com/88250/liandi/issues/87)查看该特性说明和提出建议 :heart:**
+
 ## 💡 简介
 
 链滴笔记是一款开源的桌面端笔记应用，支持 Windows、Mac 和 Linux。
