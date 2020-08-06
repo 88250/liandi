@@ -79,7 +79,7 @@ declare interface ILiandi {
     navigation?: {
         element: HTMLElement
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
-        onMount: (data: { dir: IDir }) => void
+        onMount: (liandi: ILiandi, data: { dir: IDir }) => void
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
         show: () => void;
         hide: () => void;

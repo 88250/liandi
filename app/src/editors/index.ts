@@ -200,16 +200,17 @@ export class Editors {
         this.initVditor(liandi, this.currentEditor);
     }
 
-    open(liandi: ILiandi, editorData: { content: string, name: string }) {
+    public open(liandi: ILiandi, editorData: { content: string, name: string }) {
         if (this.currentEditor) {
             this.initVditor(liandi, this.currentEditor, editorData.content);
         } else {
             this.newEditor(liandi, editorData.content);
         }
         this.currentEditor.inputElement.value = editorData.name.replace('.md', '');
+        document.querySelector<HTMLElement>('.editor__empty').style.display = "none"
     }
 
-    showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[] }) {
+    public showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[] }) {
         const dataList: IHintData[] = [];
         data.blocks.forEach(item => {
             const dirName = path.dirname(item.path);

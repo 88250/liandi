@@ -1,30 +1,29 @@
-import {initFilesMenu, initFilesSpaceMenu} from './files';
+import {initFolderMenu, initFileMenu} from './file';
 import {initNavigationMenu} from './navigation';
 import {initMountMenu} from './mount';
 
-// 文件夹上：新建文档/文件夹/删除/重命名/打开文件位置
-// 文件上：删除/重命名/打开文件位置
-// 根上：新建文档/文件夹/取消挂在/打开文件位置
 export class Menus {
     public itemData: IMenuData;
 
     constructor(liandi: ILiandi) {
 
-        const filesMenu = initFilesMenu(liandi);
-        const filesSpaceMenu = initFilesSpaceMenu(liandi);
+        const folderMenu = initFolderMenu(liandi);
+        const fileMenu = initFileMenu(liandi);
         const navigationMenu = initNavigationMenu(liandi);
         const mountMenu = initMountMenu(liandi);
         window.addEventListener('contextmenu', (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector('body'))) {
                 if (target.classList.contains('navigation')) {
+                    // navigation 空白：挂载目录/挂载 DAV
                     mountMenu.popup();
                     event.preventDefault();
                     break;
                 }
 
-                if (target.tagName === 'TREE-LIST' || target.getAttribute("data-type") === 'root') {
-                    const dir = JSON.parse(decodeURIComponent(target.getAttribute('dir')))
+                if (target.getAttribute("data-type") === 'navigation-root') {
+                    // navigation 根上：新建文档/文件夹/取消挂在/打开文件位置
+                    const dir = JSON.parse(decodeURIComponent(target.parentElement.getAttribute("data-dir")))
                     this.itemData = {
                         target,
                         path: "/",
@@ -35,7 +34,8 @@ export class Menus {
                     break;
                 }
 
-                if (target.classList.contains('file')) {
+                if (target.getAttribute("data-type") === 'navigation-folder') {
+                    // navigation 文件夹上：新建文档/文件夹/删除/重命名/打开文件位置
                     this.itemData = {
                         target,
                         name: decodeURIComponent(target.getAttribute('name')).replace(/&/g, '&amp;').replace(/</g, '&lt;'),
@@ -43,28 +43,18 @@ export class Menus {
                         path: decodeURIComponent(target.getAttribute('path')),
                     };
 
-                    filesMenu.popup({
-                        callback: () => {
-                            target.shadowRoot.querySelector('.list__item').classList.remove('list__item--focus');
-                        }
-                    });
-
-                    if (!target.shadowRoot.querySelector('.list__item').classList.contains('list__item--current')) {
-                        liandi.navigation.element.querySelectorAll('.file').forEach(item => {
-                            item.shadowRoot.querySelector('.list__item').classList.remove('list__item--focus');
-                        });
-                        target.shadowRoot.querySelector('.list__item').classList.add('list__item--focus');
-                    }
+                    folderMenu.popup();
                     event.preventDefault();
                     break;
                 }
 
-                if (target.classList.contains('files__list') && liandi.current.dir && liandi.current.dir.url) {
+                if (target.getAttribute("data-type") === 'navigation-file') {
+                    // navigation 文件上：删除/重命名/打开文件位置
                     this.itemData = {
                         url: liandi.current.dir.url,
                         path: liandi.current.path
                     };
-                    filesSpaceMenu.popup();
+                    fileMenu.popup();
                     event.preventDefault();
                     break;
                 }
