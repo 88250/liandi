@@ -26,7 +26,7 @@
 <a href="https://github.com/88250/liandi/blob/master/README.md">中文</a>
 </p>
 
-**Status**: We are developing the Markdown block-level reference feature, please go to [here](https://github.com/88250/liandi/issues/87) to view the feature description and make suggestions :heart:
+**Status: We are developing the Markdown block-level reference feature, please go to [here](https://github.com/88250/liandi/issues/87) to view the feature description and make suggestions :heart:**
 
 ## 💡 Introduction
 
