@@ -41,26 +41,26 @@ type Snippet struct {
 	Content string `json:"content"`
 }
 
-func (dir *Dir) MoveIndexDoc(url, path, newPath string) {
+func (dir *Dir) MoveIndexDoc(path, newPath string) {
 	for _, d := range docs {
-		if url == d.URL && path == d.Path {
+		if dir.URL == d.URL && path == d.Path {
 			d.Path = newPath
 			break
 		}
 	}
 }
 
-func (dir *Dir) RemoveIndexDoc(url, path string) {
+func (dir *Dir) RemoveIndexDoc(path string) {
 	for i, doc := range docs {
-		if doc.URL == url && doc.Path == path {
+		if doc.URL == dir.URL && doc.Path == path {
 			docs = docs[:i+copy(docs[i:], docs[i+1:])]
 			break
 		}
 	}
 }
 
-func (dir *Dir) IndexDoc(url, path, content string) {
-	doc := &Doc{URL: url, Path: path, Content: content}
+func (dir *Dir) IndexDoc(path, content string) {
+	doc := &Doc{URL: dir.URL, Path: path, Content: content}
 	for i, d := range docs {
 		if doc.URL == d.URL && doc.Path == d.Path {
 			docs = docs[:i+copy(docs[i:], docs[i+1:])]

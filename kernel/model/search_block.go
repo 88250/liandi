@@ -45,18 +45,18 @@ func (dir *Dir) MoveTree(url, p, newPath string) {
 	}
 }
 
-func (dir *Dir) RemoveTree(url, path string) {
+func (dir *Dir) RemoveTree(path string) {
 	for i, tree := range trees {
-		if tree.URL == url && tree.Path == path {
+		if tree.URL == dir.URL && tree.Path == path {
 			trees = trees[:i+copy(trees[i:], trees[i+1:])]
 			break
 		}
 	}
 }
 
-func (dir *Dir) ParseIndexTree(url, p, markdown string) {
+func (dir *Dir) ParseIndexTree(p, markdown string) {
 	tree := parse.Parse("", util.StrToBytes(markdown), Lute.Options)
-	tree.URL = url
+	tree.URL = dir.URL
 	tree.Path = p
 	tree.Name = path.Base(p)
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
@@ -84,9 +84,9 @@ func (dir *Dir) IndexTree(tree *parse.Tree) {
 	trees = append(trees, tree)
 }
 
-func (dir *Dir) queryTree(url, path string) *parse.Tree {
+func (dir *Dir) Tree(path string) *parse.Tree {
 	for _, t := range trees {
-		if url == t.URL && path == t.Path {
+		if dir.URL == t.URL && path == t.Path {
 			return t
 		}
 	}
