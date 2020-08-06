@@ -24,6 +24,7 @@ import (
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
 	"github.com/88250/lute"
+	"github.com/88250/lute/parse"
 )
 
 // Mode 标识了运行模式，默认开发环境。
@@ -285,37 +286,43 @@ func (dir *Dir) Index() {
 	files := dir.Files("/")
 	for _, file := range files {
 		p := file.(*gowebdav.File).Path()
-		if markdown, err := dir.Get(p); nil == err {
-			dir.IndexDoc(p, markdown)
-
+		var tree *parse.Tree
+		if isJSON(file) {
 			astJSONStr, err := ReadASTJSON(dir.URL, p)
 			if nil != err {
 				Logger.Fatalf("读取目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
 			}
-			if "" != astJSONStr {
-				tree, err := ParseJSON(astJSONStr)
-				if nil != err {
-					Logger.Fatalf("解析目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
-				}
-				tree.URL = dir.URL
-				tree.Path = p
-				tree.Name = path.Base(p)
-				dir.IndexTree(tree)
-			} else {
-				dir.ParseIndexTree(p, markdown)
+			tree, err = ParseJSON(astJSONStr)
+			if nil != err {
+				Logger.Fatalf("解析目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
+			}
+			tree.URL = dir.URL
+			tree.Path = jsonName2Path(p)
+			tree.Name = jsonName2Path(path.Base(p))
+		} else {
+			markdown, err := dir.Get(p)
+			if nil != err {
+				Logger.Fatalf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, p, err)
+			}
+			tree = dir.ParseIndexTree(p, markdown)
+			if err = WriteASTJSON(tree); nil != err {
+				Logger.Fatalf("生成目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
 			}
 		}
+		dir.IndexTree(tree)
 	}
 	Logger.Debugf("索引目录 [%s] 完毕", dir.URL)
 }
 
 func (dir *Dir) Unindex() {
 	Logger.Debugf("开始删除索引 [%s] 目录", dir.URL)
-	files := dir.Files("/")
-	for _, file := range files {
-		p := file.(*gowebdav.File).Path()
-		dir.RemoveIndexDoc(p)
-		dir.RemoveTree(p)
+	var paths []string
+	for _, tree := range trees {
+		paths = append(paths, tree.Path)
+	}
+	for _, path := range paths {
+		dir.RemoveIndexDoc(path)
+		dir.RemoveTree(path)
 	}
 }
 
@@ -345,7 +352,7 @@ func (dir *Dir) files(files, ret *[]os.FileInfo) {
 				dir.files(&fs, ret)
 			}
 		} else {
-			if isMarkdown(f) {
+			if isMarkdown(f) || isJSON(f) {
 				*ret = append(*ret, f)
 			}
 		}

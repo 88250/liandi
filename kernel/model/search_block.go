@@ -54,12 +54,12 @@ func (dir *Dir) RemoveTree(path string) {
 	}
 }
 
-func (dir *Dir) ParseIndexTree(p, markdown string) {
-	tree := parse.Parse("", util.StrToBytes(markdown), Lute.Options)
-	tree.URL = dir.URL
-	tree.Path = p
-	tree.Name = path.Base(p)
-	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+func (dir *Dir) ParseIndexTree(p, markdown string) (ret *parse.Tree){
+	ret = parse.Parse("", util.StrToBytes(markdown), Lute.Options)
+	ret.URL = dir.URL
+	ret.Path = jsonName2Path(p)
+	ret.Name = jsonName2Path(path.Base(p))
+	ast.Walk(ret.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		if !entering {
 			return ast.WalkContinue
 		}
@@ -69,9 +69,7 @@ func (dir *Dir) ParseIndexTree(p, markdown string) {
 		}
 		return ast.WalkContinue
 	})
-
-	dir.IndexTree(tree)
-	WriteASTJSON(tree)
+	return
 }
 
 func (dir *Dir) IndexTree(tree *parse.Tree) {

@@ -42,8 +42,6 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) (ret
 		ret = &unmount{baseCmd}
 	case "ls":
 		ret = &ls{baseCmd}
-	case "lsd":
-		ret = &lsd{baseCmd}
 	case "get":
 		ret = &get{baseCmd}
 	case "put":
