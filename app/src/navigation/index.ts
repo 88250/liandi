@@ -19,7 +19,7 @@ export class Navigation {
         }
     }
 
-    onLs(liandi: ILiandi, data: { files: IFile[], url: string, path: string }) {
+    public onLs(liandi: ILiandi, data: { files: IFile[], url: string, path: string }) {
         if (data.files.length > 0) {
             const arrowElement = this.element.querySelector(`tree-list[url="${data.url}"]`).shadowRoot
                 .querySelector(`.item__arrow[path="${data.path}"]`);
@@ -32,5 +32,15 @@ export class Navigation {
     public onMount(data: { dir: IDir }) {
         this.element.insertAdjacentHTML('beforeend',
             `<tree-list url="${data.dir.url}" dir="${encodeURIComponent(JSON.stringify(data.dir))}"></tree-list>`);
+    }
+
+    public show() {
+        this.element.classList.remove('fn__none');
+        document.getElementById('resize').classList.remove('fn__none');
+    }
+
+    public hide() {
+        this.element.classList.add('fn__none');
+        document.getElementById('resize').classList.add('fn__none');
     }
 }
