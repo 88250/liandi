@@ -4,7 +4,6 @@ import * as path from 'path';
 import {showMessage} from '../util/message';
 import {bindDialogInput, destroyDialog, dialog} from '../util/dialog';
 import {validateName} from '../util/rename';
-import {getPath, removeLastPath, urlJoin} from '../util/path';
 
 export const showInFolder = (liandi: ILiandi) => {
     return new remote.MenuItem({
@@ -22,7 +21,7 @@ export const showInFolder = (liandi: ILiandi) => {
                 if (liandi.current.dir.path) {
                     shell.showItemInFolder(path.join(liandi.current.dir.path, itemData.path));
                 } else {
-                    showMessage(urlJoin(liandi.current.dir.url, itemData.path));
+                    showMessage(path.join(liandi.current.dir.url, itemData.path));
                 }
             }
         }
@@ -54,7 +53,7 @@ export const newFile = (liandi: ILiandi) => {
                 if (!validateName(liandi, name)) {
                     return false;
                 }
-                let currentNewPath = removeLastPath(itemData.path) + name;
+                let currentNewPath = path.join(path.dirname(itemData.path), name);
                 liandi.editors.save(window.liandi.liandi);
                 liandi.ws.send('create', {
                     url: itemData.url,
@@ -98,10 +97,7 @@ export const newFolder = (liandi: ILiandi) => {
                     return false;
                 }
 
-                let currentNewPath = removeLastPath(itemData.path) + name + '/';
-                if (!itemData.target) {
-                    currentNewPath = getPath(itemData.path) + name + '/';
-                }
+                let currentNewPath = path.join(path.dirname(itemData.path), name);
                 liandi.ws.send('mkdir', {
                     url: itemData.url,
                     path: currentNewPath

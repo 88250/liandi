@@ -1,7 +1,6 @@
 import {rename} from '../util/rename';
 import Vditor from '../../vditore/src';
 import {Constants} from '../constants';
-import {getPath, urlJoin} from '../util/path';
 import {remote} from 'electron';
 import * as path from 'path';
 
@@ -133,7 +132,7 @@ export class Editors {
                 url: Constants.UPLOAD_ADDRESS,
             },
             after: () => {
-                editor.vditor.vditor.lute.SetLinkBase(urlJoin(liandi.current.dir.url, getPath(liandi.current.path)));
+                editor.vditor.vditor.lute.SetLinkBase(path.join(liandi.current.dir.url, liandi.current.path));
                 editor.vditor.setHTML(html);
                 editor.vditor.focus();
             },
@@ -201,16 +200,17 @@ export class Editors {
         this.initVditor(liandi, this.currentEditor);
     }
 
-    open(liandi: ILiandi, editorData: { content: string, name: string }) {
+    public open(liandi: ILiandi, editorData: { content: string, name: string }) {
         if (this.currentEditor) {
             this.initVditor(liandi, this.currentEditor, editorData.content);
         } else {
             this.newEditor(liandi, editorData.content);
         }
         this.currentEditor.inputElement.value = editorData.name.replace('.md', '');
+        document.querySelector<HTMLElement>('.editor__empty').style.display = "none"
     }
 
-    showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[] }) {
+    public showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[] }) {
         const dataList: IHintData[] = [];
         data.blocks.forEach(item => {
             const dirName = path.dirname(item.path);

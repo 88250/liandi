@@ -4,10 +4,10 @@ import {lauguage} from '../config/language';
 import {about} from '../config/about';
 import {theme} from '../config/theme';
 import {initConfigSearch} from '../config/search';
-import {getPath, removeLastPath} from '../util/path';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
 import {help} from '../config/help';
+import * as path from 'path';
 
 export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
@@ -24,15 +24,10 @@ export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     if (currentTreeElement) {
         currentTreeElement.classList.remove('list__item--current');
     }
-    const currentTreeFolderElement = currentNavigationElement.shadowRoot.querySelector(`.tree-list__folder[path="${removeLastPath(liandi.current.path)}"]`);
+    const currentTreeFolderElement = currentNavigationElement.shadowRoot.querySelector(`.tree-list__folder[path="${path.dirname(liandi.current.path)}"]`);
     if (currentTreeFolderElement) {
         currentTreeFolderElement.parentElement.classList.add('list__item--current');
     }
-
-    window.liandi.liandi.ws.send('ls', {
-        url: liandi.current.dir.url,
-        path: getPath(liandi.current.path)
-    });
     liandi.ws.send('searchget', {
         url: liandi.current.dir.url,
         path: liandi.current.path,

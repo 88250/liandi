@@ -120,7 +120,7 @@ export class WebSocketUtil {
 
                     liandi.navigation.element.innerHTML = '';
                     response.data.dirs.map((item: IDir) => {
-                        liandi.navigation.onMount({dir: item});
+                        liandi.navigation.onMount(liandi, {dir: item});
                     });
                     break;
                 case 'put':
@@ -156,7 +156,7 @@ export class WebSocketUtil {
                     }
                     liandi.navigation.element.innerHTML = '';
                     response.data.map((item: { dir: IDir }) => {
-                        liandi.navigation.onMount(item);
+                        liandi.navigation.onMount(liandi, item);
                     });
                     break;
                 case 'rename':

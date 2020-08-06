@@ -1,7 +1,6 @@
 import './assets/scss/base.scss';
 import {Navigation} from './navigation';
 import {WebSocketUtil} from './websocket';
-import './components/tree-list';
 import './components/tab-panel';
 import './icons/index';
 import {Editors} from './editors';
@@ -27,7 +26,7 @@ class App {
         };
 
         this.liandi.ws = new WebSocketUtil(this.liandi, () => {
-            this.liandi.navigation = new Navigation();
+            this.liandi.navigation = new Navigation(this.liandi);
             this.liandi.editors = new Editors();
             this.liandi.menus = new Menus(this.liandi);
             this.liandi.find = new Find();
