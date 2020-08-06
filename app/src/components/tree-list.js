@@ -13,7 +13,7 @@ customElements.define('tree-list',
       }
       const ulElement = document.createElement('ul')
       ulElement.className = 'tree-list'
-      ulElement.innerHTML = `<li class="fn__flex fn__a">
+      ulElement.innerHTML = `<li class="fn__flex fn__a" data-type="root">
 <svg class="item__arrow" path="/" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
 <span class="item__name" path="/">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">${pathHTML}</svg>

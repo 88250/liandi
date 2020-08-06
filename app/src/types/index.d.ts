@@ -40,6 +40,13 @@ declare interface IEditor {
     vditor?: any;
 }
 
+declare interface IMenuData {
+    target?: HTMLElement
+    name?: string
+    path?: string
+    url?: string
+}
+
 declare interface IMD {
     autoSpace: boolean;
     chinesePunct: boolean;
@@ -74,6 +81,8 @@ declare interface ILiandi {
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
         onMount: (data: { dir: IDir }) => void
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
+        show: () => void;
+        hide: () => void;
     };
     backlinks?: {
         element: HTMLElement
@@ -88,12 +97,7 @@ declare interface ILiandi {
         showSearchBlock: (liandi: ILiandi, data: { k: string, blocks: IBlock[] }) => void;
     };
     menus?: {
-        itemData: {
-            target?: HTMLElement
-            name?: string
-            url: string
-            path?: string
-        }
+        itemData: IMenuData
     };
     current?: {
         dir?: IDir

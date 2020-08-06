@@ -47,11 +47,9 @@ class App {
     private initBar() {
         document.getElementById('barNavigation').addEventListener('click', () => {
             if (this.liandi.navigation.element.classList.contains('fn__none')) {
-                this.liandi.navigation.element.classList.remove('fn__none');
-                document.getElementById('resize').classList.remove('fn__none');
+                this.liandi.navigation.show()
             } else {
-                this.liandi.navigation.element.classList.add('fn__none');
-                document.getElementById('resize').classList.add('fn__none');
+                this.liandi.navigation.hide()
             }
             window.dispatchEvent(new CustomEvent('resize'));
         });

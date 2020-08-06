@@ -2,7 +2,6 @@ import {Constants} from '../constants';
 import {hideMessage, showMessage} from '../util/message';
 import {destroyDialog, dialog} from '../util/dialog';
 import {i18n} from '../i18n';
-import {showMountDialog} from '../util/mount';
 import {lauguage} from '../config/language';
 import {theme} from '../config/theme';
 import {onSearch} from '../search';
@@ -115,7 +114,7 @@ export class WebSocketUtil {
                     }
 
                     if (response.data.dirs.length === 0) {
-                        showMountDialog(liandi);
+                        liandi.navigation.hide();
                         return;
                     }
 
@@ -130,7 +129,7 @@ export class WebSocketUtil {
                     break;
                 case 'unmount':
                     if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {
-                        showMountDialog(liandi);
+                        liandi.navigation.hide();
                     }
                     break;
                 case 'mount':
@@ -138,6 +137,7 @@ export class WebSocketUtil {
                     this.send('dirs', {});
                     hideMessage();
                     destroyDialog();
+                    liandi.navigation.show();
                     break;
                 case 'ls':
                     liandi.navigation.onLs(liandi, response.data);
@@ -151,7 +151,7 @@ export class WebSocketUtil {
                     break;
                 case 'dirs':
                     if (response.data.length === 0) {
-                        showMountDialog(liandi);
+                        liandi.navigation.hide();
                         return;
                     }
                     liandi.navigation.element.innerHTML = '';

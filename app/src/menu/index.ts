@@ -2,13 +2,11 @@ import {initFilesMenu, initFilesSpaceMenu} from './files';
 import {initNavigationMenu} from './navigation';
 import {initMountMenu} from './mount';
 
+// 文件夹上：新建文档/文件夹/删除/重命名/打开文件位置
+// 文件上：删除/重命名/打开文件位置
+// 根上：新建文档/文件夹/取消挂在/打开文件位置
 export class Menus {
-    public itemData: {
-        target?: HTMLElement
-        name?: string
-        url: string
-        path?: string
-    };
+    public itemData: IMenuData;
 
     constructor(liandi: ILiandi) {
 
@@ -25,20 +23,14 @@ export class Menus {
                     break;
                 }
 
-                if (target.tagName === 'TREE-LIST') {
+                if (target.tagName === 'TREE-LIST' || target.getAttribute("data-type") === 'root') {
+                    const dir = JSON.parse(decodeURIComponent(target.getAttribute('dir')))
                     this.itemData = {
                         target,
-                        url: target.getAttribute('url'),
+                        path: "/",
+                        url: dir.url
                     };
-                    navigationMenu.popup({
-                        callback: () => {
-                            target.classList.remove('list__item--focus');
-                        }
-                    });
-                    target.parentElement.querySelectorAll('tree-list').forEach(item => {
-                        item.classList.remove('list__item--focus');
-                    });
-                    target.classList.add('list__item--focus');
+                    navigationMenu.popup();
                     event.preventDefault();
                     break;
                 }

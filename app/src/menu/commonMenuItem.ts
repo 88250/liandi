@@ -54,21 +54,14 @@ export const newFile = (liandi: ILiandi) => {
                 if (!validateName(liandi, name)) {
                     return false;
                 }
-
                 let currentNewPath = removeLastPath(itemData.path) + name;
-                if (!itemData.target) {
-                    currentNewPath = getPath(itemData.path) + name;
-                }
-
                 liandi.editors.save(window.liandi.liandi);
-
                 liandi.ws.send('create', {
                     url: itemData.url,
                     path: currentNewPath
-
                 });
 
-                liandi.current.path = currentNewPath.endsWith('.md') ? currentNewPath : currentNewPath + '.md';
+                liandi.current.path = currentNewPath;
                 destroyDialog();
             });
             bindDialogInput(inputElement, () => {
