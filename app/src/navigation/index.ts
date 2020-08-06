@@ -83,9 +83,9 @@ export class Navigation {
             const style = ` style="padding-left: ${(item.path.split('/').length -
                 (item.isdir ? 2 : 1)) * 13}px"`
             if (item.isdir) {
-                fileHTML += `<li data-type="navigation-folder" class="fn__a fn__flex"${style}>
-<svg class="item__arrow" path="${item.path}" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
-<span class="item__name" path="${item.path}">
+                fileHTML += `<li data-path="${encodeURIComponent(item.path)}" data-type="navigation-folder" class="fn__a fn__flex"${style}>
+<svg class="item__arrow" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
+<span class="item__name">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${dir.path !== '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
   <span class="fn__ellipsis">${item.name}</span>
 </span>

@@ -1,7 +1,6 @@
 import {remote, shell} from 'electron';
 import {i18n} from '../i18n';
 import * as path from 'path';
-import {showMessage} from '../util/message';
 import {bindDialogInput, destroyDialog, dialog} from '../util/dialog';
 import {validateName} from '../util/rename';
 
@@ -10,20 +9,7 @@ export const showInFolder = (liandi: ILiandi) => {
         label: i18n[liandi.config.lang].showInFolder,
         click: () => {
             const itemData = liandi.menus.itemData;
-            if (itemData.target && itemData.target.tagName === 'TREE-LIST') {
-                const dir = JSON.parse(decodeURIComponent(itemData.target.getAttribute('dir')));
-                if (dir.path) {
-                    shell.showItemInFolder(dir.path);
-                } else {
-                    showMessage(dir.url);
-                }
-            } else {
-                if (liandi.current.dir.path) {
-                    shell.showItemInFolder(path.join(liandi.current.dir.path, itemData.path));
-                } else {
-                    showMessage(path.join(liandi.current.dir.url, itemData.path));
-                }
-            }
+            shell.showItemInFolder(path.join(itemData.dir.path, itemData.path));
         }
     });
 };
@@ -56,7 +42,7 @@ export const newFile = (liandi: ILiandi) => {
                 let currentNewPath = path.join(path.dirname(itemData.path), name);
                 liandi.editors.save(window.liandi.liandi);
                 liandi.ws.send('create', {
-                    url: itemData.url,
+                    url: itemData.dir.url,
                     path: currentNewPath
                 });
 
@@ -99,7 +85,7 @@ export const newFolder = (liandi: ILiandi) => {
 
                 let currentNewPath = path.join(path.dirname(itemData.path), name);
                 liandi.ws.send('mkdir', {
-                    url: itemData.url,
+                    url: itemData.dir.url,
                     path: currentNewPath
                 });
                 destroyDialog();

@@ -42,9 +42,8 @@ declare interface IEditor {
 
 declare interface IMenuData {
     target?: HTMLElement
-    name?: string
     path?: string
-    url?: string
+    dir?: IDir
 }
 
 declare interface IMD {

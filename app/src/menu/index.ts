@@ -1,6 +1,7 @@
 import {initFolderMenu, initFileMenu} from './file';
 import {initNavigationMenu} from './navigation';
 import {initMountMenu} from './mount';
+import {hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
 
 export class Menus {
     public itemData: IMenuData;
@@ -23,11 +24,10 @@ export class Menus {
 
                 if (target.getAttribute("data-type") === 'navigation-root') {
                     // navigation 根上：新建文档/文件夹/取消挂在/打开文件位置
-                    const dir = JSON.parse(decodeURIComponent(target.parentElement.getAttribute("data-dir")))
                     this.itemData = {
                         target,
                         path: "/",
-                        url: dir.url
+                        dir: this.getDir(target),
                     };
                     navigationMenu.popup();
                     event.preventDefault();
@@ -38,9 +38,8 @@ export class Menus {
                     // navigation 文件夹上：新建文档/文件夹/删除/重命名/打开文件位置
                     this.itemData = {
                         target,
-                        name: decodeURIComponent(target.getAttribute('name')).replace(/&/g, '&amp;').replace(/</g, '&lt;'),
-                        url: liandi.current.dir.url,
-                        path: decodeURIComponent(target.getAttribute('path')),
+                        dir: this.getDir(target),
+                        path: decodeURIComponent(target.getAttribute('data-path')),
                     };
 
                     folderMenu.popup();
@@ -51,8 +50,9 @@ export class Menus {
                 if (target.getAttribute("data-type") === 'navigation-file') {
                     // navigation 文件上：删除/重命名/打开文件位置
                     this.itemData = {
-                        url: liandi.current.dir.url,
-                        path: liandi.current.path
+                        target,
+                        dir: this.getDir(target),
+                        path: decodeURIComponent(target.getAttribute('data-path')),
                     };
                     fileMenu.popup();
                     event.preventDefault();
@@ -62,5 +62,12 @@ export class Menus {
                 target = target.parentElement;
             }
         }, false);
+    }
+
+    private getDir(target: HTMLElement) {
+        const rootElement = hasTopClosestByTag(target, "UL")
+        if (rootElement) {
+            return JSON.parse(decodeURIComponent(rootElement.getAttribute("data-dir")))
+        }
     }
 }

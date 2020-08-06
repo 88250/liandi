@@ -10,14 +10,14 @@ export const initNavigationMenu = (liandi: ILiandi) => {
         label: i18n[liandi.config.lang].unMount,
         click: () => {
             const itemData = liandi.menus.itemData;
-            if (liandi.current.dir && liandi.current.dir.url === itemData.url) {
+            if (liandi.current.dir && liandi.current.dir.url === itemData.dir.url) {
                 liandi.editors.close(liandi);
                 liandi.current = {
                     path: '',
                 };
             }
             liandi.ws.send('unmount', {
-                url: itemData.url
+                url: itemData.dir.url
             });
             itemData.target.remove();
         }
