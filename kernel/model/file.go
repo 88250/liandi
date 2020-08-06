@@ -53,24 +53,19 @@ func Ls(url, p string) (ret []*File, err error) {
 			continue
 		}
 		treeDir := path.Dir(tree.Path)
-		if treeDir != p {
-			continue
-		}
-
-		if strings.HasSuffix(tree.Path, ".md") {
+		if p == treeDir {
 			docs = append(docs, &File{Path: tree.Path, Name: path.Base(tree.Path)})
-			continue
-		}
-
-		var existDir bool
-		for _, dir := range dirs {
-			if dir.Path == treeDir {
-				existDir = true
-				break
+		} else if p == path.Dir(treeDir) {
+			var existDir bool
+			for _, dir := range dirs {
+				if dir.Path == treeDir {
+					existDir = true
+					break
+				}
 			}
-		}
-		if !existDir {
-			dirs = append(dirs, &File{Path: treeDir, Name: path.Base(treeDir), IsDir: true})
+			if !existDir {
+				dirs = append(dirs, &File{Path: treeDir, Name: path.Base(treeDir), IsDir: true})
+			}
 		}
 	}
 

@@ -57,8 +57,8 @@ func (dir *Dir) RemoveTree(path string) {
 func (dir *Dir) ParseIndexTree(p, markdown string) (ret *parse.Tree){
 	ret = parse.Parse("", util.StrToBytes(markdown), Lute.Options)
 	ret.URL = dir.URL
-	ret.Path = jsonName2Path(p)
-	ret.Name = jsonName2Path(path.Base(p))
+	ret.Path = p
+	ret.Name = path.Base(p)
 	ast.Walk(ret.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		if !entering {
 			return ast.WalkContinue
