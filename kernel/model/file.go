@@ -19,7 +19,6 @@ import (
 	"strings"
 
 	"github.com/88250/gowebdav"
-	"github.com/88250/gulu"
 )
 
 type File struct {
@@ -132,7 +131,7 @@ func Get(url, path string) (ret string, err error) {
 	return
 }
 
-func Put(url, path string, domStr string) (backlinks []*BacklinkRefBlock, err error) {
+func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error) {
 	dir := Conf.dir(url)
 	if nil == dir {
 		return nil, errors.New(Conf.lang(0))
@@ -140,10 +139,7 @@ func Put(url, path string, domStr string) (backlinks []*BacklinkRefBlock, err er
 
 	// DOM 转 Markdown
 	markdown := Lute.VditorIRBlockDOM2Md(domStr)
-	if err = dir.Put(path, gulu.Str.ToBytes(markdown)); nil != err {
-		return nil, err
-	}
-	dir.IndexDoc(path, markdown)
+	dir.IndexDoc(p, markdown)
 
 	// DOM 转树
 	tree, err := Lute.VditorIRBlockDOM2Tree(domStr)
@@ -153,7 +149,7 @@ func Put(url, path string, domStr string) (backlinks []*BacklinkRefBlock, err er
 		return nil, errors.New(msg)
 	}
 	tree.URL = url
-	tree.Path = path
+	tree.Path = p
 	dir.IndexTree(tree)
 
 	// 构建双链
