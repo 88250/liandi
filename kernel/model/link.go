@@ -12,6 +12,7 @@ package model
 
 import (
 	"bytes"
+	"errors"
 	"strings"
 
 	"github.com/88250/gulu"
@@ -32,6 +33,17 @@ type BacklinkRefBlock struct {
 	URL    string   `json:"url"`
 	Path   string   `json:"path"`
 	Blocks []*Block `json:"blocks"`
+}
+
+func Backlinks(url, path string) (ret []*BacklinkRefBlock, err error) {
+	dir := Conf.dir(url)
+	if nil == dir {
+		return nil, errors.New(Conf.lang(0))
+	}
+
+	tree := dir.Tree(path)
+	ret = dir.IndexLink(tree)
+	return
 }
 
 func (dir *Dir) IndexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {

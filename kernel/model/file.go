@@ -123,7 +123,7 @@ func Get(url, path string) (ret string, err error) {
 		return "", errors.New(Conf.lang(0))
 	}
 
-	tree := dir.queryTree(url, path)
+	tree := dir.Tree(path)
 	if nil == tree {
 		return "", errors.New(Conf.lang(13))
 	}
@@ -143,7 +143,7 @@ func Put(url, path string, domStr string) (backlinks []*BacklinkRefBlock, err er
 	if err = dir.Put(path, gulu.Str.ToBytes(markdown)); nil != err {
 		return nil, err
 	}
-	dir.IndexDoc(url, path, markdown)
+	dir.IndexDoc(path, markdown)
 
 	// DOM 转树
 	tree, err := Lute.VditorIRBlockDOM2Tree(domStr)
@@ -220,7 +220,7 @@ func Rename(url, oldPath, newPath string) error {
 		return err
 	}
 
-	dir.MoveIndexDoc(url, oldPath, newPath)
+	dir.MoveIndexDoc(oldPath, newPath)
 	dir.MoveTree(url, oldPath, newPath)
 	return MoveASTJSON(url, oldPath, newPath)
 }
@@ -238,8 +238,8 @@ func Remove(url, path string) error {
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
-	dir.RemoveIndexDoc(url, path)
-	dir.RemoveTree(url, path)
+	dir.RemoveIndexDoc(path)
+	dir.RemoveTree(path)
 	err := dir.Remove(path)
 	if nil != err {
 		return err

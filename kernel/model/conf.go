@@ -286,7 +286,7 @@ func (dir *Dir) Index() {
 	for _, file := range files {
 		p := file.(*gowebdav.File).Path()
 		if markdown, err := dir.Get(p); nil == err {
-			dir.IndexDoc(dir.URL, p, markdown)
+			dir.IndexDoc(p, markdown)
 
 			astJSONStr, err := ReadASTJSON(dir.URL, p)
 			if nil != err {
@@ -302,7 +302,7 @@ func (dir *Dir) Index() {
 				tree.Name = path.Base(p)
 				dir.IndexTree(tree)
 			} else {
-				dir.ParseIndexTree(dir.URL, p, markdown)
+				dir.ParseIndexTree(p, markdown)
 			}
 		}
 	}
@@ -314,8 +314,8 @@ func (dir *Dir) Unindex() {
 	files := dir.Files("/")
 	for _, file := range files {
 		p := file.(*gowebdav.File).Path()
-		dir.RemoveIndexDoc(dir.URL, p)
-		dir.RemoveTree(dir.URL, p)
+		dir.RemoveIndexDoc(p)
+		dir.RemoveTree(p)
 	}
 }
 
