@@ -37,6 +37,7 @@ func (cmd *mkdir) Exec() {
 	ret.Data = map[string]interface{}{
 		"url":  url,
 		"path": p,
+		"name": path.Base(p),
 	}
 	model.Push(ret.Bytes())
 }
