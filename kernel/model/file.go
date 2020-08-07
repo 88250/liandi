@@ -17,6 +17,8 @@ import (
 	"path"
 	"sort"
 	"strings"
+
+	"github.com/88250/gowebdav"
 )
 
 type File struct {
@@ -29,16 +31,27 @@ type File struct {
 	HMtime string `json:"hMtime"`
 }
 
+func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
+	ret = &File{}
+	f := fileInfo.(*gowebdav.File)
+	ret.Path = f.Path()
+	ret.Name = f.Name()
+	ret.IsDir = f.IsDir()
+	ret.Size = f.Size()
+	ret.Mtime = f.ModTime().Unix()
+	return
+}
+
 func isMarkdown(fileInfo os.FileInfo) bool {
-	fname := strings.ToLower(path.Ext(fileInfo.Name()))
-	return ".md" == fname || ".markdown" == fname
+	fileName := strings.ToLower(path.Ext(fileInfo.Name()))
+	return ".md" == fileName || ".markdown" == fileName
 }
 
 func isJSON(fileInfo os.FileInfo) bool {
 	return strings.HasSuffix(fileInfo.Name(), ".md.json")
 }
 
-func Ls(url, p string) (ret []*File, err error) {
+func Ls(url, path string) (ret []*File, err error) {
 	ret = []*File{}
 
 	dir := Conf.dir(url)
@@ -46,26 +59,26 @@ func Ls(url, p string) (ret []*File, err error) {
 		return nil, errors.New(Conf.lang(0))
 	}
 
+	files, err := dir.Ls(path)
+	if nil != err {
+		return nil, err
+	}
+
 	var dirs, docs []*File
 
-	for _, tree := range trees {
-		if tree.URL != dir.URL {
+	for _, f := range files {
+		if strings.HasPrefix(f.Name(), ".") || dir.isSkipDir(f.Name()) {
 			continue
 		}
-		treeDir := path.Dir(tree.Path)
-		if p == treeDir {
-			docs = append(docs, &File{Path: tree.Path, Name: path.Base(tree.Path)})
-		} else if p == path.Dir(treeDir) {
-			var existDir bool
-			for _, dir := range dirs {
-				if dir.Path == treeDir {
-					existDir = true
-					break
-				}
-			}
-			if !existDir {
-				dirs = append(dirs, &File{Path: treeDir, Name: path.Base(treeDir), IsDir: true})
-			}
+
+		if f.IsDir() {
+			dirs = append(dirs, fromFileInfo(f))
+			continue
+		}
+
+		if isJSON(f) {
+			docs = append(docs, fromFileInfo(f))
+			continue
 		}
 	}
 
