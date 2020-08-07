@@ -22,7 +22,6 @@ class App {
             current: {
                 path: '',
             },
-            componentCSS: require('../dist/components.css')[0][1]
         };
 
         this.liandi.ws = new WebSocketUtil(this.liandi, () => {

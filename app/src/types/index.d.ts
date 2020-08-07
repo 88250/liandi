@@ -70,7 +70,6 @@ declare interface ILiandi {
         markdown: IMD,
         image: IImage,
     };
-    componentCSS: string;
     ws?: {
         webSocket: WebSocket,
         send: (cmd: string, param: any, process?: boolean) => void

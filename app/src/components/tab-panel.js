@@ -5,10 +5,9 @@ customElements.define('tab-panel',
 
       const isVertical = this.getAttribute('type') === 'vertical'
       const shadowRoot = this.attachShadow({mode: 'open'})
-      shadowRoot.innerHTML = `<style>${window.liandi.liandi.componentCSS}</style>
-<div class="${isVertical ? 'fn__flex' : ''}">
+      shadowRoot.innerHTML = `<div${isVertical ? ' style="display:flex"' : ''}>
   <slot name="tab"></slot>
-  <div class="${isVertical ? 'fn__flex-1' : ''}"><slot name="ext"></slot><slot name="panel"></slot></div>
+  <div ${isVertical ? ' style="flex:1"' : ''}"><slot name="ext"></slot><slot name="panel"></slot></div>
 </div>`
 
       const tabs = Array.from(this.firstElementChild.children).filter(item => {
