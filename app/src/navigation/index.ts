@@ -11,12 +11,12 @@ export class Navigation {
             let target = event.target as HTMLElement
             const ulElement = hasTopClosestByTag(target, "UL")
             if (ulElement) {
-                liandi.current.dir = JSON.parse(decodeURIComponent(ulElement.getAttribute("data-dir")))
+                const dir = JSON.parse(decodeURIComponent(ulElement.getAttribute("data-dir")))
                 if (event.detail === 1) {
                     timeoutId = window.setTimeout(() => {
                         while (target && !target.isEqualNode(ulElement)) {
                             if (target.classList.contains('item__arrow')) {
-                                this.getLeaf(target.parentElement, liandi.current.dir)
+                                this.getLeaf(target.parentElement, dir)
                                 this.setCurrent(target.parentElement)
                                 event.preventDefault()
                                 event.stopPropagation()
@@ -27,11 +27,13 @@ export class Navigation {
                                 this.setCurrent(target)
                                 liandi.editors.save(liandi)
                                 const path = decodeURIComponent(target.getAttribute('data-path'))
+                                liandi.current = {
+                                    dir, path
+                                }
                                 liandi.ws.send('get', {
-                                    url: liandi.current.dir.url,
+                                    url: dir.url,
                                     path,
                                 })
-                                liandi.current.path = path
                                 event.preventDefault()
                                 event.stopPropagation()
                                 break
@@ -49,7 +51,7 @@ export class Navigation {
                 } else if (event.detail === 2) {
                     while (target && !target.isEqualNode(ulElement)) {
                         if (target.tagName === "LI" && target.getAttribute("data-type") !== "navigation-file") {
-                            this.getLeaf(target, liandi.current.dir)
+                            this.getLeaf(target, dir)
                             this.setCurrent(target)
                             event.preventDefault()
                             event.stopPropagation()
@@ -86,7 +88,7 @@ export class Navigation {
                 fileHTML += `<li data-path="${encodeURIComponent(item.path)}" data-type="navigation-folder" class="fn__a fn__flex"${style}>
 <svg class="item__arrow fn__hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconRight"></use></svg>
 <span class="item__name">
-  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${dir.path !== '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${dir.path === '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
   <span class="fn__ellipsis">${item.name}</span>
 </span>
 </li>`
@@ -127,7 +129,7 @@ export class Navigation {
     }
 
     public onLs(liandi: ILiandi, data: { files: IFile[], url: string, path: string }) {
-        const liElement = this.element.querySelector(`li[data-path="${encodeURIComponent(data.path)}"]`);
+        const liElement = this.element.querySelector(`ul[data-url="${encodeURIComponent(data.url)}"] li[data-path="${encodeURIComponent(data.path)}"]`);
         if (data.files.length > 0 && liElement) {
             liElement.setAttribute('data-files', JSON.stringify(data.files));
             liElement.firstElementChild.classList.remove("fn__hidden")
@@ -135,11 +137,11 @@ export class Navigation {
     }
 
     public onMount(liandi: ILiandi, data: { dir: IDir }) {
-        let html = `<ul data-url="${data.dir.url}" data-dir="${encodeURIComponent(JSON.stringify(data.dir))}">
+        let html = `<ul data-url="${encodeURIComponent(data.dir.url)}" data-dir="${encodeURIComponent(JSON.stringify(data.dir))}">
 <li class="fn__flex fn__a" data-type="navigation-root" data-path="%2F">
 <svg class="item__arrow fn__hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconRight"></use></svg>
 <span class="item__name">
-  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${data.dir.path !== '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${data.dir.path === '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
   <span class="fn__ellipsis">${path.basename(data.dir.url)}</span>
 </span>
 </li></ul>`

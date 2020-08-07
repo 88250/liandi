@@ -70,7 +70,7 @@ export class WebSocketUtil {
                     image.onSetimage(liandi, response.data);
                     break;
                 case 'setlang':
-                    lauguage.onSetlang();
+                    window.location.reload();
                     break;
                 case 'setmd':
                     markdown.onSetMD(liandi, response.data);
@@ -79,63 +79,34 @@ export class WebSocketUtil {
                     theme.onSetTheme(liandi, response.data);
                     break;
                 case 'getconf':
-                    if (this.isFirst) {
-                        liandi.config = response.data;
-                    }
+                    liandi.config = Object.assign({
+                        lang: 'zh_CN'
+                    }, response.data);
+                    document.title = i18n[liandi.config.lang].slogan;
 
-                    if (!liandi.config.lang) {
-                        dialog({
-                            hideBackground: true,
-                            content: `<select class="input">
-    <option value="en_US" selected>English</option>
-    <option value="zh_CN">简体中文</option>
-</select>`,
-                            width: 400,
-                            height: 60,
-                            destroyDialogCallback: () => {
-                                liandi.ws.send('setlang', {
-                                    lang: 'en_US'
-                                });
-                            }
-                        });
-                        document.querySelector('select').addEventListener('change', (selectEvent) => {
-                            liandi.ws.send('setlang', {
-                                lang: (selectEvent.target as HTMLSelectElement).value
-                            });
-                        });
-                        return;
-                    }
-
-                    if (this.isFirst) {
-                        document.title = i18n[liandi.config.lang || 'en_US'].slogan;
-                        callback();
-                        theme.onSetTheme(liandi, response.data.theme);
-                        this.isFirst = false;
-                    }
+                    callback();
+                    theme.onSetTheme(liandi, response.data.theme);
 
                     if (response.data.dirs.length === 0) {
                         liandi.navigation.hide();
-                        return;
+                    } else {
+                        response.data.dirs.map((item: IDir) => {
+                            liandi.navigation.onMount(liandi, {dir: item});
+                        });
                     }
-
-                    liandi.navigation.element.innerHTML = '';
-                    response.data.dirs.map((item: IDir) => {
-                        liandi.navigation.onMount(liandi, {dir: item});
-                    });
+                    this.isFirst = false;
                     break;
                 case 'put':
                     showMessage(i18n[liandi.config.lang].saveSuccess);
                     liandi.backlinks.onBacklinks(response.data.backlinks);
                     break;
                 case 'unmount':
-                    if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {
+                    if (liandi.navigation.element.querySelectorAll('ul').length === 0) {
                         liandi.navigation.hide();
                     }
                     break;
                 case 'mount':
                 case 'mountremote':
-                    this.send('dirs', {});
-                    hideMessage();
                     destroyDialog();
                     liandi.navigation.show();
                     break;
@@ -143,21 +114,11 @@ export class WebSocketUtil {
                     liandi.navigation.onLs(liandi, response.data);
                     break;
                 case 'get':
-                    liandi.editors.open(liandi, response.data);
+                    liandi.editors.onGet(liandi, response.data);
                     break;
                 case 'searchget':
-                    liandi.editors.open(liandi, response.data);
+                    liandi.editors.onGet(liandi, response.data);
                     liandi.find.open(response.data.key, parseInt(response.data.index, 10));
-                    break;
-                case 'dirs':
-                    if (response.data.length === 0) {
-                        liandi.navigation.hide();
-                        return;
-                    }
-                    liandi.navigation.element.innerHTML = '';
-                    response.data.map((item: { dir: IDir }) => {
-                        liandi.navigation.onMount(liandi, item);
-                    });
                     break;
                 case 'rename':
                     liandi.navigation.onRename(liandi, response.data);
@@ -177,7 +138,7 @@ export class WebSocketUtil {
                     folderItemData.target.insertAdjacentHTML("afterend", `<li style="${folderItemData.target.getAttribute("style")}" data-path="${encodeURIComponent(response.data.path)}" data-type="navigation-folder" class="fn__a fn__flex">
 <svg class="item__arrow" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
 <span class="item__name">
-  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${folderItemData.dir.path !== '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${folderItemData.dir.path === '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
   <span class="fn__ellipsis">${response.data.name}</span>
 </span>
 </li>`)

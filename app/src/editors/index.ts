@@ -21,7 +21,7 @@ export class Editors {
     }
 
     private initVditor(liandi: ILiandi, editor: IEditor, html?: string) {
-        if (!html && editor.vditor) {
+        if (typeof html === 'undefined' && editor.vditor) {
             html = editor.vditor.vditor.ir.element.innerHTML;
         }
         if (editor.vditor) {
@@ -200,7 +200,7 @@ export class Editors {
         this.initVditor(liandi, this.currentEditor);
     }
 
-    public open(liandi: ILiandi, editorData: { content: string, name: string }) {
+    public onGet(liandi: ILiandi, editorData: { content: string, name: string }) {
         if (this.currentEditor) {
             this.initVditor(liandi, this.currentEditor, editorData.content);
         } else {

@@ -91,7 +91,7 @@ declare interface ILiandi {
         save: (liandi: ILiandi) => void;
         close: (liandi: ILiandi) => void;
         reloadEditor: (liandi: ILiandi) => void;
-        open: (liandi: ILiandi, editorData?: { content: string, name: string }) => void;
+        onGet: (liandi: ILiandi, editorData?: { content: string, name: string }) => void;
         showSearchBlock: (liandi: ILiandi, data: { k: string, blocks: IBlock[] }) => void;
     };
     menus?: {

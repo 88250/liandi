@@ -11,8 +11,5 @@ export const lauguage = {
                 lang: (event.target as HTMLSelectElement).value
             });
         });
-    },
-    onSetlang: () => {
-        window.location.reload();
     }
 };

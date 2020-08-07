@@ -171,7 +171,7 @@ export const onSearch = (liandi: ILiandi, data: {
     let resultHTML = '';
     data.forEach((item, index) => {
         resultHTML += `<div class="list__item fn__flex${index === 0 ? ' list__item--current' : ''}"
-title="${item.content}" data-url="${item.url}" data-path="${item.path}" data-index="${item.index}">
+title="${item.content}" data-url="${encodeURIComponent(item.url)}" data-path="${encodeURIComponent(item.path)}" data-index="${item.index}">
 <span class="fn__flex-1 fn__ellipsis">${item.content}</span>
 <span class="fn__space"></span>
 <span class="ft__smaller ft__secondary">${item.path} ${item.ln}:${item.col}</span>
