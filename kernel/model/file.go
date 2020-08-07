@@ -37,6 +37,10 @@ func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 	ret.Path = f.Path()
 	ret.Name = f.Name()
 	ret.IsDir = f.IsDir()
+	if !ret.IsDir {
+		ret.Name = ret.Name[:len(ret.Name) - len(".json")]
+		ret.Path = ret.Path[:len(ret.Path) - len(".json")]
+	}
 	ret.Size = f.Size()
 	ret.Mtime = f.ModTime().Unix()
 	return
