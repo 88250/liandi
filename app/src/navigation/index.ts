@@ -1,5 +1,7 @@
 import * as path from 'path';
 import {hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
+import {escapeHtml} from "../util/compatibility";
+import {destroyDialog} from "../util/dialog";
 
 export class Navigation {
     public element: HTMLElement;
@@ -34,6 +36,7 @@ export class Navigation {
                                     url: dir.url,
                                     path,
                                 })
+                                liandi.backlinks.getBacklinks(liandi);
                                 event.preventDefault()
                                 event.stopPropagation()
                                 break
@@ -85,11 +88,11 @@ export class Navigation {
             const style = ` style="padding-left: ${(item.path.split('/').length -
                 (item.isdir ? 2 : 1)) * 13}px"`
             if (item.isdir) {
-                fileHTML += `<li data-path="${encodeURIComponent(item.path)}" data-type="navigation-folder" class="fn__a fn__flex"${style}>
+                fileHTML += `<li data-name="${encodeURIComponent(item.name)}" data-path="${encodeURIComponent(item.path)}" data-type="navigation-folder" class="fn__a fn__flex"${style}>
 <svg class="item__arrow fn__hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconRight"></use></svg>
 <span class="item__name">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${dir.path === '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
-  <span class="fn__ellipsis">${item.name}</span>
+  <span class="fn__ellipsis">${escapeHtml(item.name)}</span>
 </span>
 </li>`
                 window.liandi.liandi.ws.send('ls', {
@@ -97,10 +100,10 @@ export class Navigation {
                     path: item.path,
                 }, true)
             } else {
-                fileHTML += `<li${style} data-type="navigation-file" class="item__name--md item__name fn__a" data-path="${encodeURIComponent(
+                fileHTML += `<li${style}  data-name="${encodeURIComponent(item.name)}" data-type="navigation-file" class="item__name--md item__name fn__a" data-path="${encodeURIComponent(
                     item.path)}">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconMD"></use></svg>
-<span class="fn__ellipsis">${item.name.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span></li>`
+<span class="fn__ellipsis">${escapeHtml(item.name)}</span></li>`
             }
         })
         liElement.insertAdjacentHTML('afterend',
@@ -114,18 +117,18 @@ export class Navigation {
         target.classList.add('item--current')
     }
 
-    public onRename(liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) {
-        const fileItemElement = this.element.querySelector(`.file[data-path="${encodeURIComponent(data.oldPath)}"]`);
+    public onRename(liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string, url: string }) {
+        const fileItemElement = this.element.querySelector(`ul[data-url="${encodeURIComponent(data.url)}"] li[data-path="${encodeURIComponent(data.oldPath)}"]`);
         fileItemElement.setAttribute('data-path', encodeURIComponent(data.newPath));
         fileItemElement.setAttribute('data-name', encodeURIComponent(data.newName));
-
-        if (fileItemElement.getAttribute('current') === 'true') {
-            liandi.current.path = data.newPath;
-
+        fileItemElement.querySelector(".fn__ellipsis").innerHTML = escapeHtml(data.newName);
+        if (liandi.current.dir && liandi.current.dir.url === data.url && liandi.current.path === data.oldPath) {
             if (!data.newPath.endsWith('/')) {
-                (document.querySelector('.editors__input') as HTMLInputElement).value = data.newName.replace('.md', '');
+                liandi.editors.currentEditor.inputElement.value = data.newName.replace('.md', '');
+                liandi.current.path = data.newPath;
             }
         }
+        destroyDialog()
     }
 
     public onLs(liandi: ILiandi, data: { files: IFile[], url: string, path: string }) {
@@ -142,7 +145,7 @@ export class Navigation {
 <svg class="item__arrow fn__hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconRight"></use></svg>
 <span class="item__name">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${data.dir.path === '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
-  <span class="fn__ellipsis">${path.basename(data.dir.url)}</span>
+  <span class="fn__ellipsis">${path.basename(escapeHtml(data.dir.url))}</span>
 </span>
 </li></ul>`
         this.element.insertAdjacentHTML('beforeend', html);

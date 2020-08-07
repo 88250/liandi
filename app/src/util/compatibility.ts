@@ -13,3 +13,7 @@ export const isCtrl = (event: KeyboardEvent) => {
         return false;
     }
 };
+
+export const escapeHtml = (html: string) => {
+    return html.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+}

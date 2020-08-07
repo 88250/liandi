@@ -7,6 +7,7 @@ import {theme} from '../config/theme';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
+import {escapeHtml} from "../util/compatibility";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -98,6 +99,9 @@ export class WebSocketUtil {
                     break;
                 case 'put':
                     showMessage(i18n[liandi.config.lang].saveSuccess);
+                    liandi.backlinks.getBacklinks(liandi);
+                    break;
+                case 'backlinks':
                     liandi.backlinks.onBacklinks(response.data.backlinks);
                     break;
                 case 'unmount':
@@ -128,7 +132,7 @@ export class WebSocketUtil {
                     fileElement.insertAdjacentHTML("afterend", `<li style="${fileElement.getAttribute("style")}" data-type="navigation-file" class="item__name--md item__name fn__a" data-path="${encodeURIComponent(
                         response.data.path)}">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconMD"></use></svg>
-<span class="fn__ellipsis">${response.data.name.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span></li>`)
+<span class="fn__ellipsis">${escapeHtml(response.data.name)}</span></li>`)
                     break;
                 case 'remove':
                     // TODO

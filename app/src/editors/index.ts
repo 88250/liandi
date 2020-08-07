@@ -9,7 +9,7 @@ const appDir = remote.app.getAppPath().replace(/\/electron$/, '').replace(/\\ele
 export class Editors {
     private editors: IEditor[] = [];
     private editorsElement: HTMLElement;
-    private currentEditor: IEditor;
+    public currentEditor: IEditor;
 
     constructor() {
         this.editorsElement = document.getElementById('editors');

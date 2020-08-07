@@ -41,9 +41,10 @@ declare interface IEditor {
 }
 
 declare interface IMenuData {
-    target?: HTMLElement
-    path?: string
-    dir?: IDir
+    target: HTMLElement
+    path: string
+    dir: IDir
+    name?: string
 }
 
 declare interface IMD {
@@ -85,8 +86,10 @@ declare interface ILiandi {
     backlinks?: {
         element: HTMLElement
         onBacklinks: (backlinks: IBacklinks[]) => void
+        getBacklinks: (liandi: ILiandi) => void
     };
     editors?: {
+        currentEditor: IEditor;
         focus: () => void;
         save: (liandi: ILiandi) => void;
         close: (liandi: ILiandi) => void;

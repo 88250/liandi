@@ -40,6 +40,7 @@ export class Menus {
                         target,
                         dir: this.getDir(target),
                         path: decodeURIComponent(target.getAttribute('data-path')),
+                        name: decodeURIComponent(target.getAttribute('data-name')),
                     };
 
                     folderMenu.popup();
@@ -53,6 +54,7 @@ export class Menus {
                         target,
                         dir: this.getDir(target),
                         path: decodeURIComponent(target.getAttribute('data-path')),
+                        name: decodeURIComponent(target.getAttribute('data-name')),
                     };
                     fileMenu.popup();
                     event.preventDefault();
