@@ -56,6 +56,8 @@ func isJSON(fileInfo os.FileInfo) bool {
 }
 
 func Ls(url, path string) (ret []*File, err error) {
+	// 列出文件实现基于 WebDAV 操作，因为根据语法树无法得到空的目录
+
 	ret = []*File{}
 
 	dir := Conf.dir(url)
