@@ -1,6 +1,7 @@
 import {EventEmitter} from 'events';
 import {remote} from 'electron';
 
+// TODO 在编辑器内重写
 export class Find extends EventEmitter {
     private webContent: Electron.webContents;
     private inputElement: HTMLInputElement;
@@ -58,7 +59,7 @@ export class Find extends EventEmitter {
     private closeEvent() {
         this.webContent.stopFindInPage('keepSelection');
         (document.querySelector('.find') as HTMLElement).style.display = 'none';
-        (document.querySelector('.drag') as HTMLElement).style.marginRight = '96px';
+        (document.querySelector('.drag') as HTMLElement).style.right = '0';
     }
 
     private nextEvent(forward = true, findNext = false) {
@@ -74,12 +75,12 @@ export class Find extends EventEmitter {
         });
     }
 
-    open(key = '', index?: number) {
+    public open(key = '', index?: number) {
         const findElement = document.querySelector('.find') as HTMLElement;
         findElement.style.display = 'flex';
         this.inputElement.value = key;
         this.inputElement.focus();
-        (document.querySelector('.drag') as HTMLElement).style.marginRight = '408px';
+        (document.querySelector('.drag') as HTMLElement).style.right = '408px';
 
         if (typeof index === 'number') {
             for (let i = 0; i <= index; i++) {
