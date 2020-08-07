@@ -25,7 +25,7 @@ export class Navigation {
                                 break
                             }
 
-                            if (target.classList.contains('item__name--md')) {
+                            if (target.getAttribute("data-type") === "navigation-file") {
                                 this.setCurrent(target)
                                 liandi.editors.save(liandi)
                                 const path = decodeURIComponent(target.getAttribute('data-path'))
@@ -69,24 +69,19 @@ export class Navigation {
         })
     }
 
-    private getLeaf(liElement: HTMLElement, dir: IDir) {
-        const filesString = liElement.getAttribute('data-files')
-        if (!filesString) {
-            return
-        }
+    public getLeaf(liElement: HTMLElement, dir: IDir) {
+        const files = JSON.parse(liElement.getAttribute('data-files'))
         if (liElement.firstElementChild.classList.contains('item__arrow--open')) {
             liElement.firstElementChild.classList.remove('item__arrow--open')
-            liElement.firstElementChild.parentElement.nextElementSibling.classList.add("fn__none")
+            liElement.nextElementSibling.remove();
             return
         }
 
         liElement.firstElementChild.classList.add('item__arrow--open')
 
-        const files = JSON.parse(filesString)
         let fileHTML = ''
         files.forEach((item: IFile) => {
-            const style = ` style="padding-left: ${(item.path.split('/').length -
-                (item.isdir ? 2 : 1)) * 13}px"`
+            const style = ` style="padding-left: ${(item.path.split('/').length - (item.isdir ? 2 : 1)) * 13 + (item.isdir ? 0 : 18)}px"`
             if (item.isdir) {
                 fileHTML += `<li data-name="${encodeURIComponent(item.name)}" data-path="${encodeURIComponent(item.path)}" data-type="navigation-folder" class="fn__a fn__flex"${style}>
 <svg class="item__arrow fn__hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconRight"></use></svg>
@@ -100,7 +95,7 @@ export class Navigation {
                     path: item.path,
                 }, true)
             } else {
-                fileHTML += `<li${style}  data-name="${encodeURIComponent(item.name)}" data-type="navigation-file" class="item__name--md item__name fn__a" data-path="${encodeURIComponent(
+                fileHTML += `<li${style}  data-name="${encodeURIComponent(item.name)}" data-type="navigation-file" class="item__name fn__a" data-path="${encodeURIComponent(
                     item.path)}">
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconMD"></use></svg>
 <span class="fn__ellipsis">${escapeHtml(item.name)}</span></li>`

@@ -32,22 +32,13 @@ export const mountWebDAV = (liandi: ILiandi) => {
 <div class="fn__flex"><div class="fn__flex-1"></div>
 <button class="button">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
 <button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
-        width: 400,
-        destroyDialogCallback: () => {
-            if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {
-                liandi.navigation.hide();
-            }
-        }
+        width: 400
     });
 
     const dialogElement = document.querySelector('#dialog');
     dialogElement.querySelector('input').focus();
     dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
-        if (liandi.navigation.element.querySelectorAll('tree-list').length === 0) {
-            liandi.navigation.hide();
-        } else {
-            destroyDialog();
-        }
+        destroyDialog();
     });
     dialogElement.querySelector('.button').addEventListener('click', () => {
         const inputs = dialogElement.querySelectorAll('input');

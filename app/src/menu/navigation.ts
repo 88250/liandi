@@ -19,7 +19,7 @@ export const initNavigationMenu = (liandi: ILiandi) => {
             liandi.ws.send('unmount', {
                 url: itemData.dir.url
             });
-            itemData.target.remove();
+            itemData.target.parentElement.remove();
         }
     }));
     menu.append(showInFolder(liandi));

@@ -1,13 +1,13 @@
 import {Constants} from '../constants';
-import {hideMessage, showMessage} from '../util/message';
-import {destroyDialog, dialog} from '../util/dialog';
+import {showMessage} from '../util/message';
+import {destroyDialog} from '../util/dialog';
 import {i18n} from '../i18n';
-import {lauguage} from '../config/language';
 import {theme} from '../config/theme';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
 import {escapeHtml} from "../util/compatibility";
+import {lauguage} from "../config/language";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -104,15 +104,10 @@ export class WebSocketUtil {
                 case 'backlinks':
                     liandi.backlinks.onBacklinks(response.data.backlinks);
                     break;
-                case 'unmount':
-                    if (liandi.navigation.element.querySelectorAll('ul').length === 0) {
-                        liandi.navigation.hide();
-                    }
-                    break;
                 case 'mount':
                 case 'mountremote':
                     destroyDialog();
-                    liandi.navigation.show();
+                    liandi.navigation.onMount(liandi, response.data)
                     break;
                 case 'ls':
                     liandi.navigation.onLs(liandi, response.data);
@@ -128,24 +123,13 @@ export class WebSocketUtil {
                     liandi.navigation.onRename(liandi, response.data);
                     break;
                 case 'create':
-                    const fileElement = liandi.menus.itemData.target
-                    fileElement.insertAdjacentHTML("afterend", `<li style="${fileElement.getAttribute("style")}" data-type="navigation-file" class="item__name--md item__name fn__a" data-path="${encodeURIComponent(
-                        response.data.path)}">
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconMD"></use></svg>
-<span class="fn__ellipsis">${escapeHtml(response.data.name)}</span></li>`)
-                    break;
-                case 'remove':
-                    // TODO
-                    break;
                 case 'mkdir':
                     const folderItemData = liandi.menus.itemData
-                    folderItemData.target.insertAdjacentHTML("afterend", `<li style="${folderItemData.target.getAttribute("style")}" data-path="${encodeURIComponent(response.data.path)}" data-type="navigation-folder" class="fn__a fn__flex">
-<svg class="item__arrow" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
-<span class="item__name">
-  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${folderItemData.dir.path === '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
-  <span class="fn__ellipsis">${response.data.name}</span>
-</span>
-</li>`)
+                    folderItemData.target.firstElementChild.classList.remove("fn__hidden")
+                    folderItemData.target.firstElementChild.classList.remove('item__arrow--open')
+                    folderItemData.target.setAttribute('data-files', JSON.stringify(response.data.files));
+                    liandi.navigation.getLeaf(folderItemData.target, response.data.dir);
+                    destroyDialog();
                     break;
             }
         };

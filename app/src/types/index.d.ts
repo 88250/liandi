@@ -80,6 +80,7 @@ declare interface ILiandi {
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
         onMount: (liandi: ILiandi, data: { dir: IDir }) => void
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
+        getLeaf: (liElement: HTMLElement, dir: IDir) => void;
         show: () => void;
         hide: () => void;
     };

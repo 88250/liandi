@@ -44,12 +44,11 @@ export const newFile = (liandi: ILiandi) => {
                 if (!validateName(liandi, name)) {
                     return false;
                 }
-                let currentNewPath = path.join(path.dirname(itemData.path), name);
+                let currentNewPath = path.join(itemData.path, name);
                 liandi.ws.send('create', {
                     url: itemData.dir.url,
                     path: currentNewPath
                 });
-                destroyDialog();
             });
             bindDialogInput(inputElement, () => {
                 (dialogElement.querySelector('.button') as HTMLButtonElement).click();
@@ -57,7 +56,6 @@ export const newFile = (liandi: ILiandi) => {
         }
     });
 };
-
 
 export const newFolder = (liandi: ILiandi) => {
     return new remote.MenuItem({
@@ -85,12 +83,11 @@ export const newFolder = (liandi: ILiandi) => {
                     return false;
                 }
 
-                let currentNewPath = path.join(path.dirname(itemData.path), name);
+                let currentNewPath = path.join(itemData.path, name);
                 liandi.ws.send('mkdir', {
                     url: itemData.dir.url,
                     path: currentNewPath
                 });
-                destroyDialog();
             });
             bindDialogInput(inputElement, () => {
                 (dialogElement.querySelector('.button') as HTMLButtonElement).click();
@@ -119,14 +116,20 @@ export const deleteMenu = (liandi: ILiandi) => {
                 destroyDialog();
             });
             dialogElement.querySelector('.button').addEventListener('click', () => {
+                if (liandi.current.dir && liandi.current.dir.url === itemData.dir.url && itemData.path === liandi.current.path) {
+                    liandi.editors.close(liandi);
+                    liandi.current = {
+                        path: '',
+                    };
+                }
                 liandi.ws.send('remove', {
                     url: itemData.dir.url,
                     path: itemData.path
                 });
-                if (liandi.current.dir.url === itemData.dir.url && itemData.path === liandi.current.path) {
-                    liandi.editors.close(liandi);
-                    liandi.current.path = '';
+                if (itemData.target.nextElementSibling?.tagName === "UL") {
+                    itemData.target.nextElementSibling.remove()
                 }
+                itemData.target.remove();
                 destroyDialog();
             });
         }
