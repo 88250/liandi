@@ -16,7 +16,7 @@ export class Navigation {
                     timeoutId = window.setTimeout(() => {
                         while (target && !target.isEqualNode(ulElement)) {
                             if (target.classList.contains('item__arrow')) {
-                                this.getLeaf(target, liandi.current.dir)
+                                this.getLeaf(target.parentElement, liandi.current.dir)
                                 this.setCurrent(target.parentElement)
                                 event.preventDefault()
                                 event.stopPropagation()
@@ -48,8 +48,8 @@ export class Navigation {
                     }, 300)
                 } else if (event.detail === 2) {
                     while (target && !target.isEqualNode(ulElement)) {
-                        if (target.classList.contains('fn__flex')) {
-                            this.getLeaf(target.firstElementChild as HTMLElement, liandi.current.dir)
+                        if (target.tagName === "LI" && target.getAttribute("data-type") !== "navigation-file") {
+                            this.getLeaf(target, liandi.current.dir)
                             this.setCurrent(target)
                             event.preventDefault()
                             event.stopPropagation()
@@ -64,18 +64,18 @@ export class Navigation {
         })
     }
 
-    private getLeaf(target: HTMLElement, dir: IDir) {
-        const filesString = target.getAttribute('data-files')
+    private getLeaf(liElement: HTMLElement, dir: IDir) {
+        const filesString = liElement.getAttribute('data-files')
         if (!filesString) {
             return
         }
-        if (target.classList.contains('item__arrow--open')) {
-            target.classList.remove('item__arrow--open')
-            target.parentElement.nextElementSibling.classList.add("fn__none")
+        if (liElement.firstElementChild.classList.contains('item__arrow--open')) {
+            liElement.firstElementChild.classList.remove('item__arrow--open')
+            liElement.firstElementChild.parentElement.nextElementSibling.classList.add("fn__none")
             return
         }
 
-        target.classList.add('item__arrow--open')
+        liElement.firstElementChild.classList.add('item__arrow--open')
 
         const files = JSON.parse(filesString)
         let fileHTML = ''
@@ -84,7 +84,7 @@ export class Navigation {
                 (item.isdir ? 2 : 1)) * 13}px"`
             if (item.isdir) {
                 fileHTML += `<li data-path="${encodeURIComponent(item.path)}" data-type="navigation-folder" class="fn__a fn__flex"${style}>
-<svg class="item__arrow" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
+<svg class="item__arrow fn__hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconRight"></use></svg>
 <span class="item__name">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${dir.path !== '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
   <span class="fn__ellipsis">${item.name}</span>
@@ -101,7 +101,7 @@ export class Navigation {
 <span class="fn__ellipsis">${item.name.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span></li>`
             }
         })
-        target.parentElement.insertAdjacentHTML('afterend',
+        liElement.insertAdjacentHTML('afterend',
             `<ul>${fileHTML}</ul>`)
     }
 
@@ -113,9 +113,9 @@ export class Navigation {
     }
 
     public onRename(liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) {
-        const fileItemElement = this.element.querySelector(`.file[path="${encodeURIComponent(data.oldPath)}"]`);
-        fileItemElement.setAttribute('path', encodeURIComponent(data.newPath));
-        fileItemElement.setAttribute('name', encodeURIComponent(data.newName));
+        const fileItemElement = this.element.querySelector(`.file[data-path="${encodeURIComponent(data.oldPath)}"]`);
+        fileItemElement.setAttribute('data-path', encodeURIComponent(data.newPath));
+        fileItemElement.setAttribute('data-name', encodeURIComponent(data.newName));
 
         if (fileItemElement.getAttribute('current') === 'true') {
             liandi.current.path = data.newPath;
@@ -127,18 +127,18 @@ export class Navigation {
     }
 
     public onLs(liandi: ILiandi, data: { files: IFile[], url: string, path: string }) {
-        if (data.files.length > 0) {
-            const arrowElement = this.element.querySelector(`.item__arrow[path="${data.path}"]`);
-            arrowElement.setAttribute('data-files', JSON.stringify(data.files));
-            arrowElement.classList.remove("fn__hidden")
+        const liElement = this.element.querySelector(`li[data-path="${encodeURIComponent(data.path)}"]`);
+        if (data.files.length > 0 && liElement) {
+            liElement.setAttribute('data-files', JSON.stringify(data.files));
+            liElement.firstElementChild.classList.remove("fn__hidden")
         }
     }
 
     public onMount(liandi: ILiandi, data: { dir: IDir }) {
         let html = `<ul data-url="${data.dir.url}" data-dir="${encodeURIComponent(JSON.stringify(data.dir))}">
-<li class="fn__flex fn__a" data-type="navigation-root">
-<svg class="item__arrow fn__hidden" path="/" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconRight"></use></svg>
-<span class="item__name" path="/">
+<li class="fn__flex fn__a" data-type="navigation-root" data-path="%2F">
+<svg class="item__arrow fn__hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconRight"></use></svg>
+<span class="item__name">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${data.dir.path !== '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
   <span class="fn__ellipsis">${path.basename(data.dir.url)}</span>
 </span>

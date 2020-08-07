@@ -163,14 +163,24 @@ export class WebSocketUtil {
                     liandi.navigation.onRename(liandi, response.data);
                     break;
                 case 'create':
-                    liandi.editors.open(liandi, {content: '', name: response.data.name});
+                    const fileElement = liandi.menus.itemData.target
+                    fileElement.insertAdjacentHTML("afterend", `<li style="${fileElement.getAttribute("style")}" data-type="navigation-file" class="item__name--md item__name fn__a" data-path="${encodeURIComponent(
+                        response.data.path)}">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconMD"></use></svg>
+<span class="fn__ellipsis">${response.data.name.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</span></li>`)
                     break;
                 case 'remove':
+                    // TODO
+                    break;
                 case 'mkdir':
-                    window.liandi.liandi.ws.send('ls', {
-                        url: response.data.url,
-                        path: response.data.path,
-                    });
+                    const folderItemData = liandi.menus.itemData
+                    folderItemData.target.insertAdjacentHTML("afterend", `<li style="${folderItemData.target.getAttribute("style")}" data-path="${encodeURIComponent(response.data.path)}" data-type="navigation-folder" class="fn__a fn__flex">
+<svg class="item__arrow" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"></svg>
+<span class="item__name">
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${folderItemData.dir.path !== '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
+  <span class="fn__ellipsis">${response.data.name}</span>
+</span>
+</li>`)
                     break;
             }
         };

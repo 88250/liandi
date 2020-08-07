@@ -9,7 +9,11 @@ export const showInFolder = (liandi: ILiandi) => {
         label: i18n[liandi.config.lang].showInFolder,
         click: () => {
             const itemData = liandi.menus.itemData;
-            shell.showItemInFolder(path.join(itemData.dir.path, itemData.path));
+            if (itemData.path.endsWith("/")) {
+                shell.openItem(path.join(itemData.dir.path, itemData.path));
+            } else {
+                shell.showItemInFolder(path.join(itemData.dir.path, itemData.path));
+            }
         }
     });
 };
@@ -40,13 +44,10 @@ export const newFile = (liandi: ILiandi) => {
                     return false;
                 }
                 let currentNewPath = path.join(path.dirname(itemData.path), name);
-                liandi.editors.save(window.liandi.liandi);
                 liandi.ws.send('create', {
                     url: itemData.dir.url,
                     path: currentNewPath
                 });
-
-                liandi.current.path = currentNewPath;
                 destroyDialog();
             });
             bindDialogInput(inputElement, () => {

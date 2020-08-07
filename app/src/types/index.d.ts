@@ -108,6 +108,8 @@ declare interface ILiandi {
 }
 
 interface II18n {
-    en_US: { [key: string]: string };
-    zh_CN: { [key: string]: string };
+    en_US: IObject;
+    zh_CN: IObject;
+    ja_JP?: IObject;
+    ko_KR?: IObject;
 }
