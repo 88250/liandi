@@ -3,6 +3,7 @@ import Vditor from '../../vditore/src';
 import {Constants} from '../constants';
 import {remote} from 'electron';
 import * as path from 'path';
+import {ipcRenderer} from 'electron';
 
 const appDir = remote.app.getAppPath().replace(/\/electron$/, '').replace(/\\electron$/, '');
 
@@ -169,7 +170,7 @@ export class Editors {
         this.editors.push(editor);
     }
 
-    save(liandi: ILiandi) {
+    public save(liandi: ILiandi) {
         if (!liandi.current.dir || !this.currentEditor || (this.currentEditor && this.currentEditor.saved)) {
             return;
         }
@@ -181,7 +182,7 @@ export class Editors {
         this.currentEditor.saved = true;
     }
 
-    close(liandi: ILiandi) {
+    public close(liandi: ILiandi) {
         if (!this.currentEditor) {
             return;
         }
@@ -192,12 +193,29 @@ export class Editors {
         this.currentEditor.inputElement.parentElement.classList.add('fn__none');
     }
 
-    focus() {
+    public focus() {
         this.currentEditor?.vditor?.focus();
     }
 
-    reloadEditor(liandi: ILiandi) {
-        this.initVditor(liandi, this.currentEditor);
+    public reloadEditor(liandi: ILiandi) {
+        if (this.currentEditor) {
+            this.initVditor(liandi, this.currentEditor);
+        }
+    }
+
+    public onSetTheme(liandi: ILiandi, theme: TTheme) {
+        liandi.config.theme = theme;
+        ipcRenderer.send(Constants.LIANDI_CONFIG_THEME, theme);
+        if (theme === 'dark') {
+            document.body.classList.add('theme--dark');
+        } else {
+            document.body.classList.remove('theme--dark');
+        }
+        this.editors.forEach((item) => {
+            if (item.vditor) {
+                item.vditor.setTheme(liandi.config.theme === 'dark' ? 'dark' : 'classic', liandi.config.theme)
+            }
+        })
     }
 
     public onGet(liandi: ILiandi, editorData: { content: string, name: string }) {

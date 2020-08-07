@@ -1,6 +1,4 @@
-import {Constants} from '../constants';
 import {i18n} from '../i18n';
-import {ipcRenderer} from 'electron';
 
 export const theme = {
     genHTML: (liandi: ILiandi) => {
@@ -15,14 +13,5 @@ export const theme = {
                 theme: (event.target as HTMLSelectElement).value
             });
         });
-    },
-    onSetTheme: (liandi: ILiandi, themeName: 'light' | 'dark') => {
-        liandi.config.theme = themeName;
-        ipcRenderer.send(Constants.LIANDI_CONFIG_THEME, themeName);
-        if (themeName === 'dark') {
-            document.body.classList.add('theme--dark');
-        } else {
-            document.body.classList.remove('theme--dark');
-        }
     }
 };

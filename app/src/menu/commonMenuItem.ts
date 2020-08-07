@@ -3,7 +3,7 @@ import {i18n} from '../i18n';
 import * as path from 'path';
 import {bindDialogInput, destroyDialog, dialog} from '../util/dialog';
 import {rename, validateName} from '../util/rename';
-import {escapeHtml} from "../util/compatibility";
+import {escapeHtml} from "../util/escape";
 
 export const showInFolder = (liandi: ILiandi) => {
     return new remote.MenuItem({

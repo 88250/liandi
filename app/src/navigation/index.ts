@@ -1,6 +1,6 @@
 import * as path from 'path';
 import {hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
-import {escapeHtml} from "../util/compatibility";
+import {escapeHtml} from "../util/escape";
 import {destroyDialog} from "../util/dialog";
 
 export class Navigation {
@@ -36,7 +36,6 @@ export class Navigation {
                                     url: dir.url,
                                     path,
                                 })
-                                liandi.backlinks.getBacklinks(liandi);
                                 event.preventDefault()
                                 event.stopPropagation()
                                 break
@@ -145,6 +144,7 @@ export class Navigation {
 </li></ul>`
         this.element.insertAdjacentHTML('beforeend', html);
 
+        // 首次挂载多个目录并发时，需要永远都执行回调
         liandi.ws.send('ls', {
             url: data.dir.url,
             path: '/',

@@ -30,6 +30,6 @@ export const rename = (liandi: ILiandi, name: string, url: string, oldPath: stri
         url,
         oldPath,
         newPath
-    }, true);
+    });
     return newPath;
 };

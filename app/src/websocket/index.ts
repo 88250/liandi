@@ -6,8 +6,6 @@ import {theme} from '../config/theme';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
-import {escapeHtml} from "../util/compatibility";
-import {lauguage} from "../config/language";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -67,8 +65,12 @@ export class WebSocketUtil {
                 case 'searchblock':
                     liandi.editors.showSearchBlock(liandi, response.data);
                     break;
+                case 'searchget':
+                    liandi.editors.onGet(liandi, response.data);
+                    liandi.find.open(response.data.key, parseInt(response.data.index, 10));
+                    break;
                 case 'setimage':
-                    image.onSetimage(liandi, response.data);
+                    image.onSetImage(liandi, response.data);
                     break;
                 case 'setlang':
                     window.location.reload();
@@ -77,7 +79,7 @@ export class WebSocketUtil {
                     markdown.onSetMD(liandi, response.data);
                     break;
                 case 'settheme':
-                    theme.onSetTheme(liandi, response.data);
+                    liandi.editors.onSetTheme(liandi, response.data);
                     break;
                 case 'getconf':
                     liandi.config = Object.assign({
@@ -86,7 +88,7 @@ export class WebSocketUtil {
                     document.title = i18n[liandi.config.lang].slogan;
 
                     callback();
-                    theme.onSetTheme(liandi, response.data.theme);
+                    liandi.editors.onSetTheme(liandi, response.data.theme);
 
                     if (response.data.dirs.length === 0) {
                         liandi.navigation.hide();
@@ -114,10 +116,7 @@ export class WebSocketUtil {
                     break;
                 case 'get':
                     liandi.editors.onGet(liandi, response.data);
-                    break;
-                case 'searchget':
-                    liandi.editors.onGet(liandi, response.data);
-                    liandi.find.open(response.data.key, parseInt(response.data.index, 10));
+                    liandi.backlinks.getBacklinks(liandi);
                     break;
                 case 'rename':
                     liandi.navigation.onRename(liandi, response.data);

@@ -64,10 +64,12 @@ declare interface IImage {
     autoFetch: boolean;
 }
 
+type TTheme = 'light' | 'dark'
+
 declare interface ILiandi {
     config?: {
         lang: keyof II18n
-        theme: 'light' | 'dark',
+        theme: TTheme,
         markdown: IMD,
         image: IImage,
     };
@@ -97,6 +99,7 @@ declare interface ILiandi {
         reloadEditor: (liandi: ILiandi) => void;
         onGet: (liandi: ILiandi, editorData?: { content: string, name: string }) => void;
         showSearchBlock: (liandi: ILiandi, data: { k: string, blocks: IBlock[] }) => void;
+        onSetTheme: (liandi: ILiandi, theme: TTheme) => void;
     };
     menus?: {
         itemData: IMenuData
