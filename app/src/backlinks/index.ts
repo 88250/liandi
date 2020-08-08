@@ -19,7 +19,7 @@ export class Backlinks {
             backlinksHTML += "<h2>${files.path}</h2>"
             files.blocks.forEach(item => {
                 backlinksHTML += `<div><span class="fn__flex"><span class="fn__flex-1 fn__a">${item.content}</span><span class="fn__space--s"></span>
-<span class="ft__smaller ft__secondary">${path.join(path.basename(item.url), item.path)}</span></span></div>`
+<span class="ft__smaller ft__secondary">${path.posix.join(path.posix.basename(item.url), item.path)}</span></span></div>`
             })
         })
         this.element.innerHTML = backlinksHTML;

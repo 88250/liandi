@@ -41,6 +41,14 @@ type Snippet struct {
 	Content string `json:"content"`
 }
 
+func (dir *Dir) MoveIndexDocsDir(dirPath, newDirPath string) {
+	for _, d := range docs {
+		if dir.URL == d.URL && strings.HasPrefix(d.Path, dirPath) {
+			d.Path = strings.Replace(d.Path, dirPath, newDirPath, -1)
+		}
+	}
+}
+
 func (dir *Dir) MoveIndexDoc(path, newPath string) {
 	for _, d := range docs {
 		if dir.URL == d.URL && path == d.Path {
@@ -87,7 +95,7 @@ func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
 			highlight := line[0:pos] + "<mark>" + line[pos:pos+len(keyword)] + "</mark>" + line[pos+len(keyword):]
 			snippet := &Snippet{URL: html.EscapeString(doc.URL),
 				Path: html.EscapeString(doc.Path),
-				Ln: idx + 1, Col: pos + 1, Index: index,
+				Ln:   idx + 1, Col: pos + 1, Index: index,
 				Content: highlight}
 			ret = append(ret, snippet)
 			index++

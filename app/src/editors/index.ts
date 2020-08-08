@@ -133,7 +133,7 @@ export class Editors {
                 url: Constants.UPLOAD_ADDRESS,
             },
             after: () => {
-                editor.vditor.vditor.lute.SetLinkBase(path.join(liandi.current.dir.url, liandi.current.path));
+                editor.vditor.vditor.lute.SetLinkBase(path.posix.join(liandi.current.dir.url, liandi.current.path));
                 editor.vditor.setHTML(html);
                 editor.vditor.focus();
             },

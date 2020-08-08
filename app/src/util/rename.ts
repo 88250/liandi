@@ -25,7 +25,7 @@ export const rename = (liandi: ILiandi, name: string, url: string, oldPath: stri
         return false;
     }
 
-    const newPath = path.join(path.dirname(oldPath), name) + (oldPath.endsWith('/') ? '/' : '');
+    const newPath = path.posix.join(path.posix.dirname(oldPath), name) + (oldPath.endsWith('/') ? '/' : '');
     window.liandi.liandi.ws.send('rename', {
         url,
         oldPath,

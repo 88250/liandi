@@ -38,8 +38,8 @@ func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 	ret.Name = f.Name()
 	ret.IsDir = f.IsDir()
 	if !ret.IsDir {
-		ret.Name = ret.Name[:len(ret.Name) - len(".json")]
-		ret.Path = ret.Path[:len(ret.Path) - len(".json")]
+		ret.Name = ret.Name[:len(ret.Name)-len(".json")]
+		ret.Path = ret.Path[:len(ret.Path)-len(".json")]
 	}
 	ret.Size = f.Size()
 	ret.Mtime = f.ModTime().Unix()
@@ -168,7 +168,6 @@ func Exist(url, path string) (bool, error) {
 	if nil == dir {
 		return false, errors.New(Conf.lang(0))
 	}
-
 	return dir.Exist(path)
 }
 
@@ -177,13 +176,27 @@ func Rename(url, oldPath, newPath string) error {
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
+	if strings.HasSuffix(oldPath, "/") {
+		// 重命名目录
+		if err := dir.Rename(oldPath, newPath); nil != err {
+			return err
+		}
+		dir.MoveIndexDocsDir(oldPath, newPath)
+		dir.MoveTreeDir(oldPath, newPath)
+		return nil
+	}
+
+	// 重命名文件
+
+	if !strings.HasSuffix(newPath, ".md") {
+		newPath += ".md"
+	}
 	if err := dir.Rename(oldPath+".json", newPath+".json"); nil != err {
 		return err
 	}
-
 	dir.MoveIndexDoc(oldPath, newPath)
-	dir.MoveTree(url, oldPath, newPath)
-	return MoveASTJSON(url, oldPath, newPath)
+	dir.MoveTree(oldPath, newPath)
+	return dir.Rename(oldPath, newPath)
 }
 
 func Mkdir(url, path string) error {
@@ -201,9 +214,5 @@ func Remove(url, path string) error {
 	}
 	dir.RemoveIndexDoc(path)
 	dir.RemoveTree(path)
-	err := dir.Remove(path + ".json")
-	if nil != err {
-		return err
-	}
-	return RemoveASTJSON(url, path)
+	return dir.Remove(path + ".json")
 }

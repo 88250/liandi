@@ -35,12 +35,21 @@ type Block struct {
 	Content string `json:"content"`
 }
 
-func (dir *Dir) MoveTree(url, p, newPath string) {
+func (dir *Dir) MoveTree(p, newPath string) {
 	for _, tree := range trees {
-		if tree.URL == url && tree.Path == p {
+		if tree.URL == dir.URL && tree.Path == p {
 			tree.Path = newPath
 			tree.Name = path.Base(p)
 			break
+		}
+	}
+}
+
+func (dir *Dir) MoveTreeDir(dirPath, newDirPath string) {
+	for _, tree := range trees {
+		if tree.URL == dir.URL && strings.HasPrefix(tree.Path, dirPath) {
+			tree.Path = strings.Replace(tree.Path, dirPath, newDirPath, -1)
+			tree.Name = path.Base(tree.Path)
 		}
 	}
 }
@@ -54,7 +63,7 @@ func (dir *Dir) RemoveTree(path string) {
 	}
 }
 
-func (dir *Dir) ParseIndexTree(p, markdown string) (ret *parse.Tree){
+func (dir *Dir) ParseIndexTree(p, markdown string) (ret *parse.Tree) {
 	ret = parse.Parse("", util.StrToBytes(markdown), Lute.Options)
 	ret.URL = dir.URL
 	ret.Path = p

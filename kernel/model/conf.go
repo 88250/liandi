@@ -24,7 +24,6 @@ import (
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
 	"github.com/88250/lute"
-	"github.com/88250/lute/parse"
 )
 
 // Mode 标识了运行模式，默认开发环境。
@@ -282,33 +281,36 @@ func (dir *Dir) Remove(path string) error {
 }
 
 func (dir *Dir) Index() {
+	Logger.Debugf("开始导入目录 [%s] 下新的 Markdown 文件", dir.URL)
+	markdowns := dir.ListNewMarkdowns("/")
+	for _, file := range markdowns {
+		p := file.(*gowebdav.File).Path()
+		markdown, err := dir.Get(p)
+		if nil != err {
+			Logger.Fatalf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, p, err)
+		}
+		tree := dir.ParseIndexTree(p, markdown)
+		if err = WriteASTJSON(tree); nil != err {
+			Logger.Fatalf("生成目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
+		}
+	}
+	Logger.Debugf("导入目录 [%s] 下新的 Markdown 文件 [%d] 完毕", dir.URL, len(markdowns))
+
 	Logger.Debugf("开始索引 [%s] 目录", dir.URL)
-	files := dir.Files("/")
+	files := dir.ListJSONs("/")
 	for _, file := range files {
 		p := file.(*gowebdav.File).Path()
-		var tree *parse.Tree
-		if isJSON(file) {
-			astJSONStr, err := ReadASTJSON(dir.URL, p)
-			if nil != err {
-				Logger.Fatalf("读取目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
-			}
-			tree, err = ParseJSON(astJSONStr)
-			if nil != err {
-				Logger.Fatalf("解析目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
-			}
-			tree.URL = dir.URL
-			tree.Path = jsonName2Path(p)
-			tree.Name = jsonName2Path(path.Base(p))
-		} else {
-			markdown, err := dir.Get(p)
-			if nil != err {
-				Logger.Fatalf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, p, err)
-			}
-			tree = dir.ParseIndexTree(p, markdown)
-			if err = WriteASTJSON(tree); nil != err {
-				Logger.Fatalf("生成目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
-			}
+		astJSONStr, err := ReadASTJSON(dir.URL, p)
+		if nil != err {
+			Logger.Fatalf("读取目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
 		}
+		tree, err := ParseJSON(astJSONStr)
+		if nil != err {
+			Logger.Fatalf("解析目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
+		}
+		tree.URL = dir.URL
+		tree.Path = jsonName2Path(p)
+		tree.Name = jsonName2Path(path.Base(p))
 		dir.IndexTree(tree)
 	}
 	Logger.Debugf("索引目录 [%s] 完毕", dir.URL)
@@ -326,16 +328,16 @@ func (dir *Dir) Unindex() {
 	}
 }
 
-func (dir *Dir) Files(path string) (ret []os.FileInfo) {
+func (dir *Dir) ListJSONs(path string) (ret []os.FileInfo) {
 	fs, err := dir.Ls(path)
 	if nil != err {
 		return
 	}
-	dir.files(&fs, &ret)
+	dir.listJSONs(&fs, &ret)
 	return
 }
 
-func (dir *Dir) files(files, ret *[]os.FileInfo) {
+func (dir *Dir) listJSONs(files, ret *[]os.FileInfo) {
 	for _, file := range *files {
 		f := file.(*gowebdav.File)
 		if strings.HasPrefix(f.Name(), ".") {
@@ -349,11 +351,48 @@ func (dir *Dir) files(files, ret *[]os.FileInfo) {
 		if f.IsDir() {
 			fs, err := dir.Ls(f.Path())
 			if nil == err {
-				dir.files(&fs, ret)
+				dir.listJSONs(&fs, ret)
 			}
 		} else {
-			if isMarkdown(f) || isJSON(f) {
+			if isJSON(f) {
 				*ret = append(*ret, f)
+			}
+		}
+	}
+	return
+}
+
+func (dir *Dir) ListNewMarkdowns(path string) (ret []os.FileInfo) {
+	fs, err := dir.Ls(path)
+	if nil != err {
+		return
+	}
+	dir.listNewMarkdowns(&fs, &ret)
+	return
+}
+
+func (dir *Dir) listNewMarkdowns(files, ret *[]os.FileInfo) {
+	for _, file := range *files {
+		f := file.(*gowebdav.File)
+		if strings.HasPrefix(f.Name(), ".") {
+			continue
+		}
+
+		if dir.isSkipDir(f.Name()) {
+			continue
+		}
+
+		if f.IsDir() {
+			fs, err := dir.Ls(f.Path())
+			if nil == err {
+				dir.listNewMarkdowns(&fs, ret)
+			}
+		} else {
+			if isMarkdown(f) {
+				exist, _ := dir.Exist(f.Path() + ".json")
+				if !exist {
+					*ret = append(*ret, f)
+				}
 			}
 		}
 	}

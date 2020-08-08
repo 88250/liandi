@@ -12,12 +12,11 @@ package model
 
 import (
 	"encoding/json"
-	"path"
-	"strconv"
-
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
 	"github.com/88250/lute/util"
+	"path"
+	"strconv"
 )
 
 // ParseJSON 用于解析 jsonStr 生成 Markdown 抽象语法树。
@@ -108,40 +107,6 @@ func ReadASTJSON(url, p string) (jsonStr string, err error) {
 	dir := Conf.dir(url)
 	jsonStr, err = dir.Get(p)
 	return
-}
-
-func MoveASTJSON(url, p, newPath string) error {
-	dir := Conf.dir(url)
-	p = path2jsonName(p)
-	exist, err := dir.Exist(p)
-	if nil != err {
-		return err
-	}
-	if !exist {
-		return nil
-	}
-	newPath = path2jsonName(newPath)
-	exist, err = dir.Exist(newPath)
-	if nil != err {
-		return err
-	}
-	if exist {
-		return nil
-	}
-	return dir.Rename(p, newPath)
-}
-
-func RemoveASTJSON(url, p string) error {
-	dir := Conf.dir(url)
-	p = path2jsonName(p)
-	exist, err := dir.Exist(p)
-	if nil != err {
-		return err
-	}
-	if !exist {
-		return nil
-	}
-	return dir.Remove(p)
 }
 
 func path2jsonName(p string) string {
