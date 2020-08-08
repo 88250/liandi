@@ -45,6 +45,15 @@ func (dir *Dir) MoveTree(p, newPath string) {
 	}
 }
 
+func (dir *Dir) RemoveTreeDir(dirPath string) {
+	for i := 0; i < len(trees); i++ {
+		if trees[i].URL == dir.URL && strings.HasPrefix(trees[i].Path, dirPath) {
+			trees = append(trees[:i], trees[i+1:]...)
+			i--
+		}
+	}
+}
+
 func (dir *Dir) MoveTreeDir(dirPath, newDirPath string) {
 	for _, tree := range trees {
 		if tree.URL == dir.URL && strings.HasPrefix(tree.Path, dirPath) {

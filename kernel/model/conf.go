@@ -93,7 +93,7 @@ func InitConf() {
 // AppConf 维护应用元数据，保存在 ~/.liandi/conf.json ，记录已经打开的文件夹、各种配置项等。
 type AppConf struct {
 	LogLevel string    `json:"logLevel"` // 日志级别：Off, Trace, Debug, Info, Warn, Error, Fatal
-	Dirs     []*Dir    `json:"dirs"`     // 已经打开的文件夹
+	Dirs     []*Dir    `json:"dirs"`     // 已经挂载的目录
 	Theme    string    `json:"theme"`    // 界面主题：light, dark
 	Lang     string    `json:"lang"`     // 界面语言
 	Markdown *Markdown `json:"markdown"` // Markdown 引擎配置
@@ -169,7 +169,7 @@ func (conf *AppConf) Close() {
 	conf.Save()
 }
 
-func (conf *AppConf) dir(url string) *Dir {
+func (conf *AppConf) Dir(url string) *Dir {
 	for _, dir := range conf.Dirs {
 		if dir.URL == url {
 			return dir
@@ -182,7 +182,7 @@ func (conf *AppConf) lang(num int) string {
 	return langs[conf.Lang][num]
 }
 
-// Dir 维护了打开的 WebDAV 文件夹。
+// Dir 维护了打开的 WebDAV 目录。
 type Dir struct {
 	URL       string `json:"url"`      // WebDAV URL
 	Auth      string `json:"auth"`     // WebDAV 鉴权方式，空值表示不需要鉴权

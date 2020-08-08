@@ -21,8 +21,11 @@ func (cmd *mount) Exec() {
 	p := cmd.param["path"].(string)
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
-	model.Mount(url, p)
+	url, _ = model.Mount(url, p)
 	model.RestartServeWebDAV()
+	ret.Data = map[string]interface{}{
+		"dir": model.Conf.Dir(url),
+	}
 	model.Push(ret.Bytes())
 }
 

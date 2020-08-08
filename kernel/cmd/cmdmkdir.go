@@ -30,10 +30,6 @@ func (cmd *mkdir) Exec() {
 		ret.Msg = err.Error()
 	}
 
-	p = path.Dir(path.Clean(p))
-	if "." == p {
-		p = "/"
-	}
 	ret.Data = map[string]interface{}{
 		"url":  url,
 		"path": p,

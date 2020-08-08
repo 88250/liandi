@@ -41,6 +41,15 @@ type Snippet struct {
 	Content string `json:"content"`
 }
 
+func (dir *Dir) RemoveIndexDocDir(dirPath string) {
+	for i := 0; i < len(docs); i++ {
+		if dir.URL == docs[i].URL && strings.HasPrefix(docs[i].Path, dirPath) {
+			docs = append(docs[:i], docs[i+1:]...)
+			i--
+		}
+	}
+}
+
 func (dir *Dir) MoveIndexDocsDir(dirPath, newDirPath string) {
 	for _, d := range docs {
 		if dir.URL == d.URL && strings.HasPrefix(d.Path, dirPath) {

@@ -22,8 +22,11 @@ func (cmd *mountremote) Exec() {
 	url = model.NormalizeURL(url)
 	user := cmd.param["user"].(string)
 	password := cmd.param["password"].(string)
-	model.MountRemote(url, user, password)
+	url, _ = model.MountRemote(url, user, password)
 	model.RestartServeWebDAV()
+	ret.Data = map[string]interface{}{
+		"dir": model.Conf.Dir(url),
+	}
 	model.Push(ret.Bytes())
 }
 

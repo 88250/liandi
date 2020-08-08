@@ -36,7 +36,7 @@ type BacklinkRefBlock struct {
 }
 
 func Backlinks(url, path string) (ret []*BacklinkRefBlock, err error) {
-	dir := Conf.dir(url)
+	dir := Conf.Dir(url)
 	if nil == dir {
 		return nil, errors.New(Conf.lang(0))
 	}

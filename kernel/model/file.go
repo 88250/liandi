@@ -56,11 +56,11 @@ func isJSON(fileInfo os.FileInfo) bool {
 }
 
 func Ls(url, path string) (ret []*File, err error) {
-	// 列出文件实现基于 WebDAV 操作，因为根据语法树无法逆推出空的目录
+	// 列出文件实现基于 WebDAV 操作，因为根据语法树无法逆推出空的文件夹
 
 	ret = []*File{}
 
-	dir := Conf.dir(url)
+	dir := Conf.Dir(url)
 	if nil == dir {
 		return nil, errors.New(Conf.lang(0))
 	}
@@ -95,7 +95,7 @@ func Ls(url, path string) (ret []*File, err error) {
 }
 
 func Get(url, path string) (ret string, err error) {
-	dir := Conf.dir(url)
+	dir := Conf.Dir(url)
 	if nil == dir {
 		return "", errors.New(Conf.lang(0))
 	}
@@ -110,7 +110,7 @@ func Get(url, path string) (ret string, err error) {
 }
 
 func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error) {
-	dir := Conf.dir(url)
+	dir := Conf.Dir(url)
 	if nil == dir {
 		return nil, errors.New(Conf.lang(0))
 	}
@@ -141,7 +141,7 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 }
 
 func PutBlob(url, path string, data []byte) (err error) {
-	dir := Conf.dir(url)
+	dir := Conf.Dir(url)
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
@@ -163,7 +163,7 @@ func Create(url, path string) (err error) {
 }
 
 func Exist(url, path string) (bool, error) {
-	dir := Conf.dir(url)
+	dir := Conf.Dir(url)
 	if nil == dir {
 		return false, errors.New(Conf.lang(0))
 	}
@@ -171,12 +171,12 @@ func Exist(url, path string) (bool, error) {
 }
 
 func Rename(url, oldPath, newPath string) error {
-	dir := Conf.dir(url)
+	dir := Conf.Dir(url)
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
 	if strings.HasSuffix(oldPath, "/") {
-		// 重命名目录
+		// 重命名文件夹
 		if err := dir.Rename(oldPath, newPath); nil != err {
 			return err
 		}
@@ -205,7 +205,7 @@ func Rename(url, oldPath, newPath string) error {
 }
 
 func Mkdir(url, path string) error {
-	dir := Conf.dir(url)
+	dir := Conf.Dir(url)
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
@@ -213,11 +213,36 @@ func Mkdir(url, path string) error {
 }
 
 func Remove(url, path string) error {
-	dir := Conf.dir(url)
+	dir := Conf.Dir(url)
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
+
+	if strings.HasSuffix(path, "/") {
+		// 删除文件夹
+		if err := dir.Remove(path); nil != err {
+			return err
+		}
+		dir.RemoveIndexDocDir(path)
+		dir.RemoveTreeDir(path)
+		return nil
+	}
+
+	// 删除文件
+
+	if err := dir.Remove(path + ".md.json"); nil != err {
+		return err
+	}
 	dir.RemoveIndexDoc(path)
 	dir.RemoveTree(path)
-	return dir.Remove(path + ".json")
+
+	// 如果存在 md 文件的话也进行删除，否则重启时会索引生成 AST
+	exist, err := dir.Exist(path + ".md")
+	if nil != err {
+		return err
+	}
+	if exist {
+		return dir.Remove(path + ".md")
+	}
+	return nil
 }

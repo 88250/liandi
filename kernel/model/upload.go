@@ -40,7 +40,7 @@ func Upload(c *gin.Context) {
 	p = filepath.Dir(p)
 	p = p[1:]                     // 去掉开头的 /
 	mode := c.GetHeader("X-Mode") // markdown, wysiwyg
-	dir := Conf.dir(u)
+	dir := Conf.Dir(u)
 	if nil == dir {
 		ret.Code = -1
 		ret.Msg = Conf.lang(0)
@@ -128,7 +128,7 @@ func UploadFetch(c *gin.Context) {
 	p = path.Dir(p)
 	p = p[1:]                     // 去掉开头的 /
 	mode := c.GetHeader("X-Mode") // markdown, wysiwyg
-	dir := Conf.dir(u)
+	dir := Conf.Dir(u)
 	if nil == dir {
 		ret.Code = -1
 		msg := Conf.lang(0)
