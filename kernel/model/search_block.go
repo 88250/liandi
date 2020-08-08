@@ -58,7 +58,6 @@ func (dir *Dir) MoveTreeDir(dirPath, newDirPath string) {
 	for _, tree := range trees {
 		if tree.URL == dir.URL && strings.HasPrefix(tree.Path, dirPath) {
 			tree.Path = strings.Replace(tree.Path, dirPath, newDirPath, -1)
-			tree.Name = path.Base(tree.Path)
 		}
 	}
 }
