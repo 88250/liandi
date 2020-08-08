@@ -32,8 +32,6 @@ func (cmd *BaseCmd) Id() float64 {
 func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) (ret Cmd) {
 	baseCmd := &BaseCmd{id: cmdId, param: param}
 	switch cmdStr {
-	case "dirs":
-		ret = &dirs{baseCmd}
 	case "mount":
 		ret = &mount{baseCmd}
 	case "mountremote":
