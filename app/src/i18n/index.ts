@@ -1,5 +1,6 @@
 export const i18n: II18n = {
     en_US: {
+        backlinks: "Backlinks",
         help: 'Help',
         help1: 'Grammar Quick Reference Manual',
         help2: 'Basic grammar',
@@ -50,6 +51,7 @@ export const i18n: II18n = {
         image: 'Image',
     },
     zh_CN: {
+        backlinks: '反向链接',
         help: '帮助',
         help1: '语法速查手册',
         help2: '基础语法',

@@ -1,4 +1,5 @@
 import * as path from 'path';
+import {i18n} from "../i18n";
 
 export class Backlinks {
     public element: HTMLElement;
@@ -16,16 +17,23 @@ export class Backlinks {
         }
     }
 
-    public onBacklinks(backlinks: IBacklinks[]) {
-        let backlinksHTML = ''
+    public onBacklinks(liandi: ILiandi, backlinks: IBacklinks[]) {
+        let backlinksHTML = `<div class="backlinks__title">
+<div class="ft__secondary ft__smaller">${i18n[liandi.config.lang].backlinks}</div>
+<span>${path.posix.join(path.posix.basename(liandi.current.dir.url), liandi.current.path)}</span>
+</div>`
         backlinks.forEach((files) => {
+            backlinksHTML += '<div class="item">'
             files.blocks.forEach((item, index) => {
                 if (index === 0) {
-                    backlinksHTML += `<h2 class="fn__a vditor-tooltipped vditor-tooltipped__nw" aria-label="${path.posix.basename(item.url)}">${path.posix.basename(files.path)}
-<span class="ft__smaller ft__secondary">${path.posix.dirname(item.path)}</span></h2>`
+                    backlinksHTML += `<h2 class="fn__flex vditor-tooltipped__nw vditor-tooltipped" aria-label="${path.posix.basename(item.url)}">
+<span class="fn__flex-1">${path.posix.basename(files.path)}</span>
+<span class="ft__smaller fn__flex-center">${path.posix.dirname(item.path).substr(1)}</span>
+</h2>`
                 }
-                backlinksHTML += `<div class="item ft__secondary">${item.content}</div>`
+                backlinksHTML += `<div class="item__content">${item.content}</div>`
             })
+            backlinksHTML += '</div>'
         })
         this.element.innerHTML = backlinksHTML;
     }

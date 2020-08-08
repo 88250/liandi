@@ -88,7 +88,7 @@ declare interface ILiandi {
     };
     backlinks?: {
         element: HTMLElement
-        onBacklinks: (backlinks: IBacklinks[]) => void
+        onBacklinks: (liandi:ILiandi, backlinks: IBacklinks[]) => void
         getBacklinks: (liandi: ILiandi) => void
         show: (liandi:ILiandi) => void;
         hide: () => void;

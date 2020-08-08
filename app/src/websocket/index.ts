@@ -104,7 +104,7 @@ export class WebSocketUtil {
                     liandi.backlinks.getBacklinks(liandi);
                     break;
                 case 'backlinks':
-                    liandi.backlinks.onBacklinks(response.data.backlinks);
+                    liandi.backlinks.onBacklinks(liandi, response.data.backlinks);
                     break;
                 case 'mount':
                 case 'mountremote':

@@ -7,13 +7,28 @@
   background-color: var(--focus-background-color);
   border-left: 1px solid var(--border-color);
 
-  h2 {
-    margin: 20px 10px 10px 10px;
-    font-weight: normal;
-    cursor: pointer;
+  &__title {
+    margin: 10px;
   }
 
   .item {
-    margin: 5px 10px;
+    margin-bottom: 5px;
+
+    h2 {
+      cursor: pointer;
+      font-weight: normal;
+      padding: 5px 10px;
+      font-size: 18px;
+
+      &:hover {
+        background-color: $blue;
+        color: $white;
+      }
+    }
+
+    &__content {
+      padding: 0 10px 5px;
+      color: var(--text-secondary-color);
+    }
   }
 }
