@@ -39,6 +39,21 @@ class App {
             this.onIpc();
             this.initWindow();
             this.initBar();
+
+            remote.process.argv.forEach((item, index) => {
+                if (item.indexOf("--liandi-url") === 0) {
+                    this.liandi.current = {
+                        dir: {
+                            url: decodeURIComponent(remote.process.argv[index]).substr(13)
+                        },
+                        path: decodeURIComponent(remote.process.argv[index + 1]).substr(14)
+                    }
+                    this.liandi.ws.send('get', {
+                        url: this.liandi.current.dir.url,
+                        path: this.liandi.current.path,
+                    }, true)
+                }
+            });
         });
     }
 
