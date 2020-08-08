@@ -130,7 +130,7 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 	tree.Path = p
 	dir.IndexTree(tree)
 
-	// 构建双链
+	// 反向链接
 	backlinks = dir.IndexLink(tree)
 
 	// 持久化数据
