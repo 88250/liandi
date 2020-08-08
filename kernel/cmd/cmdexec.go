@@ -11,8 +11,9 @@
 package cmd
 
 import (
-	"github.com/88250/liandi/kernel/model"
 	execstd "os/exec"
+
+	"github.com/88250/liandi/kernel/model"
 )
 
 type exec struct {
@@ -27,7 +28,21 @@ func (cmd *exec) Exec() {
 	for _, arg := range args {
 		argsStrs = append(argsStrs, arg.(string))
 	}
-	go execstd.Command(execPath, argsStrs...).Run()
+
+	execCmd := execstd.Command(execPath, argsStrs...)
+	err := execCmd.Start()
+	if nil != err {
+		ret.Code = -1
+		ret.Msg = err.Error()
+		cmd.Push(ret.Bytes())
+		return
+	}
+
+	go func() {
+		model.AddChildProcess(execCmd.Process)
+		execCmd.Wait()
+		model.RemoveChildProcess(execCmd.Process)
+	}()
 	cmd.Push(ret.Bytes())
 }
 
