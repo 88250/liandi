@@ -29,7 +29,7 @@ class App {
             this.liandi.editors = new Editors();
             this.liandi.menus = new Menus(this.liandi);
             this.liandi.find = new Find();
-            this.liandi.backlinks = new Backlinks();
+            this.liandi.backlinks = new Backlinks(this.liandi);
 
             resize('resize');
             resize('resize2', true);

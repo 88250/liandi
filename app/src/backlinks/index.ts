@@ -1,13 +1,27 @@
 import * as path from 'path';
 import {i18n} from "../i18n";
-import { remote } from 'electron';
-const appDir = remote.app.getAppPath().replace(/\/electron$/, '').replace(/\\electron$/, '');
+import {remote} from 'electron';
 
 export class Backlinks {
     public element: HTMLElement;
 
-    constructor() {
+    constructor(liandi: ILiandi) {
         this.element = document.getElementById('backlinks');
+        this.element.addEventListener("click", (event) => {
+            let target = event.target as HTMLElement
+            while (target && !target.isEqualNode(this.element)) {
+                if (target.tagName === "H2") {
+                    liandi.ws.send("exec", {
+                        bin: remote.process.execPath,
+                        args: [remote.process.argv[1], `--dir=${target.getAttribute("data-dir")}`, `--path=${target.getAttribute('data-path')}`]
+                    })
+                    event.preventDefault()
+                    event.stopPropagation()
+                    break
+                }
+                target = target.parentElement
+            }
+        })
     }
 
     public getBacklinks(liandi: ILiandi) {
@@ -28,7 +42,7 @@ export class Backlinks {
             backlinksHTML += '<div class="item">'
             files.blocks.forEach((item, index) => {
                 if (index === 0) {
-                    backlinksHTML += `<h2 class="fn__flex vditor-tooltipped__nw vditor-tooltipped" aria-label="${path.posix.basename(item.url)}">
+                    backlinksHTML += `<h2 data-path="${encodeURIComponent(item.path)}" data-url="${encodeURIComponent(item.url)}" class="fn__flex vditor-tooltipped__nw vditor-tooltipped" aria-label="${path.posix.basename(item.url)}">
 <span class="fn__flex-1">${path.posix.basename(files.path)}</span>
 <span class="ft__smaller fn__flex-center">${path.posix.dirname(item.path).substr(1)}</span>
 </h2>`
@@ -41,24 +55,6 @@ export class Backlinks {
             backlinksHTML += `<div class="item"><div class="item__content">${i18n[liandi.config.lang].noBacklinks}</div></div>`
         }
         this.element.innerHTML = backlinksHTML;
-
-        this.element.addEventListener("click", (event) => {
-            let target = event.target as HTMLElement
-            while (target && !target.isEqualNode(this.element)) {
-                if (target.tagName === "H2") {
-                    let win = new remote.BrowserWindow({ width: 800, height: 600 })
-                    win.on('closed', () => {
-                        win = null
-                    })
-
-                    win.loadURL(`${appDir}/public/index.html`)
-                    event.preventDefault()
-                    event.stopPropagation()
-                    break
-                }
-                target = target.parentElement
-            }
-        })
     }
 
     public show(liandi: ILiandi) {
