@@ -44,7 +44,7 @@ export const newFile = (liandi: ILiandi) => {
                 if (!validateName(liandi, name)) {
                     return false;
                 }
-                let currentNewPath = path.posix.join(itemData.path, name);
+                const currentNewPath = path.posix.join(itemData.path, name);
                 liandi.ws.send('create', {
                     url: itemData.dir.url,
                     path: currentNewPath
@@ -83,7 +83,7 @@ export const newFolder = (liandi: ILiandi) => {
                     return false;
                 }
 
-                let currentNewPath = path.posix.join(itemData.path, name);
+                const currentNewPath = path.posix.join(itemData.path, name);
                 liandi.ws.send('mkdir', {
                     url: itemData.dir.url,
                     path: currentNewPath

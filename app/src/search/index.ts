@@ -7,7 +7,6 @@ import {initConfigSearch} from '../config/search';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
 import {help} from '../config/help';
-import * as path from 'path';
 
 export const initSearch = (liandi: ILiandi, type = 'search') => {
     dialog({

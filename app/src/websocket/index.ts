@@ -2,7 +2,6 @@ import {Constants} from '../constants';
 import {showMessage} from '../util/message';
 import {destroyDialog} from '../util/dialog';
 import {i18n} from '../i18n';
-import {theme} from '../config/theme';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
@@ -123,14 +122,13 @@ export class WebSocketUtil {
                     break;
                 case 'create':
                 case 'mkdir':
-                    const folderItemData = liandi.menus.itemData
-                    folderItemData.target.firstElementChild.classList.remove("fn__hidden")
-                    if (folderItemData.target.firstElementChild.classList.contains('item__arrow--open')) {
-                        folderItemData.target.firstElementChild.classList.remove('item__arrow--open')
-                        folderItemData.target.nextElementSibling.remove();
+                    liandi.menus.itemData.target.firstElementChild.classList.remove("fn__hidden")
+                    if (liandi.menus.itemData.target.firstElementChild.classList.contains('item__arrow--open')) {
+                        liandi.menus.itemData.target.firstElementChild.classList.remove('item__arrow--open')
+                        liandi.menus.itemData.target.nextElementSibling.remove();
                     }
-                    folderItemData.target.setAttribute('data-files', JSON.stringify(response.data.files));
-                    liandi.navigation.getLeaf(folderItemData.target, response.data.dir);
+                    liandi.menus.itemData.target.setAttribute('data-files', JSON.stringify(response.data.files));
+                    liandi.navigation.getLeaf(liandi.menus.itemData.target, response.data.dir);
                     destroyDialog();
                     break;
             }
