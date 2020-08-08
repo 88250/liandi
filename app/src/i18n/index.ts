@@ -1,5 +1,6 @@
 export const i18n: II18n = {
     en_US: {
+        openInNewWindow: 'Open in New Window',
         backlinks: "Backlinks",
         noBacklinks: "No backlinks found",
         help: 'Help',
@@ -52,6 +53,7 @@ export const i18n: II18n = {
         image: 'Image',
     },
     zh_CN: {
+        openInNewWindow: '在新窗口中打开',
         backlinks: '反向链接',
         noBacklinks: '没有找到反向链接',
         help: '帮助',

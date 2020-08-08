@@ -11,9 +11,14 @@ export class Backlinks {
             let target = event.target as HTMLElement
             while (target && !target.isEqualNode(this.element)) {
                 if (target.tagName === "H2") {
-                    liandi.ws.send("exec", {
-                        bin: remote.process.execPath,
-                        args: [remote.process.argv[1], `--dir=${target.getAttribute("data-dir")}`, `--path=${target.getAttribute('data-path')}`]
+                    liandi.editors.save(liandi);
+                    liandi.current = {
+                        dir: {url: decodeURIComponent(target.getAttribute('data-url'))},
+                        path: decodeURIComponent(target.getAttribute('data-path'))
+                    }
+                    liandi.ws.send('get', {
+                        url: liandi.current.dir.url,
+                        path: liandi.current.path
                     })
                     event.preventDefault()
                     event.stopPropagation()
@@ -42,7 +47,7 @@ export class Backlinks {
             backlinksHTML += '<div class="item">'
             files.blocks.forEach((item, index) => {
                 if (index === 0) {
-                    backlinksHTML += `<h2 data-path="${encodeURIComponent(item.path)}" data-url="${encodeURIComponent(item.url)}" class="fn__flex vditor-tooltipped__nw vditor-tooltipped" aria-label="${path.posix.basename(item.url)}">
+                    backlinksHTML += `<h2 data-type="backlinks-file" data-path="${encodeURIComponent(item.path)}" data-url="${encodeURIComponent(item.url)}" class="fn__flex vditor-tooltipped__nw vditor-tooltipped" aria-label="${path.posix.basename(item.url)}">
 <span class="fn__flex-1">${path.posix.basename(files.path)}</span>
 <span class="ft__smaller fn__flex-center">${path.posix.dirname(item.path).substr(1)}</span>
 </h2>`

@@ -25,11 +25,11 @@ declare interface IBacklinks {
 }
 
 declare interface IDir {
-    auth: string;
-    password: string;
-    path: string;
+    auth?: string;
+    password?: string;
+    path?: string;
     url: string;
-    user: string;
+    user?: string;
 }
 
 declare interface IEditor {
