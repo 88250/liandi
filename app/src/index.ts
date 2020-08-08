@@ -39,6 +39,24 @@ class App {
             this.onIpc();
             this.initWindow();
             this.initBar();
+
+            // 打开新窗口的处理
+            remote.process.argv.forEach((item, index) => {
+                if (item.indexOf("--liandi-url") === 0) {
+                    this.liandi.current = {
+                        dir: {
+                            url: decodeURIComponent(remote.process.argv[index]).substr(13)
+                        },
+                        path: decodeURIComponent(remote.process.argv[index + 1]).substr(14)
+                    }
+                    this.liandi.navigation.hide()
+                    this.liandi.backlinks.hide();
+                    this.liandi.ws.send('get', {
+                        url: this.liandi.current.dir.url,
+                        path: this.liandi.current.path,
+                    }, true)
+                }
+            });
         });
     }
 

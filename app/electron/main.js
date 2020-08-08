@@ -118,6 +118,13 @@ const createWindow = () => {
 app.whenReady().then(() => {
   createWindow()
 
+  const isChildProcess = process.argv.some((item) => {
+    return item.indexOf('--liandi-url') === 0
+  })
+  if (isChildProcess) {
+    return
+  }
+
   let kernelName = 'kernel.exe'
   if (process.platform === 'darwin') {
     kernelName = 'kernel-darwin'
