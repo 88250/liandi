@@ -141,6 +141,7 @@ func ConfLute() {
 	Lute.InlineMathAllowDigitAfterOpenMarker = Conf.Markdown.InlineMathAllowDigitAfterOpenMarker
 	Lute.InlineMathAllowDigitAfterOpenMarker = Conf.Markdown.InlineMathAllowDigitAfterOpenMarker
 	Lute.ChineseParagraphBeginningSpace = Conf.Markdown.ParagraphBeginningSpace
+	Lute.BlockRef = true
 }
 
 func newImage() *Image {
