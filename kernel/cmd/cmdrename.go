@@ -30,7 +30,7 @@ func (cmd *rename) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		model.Push(ret.Bytes())
+		cmd.Push(ret.Bytes())
 		return
 	}
 
@@ -40,7 +40,7 @@ func (cmd *rename) Exec() {
 		"newPath": newPath,
 		"newName": path.Base(newPath),
 	}
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *rename) Name() string {

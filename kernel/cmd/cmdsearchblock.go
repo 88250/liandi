@@ -25,7 +25,7 @@ func (cmd *searchblock) Exec() {
 		"k":      keyword,
 	}
 	ret.Data = result
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *searchblock) Name() string {

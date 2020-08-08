@@ -28,7 +28,7 @@ func (cmd *mkdir) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		model.Push(ret.Bytes())
+		cmd.Push(ret.Bytes())
 		return
 	}
 
@@ -39,7 +39,7 @@ func (cmd *mkdir) Exec() {
 		"files": files,
 		"name": path.Base(p),
 	}
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *mkdir) Name() string {

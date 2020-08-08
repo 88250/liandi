@@ -70,5 +70,5 @@ func pushMsg(msg string, closeTimeout int) {
 	ret.Data = map[string]interface{}{
 		"closeTimeout": closeTimeout,
 	}
-	Push(ret.Bytes())
+	Broadcast(ret.Bytes())
 }

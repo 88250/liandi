@@ -24,7 +24,7 @@ func (cmd *settheme) Exec() {
 	model.Conf.Theme = theme
 	model.Conf.Save()
 	ret.Data = theme
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *settheme) Name() string {

@@ -11,15 +11,29 @@
 package model
 
 import (
+	"github.com/88250/gulu"
 	"gopkg.in/olahol/melody.v1"
 )
 
-var s *melody.Session
+var sessions map[string]*melody.Session
 
-func SetPushChan(session *melody.Session) {
-	s = session
+func InitSessions() {
+	sessions = map[string]*melody.Session{}
 }
 
-func Push(msg []byte) {
-	s.Write(msg)
+func AddPushChan(session *melody.Session) {
+	id := gulu.Rand.String(7)
+	session.Set("id", id)
+	sessions[id] = session
+}
+
+func RemovePushChan(session *melody.Session) {
+	id, _ := session.Get("id")
+	delete(sessions, id.(string))
+}
+
+func Broadcast(msg []byte) {
+	for _, session := range sessions {
+		session.Write(msg)
+	}
 }

@@ -23,7 +23,7 @@ func (cmd *setlang) Exec() {
 	lang := cmd.param["lang"].(string)
 	model.Conf.Lang = lang
 	model.Conf.Save()
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *setlang) Name() string {

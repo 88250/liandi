@@ -31,6 +31,7 @@ func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	model.InitLog()
+	model.InitSessions()
 	model.InitConf()
 	model.InitMount()
 	model.InitIndex()
@@ -68,20 +69,25 @@ func main() {
 	r.POST("/upload/fetch", model.UploadFetch)
 
 	m.HandleConnect(func(s *melody.Session) {
-		model.SetPushChan(s)
-		model.Logger.Debugf("WebSocket 已连接")
+		model.AddPushChan(s)
+		sessionId, _ := s.Get("id")
+		model.Logger.Debugf("会话 [%s] 已连接", sessionId)
 	})
 
 	m.HandleDisconnect(func(s *melody.Session) {
-		model.Logger.Debugf("WebSocket 连接已断开")
+		model.RemovePushChan(s)
+		sessionId, _ := s.Get("id")
+		model.Logger.Debugf("会话 [%s] 已断开", sessionId)
 	})
 
 	m.HandleError(func(s *melody.Session, err error) {
-		model.Logger.Debugf("WebSocket 连接报错：%s", err)
+		sessionId, _ := s.Get("id")
+		model.Logger.Debugf("会话 [%s] 报错：%s", sessionId, err)
 	})
 
 	m.HandleClose(func(s *melody.Session, i int, str string) error {
-		model.Logger.Debugf("WebSocket 关闭：%v, %v", i, str)
+		sessionId, _ := s.Get("id")
+		model.Logger.Debugf("会话 [%s] 关闭：%v, %v", sessionId, i, str)
 		return nil
 	})
 
@@ -93,19 +99,19 @@ func main() {
 			result.Code = -1
 			result.Msg = "Bad Request"
 			responseData, _ := json.Marshal(result)
-			model.Push(responseData)
+			s.Write(responseData)
 			return
 		}
 
 		cmdStr := request["cmd"].(string)
 		cmdId := request["reqId"].(float64)
 		param := request["param"].(map[string]interface{})
-		command := cmd.NewCommand(cmdStr, cmdId, param)
+		command := cmd.NewCommand(cmdStr, cmdId, param, s)
 		if nil == command {
 			result := model.NewResult()
 			result.Code = -1
 			result.Msg = "查找命令 [" + cmdStr + "] 失败"
-			model.Push(result.Bytes())
+			s.Write(result.Bytes())
 			return
 		}
 		cmd.Exec(command)

@@ -29,7 +29,7 @@ func (cmd *create) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		model.Push(ret.Bytes())
+		cmd.Push(ret.Bytes())
 		return
 	}
 
@@ -41,7 +41,7 @@ func (cmd *create) Exec() {
 		"files": files,
 		"name": name,
 	}
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *create) Name() string {

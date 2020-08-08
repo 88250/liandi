@@ -22,7 +22,7 @@ func (cmd *unmount) Exec() {
 	url = model.NormalizeURL(url)
 	model.Unmount(url)
 	model.RestartServeWebDAV()
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *unmount) Name() string {
