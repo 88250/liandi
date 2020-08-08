@@ -27,4 +27,14 @@ export class Backlinks {
         })
         this.element.innerHTML = backlinksHTML;
     }
+
+    public show() {
+        this.element.classList.remove('fn__none');
+        document.getElementById('resize2').classList.remove('fn__none');
+    }
+
+    public hide() {
+        this.element.classList.add('fn__none');
+        document.getElementById('resize2').classList.add('fn__none');
+    }
 }

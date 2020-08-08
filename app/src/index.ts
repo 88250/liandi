@@ -53,11 +53,9 @@ class App {
         });
         document.getElementById('barBacklinks').addEventListener('click', () => {
             if (this.liandi.backlinks.element.classList.contains('fn__none')) {
-                this.liandi.backlinks.element.classList.remove('fn__none');
-                document.getElementById('resize2').classList.remove('fn__none');
+                this.liandi.backlinks.show();
             } else {
-                this.liandi.backlinks.element.classList.add('fn__none');
-                document.getElementById('resize2').classList.add('fn__none');
+                this.liandi.backlinks.hide();
             }
             window.dispatchEvent(new CustomEvent('resize'));
         });
@@ -65,10 +63,10 @@ class App {
             initSearch(this.liandi, 'settings');
         });
         document.getElementById('editorEmptyMount').addEventListener('click', () => {
-           mountFile(this.liandi);
+            mountFile(this.liandi);
         });
         document.getElementById('editorEmptyMountDAV').addEventListener('click', () => {
-           mountWebDAV(this.liandi);
+            mountWebDAV(this.liandi);
         });
     }
 

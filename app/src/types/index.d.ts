@@ -90,6 +90,8 @@ declare interface ILiandi {
         element: HTMLElement
         onBacklinks: (backlinks: IBacklinks[]) => void
         getBacklinks: (liandi: ILiandi) => void
+        show: () => void;
+        hide: () => void;
     };
     editors?: {
         currentEditor: IEditor;
