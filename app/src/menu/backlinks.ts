@@ -1,4 +1,5 @@
 import {remote} from 'electron';
+import * as path from 'path';
 import {i18n} from '../i18n';
 
 export const initBacklinksMenu = (liandi: ILiandi) => {
@@ -9,7 +10,7 @@ export const initBacklinksMenu = (liandi: ILiandi) => {
             const itemData = liandi.menus.itemData;
             liandi.ws.send("exec", {
                 bin: remote.process.execPath,
-                args: [remote.process.argv[1], `--dir=${itemData.dir.url}`, `--path=${itemData.path}`]
+                args: [path.posix.join(remote.app.getAppPath(), "main.js"), `--dir=${itemData.dir.url}`, `--path=${itemData.path}`]
             })
         }
     }));
