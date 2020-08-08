@@ -24,7 +24,7 @@ export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     if (currentTreeElement) {
         currentTreeElement.classList.remove('list__item--current');
     }
-    const currentTreeFolderElement = currentNavigationElement.shadowRoot.querySelector(`.tree-list__folder[path="${path.dirname(liandi.current.path)}"]`);
+    const currentTreeFolderElement = currentNavigationElement.shadowRoot.querySelector(`.tree-list__folder[path="${path.posix.dirname(liandi.current.path)}"]`);
     if (currentTreeFolderElement) {
         currentTreeFolderElement.parentElement.classList.add('list__item--current');
     }

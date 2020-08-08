@@ -146,7 +146,7 @@ export class Navigation {
 <svg class="item__arrow fn__hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconRight"></use></svg>
 <span class="item__name">
   <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${data.dir.path === '' ? 'iconCloud' : 'iconFolder'}"></use></svg>
-  <span class="fn__ellipsis">${path.basename(escapeHtml(data.dir.url))}</span>
+  <span class="fn__ellipsis">${path.posix.basename(escapeHtml(data.dir.url))}</span>
 </span>
 </li></ul>`
         this.element.insertAdjacentHTML('beforeend', html);

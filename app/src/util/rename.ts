@@ -18,7 +18,7 @@ export const rename = (liandi: ILiandi, name: string, url: string, oldPath: stri
         return false;
     }
 
-    const oldName = path.basename(oldPath);
+    const oldName = path.posix.basename(oldPath);
 
     if (name === oldName) {
         destroyDialog();
