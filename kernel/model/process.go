@@ -26,9 +26,21 @@ func InitProcess() {
 
 func ParentExited() {
 	for range time.Tick(2 * time.Second) {
-		process, e := ps.FindProcess(ppid)
-		if nil == process || nil != e {
-			Logger.Info("UI 进程已经退出，现在退出内核进程")
+		pids := []int{ppid}
+		for childPid, _ := range childProcess {
+			pids = append(pids, childPid)
+		}
+
+		emptyProcess := true
+		for _, pid := range pids {
+			process, _ := ps.FindProcess(pid)
+			if nil != process {
+				emptyProcess = false
+				break
+			}
+		}
+		if emptyProcess {
+			Logger.Infof("UI 进程已经退出，现在退出内核进程")
 			Close()
 			os.Exit(0)
 		}
