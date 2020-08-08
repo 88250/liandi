@@ -115,10 +115,6 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 		return nil, errors.New(Conf.lang(0))
 	}
 
-	// DOM 转 Markdown
-	markdown := Lute.VditorIRBlockDOM2Md(domStr)
-	dir.IndexDoc(p, markdown)
-
 	// DOM 转树
 	tree, err := Lute.VditorIRBlockDOM2Tree(domStr)
 	if nil != err {
@@ -129,6 +125,9 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 	tree.URL = url
 	tree.Path = p
 	dir.IndexTree(tree)
+
+	// 更新索引
+	dir.IndexDoc(tree.Path, tree.Root.Text())
 
 	// 反向链接
 	backlinks = dir.IndexLink(tree)
@@ -151,7 +150,7 @@ func PutBlob(url, path string, data []byte) (err error) {
 }
 
 func Create(url, path string) (err error) {
-	exist, err := Exist(url, path + ".md.json")
+	exist, err := Exist(url, path+".md.json")
 	if nil != err {
 		return err
 	}
