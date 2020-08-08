@@ -47,6 +47,7 @@ func Backlinks(url, path string) (ret []*BacklinkRefBlock, err error) {
 }
 
 func (dir *Dir) IndexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
+	ret = []*BacklinkRefBlock{}
 	// 找到当前块列表
 	var currentBlocks []*ast.Node
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
