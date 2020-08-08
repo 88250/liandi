@@ -9,34 +9,6 @@ import {image} from '../config/image';
 import {help} from '../config/help';
 import * as path from 'path';
 
-export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
-    const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
-
-    liandi.editors.save(liandi);
-
-    const currentNavigationElement =
-        liandi.navigation.element.querySelector(`tree-list[url="${currentList.getAttribute('data-url')}"]`);
-
-    liandi.current.dir = JSON.parse(decodeURIComponent(currentNavigationElement.getAttribute('dir')));
-    liandi.current.path = currentList.getAttribute('data-path');
-
-    const currentTreeElement = currentNavigationElement.shadowRoot.querySelector('.list__item--current');
-    if (currentTreeElement) {
-        currentTreeElement.classList.remove('list__item--current');
-    }
-    const currentTreeFolderElement = currentNavigationElement.shadowRoot.querySelector(`.tree-list__folder[path="${path.posix.dirname(liandi.current.path)}"]`);
-    if (currentTreeFolderElement) {
-        currentTreeFolderElement.parentElement.classList.add('list__item--current');
-    }
-    liandi.ws.send('searchget', {
-        url: liandi.current.dir.url,
-        path: liandi.current.path,
-        index: currentList.getAttribute('data-index'),
-        key: (dialogElement.querySelector('.input') as HTMLInputElement).value
-    });
-    destroyDialog();
-};
-
 export const initSearch = (liandi: ILiandi, type = 'search') => {
     dialog({
         content: `<tab-panel>
@@ -160,8 +132,24 @@ export const initSearch = (liandi: ILiandi, type = 'search') => {
     image.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="image"]'));
 };
 
+export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
+    liandi.editors.save(liandi);
+
+    const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
+    liandi.current.dir = JSON.parse(decodeURIComponent(currentList.getAttribute("data-dir")));
+    liandi.current.path = decodeURIComponent(currentList.getAttribute('data-path'));
+
+    liandi.ws.send('searchget', {
+        url: liandi.current.dir.url,
+        path: liandi.current.path,
+        index: currentList.getAttribute('data-index'),
+        key: (dialogElement.querySelector('.input') as HTMLInputElement).value
+    });
+    destroyDialog();
+};
+
 export const onSearch = (liandi: ILiandi, data: {
-    url: string
+    dir: IDir
     path: string
     content: string
     ln: number
@@ -171,7 +159,7 @@ export const onSearch = (liandi: ILiandi, data: {
     let resultHTML = '';
     data.forEach((item, index) => {
         resultHTML += `<div class="list__item fn__flex${index === 0 ? ' list__item--current' : ''}"
-title="${item.content}" data-url="${encodeURIComponent(item.url)}" data-path="${encodeURIComponent(item.path)}" data-index="${item.index}">
+title="${item.content}" data-dir="${encodeURIComponent(JSON.stringify(item.dir))}" data-path="${encodeURIComponent(item.path)}" data-index="${item.index}">
 <span class="fn__flex-1 fn__ellipsis">${item.content}</span>
 <span class="fn__space"></span>
 <span class="ft__smaller ft__secondary">${item.path} ${item.ln}:${item.col}</span>

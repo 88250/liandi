@@ -67,7 +67,7 @@ export class WebSocketUtil {
                     break;
                 case 'searchget':
                     liandi.editors.onGet(liandi, response.data);
-                    liandi.find.open(response.data.key, parseInt(response.data.index, 10));
+                    liandi.find.open(response.data.key, response.data.index);
                     break;
                 case 'setimage':
                     image.onSetImage(liandi, response.data);
