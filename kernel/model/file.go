@@ -48,7 +48,7 @@ func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 
 func isMarkdown(fileInfo os.FileInfo) bool {
 	fileName := strings.ToLower(path.Ext(fileInfo.Name()))
-	return ".md" == fileName || ".markdown" == fileName
+	return ".md" == fileName
 }
 
 func isJSON(fileInfo os.FileInfo) bool {
@@ -151,6 +151,9 @@ func PutBlob(url, path string, data []byte) (err error) {
 }
 
 func Create(url, path string) (err error) {
+	if !strings.HasSuffix(path, ".md") {
+		path += ".md"
+	}
 	exist, err := Exist(url, path)
 	if nil != err {
 		return err

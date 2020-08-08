@@ -12,7 +12,6 @@ package cmd
 
 import (
 	"path"
-	"strings"
 
 	"github.com/88250/liandi/kernel/model"
 )
@@ -26,10 +25,6 @@ func (cmd *create) Exec() {
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
-	if !strings.HasSuffix(p, ".md") {
-		p += ".md"
-	}
-
 	err := model.Create(url, p)
 	if nil != err {
 		ret.Code = -1
@@ -38,11 +33,8 @@ func (cmd *create) Exec() {
 		return
 	}
 
+	p = p[:len(p)-len(".md")]
 	name := path.Base(p)
-	p = path.Dir(path.Clean(p))
-	if "." == p {
-		p = "/"
-	}
 	ret.Data = map[string]interface{}{
 		"url":  url,
 		"path": p,

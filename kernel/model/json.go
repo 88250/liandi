@@ -95,7 +95,7 @@ func WriteASTJSON(tree *parse.Tree) error {
 	output := renderer.Render()
 
 	dir := Conf.Dir(tree.URL)
-	if err := dir.Put(tree.Path+".json", output); nil != err {
+	if err := dir.Put(tree.Path+".md.json", output); nil != err {
 		return err
 	}
 	return nil
