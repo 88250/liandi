@@ -32,7 +32,7 @@ func (cmd *put) Exec() {
 	ret.Data = map[string]interface{}{
 		"backlinks": backlinks,
 	}
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *put) Name() string {

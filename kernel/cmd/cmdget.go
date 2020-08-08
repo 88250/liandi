@@ -37,7 +37,7 @@ func (cmd *get) Exec() {
 			"path":    p,
 		}
 	}
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *get) Name() string {

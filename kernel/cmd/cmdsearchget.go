@@ -39,7 +39,7 @@ func (cmd *searchget) Exec() {
 			"key":     cmd.param["key"],
 		}
 	}
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *searchget) Name() string {

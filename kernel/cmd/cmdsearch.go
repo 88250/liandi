@@ -21,7 +21,7 @@ func (cmd *search) Exec() {
 	keyword := cmd.param["k"].(string)
 	result := model.Search(keyword)
 	ret.Data = result
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *search) Name() string {

@@ -27,7 +27,7 @@ func (cmd *setimage) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		model.Push(ret.Bytes())
+		cmd.Push(ret.Bytes())
 		return
 	}
 
@@ -35,7 +35,7 @@ func (cmd *setimage) Exec() {
 	if err = json.Unmarshal(param, image); nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		model.Push(ret.Bytes())
+		cmd.Push(ret.Bytes())
 		return
 	}
 
@@ -43,7 +43,7 @@ func (cmd *setimage) Exec() {
 	model.Conf.Save()
 
 	ret.Data = model.Conf.Image
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *setimage) Name() string {

@@ -27,7 +27,7 @@ func (cmd *setmd) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		model.Push(ret.Bytes())
+		cmd.Push(ret.Bytes())
 		return
 	}
 
@@ -35,7 +35,7 @@ func (cmd *setmd) Exec() {
 	if err = json.Unmarshal(param, md); nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		model.Push(ret.Bytes())
+		cmd.Push(ret.Bytes())
 		return
 	}
 
@@ -44,7 +44,7 @@ func (cmd *setmd) Exec() {
 	model.Conf.Save()
 
 	ret.Data = model.Conf.Markdown
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *setmd) Name() string {

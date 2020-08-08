@@ -12,6 +12,7 @@ package cmd
 
 import (
 	"github.com/88250/liandi/kernel/model"
+	"gopkg.in/olahol/melody.v1"
 )
 
 type Cmd interface {
@@ -21,16 +22,21 @@ type Cmd interface {
 }
 
 type BaseCmd struct {
-	id    float64
-	param map[string]interface{}
+	id      float64
+	param   map[string]interface{}
+	session *melody.Session
 }
 
 func (cmd *BaseCmd) Id() float64 {
 	return cmd.id
 }
 
-func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}) (ret Cmd) {
-	baseCmd := &BaseCmd{id: cmdId, param: param}
+func (cmd *BaseCmd) Push(data []byte) {
+	cmd.session.Write(data)
+}
+
+func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, session *melody.Session) (ret Cmd) {
+	baseCmd := &BaseCmd{id: cmdId, param: param, session: session}
 	switch cmdStr {
 	case "mount":
 		ret = &mount{baseCmd}

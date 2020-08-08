@@ -26,7 +26,7 @@ func (cmd *mount) Exec() {
 	ret.Data = map[string]interface{}{
 		"dir": model.Conf.Dir(url),
 	}
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *mount) Name() string {

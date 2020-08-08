@@ -39,7 +39,7 @@ func (cmd *remove) Exec() {
 		"url":  url,
 		"path": p,
 	}
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *remove) Name() string {

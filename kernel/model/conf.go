@@ -322,9 +322,9 @@ func (dir *Dir) Unindex() {
 	for _, tree := range trees {
 		paths = append(paths, tree.Path)
 	}
-	for _, path := range paths {
-		dir.RemoveIndexDoc(path)
-		dir.RemoveTree(path)
+	for _, p := range paths {
+		dir.RemoveIndexDoc(p)
+		dir.RemoveTree(p)
 	}
 }
 

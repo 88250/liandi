@@ -34,7 +34,7 @@ func (cmd *ls) Exec() {
 			"files": files,
 		}
 	}
-	model.Push(ret.Bytes())
+	cmd.Push(ret.Bytes())
 }
 
 func (cmd *ls) Name() string {
