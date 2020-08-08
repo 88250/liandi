@@ -36,6 +36,12 @@
     </div>
     <div>
         <svg>
+            <use xlink:href="#iconFavorite"></use>
+        </svg>
+        iconFavorite
+    </div>
+    <div>
+        <svg>
             <use xlink:href="#iconRestore"></use>
         </svg>
         iconRestore
@@ -110,6 +116,9 @@
 <script>
   document.body.insertAdjacentHTML('afterbegin', `
 <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg"><defs>
+  <symbol id="iconFavorite" viewBox="0 0 32 32">
+    <path d="M16 30.685l-2.329-2.103q-3.981-3.606-5.784-5.333t-4.019-4.282-3.042-4.62-0.826-4.244q0-3.681 2.516-6.235t6.272-2.554q4.357 0 7.211 3.38 2.854-3.38 7.211-3.38 3.756 0 6.272 2.554t2.516 6.235q0 2.93-1.953 6.084t-4.244 5.484-7.474 6.986z"></path>
+  </symbol>
   <symbol id="iconClose" viewBox="0 0 32 32">
     <path d="M32 3.221l-12.779 12.779 12.779 12.779-3.221 3.221-12.779-12.779-12.779 12.779-3.221-3.221 12.779-12.779-12.779-12.779 3.221-3.221 12.779 12.779 12.779-12.779z"></path>
   </symbol>

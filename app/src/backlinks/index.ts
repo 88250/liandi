@@ -35,6 +35,9 @@ export class Backlinks {
             })
             backlinksHTML += '</div>'
         })
+        if (backlinks.length === 0) {
+            backlinksHTML += `<div class="item"><div class="item__content">${i18n[liandi.config.lang].noBacklinks}</div></div>`
+        }
         this.element.innerHTML = backlinksHTML;
     }
 
