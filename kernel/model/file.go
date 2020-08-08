@@ -151,9 +151,6 @@ func PutBlob(url, path string, data []byte) (err error) {
 }
 
 func Create(url, path string) (err error) {
-	if !strings.HasSuffix(path, ".md") {
-		path += ".md"
-	}
 	exist, err := Exist(url, path)
 	if nil != err {
 		return err
@@ -211,6 +208,13 @@ func Mkdir(url, path string) error {
 	dir := Conf.Dir(url)
 	if nil == dir {
 		return errors.New(Conf.lang(0))
+	}
+	exist, err := dir.Exist(path)
+	if nil != err {
+		return err
+	}
+	if exist {
+		return errors.New(Conf.lang(1))
 	}
 	return dir.Mkdir(path)
 }

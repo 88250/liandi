@@ -28,11 +28,15 @@ func (cmd *mkdir) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+		model.Push(ret.Bytes())
+		return
 	}
 
+	dir := model.Conf.Dir(url)
+	files, _ := model.Ls(url, path.Dir(p))
 	ret.Data = map[string]interface{}{
-		"url":  url,
-		"path": p,
+		"dir":  dir,
+		"files": files,
 		"name": path.Base(p),
 	}
 	model.Push(ret.Bytes())

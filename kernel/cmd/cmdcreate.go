@@ -33,11 +33,12 @@ func (cmd *create) Exec() {
 		return
 	}
 
-	p = p[:len(p)-len(".md")]
 	name := path.Base(p)
+	dir := model.Conf.Dir(url)
+	files, _ := model.Ls(url, path.Dir(p))
 	ret.Data = map[string]interface{}{
-		"url":  url,
-		"path": p,
+		"dir":  dir,
+		"files": files,
 		"name": name,
 	}
 	model.Push(ret.Bytes())
