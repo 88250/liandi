@@ -28,8 +28,9 @@ export class Backlinks {
         this.element.innerHTML = backlinksHTML;
     }
 
-    public show() {
+    public show(liandi: ILiandi) {
         this.element.classList.remove('fn__none');
+        this.getBacklinks(liandi);
         document.getElementById('resize2').classList.remove('fn__none');
     }
 

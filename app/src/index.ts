@@ -53,7 +53,7 @@ class App {
         });
         document.getElementById('barBacklinks').addEventListener('click', () => {
             if (this.liandi.backlinks.element.classList.contains('fn__none')) {
-                this.liandi.backlinks.show();
+                this.liandi.backlinks.show(this.liandi);
             } else {
                 this.liandi.backlinks.hide();
             }
