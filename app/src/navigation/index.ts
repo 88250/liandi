@@ -118,9 +118,16 @@ export class Navigation {
         fileItemElement.querySelector(".fn__ellipsis").innerHTML = escapeHtml(data.newName);
         if (liandi.current.dir && liandi.current.dir.url === data.url && liandi.current.path === data.oldPath) {
             if (!data.newPath.endsWith('/')) {
-                liandi.editors.currentEditor.inputElement.value = data.newName.replace('.md', '');
+                liandi.editors.currentEditor.inputElement.value = data.newName;
                 liandi.current.path = data.newPath;
             }
+        }
+        if (data.newPath.endsWith('/')) {
+            const files = JSON.parse(fileItemElement.getAttribute('data-files'));
+            files.forEach((item: IFile) => {
+                item.path = item.path.replace(data.oldPath, data.newPath)
+            })
+            fileItemElement.setAttribute('data-files', JSON.stringify(files));
         }
         destroyDialog()
     }

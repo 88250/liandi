@@ -9,7 +9,10 @@ export class Backlinks {
 
     public getBacklinks(liandi: ILiandi) {
         if (!this.element.classList.contains("fn__none")) {
-            liandi.ws.send('backlinks', {});
+            liandi.ws.send('backlinks', {
+                url: liandi.current.dir.url,
+                path: liandi.current.path
+            });
         }
     }
 

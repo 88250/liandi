@@ -125,7 +125,10 @@ export class WebSocketUtil {
                 case 'mkdir':
                     const folderItemData = liandi.menus.itemData
                     folderItemData.target.firstElementChild.classList.remove("fn__hidden")
-                    folderItemData.target.firstElementChild.classList.remove('item__arrow--open')
+                    if (folderItemData.target.firstElementChild.classList.contains('item__arrow--open')) {
+                        folderItemData.target.firstElementChild.classList.remove('item__arrow--open')
+                        folderItemData.target.nextElementSibling.remove();
+                    }
                     folderItemData.target.setAttribute('data-files', JSON.stringify(response.data.files));
                     liandi.navigation.getLeaf(folderItemData.target, response.data.dir);
                     destroyDialog();

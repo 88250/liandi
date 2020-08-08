@@ -224,7 +224,7 @@ export class Editors {
         } else {
             this.newEditor(liandi, editorData.content);
         }
-        this.currentEditor.inputElement.value = editorData.name.replace('.md', '');
+        this.currentEditor.inputElement.value = editorData.name;
         document.querySelector<HTMLElement>('.editor__empty').style.display = "none"
     }
 
