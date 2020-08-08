@@ -1,5 +1,7 @@
 import * as path from 'path';
 import {i18n} from "../i18n";
+import { remote } from 'electron';
+const appDir = remote.app.getAppPath().replace(/\/electron$/, '').replace(/\\electron$/, '');
 
 export class Backlinks {
     public element: HTMLElement;
@@ -39,6 +41,24 @@ export class Backlinks {
             backlinksHTML += `<div class="item"><div class="item__content">${i18n[liandi.config.lang].noBacklinks}</div></div>`
         }
         this.element.innerHTML = backlinksHTML;
+
+        this.element.addEventListener("click", (event) => {
+            let target = event.target as HTMLElement
+            while (target && !target.isEqualNode(this.element)) {
+                if (target.tagName === "H2") {
+                    let win = new remote.BrowserWindow({ width: 800, height: 600 })
+                    win.on('closed', () => {
+                        win = null
+                    })
+
+                    win.loadURL(`${appDir}/public/index.html`)
+                    event.preventDefault()
+                    event.stopPropagation()
+                    break
+                }
+                target = target.parentElement
+            }
+        })
     }
 
     public show(liandi: ILiandi) {
