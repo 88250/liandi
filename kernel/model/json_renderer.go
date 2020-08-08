@@ -11,13 +11,13 @@
 package model
 
 import (
-	"github.com/88250/lute/lex"
-	"github.com/88250/lute/render"
+	"encoding/json"
 	"strconv"
-	"strings"
 
 	"github.com/88250/lute/ast"
+	"github.com/88250/lute/lex"
 	"github.com/88250/lute/parse"
+	"github.com/88250/lute/render"
 	"github.com/88250/lute/util"
 )
 
@@ -584,11 +584,9 @@ func (r *JSONRenderer) val(val string, node *ast.Node) {
 	} else {
 		return
 	}
-	val = strings.ReplaceAll(val, "\\", "\\\\")
-	val = strings.ReplaceAll(val, "\n", "\\n")
-	val = strings.ReplaceAll(val, "\"", "\\\"")
-	val = strings.ReplaceAll(val, "'", "\\'")
-	r.WriteString("\"Val\":\"" + val + "\"")
+	valBytes, _ := json.Marshal(val)
+	val = util.BytesToStr(valBytes)
+	r.WriteString("\"Val\":" + val)
 }
 
 func (r *JSONRenderer) openObj() {
