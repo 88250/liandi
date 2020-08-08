@@ -312,6 +312,9 @@ func (dir *Dir) Index() {
 		tree.Path = p[:len(p)-len(".md.json")]
 		tree.Name = path.Base(tree.Path)
 		dir.IndexTree(tree)
+
+		content := tree.Root.Text()
+		dir.IndexDoc(tree.Path, content)
 	}
 	Logger.Debugf("索引目录 [%s] 完毕", dir.URL)
 }
