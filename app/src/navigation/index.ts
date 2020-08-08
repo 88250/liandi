@@ -8,61 +8,65 @@ export class Navigation {
 
     constructor(liandi: ILiandi) {
         this.element = document.getElementById('navigation');
-        let timeoutId: number
+        this.element.addEventListener('dblclick', (event) => {
+            let target = event.target as HTMLElement
+            const ulElement = hasTopClosestByTag(target, "UL")
+            if (ulElement) {
+                const dir = JSON.parse(decodeURIComponent(ulElement.getAttribute("data-dir")))
+                while (target && !target.isEqualNode(ulElement)) {
+                    if (target.classList.contains('item__arrow')) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                        break
+                    }
+                    if (target.tagName === "LI" && target.getAttribute("data-type") !== "navigation-file") {
+                        this.getLeaf(target, dir)
+                        this.setCurrent(target)
+                        event.preventDefault()
+                        event.stopPropagation()
+                        break
+                    }
+                    target = target.parentElement
+                }
+            }
+        });
         this.element.addEventListener('click', (event) => {
             let target = event.target as HTMLElement
             const ulElement = hasTopClosestByTag(target, "UL")
             if (ulElement) {
                 const dir = JSON.parse(decodeURIComponent(ulElement.getAttribute("data-dir")))
-                if (event.detail === 1) {
-                    timeoutId = window.setTimeout(() => {
-                        while (target && !target.isEqualNode(ulElement)) {
-                            if (target.classList.contains('item__arrow')) {
-                                this.getLeaf(target.parentElement, dir)
-                                this.setCurrent(target.parentElement)
-                                event.preventDefault()
-                                event.stopPropagation()
-                                break
-                            }
-
-                            if (target.getAttribute("data-type") === "navigation-file") {
-                                this.setCurrent(target)
-                                liandi.editors.save(liandi)
-                                const path = decodeURIComponent(target.getAttribute('data-path'))
-                                liandi.current = {
-                                    dir, path
-                                }
-                                liandi.ws.send('get', {
-                                    url: dir.url,
-                                    path,
-                                })
-                                event.preventDefault()
-                                event.stopPropagation()
-                                break
-                            }
-
-                            if (target.tagName === 'LI') {
-                                this.setCurrent(target)
-                                event.preventDefault()
-                                event.stopPropagation()
-                                break
-                            }
-                            target = target.parentElement
-                        }
-                    }, 300)
-                } else if (event.detail === 2) {
-                    while (target && !target.isEqualNode(ulElement)) {
-                        if (target.tagName === "LI" && target.getAttribute("data-type") !== "navigation-file") {
-                            this.getLeaf(target, dir)
-                            this.setCurrent(target)
-                            event.preventDefault()
-                            event.stopPropagation()
-                            break
-                        }
-
-                        target = target.parentElement
+                while (target && !target.isEqualNode(ulElement)) {
+                    if (target.classList.contains('item__arrow')) {
+                        this.getLeaf(target.parentElement, dir)
+                        this.setCurrent(target.parentElement)
+                        event.preventDefault()
+                        event.stopPropagation()
+                        break
                     }
-                    clearTimeout(timeoutId)
+
+                    if (target.getAttribute("data-type") === "navigation-file") {
+                        this.setCurrent(target)
+                        liandi.editors.save(liandi)
+                        const path = decodeURIComponent(target.getAttribute('data-path'))
+                        liandi.current = {
+                            dir, path
+                        }
+                        liandi.ws.send('get', {
+                            url: dir.url,
+                            path,
+                        })
+                        event.preventDefault()
+                        event.stopPropagation()
+                        break
+                    }
+
+                    if (target.tagName === 'LI') {
+                        this.setCurrent(target)
+                        event.preventDefault()
+                        event.stopPropagation()
+                        break
+                    }
+                    target = target.parentElement
                 }
             }
         })
