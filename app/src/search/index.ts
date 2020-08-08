@@ -7,6 +7,7 @@ import {initConfigSearch} from '../config/search';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
 import {help} from '../config/help';
+import {escapeHtml} from "../util/escape";
 
 export const initSearch = (liandi: ILiandi, type = 'search') => {
     dialog({
@@ -161,7 +162,7 @@ export const onSearch = (liandi: ILiandi, data: {
 title="${item.content}" data-dir="${encodeURIComponent(JSON.stringify(item.dir))}" data-path="${encodeURIComponent(item.path)}" data-index="${item.index}">
 <span class="fn__flex-1 fn__ellipsis">${item.content}</span>
 <span class="fn__space"></span>
-<span class="ft__smaller ft__secondary">${item.path} ${item.ln}:${item.col}</span>
+<span class="ft__smaller ft__secondary">${escapeHtml(item.path)} ${item.ln}:${item.col}</span>
 </div>`;
     });
 
