@@ -33,7 +33,7 @@ type Doc struct {
 }
 
 type Snippet struct {
-	URL     string `json:"url"`
+	Dir     *Dir   `json:"dir"`
 	Path    string `json:"path"`
 	Ln      int    `json:"ln"`
 	Col     int    `json:"col"`
@@ -102,7 +102,8 @@ func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
 	for idx, line := range lines {
 		if pos := strings.Index(strings.ToLower(line), strings.ToLower(keyword)); -1 != pos {
 			highlight := line[0:pos] + "<mark>" + line[pos:pos+len(keyword)] + "</mark>" + line[pos+len(keyword):]
-			snippet := &Snippet{URL: html.EscapeString(doc.URL),
+			dir := Conf.Dir(doc.URL)
+			snippet := &Snippet{Dir: dir,
 				Path: html.EscapeString(doc.Path),
 				Ln:   idx + 1, Col: pos + 1, Index: index,
 				Content: highlight}
