@@ -38,8 +38,8 @@ func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 	ret.Name = f.Name()
 	ret.IsDir = f.IsDir()
 	if !ret.IsDir {
-		ret.Name = ret.Name[:len(ret.Name)-len(".json")]
-		ret.Path = ret.Path[:len(ret.Path)-len(".json")]
+		ret.Name = ret.Name[:len(ret.Name)-len(".md.json")]
+		ret.Path = ret.Path[:len(ret.Path)-len(".md.json")]
 	}
 	ret.Size = f.Size()
 	ret.Mtime = f.ModTime().Unix()
@@ -71,7 +71,6 @@ func Ls(url, path string) (ret []*File, err error) {
 	}
 
 	var dirs, docs []*File
-
 	for _, f := range files {
 		if strings.HasPrefix(f.Name(), ".") || dir.isSkipDir(f.Name()) {
 			continue
@@ -188,15 +187,21 @@ func Rename(url, oldPath, newPath string) error {
 
 	// 重命名文件
 
-	if !strings.HasSuffix(newPath, ".md") {
-		newPath += ".md"
-	}
-	if err := dir.Rename(oldPath+".json", newPath+".json"); nil != err {
+	if err := dir.Rename(oldPath+".md.json", newPath+".md.json"); nil != err {
 		return err
 	}
 	dir.MoveIndexDoc(oldPath, newPath)
 	dir.MoveTree(oldPath, newPath)
-	return dir.Rename(oldPath, newPath)
+
+	// 如果存在 md 文件的话也进行重命名，否则重启时会索引生成 AST
+	exist, err := dir.Exist(oldPath + ".md")
+	if nil != err {
+		return err
+	}
+	if exist {
+		return dir.Rename(oldPath+".md", newPath+".md")
+	}
+	return nil
 }
 
 func Mkdir(url, path string) error {

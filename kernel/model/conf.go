@@ -309,8 +309,8 @@ func (dir *Dir) Index() {
 			Logger.Fatalf("解析目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
 		}
 		tree.URL = dir.URL
-		tree.Path = jsonName2Path(p)
-		tree.Name = jsonName2Path(path.Base(p))
+		tree.Path = p[:len(p)-len(".md.json")]
+		tree.Name = path.Base(tree.Path)
 		dir.IndexTree(tree)
 	}
 	Logger.Debugf("索引目录 [%s] 完毕", dir.URL)

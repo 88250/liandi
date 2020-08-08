@@ -15,7 +15,6 @@ import (
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
 	"github.com/88250/lute/util"
-	"path"
 	"strconv"
 )
 
@@ -96,8 +95,7 @@ func WriteASTJSON(tree *parse.Tree) error {
 	output := renderer.Render()
 
 	dir := Conf.dir(tree.URL)
-	p := path2jsonName(tree.Path)
-	if err := dir.Put(p, output); nil != err {
+	if err := dir.Put(tree.Path+".json", output); nil != err {
 		return err
 	}
 	return nil
@@ -107,14 +105,4 @@ func ReadASTJSON(url, p string) (jsonStr string, err error) {
 	dir := Conf.dir(url)
 	jsonStr, err = dir.Get(p)
 	return
-}
-
-func path2jsonName(p string) string {
-	name := path.Base(p) + ".json"
-	p = path.Dir(p)
-	return path.Join(p, name)
-}
-
-func jsonName2Path(p string) string {
-	return p[:len(p)-len(".json")]
 }
