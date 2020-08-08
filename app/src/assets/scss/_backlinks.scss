@@ -6,4 +6,14 @@
   box-sizing: border-box;
   background-color: var(--focus-background-color);
   border-left: 1px solid var(--border-color);
+
+  h2 {
+    margin: 20px 10px 10px 10px;
+    font-weight: normal;
+    cursor: pointer;
+  }
+
+  .item {
+    margin: 5px 10px;
+  }
 }

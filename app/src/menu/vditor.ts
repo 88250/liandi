@@ -6,7 +6,7 @@ export const initVditorMenu = (liandi: ILiandi) => {
     menu.append(new remote.MenuItem({
         label: i18n[liandi.config.lang].pasteAsPlainText,
         id: 'pasteAsPlainText',
-        accelerator: 'CmdOrCtrl+Shift+V',
+        accelerator: 'CmdOrCtrl+Shift+Alt+V',
         click: () => {
             remote.getCurrentWindow().webContents.pasteAndMatchStyle()
         }

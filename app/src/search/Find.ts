@@ -59,7 +59,7 @@ export class Find extends EventEmitter {
     private closeEvent() {
         this.webContent.stopFindInPage('keepSelection');
         (document.querySelector('.find') as HTMLElement).style.display = 'none';
-        (document.querySelector('.drag') as HTMLElement).style.right = '0';
+        (document.querySelector('.drag') as HTMLElement).style.right = '34px';
     }
 
     private nextEvent(forward = true, findNext = false) {

@@ -91,11 +91,11 @@
 .drag {
   -webkit-app-region: drag;
   height: 12px;
-  left: 96px;
+  right: 34px;
+  left: 128px;
   position: absolute;
   top: 0;
   z-index: 100;
-  width: 100%;
 }
 
 .loading {
