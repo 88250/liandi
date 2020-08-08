@@ -23,7 +23,6 @@ import (
 	"github.com/88250/liandi/kernel/cmd"
 	"github.com/88250/liandi/kernel/model"
 	"github.com/gin-gonic/gin"
-	"github.com/mitchellh/go-ps"
 	"gopkg.in/olahol/melody.v1"
 )
 
@@ -36,7 +35,8 @@ func init() {
 	model.InitMount()
 	model.InitIndex()
 
-	go ParentExited()
+	model.InitProcess()
+	go model.ParentExited()
 	model.CheckUpdatePeriodically()
 }
 
@@ -137,19 +137,6 @@ func handleSignal() {
 		model.Close()
 		os.Exit(0)
 	}()
-}
-
-var ppid = os.Getppid()
-
-func ParentExited() {
-	for range time.Tick(2 * time.Second) {
-		process, e := ps.FindProcess(ppid)
-		if nil == process || nil != e {
-			model.Logger.Info("UI 进程已经退出，现在退出内核进程")
-			model.Close()
-			os.Exit(0)
-		}
-	}
 }
 
 func shortReqMsg(msg []byte) []byte {
