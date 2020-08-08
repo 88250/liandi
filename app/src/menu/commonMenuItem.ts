@@ -13,7 +13,7 @@ export const showInFolder = (liandi: ILiandi) => {
             if (itemData.path.endsWith("/")) {
                 shell.openItem(path.posix.join(itemData.dir.path, itemData.path));
             } else {
-                shell.showItemInFolder(path.posix.join(itemData.dir.path, itemData.path));
+                shell.showItemInFolder(path.posix.join(itemData.dir.path, itemData.path + ".md.json"));
             }
         }
     });
