@@ -151,7 +151,7 @@ func PutBlob(url, path string, data []byte) (err error) {
 }
 
 func Create(url, path string) (err error) {
-	exist, err := Exist(url, path)
+	exist, err := Exist(url, path + ".md.json")
 	if nil != err {
 		return err
 	}
