@@ -11,7 +11,6 @@
 package model
 
 import (
-	"github.com/88250/lute/html"
 	"strings"
 )
 
@@ -104,7 +103,7 @@ func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
 			highlight := line[0:pos] + "<mark>" + line[pos:pos+len(keyword)] + "</mark>" + line[pos+len(keyword):]
 			dir := Conf.Dir(doc.URL)
 			snippet := &Snippet{Dir: dir,
-				Path: html.EscapeString(doc.Path),
+				Path: doc.Path,
 				Ln:   idx + 1, Col: pos + 1, Index: index,
 				Content: highlight}
 			ret = append(ret, snippet)
