@@ -70,14 +70,14 @@ func main() {
 
 	m.HandleConnect(func(s *melody.Session) {
 		model.AddPushChan(s)
-		sessionId, _ := s.Get("id")
-		model.Logger.Debugf("会话 [%s] 已连接", sessionId)
+		//sessionId, _ := s.Get("id")
+		//model.Logger.Debugf("会话 [%s] 已连接", sessionId)
 	})
 
 	m.HandleDisconnect(func(s *melody.Session) {
 		model.RemovePushChan(s)
-		sessionId, _ := s.Get("id")
-		model.Logger.Debugf("会话 [%s] 已断开", sessionId)
+		//sessionId, _ := s.Get("id")
+		//model.Logger.Debugf("会话 [%s] 已断开", sessionId)
 	})
 
 	m.HandleError(func(s *melody.Session, err error) {
