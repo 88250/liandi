@@ -4,7 +4,7 @@ import {Constants} from '../constants';
 import {remote} from 'electron';
 import * as path from 'path';
 import {ipcRenderer} from 'electron';
-import {BlockHint} from "./BlockHint";
+import {addIds, BlockHint} from "./BlockHint";
 
 const appDir = remote.app.getAppPath().replace(/\/electron$/, '').replace(/\\electron$/, '');
 
@@ -24,7 +24,7 @@ export class Editors {
         this.blockHint = new BlockHint()
     }
 
-    private initVditor(liandi: ILiandi, editor: IEditor, html?: string) {
+    private initVditor(liandi: ILiandi, editor: IEditor, html?: string, processHTML = false) {
         if (typeof html === 'undefined' && editor.vditor) {
             html = editor.vditor.vditor.ir.element.innerHTML;
         }
@@ -137,6 +137,9 @@ export class Editors {
             },
             after: () => {
                 editor.vditor.vditor.lute.SetLinkBase(path.posix.join(liandi.current.dir.url, liandi.current.path));
+                if (processHTML) {
+                    html = addIds(html, editor.vditor.vditor.lute)
+                }
                 editor.vditor.setHTML(html);
                 editor.vditor.focus();
                 this.blockHint.initEvent(liandi, editor.vditor.vditor.ir.element)
@@ -148,7 +151,7 @@ export class Editors {
         });
     }
 
-    private newEditor(liandi: ILiandi, html: string) {
+    private newEditor(liandi: ILiandi, html: string, processHTML = false) {
         const inputElement = document.createElement('input');
         inputElement.className = 'editor__input';
         inputElement.addEventListener('blur', () => {
@@ -169,7 +172,7 @@ export class Editors {
             saved: true,
             active: true
         };
-        this.initVditor(liandi, editor, html);
+        this.initVditor(liandi, editor, html, processHTML);
         this.currentEditor = editor;
         this.editors.push(editor);
     }
@@ -224,9 +227,9 @@ export class Editors {
 
     public onGet(liandi: ILiandi, editorData: { content: string, name: string }) {
         if (this.currentEditor) {
-            this.initVditor(liandi, this.currentEditor, editorData.content);
+            this.initVditor(liandi, this.currentEditor, editorData.content, true);
         } else {
-            this.newEditor(liandi, editorData.content);
+            this.newEditor(liandi, editorData.content, true);
         }
         this.currentEditor.inputElement.value = editorData.name;
         document.querySelector<HTMLElement>('.editor__empty').style.display = "none"
