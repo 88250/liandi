@@ -18,11 +18,11 @@ type getblock struct {
 
 func (cmd *getblock) Exec() {
 	ret := model.NewCmdResult(cmd.Name(), cmd.id)
-	keyword := cmd.param["k"].(string)
-	blocks := model.SearchBlock(keyword)
+	id := cmd.param["id"].(string)
+	block := model.GetBlock(id)
 	result := map[string]interface{}{
-		"blocks": blocks,
-		"k":      keyword,
+		"block": block,
+		"id":    id,
 	}
 	ret.Data = result
 	cmd.Push(ret.Bytes())

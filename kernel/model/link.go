@@ -59,10 +59,6 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 			return ast.WalkContinue
 		}
 
-		if "" == n.ID {
-			return ast.WalkStop
-		}
-
 		if isSearchBlockSkipNode(n) {
 			return ast.WalkStop
 		}

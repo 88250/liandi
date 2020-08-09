@@ -108,6 +108,41 @@ func (dir *Dir) Tree(path string) *parse.Tree {
 	return nil
 }
 
+func GetBlock(id string) (ret *Block) {
+	for _, tree := range trees {
+		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+			if !entering {
+				return ast.WalkContinue
+			}
+
+			if ast.NodeDocument == n.Type {
+				// 跳过根块
+				return ast.WalkContinue
+			}
+
+			if ast.NodeDocument != n.Parent.Type {
+				// 仅支持根节点的直接子节点
+				return ast.WalkContinue
+			}
+
+			if isSearchBlockSkipNode(n) {
+				return ast.WalkStop
+			}
+
+			if id == n.ID {
+				u := html.EscapeString(tree.URL)
+				p := html.EscapeString(tree.Path)
+				text := n.Text()
+				c := html.EscapeString(text)
+				ret = &Block{URL: u, Path: p, ID: n.ID, Content: c}
+				return ast.WalkStop
+			}
+			return ast.WalkContinue
+		})
+	}
+	return
+}
+
 func SearchBlock(keyword string) (ret []*Block) {
 	ret = []*Block{}
 	keyword = strings.TrimSpace(keyword)
@@ -157,7 +192,8 @@ func SearchBlock(keyword string) (ret []*Block) {
 }
 
 func isSearchBlockSkipNode(node *ast.Node) bool {
-	return ast.NodeText == node.Type || ast.NodeThematicBreak == node.Type ||
+	return "" == node.ID ||
+		ast.NodeText == node.Type || ast.NodeThematicBreak == node.Type ||
 		ast.NodeHTMLBlock == node.Type || ast.NodeInlineHTML == node.Type || ast.NodeCodeBlock == node.Type ||
 		ast.NodeCodeSpan == node.Type || ast.NodeHardBreak == node.Type || ast.NodeSoftBreak == node.Type ||
 		ast.NodeHTMLEntity == node.Type
