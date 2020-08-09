@@ -81,13 +81,13 @@ func main() {
 	})
 
 	m.HandleError(func(s *melody.Session, err error) {
-		sessionId, _ := s.Get("id")
-		model.Logger.Debugf("会话 [%s] 报错：%s", sessionId, err)
+		//sessionId, _ := s.Get("id")
+		//model.Logger.Debugf("会话 [%s] 报错：%s", sessionId, err)
 	})
 
 	m.HandleClose(func(s *melody.Session, i int, str string) error {
-		sessionId, _ := s.Get("id")
-		model.Logger.Debugf("会话 [%s] 关闭：%v, %v", sessionId, i, str)
+		//sessionId, _ := s.Get("id")
+		//model.Logger.Debugf("会话 [%s] 关闭：%v, %v", sessionId, i, str)
 		return nil
 	})
 
