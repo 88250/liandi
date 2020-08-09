@@ -14,7 +14,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"path"
 	"sort"
 	"strings"
 
@@ -47,8 +46,7 @@ func fromFileInfo(fileInfo os.FileInfo) (ret *File) {
 }
 
 func isMarkdown(fileInfo os.FileInfo) bool {
-	fileName := strings.ToLower(path.Ext(fileInfo.Name()))
-	return ".md" == fileName
+	return strings.HasSuffix(fileInfo.Name(), ".md")
 }
 
 func isJSON(fileInfo os.FileInfo) bool {
@@ -218,6 +216,10 @@ func Mkdir(url, path string) error {
 	return dir.Mkdir(path)
 }
 
+// deletedSuffix 文件/文件夹删除后缀。
+// 删除逻辑为了安全考虑，只是进行重命名，带上 .deleted 后缀。
+const deletedSuffix = ".deleted"
+
 func Remove(url, path string) error {
 	dir := Conf.Dir(url)
 	if nil == dir {
@@ -225,8 +227,7 @@ func Remove(url, path string) error {
 	}
 
 	if strings.HasSuffix(path, "/") {
-		// 删除文件夹
-		if err := dir.Remove(path); nil != err {
+		if err := dir.Rename(path, path+deletedSuffix); nil != err {
 			return err
 		}
 		dir.RemoveIndexDocDir(path)
@@ -236,19 +237,19 @@ func Remove(url, path string) error {
 
 	// 删除文件
 
-	if err := dir.Remove(path + ".md.json"); nil != err {
+	if err := dir.Rename(path+".md.json", path+".md.json"+deletedSuffix); nil != err {
 		return err
 	}
 	dir.RemoveIndexDoc(path)
 	dir.RemoveTree(path)
 
-	// 如果存在 md 文件的话，为了安全只是改下后缀
+	// 如果存在 md 文件的话也进行重命名
 	exist, err := dir.Exist(path + ".md")
 	if nil != err {
 		return err
 	}
 	if exist {
-		return dir.Rename(path+".md", path+".md.deleted")
+		return dir.Rename(path+".md", path+".md"+deletedSuffix)
 	}
 	return nil
 }

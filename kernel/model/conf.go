@@ -404,7 +404,7 @@ func (dir *Dir) listNewMarkdowns(files, ret *[]os.FileInfo) {
 }
 
 func (dir *Dir) isSkipDir(filename string) bool {
-	return "node_modules" == filename || "dist" == filename || "target" == filename
+	return "node_modules" == filename || "dist" == filename || "target" == filename || strings.HasSuffix(filename, deletedSuffix)
 }
 
 var zhCN = map[int]string{
