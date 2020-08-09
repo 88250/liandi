@@ -242,13 +242,13 @@ func Remove(url, path string) error {
 	dir.RemoveIndexDoc(path)
 	dir.RemoveTree(path)
 
-	// 如果存在 md 文件的话也进行删除，否则重启时会索引生成 AST
+	// 如果存在 md 文件的话，为了安全只是改下后缀
 	exist, err := dir.Exist(path + ".md")
 	if nil != err {
 		return err
 	}
 	if exist {
-		return dir.Remove(path + ".md")
+		return dir.Rename(path+".md", path+".md.deleted")
 	}
 	return nil
 }
