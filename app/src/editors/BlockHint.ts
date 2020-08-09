@@ -29,6 +29,9 @@ export class BlockHint {
     }
 
     public onGetBlock(data: { id: string, block: IBlock }) {
+        if (data.block) {
+            return;
+        }
         const elementRect = this.blockRefElement.getBoundingClientRect()
         this.element.innerHTML = data.block.content;
         const top = elementRect.top + elementRect.height + 5
