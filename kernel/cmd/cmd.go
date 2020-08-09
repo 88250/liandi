@@ -80,6 +80,8 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, sess
 		ret = &setimage{baseCmd}
 	case "exec":
 		ret = &exec{baseCmd}
+	case "getblock":
+		ret = &exec{baseCmd}
 	}
 	return
 }
