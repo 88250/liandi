@@ -170,7 +170,7 @@ func SearchBlock(keyword string) (ret []*Block) {
 			}
 
 			text := n.Text()
-			if strings.Contains(text, keyword) {
+			if strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
 				u := html.EscapeString(tree.URL)
 				p := html.EscapeString(tree.Path)
 				c := html.EscapeString(text)
