@@ -36,7 +36,7 @@ export class BlockHint {
         this.element.setAttribute("style", `display:block;top:${top}px;left:${left}px`)
         // 展现在上部
         if (this.element.getBoundingClientRect().bottom > window.innerHeight) {
-            this.element.style.top = `${top - this.element.clientHeight - 5 - elementRect.height}px`;
+            this.element.style.top = `${top - this.element.clientHeight - 10 - elementRect.height}px`;
         }
         if (this.element.getBoundingClientRect().right > window.innerWidth) {
             this.element.style.left = 'auto';
