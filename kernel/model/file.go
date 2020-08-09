@@ -220,36 +220,37 @@ func Mkdir(url, path string) error {
 // 删除逻辑为了安全考虑，只是进行重命名，带上 .deleted 后缀。
 const deletedSuffix = ".deleted"
 
-func Remove(url, path string) error {
+func Remove(url, p string) error {
 	dir := Conf.Dir(url)
 	if nil == dir {
 		return errors.New(Conf.lang(0))
 	}
 
-	if strings.HasSuffix(path, "/") {
-		if err := dir.Rename(path, path+deletedSuffix); nil != err {
+	if strings.HasSuffix(p, "/") {
+		newPath := p[:len(p)-1] + deletedSuffix + "/"
+		if err := dir.Rename(p, newPath); nil != err {
 			return err
 		}
-		dir.RemoveIndexDocDir(path)
-		dir.RemoveTreeDir(path)
+		dir.RemoveIndexDocDir(p)
+		dir.RemoveTreeDir(p)
 		return nil
 	}
 
 	// 删除文件
 
-	if err := dir.Rename(path+".md.json", path+".md.json"+deletedSuffix); nil != err {
+	if err := dir.Rename(p+".md.json", p+".md.json"+deletedSuffix); nil != err {
 		return err
 	}
-	dir.RemoveIndexDoc(path)
-	dir.RemoveTree(path)
+	dir.RemoveIndexDoc(p)
+	dir.RemoveTree(p)
 
 	// 如果存在 md 文件的话也进行重命名
-	exist, err := dir.Exist(path + ".md")
+	exist, err := dir.Exist(p + ".md")
 	if nil != err {
 		return err
 	}
 	if exist {
-		return dir.Rename(path+".md", path+".md"+deletedSuffix)
+		return dir.Rename(p+".md", p+".md"+deletedSuffix)
 	}
 	return nil
 }
