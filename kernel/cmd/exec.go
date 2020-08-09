@@ -21,6 +21,8 @@ type exec struct {
 }
 
 func (cmd *exec) Exec() {
+	// 这里有远程执行漏洞风险
+
 	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	execPath := cmd.param["bin"].(string)
 	args := cmd.param["args"].([]interface{})
