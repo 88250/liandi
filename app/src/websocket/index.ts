@@ -118,6 +118,9 @@ export class WebSocketUtil {
                     liandi.editors.onGet(liandi, response.data);
                     liandi.backlinks.getBacklinks(liandi);
                     break;
+                case 'getblock':
+                    liandi.editors.onGetBlock(response.data);
+                    break;
                 case 'rename':
                     liandi.navigation.onRename(liandi, response.data);
                     break;

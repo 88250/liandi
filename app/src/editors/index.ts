@@ -4,12 +4,14 @@ import {Constants} from '../constants';
 import {remote} from 'electron';
 import * as path from 'path';
 import {ipcRenderer} from 'electron';
+import {BlockHint} from "./BlockHint";
 
 const appDir = remote.app.getAppPath().replace(/\/electron$/, '').replace(/\\electron$/, '');
 
 export class Editors {
     private editors: IEditor[] = [];
     private editorsElement: HTMLElement;
+    private blockHint: BlockHint;
     public currentEditor: IEditor;
 
     constructor() {
@@ -19,6 +21,7 @@ export class Editors {
                 this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + 'px';
             }
         };
+        this.blockHint = new BlockHint()
     }
 
     private initVditor(liandi: ILiandi, editor: IEditor, html?: string) {
@@ -136,6 +139,7 @@ export class Editors {
                 editor.vditor.vditor.lute.SetLinkBase(path.posix.join(liandi.current.dir.url, liandi.current.path));
                 editor.vditor.setHTML(html);
                 editor.vditor.focus();
+                this.blockHint.initEvent(liandi, editor.vditor.vditor.ir.element)
             },
             input: () => {
                 editor.saved = false;
@@ -239,5 +243,9 @@ export class Editors {
             });
         });
         this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);
+    }
+
+    public onGetBlock(data: { id: string, block: IBlock }) {
+        this.blockHint.onGetBlock(data);
     }
 }

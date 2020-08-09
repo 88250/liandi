@@ -88,9 +88,9 @@ declare interface ILiandi {
     };
     backlinks?: {
         element: HTMLElement
-        onBacklinks: (liandi:ILiandi, backlinks: IBacklinks[]) => void
+        onBacklinks: (liandi: ILiandi, backlinks: IBacklinks[]) => void
         getBacklinks: (liandi: ILiandi) => void
-        show: (liandi:ILiandi) => void;
+        show: (liandi: ILiandi) => void;
         hide: () => void;
     };
     editors?: {
@@ -102,6 +102,7 @@ declare interface ILiandi {
         onGet: (liandi: ILiandi, editorData?: { content: string, name: string }) => void;
         showSearchBlock: (liandi: ILiandi, data: { k: string, blocks: IBlock[] }) => void;
         onSetTheme: (liandi: ILiandi, theme: TTheme) => void;
+        onGetBlock: (data: { id: string, block: IBlock }) => void;
     };
     menus?: {
         itemData: IMenuData

@@ -27,6 +27,9 @@ $barHeight: 20px !default;
   // vditor
   --textarea-background-color: #fafbfc;
   --toolbar-background-color: #f6f8fa;
+
+  --panel-background-color: #fff;
+  --panel-shadow: 0 1px 2px rgba(0, 0, 0, .2);
 }
 
 body.theme--dark {
@@ -45,5 +48,8 @@ body.theme--dark {
   // vditor
   --textarea-background-color: #2f363d;
   --toolbar-background-color: #1d2125;
+
+  --panel-background-color: #24292e;
+  --panel-shadow: 0 1px 2px rgba(255, 255, 255, .2);
 }
 
