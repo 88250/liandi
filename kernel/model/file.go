@@ -106,7 +106,6 @@ func Get(url, path string) (ret string, err error) {
 	}
 
 	ret = Lute.Tree2VditorIRBlockDOM(tree)
-	ret = Lute.SpinVditorIRBlockDOM(ret)
 	return
 }
 
