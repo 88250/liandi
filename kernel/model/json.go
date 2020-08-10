@@ -64,7 +64,14 @@ func genASTByJSON(jsonNode interface{}, tree *parse.Tree) {
 	case ast.NodeListItem:
 		listDataTyp := tree.Context.Tip.ListData.Typ
 		marker := node.Tokens
-		node.ListData = &ast.ListData{Typ: listDataTyp, Marker: marker}
+		var delimiter byte
+		if nil != n["Delimiter"] {
+			delimiter = n["Delimiter"].(string)[0]
+		}
+		node.ListData = &ast.ListData{Typ: listDataTyp, Marker: marker, Delimiter: delimiter}
+		if nil != n["Num"] {
+			node.ListData.Num = int(n["Num"].(float64))
+		}
 	case ast.NodeEmojiUnicode, ast.NodeEmojiImg, ast.NodeHTMLEntity:
 		node.Type = ast.NodeText
 	}

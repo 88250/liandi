@@ -26,16 +26,17 @@ type parseTest struct {
 
 var jsonTests = []parseTest{
 
+	{"27", "1. foo\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeList\",\"Val\":\"1\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeListItem\",\"Val\":\"1\",\"Delimiter\":\".\",\"Num\":1,\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"foo\"}]}]}]}]}"},
 	{"26", "[^foo] [^404]\n\n[^foo]: bar\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeFootnotesRef\",\"Val\":\"^foo\"},{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\" [^404]\"}]},{\"ID\":\"\",\"Type\":\"NodeFootnotesDef\",\"Val\":\"^foo\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"bar\"}]}]}]}"},
 	{"25", "[toc]\n\n# foo\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeToC\"},{\"ID\":\"\",\"Type\":\"NodeHeading\",\"Val\":\"1\",\"HeadingSetext\":false,\"Children\":[{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"foo\"}]}]}"},
 	{"24", "foo\\*\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"foo\"},{\"ID\":\"\",\"Type\":\"NodeBackslash\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeBackslashContent\",\"Val\":\"*\"}]}]}]}"},
-	{"23", "&hearts;\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeHTMLEntity\",\"Val\":\"&hearts;\"}]}]}"},
+	{"23", "&hearts;\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeHTMLEntity\",\"Val\":\"\\u0026hearts;\"}]}]}"},
 	{"22", ":octocat:\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeEmojiImg\",\"Val\":\":octocat:\"}]}]}"},
 	{"21", ":heart:\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeEmojiUnicode\",\"Val\":\":heart:\"}]}]}"},
 	{"20", "| foo | bar |\n| - | - |\n| baz | baz2 |\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeTable\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeTableHead\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeTableRow\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeTableCell\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"foo\"}]},{\"ID\":\"\",\"Type\":\"NodeTableCell\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"bar\"}]}]}]},{\"ID\":\"\",\"Type\":\"NodeTableRow\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeTableCell\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"baz\"}]},{\"ID\":\"\",\"Type\":\"NodeTableCell\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"baz2\"}]}]}]}]}"},
 	{"19", "[foo](bar)\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeLink\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeOpenBracket\",\"Val\":\"[\"},{\"ID\":\"\",\"Type\":\"NodeLinkText\",\"Val\":\"foo\"},{\"ID\":\"\",\"Type\":\"NodeCloseBracket\",\"Val\":\"]\"},{\"ID\":\"\",\"Type\":\"NodeOpenParen\",\"Val\":\"(\"},{\"ID\":\"\",\"Type\":\"NodeLinkDest\",\"Val\":\"bar\"},{\"ID\":\"\",\"Type\":\"NodeCloseParen\",\"Val\":\")\"}]}]}]}"},
-	{"18", "<span>foo</span>\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeInlineHTML\",\"Val\":\"<span>\"},{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"foo\"},{\"ID\":\"\",\"Type\":\"NodeInlineHTML\",\"Val\":\"</span>\"}]}]}"},
-	{"17", "<div>foo</div>\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeHTMLBlock\",\"Val\":\"<div>foo</div>\"}]}"},
+	{"18", "<span>foo</span>\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeInlineHTML\",\"Val\":\"\\u003cspan\\u003e\"},{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"foo\"},{\"ID\":\"\",\"Type\":\"NodeInlineHTML\",\"Val\":\"\\u003c/span\\u003e\"}]}]}"},
+	{"17", "<div>foo</div>\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeHTMLBlock\",\"Val\":\"\\u003cdiv\\u003efoo\\u003c/div\\u003e\"}]}"},
 	{"16", "foo\n\n---\n\nbar\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"foo\"}]},{\"ID\":\"\",\"Type\":\"NodeThematicBreak\"},{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"bar\"}]}]}"},
 	{"15", "foo\nbar\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeParagraph\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"foo\"},{\"ID\":\"\",\"Type\":\"NodeSoftBreak\"},{\"ID\":\"\",\"Type\":\"NodeText\",\"Val\":\"bar\"}]}]}"},
 	{"14", "---\nfoo\n---\n", "{\"ID\":\"\",\"Type\":\"NodeDocument\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeYamlFrontMatter\",\"Children\":[{\"ID\":\"\",\"Type\":\"NodeYamlFrontMatterOpenMarker\",\"Val\":\"---\"},{\"ID\":\"\",\"Type\":\"NodeYamlFrontMatterContent\",\"Val\":\"foo\"},{\"ID\":\"\",\"Type\":\"NodeYamlFrontMatterCloseMarker\",\"Val\":\"---\"}]}]}"},
@@ -66,7 +67,11 @@ func TestJSON(t *testing.T) {
 			t.Fatalf("test case [%s] failed\nexpected\n\t%s\ngot\n\t%s\noriginal markdown text\n\t%q", test.name, test.to, json, test.from)
 		}
 
-		tree := ParseJSON(json)
+		tree, err := ParseJSON(json)
+		if nil != err {
+			t.Fatalf("parse json failed [%s]", err)
+		}
+
 		renderer := render.NewFormatRenderer(tree)
 		markdown := util.BytesToStr(renderer.Render())
 		if test.from != markdown {

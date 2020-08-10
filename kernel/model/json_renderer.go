@@ -493,6 +493,12 @@ func (r *JSONRenderer) renderListItem(node *ast.Node, entering bool) ast.WalkSta
 	if entering {
 		r.openObj()
 		r.val(util.BytesToStr(node.ListData.Marker), node)
+		if 0 == node.ListData.BulletChar {
+			r.comma()
+			r.WriteString("\"Delimiter\":\"" + string(node.Delimiter) + "\"")
+			r.comma()
+			r.WriteString("\"Num\":" + strconv.Itoa(node.Num))
+		}
 		r.openChildren(node)
 	} else {
 		r.closeChildren(node)
@@ -508,7 +514,7 @@ func (r *JSONRenderer) renderTaskListItemMarker(node *ast.Node, entering bool) a
 		if node.TaskListItemChecked {
 			check = "X"
 		}
-		r.val("Task List Item Marker\n["+check+"]", node)
+		r.val("["+check+"]", node)
 		r.openChildren(node)
 	} else {
 		r.closeChildren(node)
