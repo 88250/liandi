@@ -12,6 +12,7 @@ package model
 
 import (
 	"strings"
+	"unicode/utf8"
 )
 
 func InitIndex() {
@@ -98,9 +99,22 @@ func Search(keyword string) (ret []*Snippet) {
 func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
 	lines := strings.Split(doc.Content, "\n")
 	index := 0
+	maxPartLen := 32
 	for idx, line := range lines {
 		if pos := strings.Index(strings.ToLower(line), strings.ToLower(keyword)); -1 != pos {
-			highlight := line[0:pos] + "<mark>" + line[pos:pos+len(keyword)] + "</mark>" + line[pos+len(keyword):]
+			var before []rune
+			var count int
+			for i := pos; 0 < i; {
+				r, size := utf8.DecodeLastRuneInString(line[:i])
+				i -= size
+				before = append([]rune{r}, before...)
+				count++
+				if maxPartLen < count {
+					break
+				}
+			}
+
+			highlight := string(before) + "<mark>" + line[pos:pos+len(keyword)] + "</mark>" + line[pos+len(keyword):]
 			dir := Conf.Dir(doc.URL)
 			snippet := &Snippet{Dir: dir,
 				Path: doc.Path,
