@@ -116,7 +116,6 @@ func GetBlock(id string) (ret *Block) {
 			}
 
 			if ast.NodeDocument == n.Type {
-				// 跳过根块
 				return ast.WalkContinue
 			}
 
@@ -160,7 +159,6 @@ func SearchBlock(url, keyword string) (ret []*Block) {
 			}
 
 			if ast.NodeDocument == n.Type {
-				// 跳过根块
 				return ast.WalkContinue
 			}
 
