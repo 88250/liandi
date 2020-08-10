@@ -239,11 +239,10 @@ export class Editors {
     public showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[] }) {
         const dataList: IHintData[] = [];
         data.blocks.forEach(item => {
-            const dirName = path.posix.dirname(item.path);
             dataList.push({
                 value: `((${item.id} ""))`,
                 html: `<span class="fn__flex"><span style="width: 150px" class="fn__ellipsis fn__flex-shrink0 fn__a">${item.content}</span><span class="fn__flex-1 fn__flex-shrink0"><span class="fn__space"></span></span>
-<span class="ft__smaller ft__secondary">${path.posix.basename(item.url) + (dirName === "/" ? "" : dirName)}</span></span>`,
+<span class="ft__smaller ft__secondary">${item.path.substr(1)}</span></span>`,
             });
         });
         this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);
