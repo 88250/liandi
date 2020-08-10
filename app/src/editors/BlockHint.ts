@@ -35,7 +35,7 @@ export class BlockHint {
         const elementRect = this.blockRefElement.getBoundingClientRect()
         this.element.innerHTML = data.block.content;
         const top = elementRect.top + elementRect.height + 5
-        let left = elementRect.left
+        const left = elementRect.left
         this.element.setAttribute("style", `display:block;top:${top}px;left:${left}px`)
         // 展现在上部
         if (this.element.getBoundingClientRect().bottom > window.innerHeight) {

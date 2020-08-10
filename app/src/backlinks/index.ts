@@ -51,7 +51,7 @@ export class Backlinks {
 <span class="ft__smaller fn__flex-center">${path.posix.dirname(item.path).substr(1)}</span>
 </h2>`
                 }
-                backlinksHTML += `<div class="item__content">${item.content}</div>`
+                backlinksHTML += `<div class="item__content fn__two-line">${item.content}</div>`
             })
             backlinksHTML += '</div>'
         })
