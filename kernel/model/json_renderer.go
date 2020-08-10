@@ -15,7 +15,6 @@ import (
 	"strconv"
 
 	"github.com/88250/lute/ast"
-	"github.com/88250/lute/lex"
 	"github.com/88250/lute/parse"
 	"github.com/88250/lute/render"
 	"github.com/88250/lute/util"
@@ -124,7 +123,7 @@ func (r *JSONRenderer) renderBlockRefID(node *ast.Node, entering bool) ast.WalkS
 }
 
 func (r *JSONRenderer) renderBlockRefSpace(node *ast.Node, entering bool) ast.WalkStatus {
-	r.WriteByte(lex.ItemSpace)
+	r.leaf(" ", node)
 	return ast.WalkStop
 }
 
