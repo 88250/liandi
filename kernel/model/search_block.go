@@ -143,13 +143,17 @@ func GetBlock(id string) (ret *Block) {
 	return
 }
 
-func SearchBlock(keyword string) (ret []*Block) {
+func SearchBlock(url, keyword string) (ret []*Block) {
 	ret = []*Block{}
 	keyword = strings.TrimSpace(keyword)
 	if "" == keyword {
 		return
 	}
 	for _, tree := range trees {
+		if tree.URL != url {
+			continue
+		}
+
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			if !entering {
 				return ast.WalkContinue

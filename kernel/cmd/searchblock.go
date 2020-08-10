@@ -18,8 +18,10 @@ type searchblock struct {
 
 func (cmd *searchblock) Exec() {
 	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	url := cmd.param["url"].(string)
+	url = model.NormalizeURL(url)
 	keyword := cmd.param["k"].(string)
-	blocks := model.SearchBlock(keyword)
+	blocks := model.SearchBlock(url, keyword)
 	result := map[string]interface{}{
 		"blocks": blocks,
 		"k":      keyword,
