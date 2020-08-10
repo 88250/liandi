@@ -89,7 +89,6 @@ Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi
 
 * [GitHub](https://github.com/88250/liandi/releases)
 * [Gitee](https://gitee.com/dl88250/liandi/releases)
-* [Local download](https://liandi.b3log.org/releases)
 
 ### Source building
 
