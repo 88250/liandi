@@ -158,9 +158,8 @@ export const onSearch = (liandi: ILiandi, data: {
 }[]) => {
     let resultHTML = '';
     data.forEach((item, index) => {
-        resultHTML += `<div class="list__item fn__flex${index === 0 ? ' list__item--current' : ''}"
-title="${item.content}" data-dir="${encodeURIComponent(JSON.stringify(item.dir))}" data-path="${encodeURIComponent(item.path)}" data-index="${item.index}">
-<span class="fn__flex-1 fn__ellipsis">${item.content}</span>
+        resultHTML += `<div class="list__item fn__flex${index === 0 ? ' list__item--current' : ''}" data-dir="${encodeURIComponent(JSON.stringify(item.dir))}" data-path="${encodeURIComponent(item.path)}" data-index="${item.index}">
+<span class="fn__flex-1 fn__ellipsis">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span>
 <span class="fn__space"></span>
 <span class="ft__smaller ft__secondary">${escapeHtml(item.path)} ${item.ln}:${item.col}</span>
 </div>`;
