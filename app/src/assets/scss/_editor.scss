@@ -37,7 +37,9 @@
     display: none;
     padding: 6px 10px;
     font-size: 16px;
-    max-width: 70%;
+    max-width: 60%;
     color: var(--text-secondary-color);
+    overflow: auto;
+    word-break: break-word;
   }
 }

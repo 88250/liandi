@@ -13,13 +13,14 @@
 
   .item {
     word-break: break-all;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 
     h2 {
       cursor: pointer;
       font-weight: normal;
-      padding: 5px 10px;
-      font-size: 18px;
+      padding: 0 10px;
+      font-size: 14px;
+      line-height: 24px;
 
       &:hover {
         background-color: $blue;
@@ -28,8 +29,14 @@
     }
 
     &__content {
-      padding: 0 10px 5px;
+      padding: 0 10px;
+      font-size: 12px;
+      line-height: 20px;
       color: var(--text-secondary-color);
+
+      &:hover {
+        color: var(--text-color);
+      }
     }
   }
 }

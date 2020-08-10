@@ -18,7 +18,7 @@ export class Editors {
         this.editorsElement = document.getElementById('editors');
         window.onresize = () => {
             if (this.currentEditor?.vditor) {
-                this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight - 1) + 'px';
+                this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + 'px';
             }
         };
         this.blockHint = new BlockHint()

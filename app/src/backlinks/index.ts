@@ -1,6 +1,5 @@
 import * as path from 'path';
 import {i18n} from "../i18n";
-import {remote} from 'electron';
 
 export class Backlinks {
     public element: HTMLElement;
@@ -47,7 +46,7 @@ export class Backlinks {
             backlinksHTML += '<div class="item">'
             files.blocks.forEach((item, index) => {
                 if (index === 0) {
-                    backlinksHTML += `<h2 data-type="backlinks-file" data-path="${encodeURIComponent(item.path)}" data-url="${encodeURIComponent(item.url)}" class="fn__flex vditor-tooltipped__nw vditor-tooltipped" aria-label="${path.posix.basename(item.url)}">
+                    backlinksHTML += `<h2 data-type="backlinks-file" data-path="${encodeURIComponent(item.path)}" data-url="${encodeURIComponent(item.url)}" class="fn__flex"">
 <span class="fn__flex-1">${path.posix.basename(files.path)}</span>
 <span class="ft__smaller fn__flex-center">${path.posix.dirname(item.path).substr(1)}</span>
 </h2>`
