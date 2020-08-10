@@ -48,6 +48,7 @@ export class Editors {
                         hint: (key) => {
                             liandi.ws.send('searchblock', {
                                 k: key,
+                                url: liandi.current.dir.url
                             });
                             return [];
                         },
