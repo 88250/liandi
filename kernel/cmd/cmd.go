@@ -82,6 +82,8 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, sess
 		ret = &exec{baseCmd}
 	case "getblock":
 		ret = &getblock{baseCmd}
+	case "graph":
+		ret = &graph{baseCmd}
 	}
 	return
 }
