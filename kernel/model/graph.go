@@ -14,7 +14,15 @@ import (
 	"encoding/json"
 )
 
-func BuildGraph() (data []interface{}, links []interface{}) {
+func Graph() (data []interface{}, links []interface{}) {
+	for _, tree := range trees {
+		delete(treeBacklinks, tree)
+	}
+
+	for _, tree := range trees {
+		indexLink(tree)
+	}
+
 	nodeIDs := map[string]string{}
 	linkIDs := map[string]string{}
 	for _, nodeBacklinks := range treeBacklinks {
@@ -28,7 +36,6 @@ func BuildGraph() (data []interface{}, links []interface{}) {
 			}
 		}
 	}
-
 
 	for nodeID, _ := range nodeIDs {
 		node := map[string]interface{}{

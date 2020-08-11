@@ -140,7 +140,7 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 	dir.IndexDoc(tree.Path, tree.Root.Text())
 
 	// 反向链接
-	backlinks = dir.IndexLink(tree)
+	backlinks = indexLink(tree)
 
 	// 持久化数据
 	if err = WriteASTJSON(tree); nil != err {

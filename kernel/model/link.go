@@ -42,11 +42,11 @@ func Backlinks(url, path string) (ret []*BacklinkRefBlock, err error) {
 	}
 
 	tree := dir.Tree(path)
-	ret = dir.IndexLink(tree)
+	ret = indexLink(tree)
 	return
 }
 
-func (dir *Dir) IndexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
+func indexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 	ret = []*BacklinkRefBlock{}
 	// 找到当前块列表
 	var currentBlocks []*ast.Node
