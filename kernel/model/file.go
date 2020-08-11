@@ -103,7 +103,7 @@ func Get(url, path string) (dom string, err error) {
 	if nil == tree {
 		return "", errors.New(Conf.lang(13))
 	}
-	dom = Lute.Tree2VditorIRBlockDOM(tree)
+	dom = Lute.Tree2VditorIRBlockDOM(tree, false)
 	return
 }
 
