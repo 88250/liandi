@@ -98,7 +98,7 @@ export class Editors {
             counter: {
                 enable: true
             },
-            cdn: Constants.APP_DIR + '/vditore',
+            cdn: path.posix.join(Constants.APP_DIR, 'vditore'),
             preview: {
                 markdown: {
                     autoSpace: liandi.config.markdown.autoSpace,
@@ -117,7 +117,7 @@ export class Editors {
                 },
                 theme: {
                     current: liandi.config.theme,
-                    path: Constants.APP_DIR + '/vditore/dist/css/content-theme',
+                    path: path.posix.join(Constants.APP_DIR ,'vditore/dist/css/content-theme'),
                 },
             },
             upload: {

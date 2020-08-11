@@ -114,6 +114,10 @@ declare interface ILiandi {
     find?: {
         open: (key?: string, index?: number) => void
     };
+    graph?: {
+        element: HTMLElement;
+        onGraph: (liandi: ILiandi, data: any) => void
+    }
 }
 
 interface II18n {

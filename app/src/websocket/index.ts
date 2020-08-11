@@ -58,6 +58,9 @@ export class WebSocketUtil {
                 return;
             }
             switch (response.cmd) {
+                case 'graph':
+                    liandi.graph.onGraph(liandi, response.data);
+                    break;
                 case 'search':
                     onSearch(liandi, response.data);
                     break;

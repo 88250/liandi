@@ -13,7 +13,7 @@ import {Constants} from './constants';
 import {mountFile, mountWebDAV} from './util/mount';
 import {initSearch} from './search';
 import {Backlinks} from './backlinks';
-import * as path from 'path';
+import {Graph} from "./graph";
 
 class App {
     public liandi: ILiandi;
@@ -31,6 +31,7 @@ class App {
             this.liandi.menus = new Menus(this.liandi);
             this.liandi.find = new Find();
             this.liandi.backlinks = new Backlinks(this.liandi);
+            this.liandi.graph = new Graph();
 
             resize('resize');
             resize('resize2', true);
@@ -71,8 +72,12 @@ class App {
             window.dispatchEvent(new CustomEvent('resize'));
         });
         document.getElementById('barGraph').addEventListener('click', () => {
-            let win = new remote.BrowserWindow({width: 800, height: 600})
-            win.loadURL(path.posix.join(Constants.APP_DIR, "public/graph.html"))
+            if (this.liandi.graph.element.classList.contains("fn__none")) {
+                this.liandi.graph.element.classList.remove("fn__none")
+                this.liandi.ws.send("graph", {});
+            } else {
+                this.liandi.graph.element.classList.add("fn__none")
+            }
         });
         document.getElementById('barBacklinks').addEventListener('click', () => {
             if (this.liandi.backlinks.element.classList.contains('fn__none')) {
