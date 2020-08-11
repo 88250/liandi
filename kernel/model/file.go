@@ -11,7 +11,6 @@
 package model
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"os"
@@ -19,7 +18,6 @@ import (
 	"strings"
 
 	"github.com/88250/gowebdav"
-	"github.com/88250/lute/ast"
 	"github.com/88250/lute/html"
 )
 
@@ -105,35 +103,7 @@ func Get(url, path string) (dom string, err error) {
 	if nil == tree {
 		return "", errors.New(Conf.lang(13))
 	}
-
-	var ids []string
-	var nodes []*ast.Node
-	for n := tree.Root.FirstChild; nil != n; n = n.Next {
-		nodes = append(nodes, n)
-		ids = append(ids, n.ID)
-	}
-
 	dom = Lute.Tree2VditorIRBlockDOM(tree)
-
-	// 构建行级节点
-	reader := strings.NewReader(dom)
-	htmlRoot := &html.Node{Type: html.ElementNode}
-	htmlNodes, err := html.ParseFragment(reader, htmlRoot)
-	if nil != err {
-		Logger.Errorf("重新构建行级节点失败：%s", err)
-		return
-	}
-	retBuf := &bytes.Buffer{}
-	for i, htmlNode := range htmlNodes {
-		blockBuf := &bytes.Buffer{}
-		setDOMAttrValue(htmlNode, "data-node-id", ids[i])
-		if err = html.Render(blockBuf, htmlNode); nil != err {
-			Logger.Errorf("重新构建行级节点失败：%s", err)
-			return
-		}
-		retBuf.WriteString(Lute.SpinVditorIRBlockDOM(blockBuf.String()))
-	}
-	dom = retBuf.String()
 	return
 }
 
