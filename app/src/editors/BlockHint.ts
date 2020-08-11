@@ -53,19 +53,3 @@ export const newNodeId = () => {
     t.setHours(t.getHours() + 8);
     return `${t.toISOString().replace(/-|T|:/g, '').split(".")[0]}-${(Math.random() * 0xfffff * 1000000).toString(16).slice(0, 6)}`;
 }
-
-export const addIds = (html: string, lute: Lute) => {
-    const ids: string[] = [];
-    const tempElement = document.createElement("div")
-    tempElement.innerHTML = html;
-    Array.from(tempElement.children).forEach((item: HTMLElement) => {
-        ids.push(item.getAttribute("data-node-id"));
-    });
-    html = lute.SpinVditorIRBlockDOM(tempElement.innerHTML)
-    const temp2Element = document.createElement("div")
-    temp2Element.innerHTML = html;
-    Array.from(temp2Element.children).forEach((item: HTMLElement, index) => {
-        item.setAttribute("data-node-id", ids[index]);
-    });
-    return temp2Element.innerHTML;
-}
