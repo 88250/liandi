@@ -31,6 +31,7 @@ func (cmd *backlinks) Exec() {
 	ret.Data = map[string]interface{}{
 		"backlinks": backlinks,
 	}
+	model.BuildGraph()
 	cmd.Push(ret.Bytes())
 }
 

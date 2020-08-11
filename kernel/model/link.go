@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	backlinks = map[*ast.Node][]*BacklinkRef{} // 反向链接关系：块被哪些块用了
+	treeBacklinks = map[*parse.Tree]map[*ast.Node][]*BacklinkRef{} // 反向链接关系：块被哪些块用了
 )
 
 type BacklinkRef struct {
@@ -67,12 +67,11 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 		return ast.WalkContinue
 	})
 
-	// 清理当前块的链接关系
-	for _, currentBlock := range currentBlocks {
-		delete(backlinks, currentBlock)
-	}
+	// 清理当前树的块链关系
+	delete(treeBacklinks, tree)
 
 	// 构建链接关系
+	backlinks := map[*ast.Node][]*BacklinkRef{}
 	for _, currentBlock := range currentBlocks {
 		for _, tree := range trees {
 			var refNodes []*ast.Node
@@ -94,6 +93,8 @@ func (dir *Dir) IndexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 			backlinks[currentBlock] = append(backlinks[currentBlock], &BacklinkRef{URL: tree.URL, Path: tree.Path, RefNodes: refNodes})
 		}
 	}
+
+	treeBacklinks[tree] = backlinks
 
 	// 组装当前块的反链列表
 	for _, currentBlock := range currentBlocks {
