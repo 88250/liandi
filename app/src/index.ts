@@ -13,6 +13,7 @@ import {Constants} from './constants';
 import {mountFile, mountWebDAV} from './util/mount';
 import {initSearch} from './search';
 import {Backlinks} from './backlinks';
+import * as path from 'path';
 
 class App {
     public liandi: ILiandi;
@@ -68,6 +69,10 @@ class App {
                 this.liandi.navigation.hide()
             }
             window.dispatchEvent(new CustomEvent('resize'));
+        });
+        document.getElementById('barGraph').addEventListener('click', () => {
+            let win = new remote.BrowserWindow({width: 800, height: 600})
+            win.loadURL(path.posix.join(Constants.APP_DIR, "public/graph.html"))
         });
         document.getElementById('barBacklinks').addEventListener('click', () => {
             if (this.liandi.backlinks.element.classList.contains('fn__none')) {

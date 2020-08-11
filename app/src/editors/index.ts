@@ -1,12 +1,9 @@
 import {rename} from '../util/rename';
 import Vditor from '../../vditore/src';
 import {Constants} from '../constants';
-import {remote} from 'electron';
 import * as path from 'path';
 import {ipcRenderer} from 'electron';
 import {BlockHint} from "./BlockHint";
-
-const appDir = remote.app.getAppPath().replace(/\/electron$/, '').replace(/\\electron$/, '');
 
 export class Editors {
     private editors: IEditor[] = [];
@@ -101,7 +98,7 @@ export class Editors {
             counter: {
                 enable: true
             },
-            cdn: appDir + '/vditore',
+            cdn: Constants.APP_DIR + '/vditore',
             preview: {
                 markdown: {
                     autoSpace: liandi.config.markdown.autoSpace,
@@ -120,7 +117,7 @@ export class Editors {
                 },
                 theme: {
                     current: liandi.config.theme,
-                    path: appDir + '/vditore/dist/css/content-theme',
+                    path: Constants.APP_DIR + '/vditore/dist/css/content-theme',
                 },
             },
             upload: {

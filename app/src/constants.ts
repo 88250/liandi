@@ -1,3 +1,5 @@
+import { remote } from "electron";
+
 export abstract class Constants {
     public static readonly WEBSOCKET_ADDREDD: string = 'ws://127.0.0.1:6806/ws';
     public static readonly WEBDAV_ADDRESS: string = 'http://127.0.0.1:6807/webdav';
@@ -14,4 +16,6 @@ export abstract class Constants {
     public static readonly LIANDI_FIND_SHOW: string = 'liandi-find-show';
 
     public static readonly LIANDI_CONFIG_THEME: string = 'liandi-config-theme';
+
+    public static readonly APP_DIR: string = remote.app.getAppPath().replace(/\/electron$/, '').replace(/\\electron$/, '');
 }
