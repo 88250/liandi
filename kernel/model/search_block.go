@@ -11,13 +11,11 @@
 package model
 
 import (
-	"github.com/88250/lute/html"
 	"path"
 	"strings"
-	"time"
 
-	"github.com/88250/gulu"
 	"github.com/88250/lute/ast"
+	"github.com/88250/lute/html"
 	"github.com/88250/lute/parse"
 	"github.com/88250/lute/util"
 )
@@ -81,8 +79,8 @@ func (dir *Dir) ParseIndexTree(p, markdown string) (ret *parse.Tree) {
 			return ast.WalkContinue
 		}
 
-		if "" == n.ID {
-			n.ID = time.Now().Format("20060102150405") + "-" + gulu.Rand.String(6)
+		if "" == n.ID && nil != n.Parent && ast.NodeDocument == n.Parent.Type {
+			n.ID = ast.NewNodeID()
 		}
 		return ast.WalkContinue
 	})

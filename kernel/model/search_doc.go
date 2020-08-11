@@ -104,7 +104,7 @@ func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
 		if pos := strings.Index(strings.ToLower(line), strings.ToLower(keyword)); -1 != pos {
 			var before []rune
 			var count int
-			for i := pos; 0 < i; {
+			for i := pos; 0 < i; { // 关键字前面太长的话缩短一些
 				r, size := utf8.DecodeLastRuneInString(line[:i])
 				i -= size
 				before = append([]rune{r}, before...)
