@@ -47,9 +47,3 @@ export class BlockHint {
         }
     }
 }
-
-export const newNodeId = () => {
-    const t = new Date();
-    t.setHours(t.getHours() + 8);
-    return `${t.toISOString().replace(/-|T|:/g, '').split(".")[0]}-${(Math.random() * 0xfffff * 1000000).toString(16).slice(0, 6)}`;
-}
