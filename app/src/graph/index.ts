@@ -16,10 +16,6 @@ export class Graph {
     onGraph(liandi: ILiandi, data: any) {
         addScript(path.posix.join(Constants.APP_DIR, `vditore/dist/js/echarts/echarts.min.js`), "vditorEchartsScript").then(() => {
             echarts.init(liandi.graph.element).setOption({
-                    title: {
-                        text: 'Graph 简单示例'
-                    },
-                    tooltip: {},
                     animationDurationUpdate: 1500,
                     animationEasingUpdate: 'quinticInOut',
                     series: [
