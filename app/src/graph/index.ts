@@ -21,8 +21,9 @@ export class Graph {
                     series: [
                         {
                             type: 'graph',
-                            layout: 'none',
-                            symbolSize: 50,
+                            layout: 'circular',
+                            focusNodeAdjacency: true,
+                            symbolSize: 15,
                             roam: true,
                             label: {
                                 show: true
@@ -35,10 +36,9 @@ export class Graph {
                             data: data.data,
                             links: data.links,
                             lineStyle: {
-                                opacity: 0.9,
-                                width: 2,
-                                curveness: 0
-                            }
+                                color: 'source',
+                                curveness: 0.3
+                            },
                         }
                     ]
                 }
