@@ -15,79 +15,35 @@ import (
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
 	"github.com/88250/lute/util"
-	"strconv"
 )
 
 // ParseJSON 用于解析 jsonStr 生成 Markdown 抽象语法树。
 func ParseJSON(jsonStr string) (ret *parse.Tree, err error) {
-	var root map[string]interface{}
-	err = json.Unmarshal(util.StrToBytes(jsonStr), &root)
+	root := &ast.Node{}
+	err = json.Unmarshal(util.StrToBytes(jsonStr), root)
 	if nil != err {
 		return nil, err
 	}
 
 	ret = &parse.Tree{Name: "", Root: &ast.Node{Type: ast.NodeDocument}, Context: &parse.Context{Option: Lute.Options}}
 	ret.Context.Tip = ret.Root
-	children := root["Children"]
-	if nil == children {
+	if nil == root.Children {
 		return
 	}
-	childNodes := children.([]interface{})
-	for _, child := range childNodes {
+	for _, child := range root.Children {
 		genASTByJSON(child, ret)
 	}
 	return
 }
 
-func genASTByJSON(jsonNode interface{}, tree *parse.Tree) {
-	n := jsonNode.(map[string]interface{})
-	typ := n["Type"].(string)
-	node := &ast.Node{Type: ast.Str2NodeType(typ)}
-	val := n["Val"]
-	if nil != val {
-		node.Tokens = util.StrToBytes(n["Val"].(string))
-	}
-	node.ID = n["ID"].(string)
-	switch node.Type {
-	case ast.NodeCodeBlock:
-		node.IsFencedCodeBlock = n["IsFencedCodeBlock"].(bool)
-	case ast.NodeCodeBlockFenceOpenMarker:
-		node.CodeBlockOpenFence = node.Tokens
-	case ast.NodeCodeBlockFenceCloseMarker:
-		node.CodeBlockCloseFence = node.Tokens
-	case ast.NodeHeading:
-		node.HeadingLevel, _ = strconv.Atoi(string(node.Tokens))
-		node.HeadingSetext = n["HeadingSetext"].(bool)
-	case ast.NodeList:
-		listDataTyp, _ := strconv.Atoi(string(node.Tokens))
-		node.ListData = &ast.ListData{Typ: listDataTyp}
-		start := n["Start"]
-		if nil != start {
-			node.Start = int(start.(float64))
-		}
-	case ast.NodeListItem:
-		listDataTyp := tree.Context.Tip.ListData.Typ
-		marker := node.Tokens
-		var delimiter byte
-		if nil != n["Delimiter"] {
-			delimiter = n["Delimiter"].(string)[0]
-		}
-		node.ListData = &ast.ListData{Typ: listDataTyp, Marker: marker, Delimiter: delimiter}
-		if nil != n["Num"] {
-			node.ListData.Num = int(n["Num"].(float64))
-		}
-	case ast.NodeEmojiUnicode, ast.NodeEmojiImg, ast.NodeHTMLEntity:
-		node.Type = ast.NodeText
-	}
+func genASTByJSON(node *ast.Node, tree *parse.Tree) {
 	tree.Context.Tip.AppendChild(node)
 	tree.Context.Tip = node
 	defer tree.Context.ParentTip()
-
-	if nil == n["Children"] {
+	if nil == node.Children {
 		return
 	}
-	children := n["Children"].([]interface{})
-	for _, child := range children {
+	for _, child := range node.Children  {
 		genASTByJSON(child, tree)
 	}
 }
