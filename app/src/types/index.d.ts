@@ -36,6 +36,8 @@ declare interface IEchartsFormatter {
         lineStyle: {
             type: string
         }
+        label: string
+        url: string
     }
 }
 

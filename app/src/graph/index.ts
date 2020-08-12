@@ -136,10 +136,17 @@ export class Graph {
             }
         );
 
-        this.chart.on('click', (params: { dataType: string }) => {
-            if (params.dataType === "node") {
-                console.log(params);
-
+        this.chart.on('click', (params: IEchartsFormatter) => {
+            if (params.dataType === "node" && params.data.label) {
+                liandi.editors.save(liandi)
+                liandi.current = {
+                    dir: {url: params.data.url},
+                    path: params.data.path
+                }
+                liandi.ws.send('get', {
+                    url: params.data.url,
+                    path: params.data.path,
+                })
             }
         });
     }
