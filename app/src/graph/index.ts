@@ -53,22 +53,15 @@ export class Graph {
                 },
                 tooltip: {
                     formatter: (params: IEchartsFormatter) => {
-
                         if (params.dataType === "edge") {
                             return `<div style="font-size: 12px">${params.data.lineStyle.type === "dotted" ? "关联关系" : "父子关系"}</div>`
                         } else {
-                            let text = params.data.content.substr(1, 24)
-                            if (params.data.content.length > 24) {
+                            let text = params.data.content.substr(1, 16)
+                            if (params.data.content.length > 16) {
                                 text += '...'
                             }
-                            if (params.data.category === 0) {
-                                return `<div style="font-size: 14px">${path.posix.basename(params.data.path)}</div>
-<div style="font-size: 12px;color: #ccc">${params.data.name}</div>
-<div style="font-size: 12px">${text}</div>`
-                            } else {
-                                return `<div style="font-size: 12px;color: #ccc">${params.data.name}</div>
-<div style="font-size: 12px">${text}</div>`
-                            }
+                            return `<div style="font-size: 12px">${text}</div>
+<div style="font-size: 12px;color: #ccc">${params.data.name}</div>`
                         }
                     },
                 },
@@ -113,19 +106,22 @@ export class Graph {
                         focusNodeAdjacency: true,
                         roam: true,
                         itemStyle: {
-                            borderColor: '#fff',
-                            borderWidth: 1,
-                            shadowBlur: 10,
-                            shadowColor: 'rgba(0, 0, 0, 0.3)'
+                            borderWidth: 0,
                         },
                         lineStyle: {
                             color: 'source',
-                            curveness: 0.1
+                            curveness: 0
                         },
                         emphasis: {
                             lineStyle: {
                                 width: 3
-                            }
+                            },
+                            itemStyle: {
+                                borderColor: '#fff',
+                                borderWidth: 1,
+                                shadowBlur: 6,
+                                shadowColor: 'rgba(0, 0, 0, 0.3)'
+                            },
                         },
                         edgeSymbol: ['none', 'arrow'],
                         edgeSymbolSize: [0, 6],
