@@ -86,6 +86,7 @@ export class Graph {
                         },
                         force: {
                             repulsion: 100,
+                            edgeLength: [30, 100],
                             layoutAnimation: false,
                         },
                         type: 'graph',
