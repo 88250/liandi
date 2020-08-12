@@ -61,6 +61,10 @@ func genASTByJSON(jsonNode interface{}, tree *parse.Tree) {
 	case ast.NodeList:
 		listDataTyp, _ := strconv.Atoi(string(node.Tokens))
 		node.ListData = &ast.ListData{Typ: listDataTyp}
+		start := n["Start"]
+		if nil != start {
+			node.Start = int(start.(float64))
+		}
 	case ast.NodeListItem:
 		listDataTyp := tree.Context.Tip.ListData.Typ
 		marker := node.Tokens
