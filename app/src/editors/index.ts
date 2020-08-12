@@ -15,12 +15,13 @@ export class Editors {
 
     constructor() {
         this.editorsElement = document.getElementById('editors');
-        window.onresize = () => {
-            if (this.currentEditor?.vditor) {
-                this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + 'px';
-            }
-        };
         this.blockHint = new BlockHint()
+    }
+
+    public resize() {
+        if (this.currentEditor?.vditor) {
+            this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + 'px';
+        }
     }
 
     private initVditor(liandi: ILiandi, editor: IEditor, html?: string) {

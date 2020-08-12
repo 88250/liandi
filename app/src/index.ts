@@ -59,6 +59,11 @@ class App {
                     }, true)
                 }
             });
+
+            window.onresize = () => {
+                this.liandi.graph.resize();
+                this.liandi.editors.resize();
+            };
         });
     }
 

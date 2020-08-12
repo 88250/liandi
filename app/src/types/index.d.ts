@@ -97,6 +97,7 @@ declare interface ILiandi {
     editors?: {
         currentEditor: IEditor;
         focus: () => void;
+        resize: () => void;
         save: (liandi: ILiandi) => void;
         close: (liandi: ILiandi) => void;
         reloadEditor: (liandi: ILiandi) => void;
@@ -120,6 +121,7 @@ declare interface ILiandi {
         onGraph: (liandi: ILiandi, data: Record<string, unknown>) => void
         show: (liandi: ILiandi) => void;
         hide: () => void;
+        resize: () => void;
     }
 }
 

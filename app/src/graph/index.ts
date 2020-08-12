@@ -2,6 +2,7 @@ import * as echarts from 'echarts';
 
 export class Graph {
     public element: HTMLDivElement;
+    private chart: echarts.ECharts
 
     constructor() {
         this.element = document.getElementById("graph") as HTMLDivElement
@@ -17,9 +18,15 @@ export class Graph {
         this.element.classList.add("fn__none")
     }
 
+    resize() {
+        if (!this.element.classList.contains("fn__none")) {
+            this.chart.resize();
+        }
+    }
+
     onGraph(liandi: ILiandi, data: { data: string[], links: Record<string, unknown>[] }) {
-        const chart = echarts.init(liandi.graph.element)
-        chart.setOption({
+        this.chart = echarts.init(liandi.graph.element)
+        this.chart.setOption({
                 animationDurationUpdate: 1500,
                 animationEasingUpdate: 'quinticInOut',
                 series: [
@@ -60,7 +67,7 @@ export class Graph {
             }
         );
 
-        chart.on('click', (params: string) => {
+        this.chart.on('click', (params: string) => {
             console.log(params);
         });
     }
