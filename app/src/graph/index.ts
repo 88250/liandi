@@ -24,7 +24,9 @@ export class Graph {
     }
 
     resize() {
-        this.chart.resize();
+        if (this.chart && !this.element.classList.contains("fn__none")) {
+            this.chart.resize();
+        }
     }
 
     onGraph(liandi: ILiandi, data: { nodes: string[], links: Record<string, unknown>[] }) {
