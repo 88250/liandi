@@ -481,6 +481,12 @@ func (r *JSONRenderer) renderList(node *ast.Node, entering bool) ast.WalkStatus 
 	if entering {
 		r.openObj()
 		r.val(strconv.Itoa(node.ListData.Typ), node)
+		if 0 == node.ListData.BulletChar {
+			if 1 != node.Start {
+				r.comma()
+				r.WriteString("\"Start\":" + strconv.Itoa(node.Start))
+			}
+		}
 		r.openChildren(node)
 	} else {
 		r.closeChildren(node)
