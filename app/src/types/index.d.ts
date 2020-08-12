@@ -26,6 +26,19 @@ declare interface IDir {
     user?: string;
 }
 
+declare interface IEchartsFormatter {
+    dataType: string
+    data: {
+        name: string
+        category: number
+        path: string
+        content: string
+        lineStyle: {
+            type: string
+        }
+    }
+}
+
 declare interface IEditor {
     inputElement: HTMLInputElement;
     editorElement: HTMLElement;
@@ -35,9 +48,9 @@ declare interface IEditor {
         vditor: IVditor
         destroy: () => void
         getCurrentMode: () => string
-        setTheme: (theme:string, contentTheme:string) => void
+        setTheme: (theme: string, contentTheme: string) => void
         focus: () => void
-        setHTML: (html:string) => void
+        setHTML: (html: string) => void
     };
 }
 
