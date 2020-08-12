@@ -38,15 +38,18 @@ func Graph() (nodes []interface{}, links []interface{}) {
 
 			isRoot := ast.NodeDocument == n.Type
 			value := 0
+			symbolSize := 20
 			if !isRoot {
 				value = 1
+				symbolSize = 1
 			}
 			nodes = append(nodes, map[string]interface{}{
-				"name":     n.ID,
-				"category": value,
-				"url":      tree.URL,
-				"path":     tree.Path,
-				"content":  n.Text(),
+				"name":       n.ID,
+				"symbolSize": symbolSize,
+				"category":   value,
+				"url":        tree.URL,
+				"path":       tree.Path,
+				"content":    n.Text(),
 			})
 
 			links = append(links, map[string]interface{}{
