@@ -52,14 +52,16 @@ func Graph() (nodes []interface{}, links []interface{}) {
 				"content":    n.Text(),
 			})
 
-			links = append(links, map[string]interface{}{
-				"source": tree.ID,
-				"target": n.ID,
-				"symbol": []string{"", ""},
-				"lineStyle": map[string]interface{}{
-					"type": "solid",
-				},
-			})
+			if tree.ID != n.ID {
+				links = append(links, map[string]interface{}{
+					"source": tree.ID,
+					"target": n.ID,
+					"symbol": []string{"", ""},
+					"lineStyle": map[string]interface{}{
+						"type": "solid",
+					},
+				})
+			}
 
 			if ast.NodeList == n.Type {
 				return ast.WalkSkipChildren
