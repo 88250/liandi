@@ -24,18 +24,18 @@ export class Graph {
         }
     }
 
-    onGraph(liandi: ILiandi, data: { data: string[], links: Record<string, unknown>[] }) {
+    onGraph(liandi: ILiandi, data: { nodes: string[], links: Record<string, unknown>[] }) {
         this.chart = echarts.init(liandi.graph.element)
         this.chart.setOption({
                 animationDurationUpdate: 1500,
                 animationEasingUpdate: 'quinticInOut',
-                legend: {
-                    data: ['name1', 'name2']
-                },
+                // legend: {
+                //     data: ['name1', 'name2']
+                // },
                 tooltip: {},
                 series: [
                     {
-                        categories: [{name: "name1"}, {name: "name2"}],
+                        // categories: [{name: "name1"}, {name: "name2"}],
                         draggable: true,
                         type: 'graph',
                         layout: 'circular',
@@ -66,7 +66,7 @@ export class Graph {
                         edgeLabel: {
                             fontSize: 14
                         },
-                        data: data.data,
+                        data: data.nodes,
                         links: data.links,
                     }
                 ]
@@ -76,6 +76,7 @@ export class Graph {
         this.chart.on('click', (params: { dataType: string }) => {
             if (params.dataType === "node") {
                 console.log(params);
+
             }
         });
     }
