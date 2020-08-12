@@ -12,8 +12,6 @@ package model
 
 import (
 	"encoding/json"
-	"strconv"
-
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
 	"github.com/88250/lute/render"
@@ -118,17 +116,17 @@ func (r *JSONRenderer) renderBlockRef(node *ast.Node, entering bool) ast.WalkSta
 }
 
 func (r *JSONRenderer) renderBlockRefID(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderBlockRefSpace(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(" ", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderBlockRefText(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
@@ -138,27 +136,27 @@ func (r *JSONRenderer) renderYamlFrontMatter(node *ast.Node, entering bool) ast.
 }
 
 func (r *JSONRenderer) renderYamlFrontMatterCloseMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(string(parse.YamlFrontMatterMarker), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderYamlFrontMatterContent(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderYamlFrontMatterOpenMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(string(parse.YamlFrontMatterMarker), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderHtmlEntity(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.HtmlEntityTokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderBackslashContent(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
@@ -173,19 +171,12 @@ func (r *JSONRenderer) renderToC(node *ast.Node, entering bool) ast.WalkStatus {
 }
 
 func (r *JSONRenderer) renderFootnotesRef(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.FootnotesRefLabel), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderFootnotesDef(node *ast.Node, entering bool) ast.WalkStatus {
-	if entering {
-		r.openObj()
-		r.val(util.BytesToStr(node.Tokens), node)
-		r.openChildren(node)
-	} else {
-		r.closeChildren(node)
-		r.closeObj(node)
-	}
+	r.renderNode(node, entering)
 	return ast.WalkContinue
 }
 
@@ -195,17 +186,17 @@ func (r *JSONRenderer) renderInlineMath(node *ast.Node, entering bool) ast.WalkS
 }
 
 func (r *JSONRenderer) renderInlineMathOpenMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("$", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderInlineMathContent(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderInlineMathCloseMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("$", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
@@ -215,27 +206,27 @@ func (r *JSONRenderer) renderMathBlock(node *ast.Node, entering bool) ast.WalkSt
 }
 
 func (r *JSONRenderer) renderMathBlockCloseMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(string(parse.MathBlockMarker), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderMathBlockContent(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderMathBlockOpenMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(string(parse.MathBlockMarker), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderEmojiImg(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.FirstChild.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderEmojiUnicode(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.FirstChild.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
@@ -273,22 +264,22 @@ func (r *JSONRenderer) renderStrikethrough(node *ast.Node, entering bool) ast.Wa
 }
 
 func (r *JSONRenderer) renderStrikethrough1OpenMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("~", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderStrikethrough1CloseMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("~", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderStrikethrough2OpenMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("~~", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderStrikethrough2CloseMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("~~", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
@@ -298,47 +289,47 @@ func (r *JSONRenderer) renderImage(node *ast.Node, entering bool) ast.WalkStatus
 }
 
 func (r *JSONRenderer) renderCloseParen(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(")", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderOpenParen(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("(", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderCloseBracket(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("]", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderOpenBracket(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("[", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderBang(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("!", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderLinkTitle(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderLinkDest(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderLinkSpace(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(" ", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderLinkText(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
@@ -348,12 +339,12 @@ func (r *JSONRenderer) renderLink(node *ast.Node, entering bool) ast.WalkStatus 
 }
 
 func (r *JSONRenderer) renderHTML(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderInlineHTML(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
@@ -368,9 +359,7 @@ func (r *JSONRenderer) renderParagraph(node *ast.Node, entering bool) ast.WalkSt
 }
 
 func (r *JSONRenderer) renderText(node *ast.Node, entering bool) ast.WalkStatus {
-	r.openObj()
-	r.val(util.BytesToStr(node.Tokens), node)
-	r.closeObj(node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
@@ -380,17 +369,17 @@ func (r *JSONRenderer) renderCodeSpan(node *ast.Node, entering bool) ast.WalkSta
 }
 
 func (r *JSONRenderer) renderCodeSpanOpenMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("`", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderCodeSpanContent(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderCodeSpanCloseMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("`", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
@@ -400,22 +389,22 @@ func (r *JSONRenderer) renderEmphasis(node *ast.Node, entering bool) ast.WalkSta
 }
 
 func (r *JSONRenderer) renderEmAsteriskOpenMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("*", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderEmAsteriskCloseMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("*", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderEmUnderscoreOpenMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("_", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderEmUnderscoreCloseMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("_", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
@@ -425,22 +414,22 @@ func (r *JSONRenderer) renderStrong(node *ast.Node, entering bool) ast.WalkStatu
 }
 
 func (r *JSONRenderer) renderStrongA6kOpenMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("**", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderStrongA6kCloseMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("**", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderStrongU8eOpenMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("__", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderStrongU8eCloseMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("__", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
@@ -454,186 +443,97 @@ func (r *JSONRenderer) renderBlockquoteMarker(node *ast.Node, entering bool) ast
 }
 
 func (r *JSONRenderer) renderHeading(node *ast.Node, entering bool) ast.WalkStatus {
-	if entering {
-		r.openObj()
-		h := " 123456"[node.HeadingLevel : node.HeadingLevel+1]
-		r.val(h, node)
-		r.comma()
-		r.WriteString("\"HeadingSetext\":" + strconv.FormatBool(node.HeadingSetext))
-		r.openChildren(node)
-	} else {
-		r.closeChildren(node)
-		r.closeObj(node)
-	}
+	r.renderNode(node, entering)
 	return ast.WalkContinue
 }
 
 func (r *JSONRenderer) renderHeadingC8hMarker(node *ast.Node, entering bool) ast.WalkStatus {
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderHeadingID(node *ast.Node, entering bool) ast.WalkStatus {
-	r.WriteString(" {" + util.BytesToStr(node.Tokens) + "}")
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderList(node *ast.Node, entering bool) ast.WalkStatus {
-	if entering {
-		r.openObj()
-		r.val(strconv.Itoa(node.ListData.Typ), node)
-		if 0 == node.ListData.BulletChar {
-			if 1 != node.Start {
-				r.comma()
-				r.WriteString("\"Start\":" + strconv.Itoa(node.Start))
-			}
-		}
-		r.openChildren(node)
-	} else {
-		r.closeChildren(node)
-		r.closeObj(node)
-	}
+	r.renderNode(node, entering)
 	return ast.WalkContinue
 }
 
 func (r *JSONRenderer) renderListItem(node *ast.Node, entering bool) ast.WalkStatus {
-	if entering {
-		r.openObj()
-		r.val(util.BytesToStr(node.ListData.Marker), node)
-		if 0 == node.ListData.BulletChar {
-			r.comma()
-			r.WriteString("\"Delimiter\":\"" + string(node.Delimiter) + "\"")
-			r.comma()
-			r.WriteString("\"Num\":" + strconv.Itoa(node.Num))
-		}
-		r.openChildren(node)
-	} else {
-		r.closeChildren(node)
-		r.closeObj(node)
-	}
+	r.renderNode(node, entering)
 	return ast.WalkContinue
 }
 
 func (r *JSONRenderer) renderTaskListItemMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	if entering {
-		r.openObj()
-		check := " "
-		if node.TaskListItemChecked {
-			check = "X"
-		}
-		r.val("["+check+"]", node)
-		r.openChildren(node)
-	} else {
-		r.closeChildren(node)
-		r.closeObj(node)
-	}
+	r.renderNode(node, entering)
 	return ast.WalkContinue
 }
 
 func (r *JSONRenderer) renderThematicBreak(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderHardBreak(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderSoftBreak(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf("", node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderCodeBlock(node *ast.Node, entering bool) ast.WalkStatus {
-	if entering {
-		r.openObj()
-		r.val("", node)
-		r.comma()
-		r.WriteString("\"IsFencedCodeBlock\":" + strconv.FormatBool(node.IsFencedCodeBlock))
-		r.openChildren(node)
-	} else {
-		r.closeChildren(node)
-		r.closeObj(node)
-	}
+	r.renderNode(node, entering)
 	return ast.WalkContinue
 }
 
 func (r *JSONRenderer) renderCodeBlockCloseMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(string(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderCodeBlockCode(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderCodeBlockInfoMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(util.BytesToStr(node.CodeBlockInfo), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
 }
 
 func (r *JSONRenderer) renderCodeBlockOpenMarker(node *ast.Node, entering bool) ast.WalkStatus {
-	r.leaf(string(node.Tokens), node)
+	r.renderNode(node, entering)
 	return ast.WalkStop
-}
-
-func (r *JSONRenderer) leaf(val string, node *ast.Node) {
-	r.openObj()
-	r.val(val, node)
-	r.closeObj(node)
-}
-
-func (r *JSONRenderer) val(val string, node *ast.Node) {
-	id := node.ID
-	r.WriteString("\"ID\":\"" + id + "\"")
-	r.comma()
-	typ := node.Type.String()
-	r.WriteString("\"Type\":\"" + typ + "\"")
-	if "" != val {
-		r.comma()
-	} else {
-		return
-	}
-	valBytes, _ := json.Marshal(val)
-	val = util.BytesToStr(valBytes)
-	r.WriteString("\"Val\":" + val)
-}
-
-func (r *JSONRenderer) openObj() {
-	r.WriteByte('{')
-}
-
-func (r *JSONRenderer) closeObj(node *ast.Node) {
-	r.WriteByte('}')
-	if nil != node.Next {
-		r.comma()
-	}
-}
-
-func (r *JSONRenderer) openChildren(node *ast.Node) {
-	if nil != node.FirstChild {
-		r.WriteString(",\"Children\":[")
-	}
-}
-
-func (r *JSONRenderer) closeChildren(node *ast.Node) {
-	if nil != node.FirstChild {
-		r.WriteByte(']')
-	}
-}
-
-func (r *JSONRenderer) comma() {
-	r.WriteString(",")
 }
 
 func (r *JSONRenderer) renderNode(node *ast.Node, entering bool) {
 	if entering {
-		r.openObj()
-		r.val("", node)
-		r.openChildren(node)
+		if nil != node.Previous {
+			r.WriteString(",")
+		}
+		data, err := json.Marshal(node)
+		if nil != err {
+			Logger.Errorf("持久化节点数据失败：%s", err)
+			return
+		}
+		n := util.BytesToStr(data)
+		n = n[:len(n)-1] // 去掉结尾的 }
+		r.WriteString(n)
+		if nil != node.FirstChild {
+			r.WriteString(",\"Children\":[")
+		} else {
+			r.WriteString("}")
+		}
 	} else {
-		r.closeChildren(node)
-		r.closeObj(node)
+		if nil != node.FirstChild {
+			r.WriteByte(']')
+			r.WriteString("}")
+		}
 	}
 }
