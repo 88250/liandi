@@ -135,7 +135,7 @@ export class WebSocketUtil {
                         liandi.menus.itemData.target.nextElementSibling.remove();
                     }
                     liandi.menus.itemData.target.setAttribute('data-files', JSON.stringify(response.data.files));
-                    liandi.navigation.getLeaf(liandi.menus.itemData.target, response.data.dir);
+                    liandi.navigation.getLeaf(liandi, liandi.menus.itemData.target, response.data.dir);
                     destroyDialog();
                     break;
             }

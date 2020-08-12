@@ -71,12 +71,13 @@ class App {
             }
             window.dispatchEvent(new CustomEvent('resize'));
         });
+        // TODO
+        this.liandi.graph.show(this.liandi);
         document.getElementById('barGraph').addEventListener('click', () => {
             if (this.liandi.graph.element.classList.contains("fn__none")) {
-                this.liandi.graph.element.classList.remove("fn__none")
-                this.liandi.ws.send("graph", {});
+                this.liandi.graph.show(this.liandi)
             } else {
-                this.liandi.graph.element.classList.add("fn__none")
+                this.liandi.graph.hide();
             }
         });
         document.getElementById('barBacklinks').addEventListener('click', () => {
@@ -172,4 +173,4 @@ class App {
     }
 }
 
-window.liandi = new App();
+new App();

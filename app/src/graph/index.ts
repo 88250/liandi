@@ -1,48 +1,67 @@
-import {addScript} from "../../vditore/src/ts/util/addScript";
-import {Constants} from "../constants";
-import * as path from "path";
-
-declare const echarts: {
-    init(element: HTMLElement): IEChart;
-};
+import * as echarts from 'echarts';
 
 export class Graph {
-    public element: HTMLElement;
+    public element: HTMLDivElement;
 
     constructor() {
-        this.element = document.getElementById("graph")
+        this.element = document.getElementById("graph") as HTMLDivElement
+    }
+
+    show(liandi: ILiandi) {
+        this.element.classList.remove("fn__none")
+        // TODO remove true
+        liandi.ws.send("graph", {}, true);
+    }
+
+    hide() {
+        this.element.classList.add("fn__none")
     }
 
     onGraph(liandi: ILiandi, data: any) {
-        addScript(path.posix.join(Constants.APP_DIR, `vditore/dist/js/echarts/echarts.min.js`), "vditorEchartsScript").then(() => {
-            echarts.init(liandi.graph.element).setOption({
-                    animationDurationUpdate: 1500,
-                    animationEasingUpdate: 'quinticInOut',
-                    series: [
-                        {
-                            type: 'graph',
-                            layout: 'circular',
-                            focusNodeAdjacency: true,
-                            symbolSize: 15,
-                            roam: true,
-                            label: {
-                                show: true
-                            },
-                            edgeSymbol: ['circle', 'arrow'],
-                            edgeSymbolSize: [4, 10],
-                            edgeLabel: {
-                                fontSize: 20
-                            },
-                            data: data.data,
-                            links: data.links,
+        const chart = echarts.init(liandi.graph.element)
+        chart.setOption({
+                animationDurationUpdate: 1500,
+                animationEasingUpdate: 'quinticInOut',
+                series: [
+                    {
+                        type: 'graph',
+                        layout: 'circular',
+                        focusNodeAdjacency: true,
+                        symbolSize: 15,
+                        roam: true,
+                        itemStyle: {
+                            borderColor: '#fff',
+                            borderWidth: 1,
+                            shadowBlur: 10,
+                            shadowColor: 'rgba(0, 0, 0, 0.3)'
+                        },
+                        label: {
+                            position: 'right',
+                            formatter: '{b}'
+                        },
+                        lineStyle: {
+                            color: 'source',
+                            curveness: 0.3
+                        },
+                        emphasis: {
                             lineStyle: {
-                                color: 'source',
-                                curveness: 0.3
-                            },
-                        }
-                    ]
-                }
-            );
+                                width: 3
+                            }
+                        },
+                        edgeSymbol: ['circle', 'arrow'],
+                        edgeSymbolSize: [4, 10],
+                        edgeLabel: {
+                            fontSize: 14
+                        },
+                        data: data.data,
+                        links: data.links,
+                    }
+                ]
+            }
+        );
+
+        chart.on('click', (params: string) => {
+            console.log(params);
         });
     }
 }

@@ -20,7 +20,7 @@ export class Navigation {
                         break
                     }
                     if (target.tagName === "LI" && target.getAttribute("data-type") !== "navigation-file") {
-                        this.getLeaf(target, dir)
+                        this.getLeaf(liandi, target, dir)
                         this.setCurrent(target)
                         event.preventDefault()
                         event.stopPropagation()
@@ -37,7 +37,7 @@ export class Navigation {
                 const dir = JSON.parse(decodeURIComponent(ulElement.getAttribute("data-dir")))
                 while (target && !target.isEqualNode(ulElement)) {
                     if (target.classList.contains('item__arrow')) {
-                        this.getLeaf(target.parentElement, dir)
+                        this.getLeaf(liandi, target.parentElement, dir)
                         this.setCurrent(target.parentElement)
                         event.preventDefault()
                         event.stopPropagation()
@@ -72,7 +72,7 @@ export class Navigation {
         })
     }
 
-    public getLeaf(liElement: HTMLElement, dir: IDir) {
+    public getLeaf(liandi:ILiandi, liElement: HTMLElement, dir: IDir) {
         const files = JSON.parse(liElement.getAttribute('data-files'))
         if (liElement.firstElementChild.classList.contains('item__arrow--open')) {
             liElement.firstElementChild.classList.remove('item__arrow--open')
@@ -93,7 +93,7 @@ export class Navigation {
   <span class="fn__ellipsis">${escapeHtml(item.name)}</span>
 </span>
 </li>`
-                window.liandi.liandi.ws.send('ls', {
+                liandi.ws.send('ls', {
                     url: dir.url,
                     path: item.path,
                 }, true)

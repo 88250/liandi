@@ -1,9 +1,3 @@
-interface Window {
-    liandi: {
-        liandi: ILiandi
-    };
-}
-
 declare interface IFile {
     path: string;
     name: string;
@@ -82,7 +76,7 @@ declare interface ILiandi {
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
         onMount: (liandi: ILiandi, data: { dir: IDir }) => void
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
-        getLeaf: (liElement: HTMLElement, dir: IDir) => void;
+        getLeaf: (liandi: ILiandi, liElement: HTMLElement, dir: IDir) => void;
         show: () => void;
         hide: () => void;
     };
@@ -115,12 +109,14 @@ declare interface ILiandi {
         open: (key?: string, index?: number) => void
     };
     graph?: {
-        element: HTMLElement;
+        element: HTMLDivElement;
         onGraph: (liandi: ILiandi, data: any) => void
+        show: (liandi: ILiandi) => void;
+        hide: () => void;
     }
 }
 
-interface II18n {
+declare interface II18n {
     en_US: IObject;
     zh_CN: IObject;
     ja_JP?: IObject;
