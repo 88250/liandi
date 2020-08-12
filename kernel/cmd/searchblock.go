@@ -20,11 +20,14 @@ func (cmd *searchblock) Exec() {
 	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
+	p := cmd.param["path"].(string)
 	keyword := cmd.param["k"].(string)
 	blocks := model.SearchBlock(url, keyword)
 	result := map[string]interface{}{
 		"blocks": blocks,
 		"k":      keyword,
+		"url":    url,
+		"path":   p,
 	}
 	ret.Data = result
 	cmd.Push(ret.Bytes())
