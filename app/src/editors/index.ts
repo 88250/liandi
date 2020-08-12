@@ -48,7 +48,8 @@ export class Editors {
                         hint: (key) => {
                             liandi.ws.send('searchblock', {
                                 k: key,
-                                url: liandi.current.dir.url
+                                url: liandi.current.dir.url,
+                                path: liandi.current.path
                             });
                             return [];
                         },
@@ -233,7 +234,10 @@ export class Editors {
         document.querySelector<HTMLElement>('.editor__empty').style.display = "none"
     }
 
-    public showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[] }) {
+    public showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[], url: string, path: string }) {
+        if (liandi.current.dir.url !== data.url || liandi.current.dir.path !== data.path) {
+            return
+        }
         const currentBlockElement = hasTopClosestByAttribute(getEditorRange(this.currentEditor.vditor.vditor.ir.element).startContainer, "data-block", '0')
         let nodeId = ''
         if (currentBlockElement) {
