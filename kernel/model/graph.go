@@ -38,7 +38,7 @@ func Graph() (nodes []interface{}, links []interface{}) {
 
 			isRoot := ast.NodeDocument == n.Type
 			value := 0
-			symbolSize := 10
+			symbolSize := 5
 			if !isRoot {
 				value = 1
 				symbolSize = 1
