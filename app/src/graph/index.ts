@@ -48,7 +48,7 @@ export class Graph {
                     right: 20,
                     orient: 'vertical',
                     textStyle: {
-                        color: '#aaa'
+                        color: '#999'
                     }
                 },
                 tooltip: {
@@ -81,7 +81,7 @@ export class Graph {
                         draggable: true,
                         label: {
                             position: 'right',
-                            color: '#4285f4',
+                            color: '#999',
                             formatter: (params: IEchartsFormatter) => {
                                 if (params.data.category === 0) {
                                     return path.posix.basename(params.data.path);
@@ -106,11 +106,15 @@ export class Graph {
                         focusNodeAdjacency: true,
                         roam: true,
                         itemStyle: {
-                            borderWidth: 0,
+                            borderColor: 'rgba(255, 255, 255, 0.68)',
+                            borderWidth: 1,
                         },
                         lineStyle: {
                             color: 'source',
-                            curveness: 0
+                            curveness: 0,
+                            shadowBlur: 1,
+                            opacity: 0.86,
+                            shadowColor: 'rgba(255, 255, 255, 0.86)'
                         },
                         emphasis: {
                             lineStyle: {
@@ -118,13 +122,10 @@ export class Graph {
                             },
                             itemStyle: {
                                 borderColor: '#fff',
-                                borderWidth: 1,
-                                shadowBlur: 6,
-                                shadowColor: 'rgba(0, 0, 0, 0.3)'
                             },
                         },
                         edgeSymbol: ['none', 'arrow'],
-                        edgeSymbolSize: [0, 6],
+                        edgeSymbolSize: [0, 16],
                         data: data.nodes,
                         links: data.links,
                     }
