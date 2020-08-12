@@ -235,7 +235,7 @@ export class Editors {
     }
 
     public showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[], url: string, path: string }) {
-        if (liandi.current.dir.url !== data.url || liandi.current.dir.path !== data.path) {
+        if (liandi.current.dir.url !== data.url || liandi.current.path !== data.path) {
             return
         }
         const currentBlockElement = hasTopClosestByAttribute(getEditorRange(this.currentEditor.vditor.vditor.ir.element).startContainer, "data-block", '0')
