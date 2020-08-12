@@ -18,7 +18,6 @@ import (
 	"strings"
 
 	"github.com/88250/gowebdav"
-	"github.com/88250/lute/html"
 )
 
 type File struct {
@@ -105,18 +104,6 @@ func Get(url, path string) (dom string, err error) {
 	}
 	dom = Lute.Tree2VditorIRBlockDOM(tree, false)
 	return
-}
-
-func setDOMAttrValue(n *html.Node, attrName, attrVal string) {
-	if nil == n {
-		return
-	}
-
-	for _, attr := range n.Attr {
-		if attr.Key == attrName {
-			attr.Val = attrVal
-		}
-	}
 }
 
 func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error) {
