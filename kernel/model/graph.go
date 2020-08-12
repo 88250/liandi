@@ -38,8 +38,10 @@ func Graph() (nodes []interface{}, links []interface{}) {
 
 			isRoot := ast.NodeDocument == n.Type
 			value := 0
+			show := true
 			if !isRoot {
 				value = 1
+				show = false
 			}
 			nodes = append(nodes, map[string]interface{}{
 				"name":     n.ID,
@@ -47,6 +49,9 @@ func Graph() (nodes []interface{}, links []interface{}) {
 				"url":      tree.URL,
 				"path":     tree.Path,
 				"content":  n.Text(),
+				"label": map[string]interface{}{
+					"show": show,
+				},
 			})
 
 			if tree.ID != n.ID {
