@@ -164,15 +164,15 @@ export class Navigation {
         }, true)
     }
 
-    public show() {
+    public show(liandi:ILiandi) {
         this.element.classList.remove('fn__none');
         document.getElementById('resize').classList.remove('fn__none');
-        document.getElementById('barNavigation').classList.add("item--current")
+        document.getElementById('barNavigation').classList.add("item--current");
     }
 
-    public hide() {
+    public hide(liandi:ILiandi) {
         this.element.classList.add('fn__none');
         document.getElementById('resize').classList.add('fn__none');
-        document.getElementById('barNavigation').classList.remove("item--current")
+        document.getElementById('barNavigation').classList.remove("item--current");
     }
 }

@@ -52,8 +52,8 @@ class App {
                         },
                         path: decodeURIComponent(remote.process.argv[index + 1]).substr(14)
                     }
-                    this.liandi.navigation.hide()
-                    this.liandi.backlinks.hide();
+                    this.liandi.navigation.hide(this.liandi)
+                    this.liandi.backlinks.hide(this.liandi);
                     this.liandi.ws.send('get', {
                         url: this.liandi.current.dir.url,
                         path: this.liandi.current.path,
@@ -72,22 +72,23 @@ class App {
         const liandi = this.liandi
         document.getElementById('barNavigation').addEventListener('click', function () {
             if (this.classList.contains("item--current")) {
-                liandi.navigation.hide()
+                liandi.navigation.hide(liandi)
             } else {
-                liandi.navigation.show()
+                liandi.navigation.show(liandi)
             }
             window.dispatchEvent(new CustomEvent('resize'));
         });
         document.getElementById('barGraph').addEventListener('click', function () {
             if (this.classList.contains("item--current")) {
-                liandi.graph.hide();
+                liandi.graph.hide(liandi);
             } else {
                 liandi.graph.show(liandi)
             }
+            window.dispatchEvent(new CustomEvent('resize'));
         });
         document.getElementById('barBacklinks').addEventListener('click', function () {
             if (this.classList.contains('item--current')) {
-                liandi.backlinks.hide();
+                liandi.backlinks.hide(liandi);
             } else {
                 liandi.backlinks.show(liandi);
             }

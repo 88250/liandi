@@ -71,7 +71,7 @@ export class Backlinks {
         this.element.classList.remove('fn__none');
         document.getElementById('resize2').classList.remove('fn__none');
         document.getElementById('barBacklinks').classList.add("item--current");
-        liandi.graph.hide();
+        liandi.graph.hide(liandi);
     }
 
     public hide() {

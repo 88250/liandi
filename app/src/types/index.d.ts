@@ -99,15 +99,15 @@ declare interface ILiandi {
         onMount: (liandi: ILiandi, data: { dir: IDir }) => void
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
         getLeaf: (liandi: ILiandi, liElement: HTMLElement, dir: IDir) => void;
-        show: () => void;
-        hide: () => void;
+        show: (liandi: ILiandi) => void;
+        hide: (liandi: ILiandi) => void;
     };
     backlinks?: {
         element: HTMLDivElement
         onBacklinks: (liandi: ILiandi, backlinks: IBacklinks[]) => void
         getBacklinks: (liandi: ILiandi) => void
         show: (liandi: ILiandi) => void;
-        hide: () => void;
+        hide: (liandi: ILiandi) => void;
     };
     editors?: {
         currentEditor: IEditor;
@@ -135,7 +135,7 @@ declare interface ILiandi {
         element: HTMLDivElement;
         onGraph: (liandi: ILiandi, data: Record<string, unknown>) => void
         show: (liandi: ILiandi) => void;
-        hide: () => void;
+        hide: (liandi: ILiandi) => void;
         resize: () => void;
     }
 }

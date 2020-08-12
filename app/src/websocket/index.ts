@@ -94,7 +94,7 @@ export class WebSocketUtil {
                     liandi.editors.onSetTheme(liandi, response.data.theme);
 
                     if (response.data.dirs.length === 0) {
-                        liandi.navigation.hide();
+                        liandi.navigation.hide(liandi);
                     } else {
                         response.data.dirs.map((item: IDir) => {
                             liandi.navigation.onMount(liandi, {dir: item});

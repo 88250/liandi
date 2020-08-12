@@ -10,8 +10,8 @@ const createWindow = () => {
   // 创建浏览器窗口
   const mainWindow = new BrowserWindow({
     show: false,
-    width: screen.getPrimaryDisplay().size.width * 0.8,
-    height: screen.getPrimaryDisplay().workAreaSize.height * 0.8,
+    width: screen.getPrimaryDisplay().size.width,
+    height: screen.getPrimaryDisplay().workAreaSize.height,
     webPreferences: {
       nodeIntegration: true,
       nativeWindowOpen: true,

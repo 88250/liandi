@@ -14,7 +14,7 @@ export class Graph {
         liandi.ws.send("graph", {});
         document.getElementById('resize3').classList.remove('fn__none');
         document.getElementById('barGraph').classList.add("item--current");
-        liandi.backlinks.hide();
+        liandi.backlinks.hide(liandi);
     }
 
     hide() {
