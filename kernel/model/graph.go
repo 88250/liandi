@@ -38,7 +38,7 @@ func Graph() (nodes []interface{}, links []interface{}) {
 
 			isRoot := ast.NodeDocument == n.Type
 			value := 0
-			symbolSize := 5
+			symbolSize := 3
 			if !isRoot {
 				value = 1
 				symbolSize = 1
@@ -56,7 +56,7 @@ func Graph() (nodes []interface{}, links []interface{}) {
 				links = append(links, map[string]interface{}{
 					"source": tree.ID,
 					"target": n.ID,
-					"symbol": []string{"", ""},
+					"symbol": "none",
 					"lineStyle": map[string]interface{}{
 						"type": "solid",
 					},
@@ -75,10 +75,10 @@ func Graph() (nodes []interface{}, links []interface{}) {
 			for _, sources := range refs {
 				for _, source := range sources.RefNodes {
 					links = append(links, map[string]interface{}{
-						"source": source,
-						"target": target,
+						"source": source.ID,
+						"target": target.ID,
 						"lineStyle": map[string]interface{}{
-							"type": "dashed",
+							"type": "dotted",
 						},
 					})
 				}
