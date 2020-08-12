@@ -2,10 +2,10 @@ import * as path from 'path';
 import {i18n} from "../i18n";
 
 export class Backlinks {
-    public element: HTMLElement;
+    public element: HTMLDivElement;
 
     constructor(liandi: ILiandi) {
-        this.element = document.getElementById('backlinks');
+        this.element = document.getElementById('backlinks') as HTMLDivElement;
         this.element.addEventListener("click", (event) => {
             let target = event.target as HTMLElement
             while (target && !target.isEqualNode(this.element)) {
@@ -34,6 +34,11 @@ export class Backlinks {
                 url: liandi.current.dir.url,
                 path: liandi.current.path
             });
+        } else {
+            this.element.innerHTML = `<div class="backlinks__title">
+<div class="ft__secondary ft__smaller">${i18n[liandi.config.lang].backlinks}</div>
+</div>
+<div class="item"><div class="item__content">${i18n[liandi.config.lang].noBacklinks}</div></div>`;
         }
     }
 
@@ -62,13 +67,16 @@ export class Backlinks {
     }
 
     public show(liandi: ILiandi) {
-        this.element.classList.remove('fn__none');
         this.getBacklinks(liandi);
+        this.element.classList.remove('fn__none');
         document.getElementById('resize2').classList.remove('fn__none');
+        document.getElementById('barBacklinks').classList.add("item--current");
+        liandi.graph.hide();
     }
 
     public hide() {
         this.element.classList.add('fn__none');
         document.getElementById('resize2').classList.add('fn__none');
+        document.getElementById('barBacklinks').classList.remove("item--current");
     }
 }

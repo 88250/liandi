@@ -7,5 +7,9 @@
   .item {
     height: 14px;
     padding: 10px;
+
+    &--current {
+      color: $blue;
+    }
   }
 }

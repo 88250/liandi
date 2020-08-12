@@ -167,10 +167,12 @@ export class Navigation {
     public show() {
         this.element.classList.remove('fn__none');
         document.getElementById('resize').classList.remove('fn__none');
+        document.getElementById('barNavigation').classList.add("item--current")
     }
 
     public hide() {
         this.element.classList.add('fn__none');
         document.getElementById('resize').classList.add('fn__none');
+        document.getElementById('barNavigation').classList.remove("item--current")
     }
 }

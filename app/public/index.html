@@ -46,7 +46,7 @@
 <div class="fn__flex wrap">
     <div class="navigation" id="navigation"></div>
     <div class="resize" id="resize"></div>
-    <div class="fn__flex-1" id="editors">
+    <div class="fn__flex-1 editor" id="editors">
         <div id="editorBlockHint" class="editor__blockhint"></div>
         <div class="editor__empty">
             <div>
@@ -58,8 +58,10 @@
     </div>
     <div class="resize fn__none" id="resize2"></div>
     <div class="backlinks fn__none" id="backlinks"></div>
+    <div class="resize fn__none" id="resize3"></div>
+    <div id="graph" class="fn__none backlinks" style="width: 360px"></div>
     <div class="bar fn__flex-column">
-        <div id="barNavigation" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="文件树">
+        <div id="barNavigation" class="item vditor-tooltipped fn__a vditor-tooltipped__w item--current" aria-label="文件树">
             <svg>
                 <use xlink:href="#iconFolder"></use>
             </svg>
@@ -89,7 +91,6 @@
 </div>
 <div class="drag"></div>
 <div class="loading"></div>
-<div id="graph" class="fn__none graph"></div>
 <script src="../dist/main.js"></script>
 </body>
 </html>

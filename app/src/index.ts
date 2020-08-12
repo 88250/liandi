@@ -35,6 +35,7 @@ class App {
 
             resize('resize');
             resize('resize2', true);
+            resize('resize3', true);
 
             initGlobalKeyPress(this.liandi);
 
@@ -68,28 +69,27 @@ class App {
     }
 
     private initBar() {
-        document.getElementById('barNavigation').addEventListener('click', () => {
-            if (this.liandi.navigation.element.classList.contains('fn__none')) {
-                this.liandi.navigation.show()
+        const liandi = this.liandi
+        document.getElementById('barNavigation').addEventListener('click', function () {
+            if (this.classList.contains("item--current")) {
+                liandi.navigation.hide()
             } else {
-                this.liandi.navigation.hide()
+                liandi.navigation.show()
             }
             window.dispatchEvent(new CustomEvent('resize'));
         });
-        // TODO
-        this.liandi.graph.show(this.liandi);
-        document.getElementById('barGraph').addEventListener('click', () => {
-            if (this.liandi.graph.element.classList.contains("fn__none")) {
-                this.liandi.graph.show(this.liandi)
+        document.getElementById('barGraph').addEventListener('click', function () {
+            if (this.classList.contains("item--current")) {
+                liandi.graph.hide();
             } else {
-                this.liandi.graph.hide();
+                liandi.graph.show(liandi)
             }
         });
-        document.getElementById('barBacklinks').addEventListener('click', () => {
-            if (this.liandi.backlinks.element.classList.contains('fn__none')) {
-                this.liandi.backlinks.show(this.liandi);
+        document.getElementById('barBacklinks').addEventListener('click', function () {
+            if (this.classList.contains('item--current')) {
+                liandi.backlinks.hide();
             } else {
-                this.liandi.backlinks.hide();
+                liandi.backlinks.show(liandi);
             }
             window.dispatchEvent(new CustomEvent('resize'));
         });

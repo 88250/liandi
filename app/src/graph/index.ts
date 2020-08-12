@@ -10,27 +10,47 @@ export class Graph {
     }
 
     show(liandi: ILiandi) {
-        this.element.classList.remove("fn__none")
-        // TODO remove true
-        liandi.ws.send("graph", {}, true);
+        this.element.classList.remove('fn__none');
+        liandi.ws.send("graph", {});
+        document.getElementById('resize3').classList.remove('fn__none');
+        document.getElementById('barGraph').classList.add("item--current");
+        liandi.backlinks.hide();
     }
 
     hide() {
-        this.element.classList.add("fn__none")
+        this.element.classList.add('fn__none');
+        document.getElementById('resize3').classList.add('fn__none');
+        document.getElementById('barGraph').classList.remove("item--current");
     }
 
     resize() {
-        if (!this.element.classList.contains("fn__none")) {
-            this.chart.resize();
-        }
+        this.chart.resize();
     }
 
     onGraph(liandi: ILiandi, data: { nodes: string[], links: Record<string, unknown>[] }) {
-        this.chart = echarts.init(liandi.graph.element)
+        if (!this.chart) {
+            this.chart = echarts.init(this.element)
+        } else {
+            this.resize()
+        }
         this.chart.setOption({
                 animationDurationUpdate: 1500,
                 animationEasingUpdate: 'quinticInOut',
-                legend: {},
+                legend: {
+                    data: [{
+                        name: "根块",
+                        icon: "circle"
+                    }, {
+                        name: "子块",
+                        icon: "circle"
+                    }],
+                    top: 20,
+                    right: 20,
+                    orient: 'vertical',
+                    textStyle: {
+                        color: '#aaa'
+                    }
+                },
                 tooltip: {
                     formatter: (params: IEchartsFormatter) => {
 
@@ -56,13 +76,11 @@ export class Graph {
                     {
                         categories: [{
                             name: "根块",
-                            symbol: "circle",
                             itemStyle: {
                                 color: "#d23f31"
                             },
                         }, {
                             name: "子块",
-                            symbol: "circle",
                             itemStyle: {
                                 color: "#3b3e43"
                             },
