@@ -30,15 +30,15 @@ export class Graph {
                 animationDurationUpdate: 1500,
                 animationEasingUpdate: 'quinticInOut',
                 legend: {
-                    data: ['name1', 'name2', 'name3']
+                    data: ['文件', '块节点']
                 },
                 tooltip: {},
                 series: [
                     {
-                        categories: [{name: "name1"}, {name: "name2"}, {name: "name3"}],
+                        categories: [{name: "文件"}, {name: "块节点"}],
                         draggable: true,
                         type: 'graph',
-                        layout: 'circular',
+                        layout: 'force',
                         focusNodeAdjacency: true,
                         symbolSize: 15,
                         roam: true,
