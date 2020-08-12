@@ -138,9 +138,11 @@ export class Navigation {
 
     public onLs(liandi: ILiandi, data: { files: IFile[], url: string, path: string }) {
         const liElement = this.element.querySelector(`ul[data-url="${encodeURIComponent(data.url)}"] li[data-path="${encodeURIComponent(data.path)}"]`);
-        if (data.files.length > 0 && liElement) {
+        if (liElement) {
             liElement.setAttribute('data-files', JSON.stringify(data.files));
-            liElement.firstElementChild.classList.remove("fn__hidden")
+            if (data.files.length > 0) {
+                liElement.firstElementChild.classList.remove("fn__hidden")
+            }
         }
     }
 

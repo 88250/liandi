@@ -4,6 +4,8 @@ import {Constants} from '../constants';
 import * as path from 'path';
 import {ipcRenderer} from 'electron';
 import {BlockHint} from "./BlockHint";
+import {hasTopClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
+import {getEditorRange} from "../../vditore/src/ts/util/selection";
 
 export class Editors {
     private editors: IEditor[] = [];
@@ -39,13 +41,15 @@ export class Editors {
             typewriterMode: true,
             height: window.innerHeight - editor.inputElement.clientHeight,
             hint: {
+                emojiPath: path.posix.join(Constants.APP_DIR, 'vditore/dist/images/emoji'),
                 extend: [
                     {
                         key: '((',
                         hint: (key) => {
                             liandi.ws.send('searchblock', {
                                 k: key,
-                                url: liandi.current.dir.url
+                                url: liandi.current.dir.url,
+                                path: liandi.current.path
                             });
                             return [];
                         },
@@ -117,7 +121,7 @@ export class Editors {
                 },
                 theme: {
                     current: liandi.config.theme,
-                    path: path.posix.join(Constants.APP_DIR ,'vditore/dist/css/content-theme'),
+                    path: path.posix.join(Constants.APP_DIR, 'vditore/dist/css/content-theme'),
                 },
             },
             upload: {
@@ -230,19 +234,29 @@ export class Editors {
         document.querySelector<HTMLElement>('.editor__empty').style.display = "none"
     }
 
-    public showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[] }) {
+    public showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[], url: string, path: string }) {
+        if (liandi.current.dir.url !== data.url || liandi.current.dir.path !== data.path) {
+            return
+        }
+        const currentBlockElement = hasTopClosestByAttribute(getEditorRange(this.currentEditor.vditor.vditor.ir.element).startContainer, "data-block", '0')
+        let nodeId = ''
+        if (currentBlockElement) {
+            nodeId = currentBlockElement.getAttribute("data-node-id")
+        }
         const dataList: IHintData[] = [];
         data.blocks.forEach(item => {
-            dataList.push({
-                value: `((${item.id} ""))`,
-                html: `<span class="fn__flex"><span style="width: 150px" class="fn__ellipsis fn__flex-shrink0 fn__a">${item.content}</span><span class="fn__flex-1 fn__flex-shrink0"><span class="fn__space"></span></span>
+            if (nodeId !== item.id) {
+                dataList.push({
+                    value: `((${item.id} ""))`,
+                    html: `<span class="fn__flex"><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0 fn__a">${item.content}</span><span class="fn__flex-1 fn__flex-shrink0" style="min-width: 10px"></span>
 <span class="ft__smaller ft__secondary">${item.path.substr(1)}</span></span>`,
-            });
+                });
+            }
         });
         this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);
     }
 
     public onGetBlock(data: { id: string, block: IBlock }) {
-        this.blockHint.onGetBlock(data);
+        this.blockHint.getBlock(data);
     }
 }

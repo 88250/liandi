@@ -28,7 +28,7 @@ export class BlockHint {
         })
     }
 
-    public onGetBlock(data: { id: string, block: IBlock }) {
+    public getBlock(data: { id: string, block: IBlock }) {
         if (!data.block) {
             return;
         }
