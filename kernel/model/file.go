@@ -18,6 +18,7 @@ import (
 	"strings"
 
 	"github.com/88250/gowebdav"
+	"github.com/88250/lute/ast"
 )
 
 type File struct {
@@ -112,8 +113,14 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 		return nil, errors.New(Conf.lang(0))
 	}
 
+	treeID := ast.NewNodeID()
+	tree := dir.Tree(p)
+	if nil != tree {
+		treeID = tree.ID
+	}
+
 	// DOM 转树
-	tree, err := Lute.VditorIRBlockDOM2Tree(domStr)
+	tree, err = Lute.VditorIRBlockDOM2Tree(domStr)
 	if nil != err {
 		msg := fmt.Sprintf(Conf.lang(12), err)
 		Logger.Errorf(msg)
@@ -121,6 +128,8 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 	}
 	tree.URL = url
 	tree.Path = p
+	tree.ID = treeID
+	tree.Root.ID = treeID
 	dir.IndexTree(tree)
 
 	// 更新索引

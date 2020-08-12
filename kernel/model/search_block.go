@@ -74,6 +74,8 @@ func (dir *Dir) ParseIndexTree(p, markdown string) (ret *parse.Tree) {
 	ret.URL = dir.URL
 	ret.Path = p[:len(p)-len(path.Ext(p))]
 	ret.Name = path.Base(ret.Path)
+	ret.ID = ast.NewNodeID()
+	ret.Root.ID = ret.ID
 	ast.Walk(ret.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		if !entering {
 			return ast.WalkContinue

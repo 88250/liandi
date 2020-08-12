@@ -25,7 +25,7 @@ func ParseJSON(jsonStr string) (ret *parse.Tree, err error) {
 		return nil, err
 	}
 
-	ret = &parse.Tree{Name: "", Root: &ast.Node{Type: ast.NodeDocument}, Context: &parse.Context{Option: Lute.Options}}
+	ret = &parse.Tree{Name: "", Root: &ast.Node{Type: ast.NodeDocument, ID: root.ID}, Context: &parse.Context{Option: Lute.Options}}
 	ret.Context.Tip = ret.Root
 	if nil == root.Children {
 		return
@@ -33,6 +33,7 @@ func ParseJSON(jsonStr string) (ret *parse.Tree, err error) {
 	for _, child := range root.Children {
 		genASTByJSON(child, ret)
 	}
+	ret.ID = ret.Root.ID
 	return
 }
 
@@ -43,18 +44,9 @@ func genASTByJSON(node *ast.Node, tree *parse.Tree) {
 	if nil == node.Children {
 		return
 	}
-	for _, child := range node.Children  {
+	for _, child := range node.Children {
 		genASTByJSON(child, tree)
 	}
-}
-
-// RenderJSON 用于渲染 JSON 格式数据。
-func RenderJSON(markdown string) (retJSON string) {
-	tree := parse.Parse("", []byte(markdown), Lute.Options)
-	renderer := NewJSONRenderer(tree)
-	output := renderer.Render()
-	retJSON = string(output)
-	return
 }
 
 func WriteASTJSON(tree *parse.Tree) error {

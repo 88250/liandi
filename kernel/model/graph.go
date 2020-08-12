@@ -42,12 +42,15 @@ func Graph() (nodes []interface{}, links []interface{}) {
 				value = 1
 			}
 			nodes = append(nodes, map[string]interface{}{
-				"name":  n.ID,
+				"name":     n.ID,
 				"category": value,
+				"url":      tree.URL,
+				"path":     tree.Path,
+				"content":  n.Text(),
 			})
 
 			links = append(links, map[string]interface{}{
-				"source": tree.Root.ID,
+				"source": tree.ID,
 				"target": n.ID,
 				"symbol": []string{"circle", "circle"},
 				"lineStyle": map[string]interface{}{
