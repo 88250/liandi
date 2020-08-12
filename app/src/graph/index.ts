@@ -29,13 +29,13 @@ export class Graph {
         this.chart.setOption({
                 animationDurationUpdate: 1500,
                 animationEasingUpdate: 'quinticInOut',
-                // legend: {
-                //     data: ['name1', 'name2']
-                // },
+                legend: {
+                    data: ['name1', 'name2', 'name3']
+                },
                 tooltip: {},
                 series: [
                     {
-                        // categories: [{name: "name1"}, {name: "name2"}],
+                        categories: [{name: "name1"}, {name: "name2"}, {name: "name3"}],
                         draggable: true,
                         type: 'graph',
                         layout: 'circular',
