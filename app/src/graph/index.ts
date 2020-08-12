@@ -88,8 +88,7 @@ export class Graph {
                             repulsion: 100,
                             edgeLength: [30, 100],
                             // @ts-ignores
-                            friction: 0.1,
-                            // layoutAnimation: false,
+                            friction: 0.15
                         },
                         type: 'graph',
                         layout: 'force',
