@@ -18,9 +18,9 @@ type graph struct {
 
 func (cmd *graph) Exec() {
 	ret := model.NewCmdResult(cmd.Name(), cmd.id)
-	data, links := model.Graph()
+	nodes, links := model.Graph()
 	ret.Data = map[string]interface{}{
-		"data":  data,
+		"nodes": nodes,
 		"links": links,
 	}
 	cmd.Push(ret.Bytes())

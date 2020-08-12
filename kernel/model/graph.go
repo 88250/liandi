@@ -11,58 +11,71 @@
 package model
 
 import (
-	"encoding/json"
+	"github.com/88250/lute/ast"
 )
 
-func Graph() (data []interface{}, links []interface{}) {
+func Graph() (nodes []interface{}, links []interface{}) {
 	for _, tree := range trees {
 		delete(treeBacklinks, tree)
 	}
 
 	for _, tree := range trees {
 		indexLink(tree)
+
+		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+			if !entering {
+				return ast.WalkContinue
+			}
+
+			if nil != n.Parent && ast.NodeDocument != n.Parent.Type {
+				// 仅支持根节点的直接子节点
+				return ast.WalkContinue
+			}
+
+			if isSearchBlockSkipNode(n) {
+				return ast.WalkContinue
+			}
+
+			isRoot := ast.NodeDocument == n.Type
+			value := 0
+			if !isRoot {
+				value = 1
+			}
+			nodes = append(nodes, map[string]interface{}{
+				"name":  n.ID,
+				"category": value,
+			})
+
+			links = append(links, map[string]interface{}{
+				"source": tree.Root.ID,
+				"target": n.ID,
+				"symbol": []string{"circle", "circle"},
+				"lineStyle": map[string]interface{}{
+					"type": "solid",
+				},
+			})
+
+			if ast.NodeList == n.Type {
+				return ast.WalkSkipChildren
+			}
+			return ast.WalkContinue
+		})
 	}
 
-	nodeIDs := map[string]string{}
-	linkIDs := map[string]string{}
 	for _, nodeBacklinks := range treeBacklinks {
 		for target, refs := range nodeBacklinks {
 			for _, sources := range refs {
 				for _, source := range sources.RefNodes {
-					linkIDs[target.ID] = source.ID
-					nodeIDs[target.ID] = ""
-					nodeIDs[source.ID] = ""
+					links = append(links, map[string]interface{}{
+						"source": source,
+						"target": target,
+						"lineStyle": map[string]interface{}{
+							"type": "dashed",
+						},
+					})
 				}
 			}
 		}
 	}
-
-	for nodeID, _ := range nodeIDs {
-		node := map[string]interface{}{
-			"name": nodeID,
-		}
-		data = append(data, node)
-	}
-
-	for source, target := range linkIDs {
-		link := map[string]interface{}{
-			"source": source,
-			"target": target,
-		}
-		links = append(links, link)
-	}
-
-	marshal, err := json.Marshal(data)
-	if nil != err {
-		Logger.Errorf("生成关系图失败：%s", err)
-		return
-	}
-	Logger.Infof(string(marshal))
-	marshal, err = json.Marshal(links)
-	if nil != err {
-		Logger.Errorf("生成关系图失败：%s", err)
-		return
-	}
-	Logger.Infof(string(marshal))
 	return
 }
