@@ -1,8 +1,7 @@
 import {Constants} from '../constants';
-import {ipcRenderer} from 'electron';
 import {initSearch} from '../search';
 
-export const initGlobalKeyPress = (liandi: ILiandi | any) => {
+export const initGlobalKeyPress = (liandi: ILiandi) => {
     let lastKeypressTime = 0;
     let timeoutId = 0;
     window.addEventListener('keydown', (event) => {
@@ -13,12 +12,7 @@ export const initGlobalKeyPress = (liandi: ILiandi | any) => {
                 && thisKeypressTime - lastKeypressTime >= 50) { // 防止 win32 长按
                 lastKeypressTime = 0;
                 timeoutId = window.setTimeout(() => {
-                    if (liandi.range) {
-                        liandi.range = getSelection().getRangeAt(0);
-                        ipcRenderer.sendToHost(Constants.LIANDI_SEARCH_OPEN);
-                    } else {
-                        initSearch(liandi);
-                    }
+                    initSearch(liandi);
                 }, 200);
             }
             lastKeypressTime = thisKeypressTime;

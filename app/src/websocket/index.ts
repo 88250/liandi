@@ -16,7 +16,7 @@ export class WebSocketUtil {
         this.connect(liandi, callback);
     }
 
-    public send(cmd: string, param: any, process = false) {
+    public send(cmd: string, param: Record<string, unknown>, process = false) {
         this.reqId = process ? 0 : new Date().getTime();
         this.webSocket.send(JSON.stringify({
             cmd,

@@ -31,7 +31,14 @@ declare interface IEditor {
     editorElement: HTMLElement;
     saved: boolean;
     active: boolean;
-    vditor?: any;
+    vditor?: {
+        vditor: IVditor
+        destroy: () => void
+        getCurrentMode: () => string
+        setTheme: (theme:string, contentTheme:string) => void
+        focus: () => void
+        setHTML: (html:string) => void
+    };
 }
 
 declare interface IMenuData {
@@ -69,7 +76,7 @@ declare interface ILiandi {
     };
     ws?: {
         webSocket: WebSocket,
-        send: (cmd: string, param: any, process?: boolean) => void
+        send: (cmd: string, param: Record<string, unknown>, process?: boolean) => void
     };
     navigation?: {
         element: HTMLElement
@@ -110,7 +117,7 @@ declare interface ILiandi {
     };
     graph?: {
         element: HTMLDivElement;
-        onGraph: (liandi: ILiandi, data: any) => void
+        onGraph: (liandi: ILiandi, data: Record<string, unknown>) => void
         show: (liandi: ILiandi) => void;
         hide: () => void;
     }

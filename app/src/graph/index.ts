@@ -17,7 +17,7 @@ export class Graph {
         this.element.classList.add("fn__none")
     }
 
-    onGraph(liandi: ILiandi, data: any) {
+    onGraph(liandi: ILiandi, data: { data: string[], links: Record<string, unknown>[] }) {
         const chart = echarts.init(liandi.graph.element)
         chart.setOption({
                 animationDurationUpdate: 1500,
