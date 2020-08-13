@@ -11,8 +11,10 @@
 package model
 
 import (
-	"github.com/88250/lute/ast"
 	"strings"
+	"unicode/utf8"
+
+	"github.com/88250/lute/ast"
 )
 
 func Graph(keyword string) (nodes []interface{}, links []interface{}) {
@@ -41,6 +43,17 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 			if !strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
 				return ast.WalkContinue
 			}
+
+			var runes []rune
+			for i := 0; i < len(text); i++ {
+				r, size := utf8.DecodeRuneInString(text)
+				runes = append(runes, r)
+				i += size
+				if 64 < len(runes) {
+					break
+				}
+			}
+			text = string(runes)
 
 			isRoot := ast.NodeDocument == n.Type
 			value := 0
