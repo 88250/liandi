@@ -55,10 +55,6 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 			return ast.WalkStop
 		}
 
-		if ast.NodeDocument == n.Type {
-			return ast.WalkContinue
-		}
-
 		if isSearchBlockSkipNode(n) {
 			return ast.WalkStop
 		}
