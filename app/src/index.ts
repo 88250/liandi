@@ -94,6 +94,11 @@ class App {
                 <use xlink:href="#iconFavorite"></use>
             </svg>
         </a>
+        <div id="barHelp" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="${i18n[liandi.config.lang].help}">
+            <svg>
+                <use xlink:href="#iconHelp"></use>
+            </svg>
+        </div>
         <div id="barSettings" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="${i18n[liandi.config.lang].config} <Double Shift>">
             <svg>
                 <use xlink:href="#iconSettings"></use>
@@ -127,6 +132,9 @@ class App {
                 liandi.backlinks.show(liandi);
             }
             window.dispatchEvent(new CustomEvent('resize'));
+        });
+        document.getElementById('barHelp').addEventListener('click', function () {
+            liandi.ws.send('help', {});
         });
         document.getElementById('barSettings').addEventListener('click', () => {
             initSearch(this.liandi, 'settings');
