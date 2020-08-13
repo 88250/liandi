@@ -137,7 +137,10 @@ export class Navigation {
         }
     }
 
-    public onMount(liandi: ILiandi, data: { dir: IDir }) {
+    public onMount(liandi: ILiandi, data: { dir: IDir, existed: boolean }) {
+        if (data.existed) {
+            return;
+        }
         const html = `<ul data-url="${encodeURIComponent(data.dir.url)}" data-dir="${encodeURIComponent(JSON.stringify(data.dir))}">
 <li class="fn__flex fn__a" data-type="navigation-root" data-path="%2F">
 <svg class="item__arrow fn__hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconRight"></use></svg>

@@ -61,10 +61,6 @@ export class WebSocketUtil {
                 case 'graph':
                     liandi.graph.onGraph(liandi, response.data);
                     break;
-                case 'help':
-                    liandi.navigation.onMount(liandi, response.data)
-                    liandi.graph.show(liandi);
-                    break;
                 case 'search':
                     onSearch(liandi, response.data);
                     break;

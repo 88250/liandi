@@ -11,10 +11,11 @@ import {ipcRenderer, remote} from 'electron';
 import {Find} from './search/Find';
 import {Constants} from './constants';
 import {mountFile, mountWebDAV} from './util/mount';
-import {initSearch} from './search';
+import * as path from "path";
 import {Backlinks} from './backlinks';
 import {Graph} from "./graph";
 import {i18n} from "./i18n";
+import {initSearch} from "./search";
 
 class App {
     public liandi: ILiandi;
@@ -134,7 +135,10 @@ class App {
             window.dispatchEvent(new CustomEvent('resize'));
         });
         document.getElementById('barHelp').addEventListener('click', function () {
-            liandi.ws.send('help', {});
+            liandi.ws.send('mount', {
+                url: `${Constants.WEBDAV_ADDRESS}/`,
+                path: path.posix.join(Constants.APP_DIR, 'public/zh_CN/help')
+            });
         });
         document.getElementById('barSettings').addEventListener('click', () => {
             initSearch(this.liandi, 'settings');
