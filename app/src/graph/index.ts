@@ -58,7 +58,7 @@ export class Graph {
                         if (params.dataType === "edge") {
                             return `<div style="font-size: 12px">${params.data.lineStyle.type === "dotted" ? "关联关系" : "父子关系"}</div>`
                         } else {
-                            let text = params.data.content.substr(1, 16)
+                            let text = params.data.content.substr(0, 16)
                             if (params.data.content.length > 16) {
                                 text += '...'
                             }
