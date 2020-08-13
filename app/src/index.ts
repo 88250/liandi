@@ -14,6 +14,7 @@ import {mountFile, mountWebDAV} from './util/mount';
 import {initSearch} from './search';
 import {Backlinks} from './backlinks';
 import {Graph} from "./graph";
+import {i18n} from "./i18n";
 
 class App {
     public liandi: ILiandi;
@@ -72,6 +73,37 @@ class App {
 
     private initBar() {
         const liandi = this.liandi
+        document.querySelector('.bar').innerHTML = `<div id="barNavigation" class="item vditor-tooltipped fn__a vditor-tooltipped__w item--current" aria-label="${i18n[liandi.config.lang].fileTree}">
+            <svg>
+                <use xlink:href="#iconFolder"></use>
+            </svg>
+        </div>
+        <div id="barBacklinks" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="${i18n[liandi.config.lang].backlinks}">
+            <svg>
+                <use xlink:href="#iconLink"></use>
+            </svg>
+        </div>
+        <div id="barGraph" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="${i18n[liandi.config.lang].graphView}">
+            <svg>
+                <use xlink:href="#iconGraph"></use>
+            </svg>
+        </div>
+        <div class="fn__flex-1"></div>
+        <a href="https://hacpai.com/sponsor" class="item vditor-tooltipped vditor-tooltipped__w ft__pink" aria-label="${i18n[liandi.config.lang].sponsor}">
+            <svg>
+                <use xlink:href="#iconFavorite"></use>
+            </svg>
+        </a>
+        <div id="barSettings" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="${i18n[liandi.config.lang].config} <Double Shift>">
+            <svg>
+                <use xlink:href="#iconSettings"></use>
+            </svg>
+        </div>`
+        document.querySelector('.editor__empty').innerHTML = `<div>
+                <div class="item fn__flex-inline">${i18n[liandi.config.lang].search}/${i18n[liandi.config.lang].config} &lt;Double Shift></div>
+                <div class="item fn__a fn__pointer" id="editorEmptyMount">${i18n[liandi.config.lang].mount}</div>
+                <div class="item fn__a fn__pointer" id="editorEmptyMountDAV">${i18n[liandi.config.lang].mountWebDAV}</div>
+            </div>`
         document.getElementById('barNavigation').addEventListener('click', function () {
             if (this.classList.contains("item--current")) {
                 liandi.navigation.hide()

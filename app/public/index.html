@@ -48,13 +48,7 @@
     <div class="resize" id="resize"></div>
     <div class="fn__flex-1 editor" id="editors">
         <div id="editorBlockHint" class="editor__blockhint"></div>
-        <div class="editor__empty">
-            <div>
-                <div class="item fn__flex-inline">搜索/配置 &lt;Double Shift></div>
-                <div class="item fn__a fn__pointer" id="editorEmptyMount">挂载本地目录</div>
-                <div class="item fn__a fn__pointer" id="editorEmptyMountDAV">挂载远程 WebDAV 目录</div>
-            </div>
-        </div>
+        <div class="editor__empty"></div>
     </div>
     <div class="resize fn__none" id="resize2"></div>
     <div class="backlinks fn__none" id="backlinks"></div>
@@ -63,34 +57,7 @@
         <div class="graph__input"><input class="input"></div>
         <div class="fn__flex-1"></div>
     </div>
-    <div class="bar fn__flex-column">
-        <div id="barNavigation" class="item vditor-tooltipped fn__a vditor-tooltipped__w item--current" aria-label="文件树">
-            <svg>
-                <use xlink:href="#iconFolder"></use>
-            </svg>
-        </div>
-        <div id="barBacklinks" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="反向链接">
-            <svg>
-                <use xlink:href="#iconLink"></use>
-            </svg>
-        </div>
-        <div id="barGraph" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="关系图">
-            <svg>
-                <use xlink:href="#iconGraph"></use>
-            </svg>
-        </div>
-        <div class="fn__flex-1"></div>
-        <a href="https://hacpai.com/sponsor" class="item vditor-tooltipped vditor-tooltipped__w ft__pink" aria-label="靠爱发电">
-            <svg>
-                <use xlink:href="#iconFavorite"></use>
-            </svg>
-        </a>
-        <div id="barSettings" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="配置<Double Shift>">
-            <svg>
-                <use xlink:href="#iconSettings"></use>
-            </svg>
-        </div>
-    </div>
+    <div class="bar fn__flex-column"></div>
 </div>
 <div class="drag"></div>
 <div class="loading"></div>

@@ -62,26 +62,27 @@ export class Graph {
                 animationEasingUpdate: 'quinticInOut',
                 legend: {
                     data: [{
-                        name: "根块",
+                        name: i18n[liandi.config.lang].rootBlock,
                         icon: "circle"
                     }, {
-                        name: "普通块",
+                        name: i18n[liandi.config.lang].normalBlock,
                         icon: "circle"
                     }, {
-                        name: "关联块",
+                        name: i18n[liandi.config.lang].relativeBlock,
                         icon: "circle"
                     }],
                     top: 20,
                     right: 20,
                     orient: 'vertical',
                     textStyle: {
-                        color: 'auto'
-                    }
+                        color: '#161719',
+                    },
+                    inactiveColor: '#7c828b',
                 },
                 tooltip: {
                     formatter: (params: IEchartsFormatter) => {
                         if (params.dataType === "edge") {
-                            return `<div style="font-size: 12px">${params.data.lineStyle.type === "dotted" ? "关联关系" : "父子关系"}</div>`
+                            return `<div style="font-size: 12px">${params.data.lineStyle.type === "dotted" ? i18n[liandi.config.lang].relativeRelation : i18n[liandi.config.lang].parentRelation}</div>`
                         } else {
                             let text = params.data.content.substr(0, 16)
                             if (params.data.content.length > 16) {
@@ -95,17 +96,17 @@ export class Graph {
                 series: [
                     {
                         categories: [{
-                            name: "根块",
+                            name: i18n[liandi.config.lang].rootBlock,
                             itemStyle: {
                                 color: "#161719"
                             },
                         }, {
-                            name: "普通块",
+                            name: i18n[liandi.config.lang].normalBlock,
                             itemStyle: {
                                 color: "#7c828b"
                             },
                         }, {
-                            name: "关联块",
+                            name: i18n[liandi.config.lang].relativeBlock,
                             itemStyle: {
                                 color: "#d23f31"
                             },

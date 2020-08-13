@@ -1,5 +1,13 @@
 export const i18n: II18n = {
     en_US: {
+        fileTree:"File Explorer",
+        graphView:"Graph View",
+        sponsor:"Sponsor",
+        rootBlock: "Root Block",
+        normalBlock: "Leaf Block",
+        relativeBlock: "Linked Block",
+        relativeRelation: "Linked",
+        parentRelation: "Parent - Child",
         hotkey: "Keymap",
         openInNewWindow: 'Open in New Window',
         backlinks: "Backlinks",
@@ -54,6 +62,14 @@ export const i18n: II18n = {
         image: 'Image',
     },
     zh_CN: {
+        fileTree:"文件树",
+        graphView:"关系图",
+        sponsor:"靠爱发电",
+        rootBlock: "根块",
+        normalBlock: "普通块",
+        relativeBlock: "关联块",
+        relativeRelation: "关联关系",
+        parentRelation: "父子关系",
         hotkey: "快捷键",
         openInNewWindow: '在新窗口中打开',
         backlinks: '反向链接',
