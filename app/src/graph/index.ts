@@ -123,9 +123,9 @@ export class Graph {
                         },
                         symbolSize: (value: number, params: IEchartsFormatter) => {
                             if (params.data.category === 0) {
-                                return 20
+                                return 18
                             } else {
-                                return 10
+                                return 12
                             }
                         },
                         force: {
