@@ -23,6 +23,7 @@ func (cmd *getblock) Exec() {
 	result := map[string]interface{}{
 		"block": block,
 		"id":    id,
+		"callback": cmd.param["callback"],
 	}
 	ret.Data = result
 	cmd.Push(ret.Bytes())
