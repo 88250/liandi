@@ -49,7 +49,8 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 				r, size := utf8.DecodeRuneInString(text)
 				runes = append(runes, r)
 				i += size
-				if 64 < len(runes) {
+				if 16 < len(runes) {
+					runes = append(runes, []rune("...")...)
 					break
 				}
 			}
