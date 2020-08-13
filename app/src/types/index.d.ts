@@ -136,6 +136,7 @@ declare interface ILiandi {
         onGraph: (liandi: ILiandi, data: Record<string, unknown>) => void
         show: (liandi: ILiandi) => void;
         hide: (liandi: ILiandi) => void;
+        render: (liandi: ILiandi) => void;
         resize: () => void;
     }
 }

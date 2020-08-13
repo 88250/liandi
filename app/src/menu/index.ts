@@ -66,6 +66,7 @@ export class Menus {
                     vditorMenu.getMenuItemById('pasteAsPlainText').enabled = clipboard.readText() !== '';
                     vditorMenu.popup();
                     event.preventDefault();
+                    getSelection().getRangeAt(0).collapse(true);
                     break;
                 }
 

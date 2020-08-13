@@ -9,6 +9,12 @@ export class Graph {
         this.element = document.getElementById("graph") as HTMLDivElement
     }
 
+    render(liandi: ILiandi) {
+        if (!this.element.classList.contains("fn__none")) {
+            liandi.ws.send("graph", {});
+        }
+    }
+
     show(liandi: ILiandi) {
         this.element.classList.remove('fn__none');
         liandi.ws.send("graph", {});

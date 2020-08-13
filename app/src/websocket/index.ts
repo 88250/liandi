@@ -105,6 +105,7 @@ export class WebSocketUtil {
                 case 'put':
                     showMessage(i18n[liandi.config.lang].saveSuccess);
                     liandi.backlinks.getBacklinks(liandi);
+                    liandi.graph.render(liandi);
                     break;
                 case 'backlinks':
                     liandi.backlinks.onBacklinks(liandi, response.data.backlinks);
@@ -127,8 +128,14 @@ export class WebSocketUtil {
                 case 'rename':
                     liandi.navigation.onRename(liandi, response.data);
                     break;
+                case'remove':
+                    liandi.graph.render(liandi);
+                    break;
                 case 'create':
                 case 'mkdir':
+                    if (response.cmd === 'create') {
+                        liandi.graph.render(liandi);
+                    }
                     liandi.menus.itemData.target.firstElementChild.classList.remove("fn__hidden")
                     if (liandi.menus.itemData.target.firstElementChild.classList.contains('item__arrow--open')) {
                         liandi.menus.itemData.target.firstElementChild.classList.remove('item__arrow--open')
