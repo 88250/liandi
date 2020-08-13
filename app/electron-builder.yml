@@ -41,5 +41,5 @@ extraResources:
     to: "public"
   - from: "dist"
     to: "dist"
-  - from: "node_modules/vditor/dist"
-    to: "node_modules/vditor/dist"
+  - from: "vditore/dist"
+    to: "vditore/dist"

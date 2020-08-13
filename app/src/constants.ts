@@ -15,5 +15,5 @@ export abstract class Constants {
 
     public static readonly LIANDI_CONFIG_THEME: string = 'liandi-config-theme';
 
-    public static readonly APP_DIR: string = remote.app.getAppPath().replace(/\/electron$/, '').replace(/\\electron$/, '');
+    public static readonly APP_DIR: string = remote.getGlobal('liandiEditor').appDir
 }
