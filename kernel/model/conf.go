@@ -41,6 +41,7 @@ var (
 	LianDiDir  = filepath.Join(HomeDir, ".liandi")
 	ConfPath   = filepath.Join(LianDiDir, "conf.json")
 	LogPath    = filepath.Join(LianDiDir, "liandi.log")
+	WorkingDir, _ = os.Getwd()
 )
 
 var Conf *AppConf

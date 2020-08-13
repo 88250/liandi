@@ -120,7 +120,7 @@ func main() {
 	handleSignal()
 
 	addr := "127.0.0.1:" + model.ServerPort
-	model.Logger.Infof("内核进程 [v%s] 正在启动，监听端口 [%s]", model.Ver, "http://"+addr)
+	model.Logger.Infof("内核进程 [v%s] 正在启动 [%s]，监听端口 [%s]", model.Ver, model.WorkingDir, "http://"+addr)
 	if err := r.Run(addr); nil != err {
 		model.Logger.Errorf("启动链滴笔记内核失败 [%s]", err)
 	}
