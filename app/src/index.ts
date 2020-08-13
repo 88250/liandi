@@ -134,6 +134,7 @@ class App {
             window.dispatchEvent(new CustomEvent('resize'));
         });
         document.getElementById('barHelp').addEventListener('click', function () {
+            liandi.navigation.show();
             liandi.ws.send('mount', {
                 url: `${Constants.WEBDAV_ADDRESS}/`,
                 path: path.posix.join(Constants.APP_DIR, 'public/zh_CN/help')
