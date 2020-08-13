@@ -93,7 +93,7 @@ func Graph() (nodes []interface{}, links []interface{}) {
 		for _, link := range links {
 			l := link.(map[string]interface{})
 			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
-			if (l["source"] == n["name"] || l["target"] == n["name"]) && "dotted" == lineStyle  {
+			if (l["source"] == n["name"] || l["target"] == n["name"]) && "dotted" == lineStyle {
 				n["category"] = 2
 			}
 		}
