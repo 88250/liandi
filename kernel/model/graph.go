@@ -11,10 +11,13 @@
 package model
 
 import (
+	"strings"
+	"unicode/utf8"
+
 	"github.com/88250/lute/ast"
 )
 
-func Graph() (nodes []interface{}, links []interface{}) {
+func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 	for _, tree := range trees {
 		delete(treeBacklinks, tree)
 	}
@@ -36,6 +39,22 @@ func Graph() (nodes []interface{}, links []interface{}) {
 				return ast.WalkContinue
 			}
 
+			text := n.Text()
+			if !strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
+				return ast.WalkContinue
+			}
+
+			var runes []rune
+			for i := 0; i < len(text); i++ {
+				r, size := utf8.DecodeRuneInString(text)
+				runes = append(runes, r)
+				i += size
+				if 64 < len(runes) {
+					break
+				}
+			}
+			text = string(runes)
+
 			isRoot := ast.NodeDocument == n.Type
 			value := 0
 			show := true
@@ -48,7 +67,7 @@ func Graph() (nodes []interface{}, links []interface{}) {
 				"category": value,
 				"url":      tree.URL,
 				"path":     tree.Path,
-				"content":  n.Text(),
+				"content":  text,
 				"label": map[string]interface{}{
 					"show": show,
 				},
