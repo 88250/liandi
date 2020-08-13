@@ -85,6 +85,10 @@ func InitConf() {
 		Conf.Image = newImage()
 	}
 
+	if "" == Conf.Lang {
+		Conf.Lang = "zh_CN"
+	}
+
 	Conf.Save()
 	Conf.InitClient()
 
