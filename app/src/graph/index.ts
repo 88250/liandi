@@ -43,14 +43,17 @@ export class Graph {
                         name: "根块",
                         icon: "circle"
                     }, {
-                        name: "子块",
+                        name: "普通块",
+                        icon: "circle"
+                    }, {
+                        name: "关联块",
                         icon: "circle"
                     }],
                     top: 20,
                     right: 20,
                     orient: 'vertical',
                     textStyle: {
-                        color: '#999'
+                        color: 'auto'
                     }
                 },
                 tooltip: {
@@ -72,18 +75,23 @@ export class Graph {
                         categories: [{
                             name: "根块",
                             itemStyle: {
-                                color: "#d23f31"
+                                color: "#161719"
                             },
                         }, {
-                            name: "子块",
+                            name: "普通块",
                             itemStyle: {
-                                color: "#3b3e43"
+                                 color: "#7c828b"
+                            },
+                        }, {
+                            name: "关联块",
+                            itemStyle: {
+                                 color: "#d23f31"
                             },
                         }],
                         draggable: true,
                         label: {
                             position: 'right',
-                            color: '#999',
+                            color: 'auto',
                             formatter: (params: IEchartsFormatter) => {
                                 if (params.data.category === 0) {
                                     return path.posix.basename(params.data.path);
@@ -114,9 +122,6 @@ export class Graph {
                         lineStyle: {
                             color: 'source',
                             curveness: 0,
-                            shadowBlur: 1,
-                            opacity: 0.86,
-                            shadowColor: 'rgba(255, 255, 255, 0.86)'
                         },
                         emphasis: {
                             lineStyle: {
@@ -127,7 +132,7 @@ export class Graph {
                             },
                         },
                         edgeSymbol: ['none', 'arrow'],
-                        edgeSymbolSize: [0, 16],
+                        edgeSymbolSize: [0, 8],
                         data: data.nodes,
                         links: data.links,
                     }
