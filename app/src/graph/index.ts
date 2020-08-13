@@ -5,32 +5,46 @@ export class Graph {
     public element: HTMLDivElement;
     private chart: echarts.ECharts
 
-    constructor() {
-        this.element = document.getElementById("graph") as HTMLDivElement
+    constructor(liandi: ILiandi) {
+        this.element = document.getElementById("graph").lastElementChild as HTMLDivElement
+        const inputElement = this.element.previousElementSibling.firstElementChild
+        inputElement.addEventListener('compositionend', () => {
+            this.render(liandi)
+        });
+        inputElement.addEventListener('input', (event: InputEvent) => {
+            if (event.isComposing) {
+                return;
+            }
+            this.render(liandi)
+        });
     }
 
     render(liandi: ILiandi) {
-        if (!this.element.classList.contains("fn__none")) {
-            liandi.ws.send("graph", {});
+        if (this.element.parentElement.style.display === "flex") {
+            liandi.ws.send("graph", {
+                k: (this.element.previousElementSibling as HTMLInputElement).value
+            });
         }
     }
 
     show(liandi: ILiandi) {
-        this.element.classList.remove('fn__none');
-        liandi.ws.send("graph", {});
+        this.element.parentElement.style.display = "flex";
+        liandi.ws.send("graph", {
+            k: (this.element.previousElementSibling as HTMLInputElement).value
+        });
         document.getElementById('resize3').classList.remove('fn__none');
         document.getElementById('barGraph').classList.add("item--current");
         liandi.backlinks.hide(liandi);
     }
 
     hide() {
-        this.element.classList.add('fn__none');
+        this.element.parentElement.style.display = "none";
         document.getElementById('resize3').classList.add('fn__none');
         document.getElementById('barGraph').classList.remove("item--current");
     }
 
     resize() {
-        if (this.chart && !this.element.classList.contains("fn__none")) {
+        if (this.chart && this.element.parentElement.style.display === "flex") {
             this.chart.resize();
         }
     }
@@ -86,12 +100,12 @@ export class Graph {
                         }, {
                             name: "普通块",
                             itemStyle: {
-                                 color: "#7c828b"
+                                color: "#7c828b"
                             },
                         }, {
                             name: "关联块",
                             itemStyle: {
-                                 color: "#d23f31"
+                                color: "#d23f31"
                             },
                         }],
                         draggable: true,

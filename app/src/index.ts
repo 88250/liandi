@@ -31,7 +31,7 @@ class App {
             this.liandi.menus = new Menus(this.liandi);
             this.liandi.find = new Find();
             this.liandi.backlinks = new Backlinks(this.liandi);
-            this.liandi.graph = new Graph();
+            this.liandi.graph = new Graph(this.liandi);
 
             resize('resize');
             resize('resize2', true);
