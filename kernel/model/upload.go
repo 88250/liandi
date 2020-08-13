@@ -39,7 +39,11 @@ func Upload(c *gin.Context) {
 	p, _ = url.PathUnescape(p)
 	p = filepath.Dir(p)
 	p = p[1:]                     // 去掉开头的 /
-	mode := c.GetHeader("X-Mode") // markdown, wysiwyg
+	//mode := c.GetHeader("X-Mode") // wysiwyg, ir, sv
+	linkBase := joinUrlPath(u, p)
+	//if "ir" == mode {
+	linkBase = ""
+	//}
 	dir := Conf.Dir(u)
 	if nil == dir {
 		ret.Code = -1
@@ -49,10 +53,6 @@ func Upload(c *gin.Context) {
 
 	var errFiles []string
 	succMap := map[string]interface{}{}
-	linkBase := joinUrlPath(u, p)
-	if "markdown" == mode {
-		linkBase = ""
-	}
 	for _, file := range files {
 		fname := file.Filename
 		f, err := file.Open()
@@ -127,7 +127,11 @@ func UploadFetch(c *gin.Context) {
 	p, _ = url.PathUnescape(p)
 	p = path.Dir(p)
 	p = p[1:]                     // 去掉开头的 /
-	mode := c.GetHeader("X-Mode") // markdown, wysiwyg
+	mode := c.GetHeader("X-Mode") // wysiwyg, ir, sv
+	linkBase := joinUrlPath(u, p)
+	if "ir" == mode {
+		linkBase = ""
+	}
 	dir := Conf.Dir(u)
 	if nil == dir {
 		ret.Code = -1
@@ -164,11 +168,6 @@ func UploadFetch(c *gin.Context) {
 		return
 	}
 	suffix := exts[0]
-
-	linkBase := joinUrlPath(u, p)
-	if "markdown" == mode {
-		linkBase = ""
-	}
 
 	fname := gulu.Rand.String(16) + suffix
 	writePath := joinUrlPath(p, fname)
