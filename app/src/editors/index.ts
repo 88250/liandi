@@ -6,6 +6,7 @@ import {ipcRenderer} from 'electron';
 import {BlockHint} from "./BlockHint";
 import {hasTopClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {getEditorRange} from "../../vditore/src/ts/util/selection";
+import {escapeHtml} from "../util/escape";
 
 export class Editors {
     private editors: IEditor[] = [];
@@ -249,7 +250,7 @@ export class Editors {
             if (nodeId !== item.id) {
                 dataList.push({
                     value: `((${item.id} ""))`,
-                    html: `<span class="fn__flex"><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0 fn__a">${item.content}</span><span class="fn__flex-1 fn__flex-shrink0" style="min-width: 10px"></span>
+                    html: `<span class="fn__flex"><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0 fn__a">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span><span class="fn__flex-1 fn__flex-shrink0" style="min-width: 10px"></span>
 <span class="ft__smaller ft__secondary">${item.path.substr(1)}</span></span>`,
                 });
             }
