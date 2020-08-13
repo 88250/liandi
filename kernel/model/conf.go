@@ -37,10 +37,10 @@ const (
 )
 
 var (
-	HomeDir, _ = gulu.OS.Home()
-	LianDiDir  = filepath.Join(HomeDir, ".liandi")
-	ConfPath   = filepath.Join(LianDiDir, "conf.json")
-	LogPath    = filepath.Join(LianDiDir, "liandi.log")
+	HomeDir, _    = gulu.OS.Home()
+	LianDiDir     = filepath.Join(HomeDir, ".liandi")
+	ConfPath      = filepath.Join(LianDiDir, "conf.json")
+	LogPath       = filepath.Join(LianDiDir, "liandi.log")
 	WorkingDir, _ = os.Getwd()
 )
 
@@ -54,7 +54,7 @@ func Close() {
 }
 
 func InitConf() {
-	Conf = &AppConf{LogLevel: "debug", Theme: "light", Dirs: []*Dir{}}
+	Conf = &AppConf{LogLevel: "debug", Theme: "light", Lang: "zh_CN", Dirs: []*Dir{}}
 	Lute = lute.New()
 	if gulu.File.IsExist(ConfPath) {
 		data, err := ioutil.ReadFile(ConfPath)
