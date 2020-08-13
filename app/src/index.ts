@@ -52,7 +52,7 @@ class App {
                         },
                         path: decodeURIComponent(remote.process.argv[index + 1]).substr(14)
                     }
-                    this.liandi.navigation.hide(this.liandi)
+                    this.liandi.navigation.hide()
                     this.liandi.backlinks.hide(this.liandi);
                     this.liandi.ws.send('get', {
                         url: this.liandi.current.dir.url,
@@ -74,9 +74,9 @@ class App {
         const liandi = this.liandi
         document.getElementById('barNavigation').addEventListener('click', function () {
             if (this.classList.contains("item--current")) {
-                liandi.navigation.hide(liandi)
+                liandi.navigation.hide()
             } else {
-                liandi.navigation.show(liandi)
+                liandi.navigation.show()
             }
             window.dispatchEvent(new CustomEvent('resize'));
         });

@@ -2,16 +2,16 @@ import * as echarts from 'echarts';
 import * as path from 'path';
 
 export class Graph {
-    public element: HTMLDivElement;
+    private inputElement: HTMLInputElement;
+    private element = document.getElementById("graph").lastElementChild as HTMLDivElement;
     private chart: echarts.ECharts
 
     constructor(liandi: ILiandi) {
-        this.element = document.getElementById("graph").lastElementChild as HTMLDivElement
-        const inputElement = this.element.previousElementSibling.firstElementChild
-        inputElement.addEventListener('compositionend', () => {
+        this.inputElement = this.element.previousElementSibling.firstElementChild as HTMLInputElement
+        this.inputElement.addEventListener('compositionend', () => {
             this.render(liandi)
         });
-        inputElement.addEventListener('input', (event: InputEvent) => {
+        this.inputElement.addEventListener('input', (event: InputEvent) => {
             if (event.isComposing) {
                 return;
             }
@@ -22,7 +22,7 @@ export class Graph {
     render(liandi: ILiandi) {
         if (this.element.parentElement.style.display === "flex") {
             liandi.ws.send("graph", {
-                k: (this.element.previousElementSibling as HTMLInputElement).value
+                k: this.inputElement.value
             });
         }
     }
@@ -30,7 +30,7 @@ export class Graph {
     show(liandi: ILiandi) {
         this.element.parentElement.style.display = "flex";
         liandi.ws.send("graph", {
-            k: (this.element.previousElementSibling as HTMLInputElement).value
+            k: this.inputElement.value
         });
         document.getElementById('resize3').classList.remove('fn__none');
         document.getElementById('barGraph').classList.add("item--current");

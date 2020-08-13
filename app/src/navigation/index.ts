@@ -4,10 +4,9 @@ import {escapeHtml} from "../util/escape";
 import {destroyDialog} from "../util/dialog";
 
 export class Navigation {
-    public element: HTMLElement;
+    private element = document.getElementById('navigation');
 
     constructor(liandi: ILiandi) {
-        this.element = document.getElementById('navigation');
         this.element.addEventListener('dblclick', (event) => {
             let target = event.target as HTMLElement
             const ulElement = hasTopClosestByTag(target, "UL")
@@ -72,7 +71,7 @@ export class Navigation {
         })
     }
 
-    public getLeaf(liandi:ILiandi, liElement: HTMLElement, dir: IDir) {
+    public getLeaf(liandi: ILiandi, liElement: HTMLElement, dir: IDir) {
         const files = JSON.parse(liElement.getAttribute('data-files'))
         if (liElement.firstElementChild.classList.contains('item__arrow--open')) {
             liElement.firstElementChild.classList.remove('item__arrow--open')
@@ -164,13 +163,13 @@ export class Navigation {
         }, true)
     }
 
-    public show(liandi:ILiandi) {
+    public show() {
         this.element.classList.remove('fn__none');
         document.getElementById('resize').classList.remove('fn__none');
         document.getElementById('barNavigation').classList.add("item--current");
     }
 
-    public hide(liandi:ILiandi) {
+    public hide() {
         this.element.classList.add('fn__none');
         document.getElementById('resize').classList.add('fn__none');
         document.getElementById('barNavigation').classList.remove("item--current");

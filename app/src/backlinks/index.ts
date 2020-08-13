@@ -2,10 +2,9 @@ import * as path from 'path';
 import {i18n} from "../i18n";
 
 export class Backlinks {
-    public element: HTMLDivElement;
+    private element = document.getElementById('backlinks') as HTMLDivElement;
 
     constructor(liandi: ILiandi) {
-        this.element = document.getElementById('backlinks') as HTMLDivElement;
         this.element.addEventListener("click", (event) => {
             let target = event.target as HTMLElement
             while (target && !target.isEqualNode(this.element)) {
