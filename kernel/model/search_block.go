@@ -115,11 +115,7 @@ func GetBlock(id string) (ret *Block) {
 				return ast.WalkContinue
 			}
 
-			if ast.NodeDocument == n.Type {
-				return ast.WalkContinue
-			}
-
-			if ast.NodeDocument != n.Parent.Type {
+			if nil != n.Parent && ast.NodeDocument != n.Parent.Type {
 				// 仅支持根节点的直接子节点
 				return ast.WalkContinue
 			}
@@ -158,11 +154,7 @@ func SearchBlock(url, keyword string) (ret []*Block) {
 				return ast.WalkContinue
 			}
 
-			if ast.NodeDocument == n.Type {
-				return ast.WalkContinue
-			}
-
-			if ast.NodeDocument != n.Parent.Type {
+			if nil != n.Parent && ast.NodeDocument != n.Parent.Type {
 				// 仅支持根节点的直接子节点
 				return ast.WalkContinue
 			}

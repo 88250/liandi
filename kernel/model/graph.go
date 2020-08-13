@@ -87,5 +87,15 @@ func Graph() (nodes []interface{}, links []interface{}) {
 			}
 		}
 	}
+
+	for _, node := range nodes {
+		n := node.(map[string]interface{})
+		for _, link := range links {
+			l := link.(map[string]interface{})
+			if l["source"] == n["name"] || l["target"] == n["name"] {
+				n["category"] = 2
+			}
+		}
+	}
 	return
 }
