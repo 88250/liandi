@@ -15,7 +15,7 @@ import "path/filepath"
 func MountHelp() (url string) {
 	lang := Conf.Lang
 	lang = "zh_CN" // TODO: 目前只有中文帮助文档
-	url, _ = Mount("http://"+WebDAVLocalhostAddr+"/webdav/", filepath.Join(WorkingDir, "public/help/"+lang))
+	url, _ = Mount("http://"+WebDAVLocalhostAddr+"/webdav/", filepath.Join(WorkingDir, "app/public/"+lang+"/help"))
 	RestartServeWebDAV()
 	return
 }
