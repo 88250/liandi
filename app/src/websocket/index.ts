@@ -84,14 +84,10 @@ export class WebSocketUtil {
                     liandi.editors.onSetTheme(liandi, response.data);
                     break;
                 case 'getconf':
-                    liandi.config = Object.assign({
-                        lang: 'zh_CN'
-                    }, response.data);
+                    liandi.config = response.data;
                     document.title = i18n[liandi.config.lang].slogan;
-
                     callback();
                     liandi.editors.onSetTheme(liandi, response.data.theme);
-
                     if (response.data.dirs.length === 0) {
                         liandi.navigation.hide();
                     } else {

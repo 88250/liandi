@@ -1,0 +1,21 @@
+{
+  "logLevel": "debug",
+  "dirs": [],
+  "theme": "light",
+  "lang": "zh_CN",
+  "markdown": {
+    "footnotes": false,
+    "toc": false,
+    "autoSpace": true,
+    "fixTermTypo": false,
+    "chinesePunct": false,
+    "inlineMathAllowDigitAfterOpenMarker": false,
+    "mathEngine": "KaTeX",
+    "hideToolbar": false,
+    "outline": false,
+    "paragraphBeginningSpace": false
+  },
+  "image": {
+    "autoFetch": false
+  }
+}

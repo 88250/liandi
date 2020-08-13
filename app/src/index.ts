@@ -26,7 +26,6 @@ class App {
                 path: '',
             },
         };
-
         this.liandi.ws = new WebSocketUtil(this.liandi, () => {
             this.liandi.navigation = new Navigation(this.liandi);
             this.liandi.editors = new Editors();

@@ -114,11 +114,11 @@ const createWindow = () => {
 }
 
 app.whenReady().then(() => {
-  createWindow()
 
   const isChildProcess = process.argv.some((item) => {
     return item.indexOf('--liandi-url') === 0
   })
+
   if (isChildProcess) {
     return
   }
@@ -134,6 +134,8 @@ app.whenReady().then(() => {
     kernelPath = path.join('..', 'kernel', kernelName)
   }
   spawn(kernelPath)
+
+  createWindow()
 })
 
 app.on('window-all-closed', () => {
