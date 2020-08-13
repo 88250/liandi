@@ -140,7 +140,8 @@ export class Editors {
                 url: Constants.UPLOAD_ADDRESS,
             },
             after: () => {
-                editor.vditor.vditor.lute.SetLinkBase(path.posix.join(liandi.current.dir.url, path.posix.dirname(liandi.current.path)));
+                const lnkBase = path.posix.join(liandi.current.dir.url, path.posix.dirname(liandi.current.path))
+                editor.vditor.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + '/');
                 editor.vditor.setHTML(html);
                 editor.vditor.focus();
                 this.blockHint.initEvent(liandi, editor.vditor.vditor.ir.element)
@@ -264,20 +265,11 @@ export class Editors {
                 case "NodeList":
                     iconName = "vditor-icon-list"
                     break;
-                case "NodeHTMLBlock":
-                    // iconName = "vditor-icon-list"
-                    break;
                 case "NodeCodeBlock":
                     iconName = "vditor-icon-code"
                     break;
                 case "NodeTable":
                     iconName = "vditor-icon-table"
-                    break;
-                case "NodeMathBlock":
-                    //  iconName = "vditor-icon-table"
-                    break;
-                case "NodeYamlFrontMatter":
-                    // iconName = "vditor-icon-table"
                     break;
             }
             if (nodeId !== item.id) {
