@@ -47,14 +47,13 @@ Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi
     * Punctuation such as Chinese followed by English comma period is automatically replaced with Chinese corresponding punctuation
     * Does inline math formula allow starting $ followed by numbers
     * Math formula engine switching MathJax, KaTeX
+* Block mode
+  * Block-level bidirectional link
+  * Link network graph    
 * WebDAV mount remote directory
 * Double Shift quick navigation
 * Fulltext search
 * Light and dark themes
-* Block mode `WIP`
-  * Block-level bidirectional link
-  * Document block diagram
-* Tag aggregation category `TBD`
 * Export static site, built-in multiple sets of themes `TBD`
 
 ## 📸 Screenshots
