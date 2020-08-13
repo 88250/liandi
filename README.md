@@ -26,8 +26,6 @@
 <a href="https://github.com/88250/liandi/blob/master/README_en_US.md">English</a>
 </p>
 
-**状态：我们正在开发 Markdown 块级双向链接特性，请到[这里](https://github.com/88250/liandi/issues/87)查看该特性说明和提出建议 :heart:**
-
 ## 💡 简介
 
 链滴笔记是一款开源的桌面端笔记应用，支持 Windows、Mac 和 Linux。
@@ -51,14 +49,13 @@
     * 中文后跟英文逗号句号等标点是否自动替换为中文对应标点
     * 内联数学公式是否允许起始 $ 后紧跟数字
     * 数学公式引擎切换 MathJax、KaTeX
+* 块模式
+  * 块级双向链接
+  * 关系图    
 * WebDAV 挂载远程目录
 * Double Shift 快速导航
 * 全文搜索
 * 明亮、暗黑两套主题
-* 块模式 `WIP`
-  * 块级双向链接
-  * 文档块关系图
-* 标签聚合分类 `TBD`
 * 导出静态站点，内置多套主题 `TBD`
 
 ## 📸 截图

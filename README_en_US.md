@@ -26,8 +26,6 @@
 <a href="https://github.com/88250/liandi/blob/master/README.md">中文</a>
 </p>
 
-**Status: We are developing the Markdown block-level reference feature, please go to [here](https://github.com/88250/liandi/issues/87) to view the feature description and make suggestions :heart:**
-
 ## 💡 Introduction
 
 LianDi Note is an open source desktop note application that supports Windows, Mac and Linux.
@@ -49,14 +47,13 @@ Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi
     * Punctuation such as Chinese followed by English comma period is automatically replaced with Chinese corresponding punctuation
     * Does inline math formula allow starting $ followed by numbers
     * Math formula engine switching MathJax, KaTeX
+* Block mode
+  * Block-level bidirectional link
+  * Link network graph    
 * WebDAV mount remote directory
 * Double Shift quick navigation
 * Fulltext search
 * Light and dark themes
-* Block mode `WIP`
-  * Block-level bidirectional link
-  * Document block diagram
-* Tag aggregation category `TBD`
 * Export static site, built-in multiple sets of themes `TBD`
 
 ## 📸 Screenshots
