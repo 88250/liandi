@@ -7,6 +7,15 @@
   background-color: var(--focus-background-color);
   border-left: 1px solid var(--border-color);
 
+  &--graph {
+    display: flex;
+    flex-direction: column;
+
+    .graph__input {
+      padding: 10px;
+    }
+  }
+
   &__title {
     margin: 10px;
   }

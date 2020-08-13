@@ -135,7 +135,7 @@ tab-panel {
       user-select: none;
 
       &.tab--current {
-        background-color: var(--focus-background-color);
+        background-color: var(--background-color);
       }
     }
 

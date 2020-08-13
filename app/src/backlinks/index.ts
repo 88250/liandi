@@ -2,10 +2,9 @@ import * as path from 'path';
 import {i18n} from "../i18n";
 
 export class Backlinks {
-    public element: HTMLDivElement;
+    private element = document.getElementById('backlinks') as HTMLDivElement;
 
     constructor(liandi: ILiandi) {
-        this.element = document.getElementById('backlinks') as HTMLDivElement;
         this.element.addEventListener("click", (event) => {
             let target = event.target as HTMLElement
             while (target && !target.isEqualNode(this.element)) {
@@ -37,8 +36,9 @@ export class Backlinks {
         } else {
             this.element.innerHTML = `<div class="backlinks__title">
 <div class="ft__secondary ft__smaller">${i18n[liandi.config.lang].backlinks}</div>
+<span>${liandi.current.path ? path.posix.join(path.posix.basename(liandi.current.dir.url), liandi.current.path) : ""}</span>
 </div>
-<div class="item"><div class="item__content">${i18n[liandi.config.lang].noBacklinks}</div></div>`;
+<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[liandi.config.lang].noBacklinks}</div></div>`;
         }
     }
 
@@ -61,14 +61,14 @@ export class Backlinks {
             backlinksHTML += '</div>'
         })
         if (backlinks.length === 0) {
-            backlinksHTML += `<div class="item"><div class="item__content">${i18n[liandi.config.lang].noBacklinks}</div></div>`
+            backlinksHTML += `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[liandi.config.lang].noBacklinks}</div></div>`
         }
         this.element.innerHTML = backlinksHTML;
     }
 
     public show(liandi: ILiandi) {
-        this.getBacklinks(liandi);
         this.element.classList.remove('fn__none');
+        this.getBacklinks(liandi);
         document.getElementById('resize2').classList.remove('fn__none');
         document.getElementById('barBacklinks').classList.add("item--current");
         liandi.graph.hide(liandi);

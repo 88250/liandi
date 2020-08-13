@@ -1,47 +1,18 @@
 .list {
-  // mount and search list
-  &--signal {
-    overflow: auto;
-    .list__item {
-      cursor: pointer;
-      padding: 5px 10px;
-
-      &:hover {
-        background-color: $blue;
-        color: $white;
-
-        .ft__secondary {
-          color: $white;
-        }
-      }
-    }
-  }
+  overflow: auto;
 
   &__item {
     border-bottom: 1px solid var(--border-color);
     line-height: 21px;
-
-    svg {
-      color: var(--text-secondary-color);
-      transition: $transition;
-    }
+    padding: 5px 10px;
+    cursor: pointer;
 
     &:hover {
       color: var(--text-secondary-color);
     }
 
     &--current {
-      background-color: $blue !important;
-      color: $white !important;
-
-      svg,
-      .ft__secondary {
-        color: $white !important;
-      }
-    }
-
-    &--focus {
-      background-color: var(--focus-background-color);
+      background-color: var(--background-color);
     }
   }
 }

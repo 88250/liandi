@@ -1,3 +1,7 @@
+interface Window {
+    liandi: ILiandi
+}
+
 declare interface IFile {
     path: string;
     name: string;
@@ -36,7 +40,9 @@ declare interface IEchartsFormatter {
         lineStyle: {
             type: string
         }
-        label: string
+        label: {
+            show: boolean
+        }
         url: string
     }
 }
@@ -94,16 +100,14 @@ declare interface ILiandi {
         send: (cmd: string, param: Record<string, unknown>, process?: boolean) => void
     };
     navigation?: {
-        element: HTMLElement
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
         onMount: (liandi: ILiandi, data: { dir: IDir }) => void
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
         getLeaf: (liandi: ILiandi, liElement: HTMLElement, dir: IDir) => void;
-        show: (liandi: ILiandi) => void;
-        hide: (liandi: ILiandi) => void;
+        show: () => void;
+        hide: () => void;
     };
     backlinks?: {
-        element: HTMLDivElement
         onBacklinks: (liandi: ILiandi, backlinks: IBacklinks[]) => void
         getBacklinks: (liandi: ILiandi) => void
         show: (liandi: ILiandi) => void;
@@ -132,7 +136,6 @@ declare interface ILiandi {
         open: (key?: string, index?: number) => void
     };
     graph?: {
-        element: HTMLDivElement;
         onGraph: (liandi: ILiandi, data: Record<string, unknown>) => void
         show: (liandi: ILiandi) => void;
         hide: (liandi: ILiandi) => void;

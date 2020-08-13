@@ -31,7 +31,7 @@ class App {
             this.liandi.menus = new Menus(this.liandi);
             this.liandi.find = new Find();
             this.liandi.backlinks = new Backlinks(this.liandi);
-            this.liandi.graph = new Graph();
+            this.liandi.graph = new Graph(this.liandi);
 
             resize('resize');
             resize('resize2', true);
@@ -52,7 +52,7 @@ class App {
                         },
                         path: decodeURIComponent(remote.process.argv[index + 1]).substr(14)
                     }
-                    this.liandi.navigation.hide(this.liandi)
+                    this.liandi.navigation.hide()
                     this.liandi.backlinks.hide(this.liandi);
                     this.liandi.ws.send('get', {
                         url: this.liandi.current.dir.url,
@@ -66,15 +66,17 @@ class App {
                 this.liandi.editors.resize();
             };
         });
+
+        window.liandi = this.liandi;
     }
 
     private initBar() {
         const liandi = this.liandi
         document.getElementById('barNavigation').addEventListener('click', function () {
             if (this.classList.contains("item--current")) {
-                liandi.navigation.hide(liandi)
+                liandi.navigation.hide()
             } else {
-                liandi.navigation.show(liandi)
+                liandi.navigation.show()
             }
             window.dispatchEvent(new CustomEvent('resize'));
         });
