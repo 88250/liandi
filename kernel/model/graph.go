@@ -12,9 +12,10 @@ package model
 
 import (
 	"github.com/88250/lute/ast"
+	"strings"
 )
 
-func Graph() (nodes []interface{}, links []interface{}) {
+func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 	for _, tree := range trees {
 		delete(treeBacklinks, tree)
 	}
@@ -36,6 +37,11 @@ func Graph() (nodes []interface{}, links []interface{}) {
 				return ast.WalkContinue
 			}
 
+			text := n.Text()
+			if !strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
+				return ast.WalkContinue
+			}
+
 			isRoot := ast.NodeDocument == n.Type
 			value := 0
 			show := true
@@ -48,7 +54,7 @@ func Graph() (nodes []interface{}, links []interface{}) {
 				"category": value,
 				"url":      tree.URL,
 				"path":     tree.Path,
-				"content":  n.Text(),
+				"content":  text,
 				"label": map[string]interface{}{
 					"show": show,
 				},
