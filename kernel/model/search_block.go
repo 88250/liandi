@@ -15,7 +15,6 @@ import (
 	"strings"
 
 	"github.com/88250/lute/ast"
-	"github.com/88250/lute/html"
 	"github.com/88250/lute/parse"
 	"github.com/88250/lute/util"
 )
@@ -125,11 +124,8 @@ func GetBlock(id string) (ret *Block) {
 			}
 
 			if id == n.ID {
-				u := html.EscapeString(tree.URL)
-				p := html.EscapeString(tree.Path)
 				text := n.Text()
-				c := html.EscapeString(text)
-				ret = &Block{URL: u, Path: p, ID: n.ID, Content: c}
+				ret = &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Type: n.Type.String(), Content: text}
 				return ast.WalkStop
 			}
 			return ast.WalkContinue
@@ -164,11 +160,9 @@ func SearchBlock(url, keyword string) (ret []*Block) {
 			}
 
 			text := n.Text()
-			if strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
-				u := html.EscapeString(tree.URL)
-				p := html.EscapeString(tree.Path)
-				c := html.EscapeString(text)
-				block := &Block{URL: u, Path: p, ID: n.ID, Content: c}
+			pos, marked := markSearch(text, keyword)
+			if -1 < pos {
+				block := &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Type: n.Type.String(), Content: marked}
 				ret = append(ret, block)
 			}
 

@@ -99,30 +99,34 @@ func Search(keyword string) (ret []*Snippet) {
 func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
 	lines := strings.Split(doc.Content, "\n")
 	index := 0
-	maxPartLen := 32
 	for idx, line := range lines {
-		if pos := strings.Index(strings.ToLower(line), strings.ToLower(keyword)); -1 != pos {
-			var before []rune
-			var count int
-			for i := pos; 0 < i; { // 关键字前面太长的话缩短一些
-				r, size := utf8.DecodeLastRuneInString(line[:i])
-				i -= size
-				before = append([]rune{r}, before...)
-				count++
-				if maxPartLen < count {
-					break
-				}
-			}
-
-			highlight := string(before) + "<mark>" + line[pos:pos+len(keyword)] + "</mark>" + line[pos+len(keyword):]
+		pos, marked := markSearch(line, keyword)
+		if -1 < pos {
 			dir := Conf.Dir(doc.URL)
 			snippet := &Snippet{Dir: dir,
 				Path: doc.Path,
-				Ln:   idx + 1, Col: pos + 1, Index: index,
-				Content: highlight}
+				Ln:   idx + 1, Col: pos + 1, Index: index, Content: marked}
 			ret = append(ret, snippet)
 			index++
 		}
 	}
 	return ret
+}
+
+func markSearch(text, keyword string) (pos int, marked string) {
+	if pos = strings.Index(strings.ToLower(text), strings.ToLower(keyword)); -1 != pos {
+		var before []rune
+		var count int
+		for i := pos; 0 < i; { // 关键字前面太长的话缩短一些
+			r, size := utf8.DecodeLastRuneInString(text[:i])
+			i -= size
+			before = append([]rune{r}, before...)
+			count++
+			if 32 < count {
+				break
+			}
+		}
+		marked = string(before) + "<mark>" + text[pos:pos+len(keyword)] + "</mark>" + text[pos+len(keyword):]
+	}
+	return
 }
