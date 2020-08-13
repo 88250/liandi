@@ -147,7 +147,7 @@ export class Graph {
         );
 
         this.chart.on('click', (params: IEchartsFormatter) => {
-            if (params.dataType === "node" && params.data.label) {
+            if (params.dataType === "node" && params.data.label.show) {
                 liandi.editors.save(liandi)
                 liandi.current = {
                     dir: {url: params.data.url},

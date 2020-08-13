@@ -66,6 +66,8 @@ class App {
                 this.liandi.editors.resize();
             };
         });
+
+        window.liandi = this.liandi;
     }
 
     private initBar() {

@@ -6,7 +6,7 @@
   width: 100%;
   line-height: 17px;
   box-sizing: border-box;
-  background-color: var(--input-background-color);
+  background-color: var(--background-color);
   color: var(--text-color);
   transition: $transition;
 
@@ -48,11 +48,12 @@ select.input {
 
   &--cancel {
     color: var(--text-color);
-    background-color: var(--input-background-color);
+    background-color: var(--background-color);
     margin-left: 10px;
     border-color: var(--border-color);
+
     &:hover {
-      border-color: var(--text-color);
+      border-color: var(--background-color);
     }
   }
 }

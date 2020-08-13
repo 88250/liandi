@@ -1,3 +1,7 @@
+interface Window {
+    liandi: ILiandi
+}
+
 declare interface IFile {
     path: string;
     name: string;
@@ -36,7 +40,9 @@ declare interface IEchartsFormatter {
         lineStyle: {
             type: string
         }
-        label: string
+        label: {
+            show: boolean
+        }
         url: string
     }
 }
