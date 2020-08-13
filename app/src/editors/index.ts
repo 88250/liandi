@@ -140,7 +140,7 @@ export class Editors {
                 url: Constants.UPLOAD_ADDRESS,
             },
             after: () => {
-                editor.vditor.vditor.lute.SetLinkBase(path.posix.join(liandi.current.dir.url, liandi.current.path));
+                editor.vditor.vditor.lute.SetLinkBase(path.posix.join(liandi.current.dir.url, path.posix.dirname(liandi.current.path)));
                 editor.vditor.setHTML(html);
                 editor.vditor.focus();
                 this.blockHint.initEvent(liandi, editor.vditor.vditor.ir.element)
@@ -247,10 +247,43 @@ export class Editors {
         }
         const dataList: IHintData[] = [];
         data.blocks.forEach(item => {
+            let iconName = ''
+            switch (item.type) {
+                case "NodeDocument":
+                    iconName = "iconMD"
+                    break;
+                case "NodeParagraph":
+                    iconName = "iconParagraph"
+                    break;
+                case "NodeHeading":
+                    iconName = "vditor-icon-headings"
+                    break;
+                case "NodeBlockquote":
+                    iconName = "vditor-icon-quote"
+                    break;
+                case "NodeList":
+                    iconName = "vditor-icon-list"
+                    break;
+                case "NodeHTMLBlock":
+                    // iconName = "vditor-icon-list"
+                    break;
+                case "NodeCodeBlock":
+                    iconName = "vditor-icon-code"
+                    break;
+                case "NodeTable":
+                    iconName = "vditor-icon-table"
+                    break;
+                case "NodeMathBlock":
+                    //  iconName = "vditor-icon-table"
+                    break;
+                case "NodeYamlFrontMatter":
+                    // iconName = "vditor-icon-table"
+                    break;
+            }
             if (nodeId !== item.id) {
                 dataList.push({
                     value: `((${item.id} ""))`,
-                    html: `<span class="fn__flex"><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0 fn__a">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span><span class="fn__flex-1 fn__flex-shrink0" style="min-width: 10px"></span>
+                    html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#${iconName}"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span><span class="fn__flex-1 fn__flex-shrink0" style="min-width: 10px"></span>
 <span class="ft__smaller ft__secondary">${item.path.substr(1)}</span></span>`,
                 });
             }
