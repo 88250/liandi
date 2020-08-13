@@ -17,7 +17,6 @@ import (
 	"mime"
 	"net/url"
 	"path"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -37,8 +36,8 @@ func Upload(c *gin.Context) {
 	u, _ = url.PathUnescape(u)
 	p := c.GetHeader("X-Path")
 	p, _ = url.PathUnescape(p)
-	p = filepath.Dir(p)
-	p = p[1:]                     // 去掉开头的 /
+	p = path.Dir(p)
+	p = p[1:] // 去掉开头的 /
 	//mode := c.GetHeader("X-Mode") // wysiwyg, ir, sv
 	linkBase := joinUrlPath(u, p)
 	//if "ir" == mode {
@@ -126,12 +125,12 @@ func UploadFetch(c *gin.Context) {
 	p := c.GetHeader("X-Path")
 	p, _ = url.PathUnescape(p)
 	p = path.Dir(p)
-	p = p[1:]                     // 去掉开头的 /
-	mode := c.GetHeader("X-Mode") // wysiwyg, ir, sv
+	p = p[1:] // 去掉开头的 /
+	//mode := c.GetHeader("X-Mode") // wysiwyg, ir, sv
 	linkBase := joinUrlPath(u, p)
-	if "ir" == mode {
-		linkBase = ""
-	}
+	//if "ir" == mode {
+	linkBase = ""
+	//}
 	dir := Conf.Dir(u)
 	if nil == dir {
 		ret.Code = -1

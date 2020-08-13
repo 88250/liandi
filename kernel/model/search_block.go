@@ -185,5 +185,5 @@ func isSearchBlockSkipNode(node *ast.Node) bool {
 		ast.NodeHTMLBlock == node.Type || ast.NodeInlineHTML == node.Type || ast.NodeCodeBlock == node.Type ||
 		ast.NodeMathBlock == node.Type || ast.NodeInlineMath == node.Type ||
 		ast.NodeCodeSpan == node.Type || ast.NodeHardBreak == node.Type || ast.NodeSoftBreak == node.Type ||
-		ast.NodeHTMLEntity == node.Type
+		ast.NodeHTMLEntity == node.Type || ast.NodeYamlFrontMatter == node.Type
 }
