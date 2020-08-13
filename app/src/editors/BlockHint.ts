@@ -28,9 +28,13 @@ export class BlockHint {
         })
     }
 
-    public getBlock(data: { id: string, block: IBlock }) {
+    public getBlock(liandi:ILiandi, data: { id: string, block: IBlock, callback: string }) {
         if (!data.block) {
             return;
+        }
+        if (data.callback === 'open') {
+            liandi.editors.open(liandi, data.block.url, data.block.path)
+            return
         }
         const elementRect = this.blockRefElement.getBoundingClientRect()
         this.element.innerHTML = data.block.content;

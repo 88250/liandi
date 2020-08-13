@@ -1,5 +1,6 @@
 import * as echarts from 'echarts';
 import * as path from 'path';
+import {i18n} from "../i18n";
 
 export class Graph {
     private inputElement: HTMLInputElement;
@@ -8,6 +9,7 @@ export class Graph {
 
     constructor(liandi: ILiandi) {
         this.inputElement = this.element.previousElementSibling.firstElementChild as HTMLInputElement
+        this.inputElement.placeholder = i18n[liandi.config.lang].search
         this.inputElement.addEventListener('compositionend', () => {
             this.render(liandi)
         });
@@ -49,7 +51,7 @@ export class Graph {
         }
     }
 
-    onGraph(liandi: ILiandi, data: { nodes: string[], links: Record<string, unknown>[] }) {
+    onGraph(liandi: ILiandi, data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[] }) {
         if (!this.chart) {
             this.chart = echarts.init(this.element)
         } else {
@@ -162,15 +164,7 @@ export class Graph {
 
         this.chart.on('click', (params: IEchartsFormatter) => {
             if (params.dataType === "node" && params.data.label.show) {
-                liandi.editors.save(liandi)
-                liandi.current = {
-                    dir: {url: params.data.url},
-                    path: params.data.path
-                }
-                liandi.ws.send('get', {
-                    url: params.data.url,
-                    path: params.data.path,
-                })
+                liandi.editors.open(liandi, params.data.url, params.data.path)
             }
         });
     }

@@ -9,15 +9,7 @@ export class Backlinks {
             let target = event.target as HTMLElement
             while (target && !target.isEqualNode(this.element)) {
                 if (target.tagName === "H2") {
-                    liandi.editors.save(liandi);
-                    liandi.current = {
-                        dir: {url: decodeURIComponent(target.getAttribute('data-url'))},
-                        path: decodeURIComponent(target.getAttribute('data-path'))
-                    }
-                    liandi.ws.send('get', {
-                        url: liandi.current.dir.url,
-                        path: liandi.current.path
-                    })
+                    liandi.editors.open(liandi, decodeURIComponent(target.getAttribute('data-url')), decodeURIComponent(target.getAttribute('data-path')))
                     event.preventDefault()
                     event.stopPropagation()
                     break

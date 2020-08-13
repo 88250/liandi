@@ -102,13 +102,6 @@ const createWindow = () => {
     })
   })
 
-  // 全局对象
-  // global.liandiEditor = {
-  //   editorText: '',
-  //   saved: true,
-  //   appDir,
-  // }
-
   // 监听主题切换
   ipcMain.on('liandi-config-theme', (event, theme) => {
     nativeTheme.themeSource = theme

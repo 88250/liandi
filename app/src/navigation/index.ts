@@ -45,15 +45,7 @@ export class Navigation {
 
                     if (target.getAttribute("data-type") === "navigation-file") {
                         this.setCurrent(target)
-                        liandi.editors.save(liandi)
-                        const path = decodeURIComponent(target.getAttribute('data-path'))
-                        liandi.current = {
-                            dir, path
-                        }
-                        liandi.ws.send('get', {
-                            url: dir.url,
-                            path,
-                        })
+                        liandi.editors.open(liandi, dir.url, decodeURIComponent(target.getAttribute('data-path')))
                         event.preventDefault()
                         event.stopPropagation()
                         break

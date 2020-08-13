@@ -191,6 +191,18 @@ export class Editors {
         this.currentEditor.saved = true;
     }
 
+    public open(liandi: ILiandi, url: string, path: string) {
+        liandi.editors.save(liandi);
+        liandi.current = {
+            dir: {url},
+            path
+        }
+        liandi.ws.send('get', {
+            url,
+            path
+        })
+    }
+
     public close(liandi: ILiandi) {
         if (!this.currentEditor) {
             return;
@@ -283,7 +295,7 @@ export class Editors {
         this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);
     }
 
-    public onGetBlock(data: { id: string, block: IBlock }) {
-        this.blockHint.getBlock(data);
+    public onGetBlock(liandi:ILiandi, data: { id: string, block: IBlock, callback: string }) {
+        this.blockHint.getBlock(liandi, data);
     }
 }

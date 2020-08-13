@@ -118,12 +118,13 @@ declare interface ILiandi {
         focus: () => void;
         resize: () => void;
         save: (liandi: ILiandi) => void;
+        open: (liandi: ILiandi, url: string, path: string) => void;
         close: (liandi: ILiandi) => void;
         reloadEditor: (liandi: ILiandi) => void;
         onGet: (liandi: ILiandi, editorData?: { content: string, name: string }) => void;
         showSearchBlock: (liandi: ILiandi, data: { k: string, blocks: IBlock[] }) => void;
         onSetTheme: (liandi: ILiandi, theme: TTheme) => void;
-        onGetBlock: (data: { id: string, block: IBlock }) => void;
+        onGetBlock: (liandi: ILiandi, data: { id: string, block: IBlock }) => void;
     };
     menus?: {
         itemData: IMenuData
