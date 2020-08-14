@@ -10,9 +10,8 @@ const createWindow = () => {
   // 创建浏览器窗口
   const mainWindow = new BrowserWindow({
     show: false,
-    width: screen.getPrimaryDisplay().size.width,
-    height: screen.getPrimaryDisplay().workAreaSize.height,
-    fullscreen: process.platform !== 'darwin',
+    width: screen.getPrimaryDisplay().size.width * 2 / 3,
+    height: screen.getPrimaryDisplay().workAreaSize.height * 2 / 3,
     webPreferences: {
       nodeIntegration: true,
       nativeWindowOpen: true,
@@ -21,6 +20,7 @@ const createWindow = () => {
     frame: process.platform === 'darwin',
     titleBarStyle: 'hidden',
   })
+  mainWindow.maximize()
 
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()

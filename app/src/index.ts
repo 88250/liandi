@@ -210,7 +210,7 @@ class App {
         });
 
         restoreBtnElement.addEventListener('click', () => {
-            currentWindow.setSize(1024, 768);
+            currentWindow.unmaximize();
         });
 
         closeBtnElement.addEventListener('click', () => {
