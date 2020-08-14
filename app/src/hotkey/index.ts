@@ -5,7 +5,6 @@ export const initGlobalKeyPress = (liandi: ILiandi) => {
     let lastKeypressTime = 0;
     window.addEventListener('keydown', (event) => {
         // 快捷搜素
-        console.log(event)
         if (event.key === 'Shift' && event.isComposing === false) {
             const thisKeypressTime = new Date().getTime();
             if (thisKeypressTime - lastKeypressTime <= Constants.DOUBLE_DELTA
