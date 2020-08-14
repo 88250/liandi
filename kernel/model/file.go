@@ -14,6 +14,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path"
 	"sort"
 	"strings"
 
@@ -128,6 +129,7 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 	}
 	tree.URL = url
 	tree.Path = p
+	tree.Name = path.Base(p)
 	tree.ID = treeID
 	tree.Root.ID = treeID
 	dir.IndexTree(tree)

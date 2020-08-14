@@ -40,6 +40,10 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 			}
 
 			text := n.Text()
+			if ast.NodeDocument == n.Type {
+				text = tree.Name + "  " + text
+			}
+
 			if !strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
 				return ast.WalkContinue
 			}
