@@ -170,7 +170,19 @@ class App {
     }
 
     private initWindow() {
+        // window action
         const currentWindow = remote.getCurrentWindow();
+        if (process.platform === 'darwin') {
+            document.querySelector('.drag').addEventListener('dblclick', () => {
+                if (currentWindow.isMaximized()) {
+                    currentWindow.unmaximize();
+                } else {
+                    currentWindow.maximize();
+                }
+            });
+            return;
+        }
+
         currentWindow.on('blur', () => {
             document.body.classList.add('body--blur');
         });
@@ -178,18 +190,6 @@ class App {
         currentWindow.on('focus', () => {
             document.body.classList.remove('body--blur');
         });
-
-        // window action
-        if (process.platform === 'darwin') {
-            document.querySelector('.drag').addEventListener('dblclick', () => {
-                if (currentWindow.isMaximized()) {
-                    currentWindow.setSize(1024, 768);
-                } else {
-                    currentWindow.maximize();
-                }
-            });
-            return;
-        }
 
         if (process.platform === 'win32') {
             document.body.classList.add('body--win32');
