@@ -1,10 +1,10 @@
 import {remote} from 'electron';
-import {deleteMenu, newFile, newFolder, renameMenu, showInFolder} from './commonMenuItem';
+import {deleteMenu, newFileMenu, newFolderMenu, renameMenu, showInFolder} from './commonMenuItem';
 
 export const initFolderMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
-    menu.append(newFile(liandi));
-    menu.append(newFolder(liandi));
+    menu.append(newFileMenu(liandi));
+    menu.append(newFolderMenu(liandi));
     menu.append(deleteMenu(liandi));
     menu.append(renameMenu(liandi));
     menu.append(showInFolder(liandi));

@@ -1,11 +1,11 @@
 import {remote} from 'electron';
 import {i18n} from '../i18n';
-import {newFile, newFolder, showInFolder} from './commonMenuItem';
+import {newFileMenu, newFolderMenu, showInFolder} from './commonMenuItem';
 
 export const initNavigationMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
-    menu.append(newFile(liandi));
-    menu.append(newFolder(liandi));
+    menu.append(newFileMenu(liandi));
+    menu.append(newFolderMenu(liandi));
     menu.append(new remote.MenuItem({
         label: i18n[liandi.config.lang].unMount,
         click: () => {

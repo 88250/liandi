@@ -52,6 +52,7 @@ declare interface IEditor {
     editorElement: HTMLElement;
     saved: boolean;
     active: boolean;
+    range?: Range;
     vditor?: {
         vditor: IVditor
         destroy: () => void
@@ -59,6 +60,7 @@ declare interface IEditor {
         setTheme: (theme: string, contentTheme: string) => void
         focus: () => void
         setHTML: (html: string) => void
+        insertValue: (value: string, render?: boolean) => void
     };
 }
 
@@ -96,10 +98,11 @@ declare interface ILiandi {
         image: IImage,
     };
     ws?: {
-        webSocket: WebSocket,
+        webSocket: WebSocket
         send: (cmd: string, param: Record<string, unknown>, process?: boolean) => void
     };
     navigation?: {
+        element: HTMLElement
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
         onMount: (liandi: ILiandi, data: { dir: IDir }) => void
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
