@@ -14,6 +14,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
+	"github.com/88250/gulu"
 	"github.com/88250/lute/ast"
 )
 
@@ -72,8 +73,11 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 				}
 			}
 			text = string(runes)
+			if "" == text {
+				return ast.WalkContinue
+			}
 
-			nodes = append(nodes, map[string]interface{}{
+			node := map[string]interface{}{
 				"name":     n.ID,
 				"category": value,
 				"url":      tree.URL,
@@ -87,7 +91,9 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 						"show": true,
 					},
 				},
-			})
+			}
+			checkBadNodes(nodes, node, &links)
+			nodes = append(nodes, node)
 
 			if tree.ID != n.ID {
 				links = append(links, map[string]interface{}{
@@ -138,4 +144,23 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 		}
 	}
 	return
+}
+
+func checkBadNodes(nodes []interface{}, node interface{}, links *[]interface{}) {
+	currentNode := node.(map[string]interface{})
+	for _, n := range nodes {
+		existNode := n.(map[string]interface{})
+		if currentNode["name"] == existNode["name"] {
+			currentNode["name"] = currentNode["name"].(string) + "-" + gulu.Rand.String(7)
+			currentNode["category"] = 2
+			*links = append(*links, map[string]interface{}{
+				"source": existNode["name"],
+				"target": currentNode["name"],
+				"symbol": "none",
+				"lineStyle": map[string]interface{}{
+					"type": "dashed",
+				},
+			})
+		}
+	}
 }
