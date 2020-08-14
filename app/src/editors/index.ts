@@ -214,6 +214,7 @@ export class Editors {
             this.currentEditor.vditor.destroy();
         }
         this.currentEditor.inputElement.parentElement.classList.add('fn__none');
+        document.querySelector<HTMLElement>('.editor__empty').style.display = "flex"
     }
 
     public focus() {
@@ -244,6 +245,7 @@ export class Editors {
     public onGet(liandi: ILiandi, editorData: { content: string, name: string }) {
         if (this.currentEditor) {
             this.initVditor(liandi, this.currentEditor, editorData.content);
+            this.editorsElement.lastElementChild.classList.remove("fn__none");
         } else {
             this.newEditor(liandi, editorData.content);
         }
@@ -293,12 +295,12 @@ export class Editors {
                 dataList.push({
                     value: `((${item.id} ""))`,
                     html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#${iconName}"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span><span class="fn__flex-1 fn__flex-shrink0" style="min-width: 10px"></span>
-<span class="ft__smaller ft__secondary">${item.path.substr(1)}</span></span>`,
+<span class="ft__smaller ft__secondary">${escapeHtml(item.path.substr(1))}</span></span>`,
                 });
             }
         });
         dataList.push({
-            value: `((${Lute.NewNodeID()} "${Lute.NewNodeID()}"))`,
+            value: `((newFile))`,
             html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#iconMD"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${i18n[liandi.config.lang].newFile}</span></span>`,
         });
         this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);

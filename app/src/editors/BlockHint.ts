@@ -1,4 +1,5 @@
 import {hasClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
+import {Constants} from "../constants";
 
 export class BlockHint {
     private element: HTMLElement
@@ -32,9 +33,12 @@ export class BlockHint {
         if (!data.block) {
             return;
         }
-        if (data.callback === 'open') {
+        if (data.callback === Constants.CB_GETBLOCK_OPEN) {
             liandi.editors.open(liandi, data.block.url, data.block.path)
             return
+        }
+        if (data.block.content.trim() === "") {
+            return;
         }
         const elementRect = this.blockRefElement.getBoundingClientRect()
         this.element.innerHTML = data.block.content;

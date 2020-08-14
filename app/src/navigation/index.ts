@@ -4,7 +4,7 @@ import {escapeHtml} from "../util/escape";
 import {destroyDialog} from "../util/dialog";
 
 export class Navigation {
-    private element = document.getElementById('navigation');
+    public element = document.getElementById('navigation');
 
     constructor(liandi: ILiandi) {
         this.element.addEventListener('dblclick', (event) => {

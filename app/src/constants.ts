@@ -16,4 +16,7 @@ export abstract class Constants {
     public static readonly LIANDI_CONFIG_THEME: string = 'liandi-config-theme';
 
     public static readonly APP_DIR: string = remote.getGlobal('liandiEditor').appDir
+
+    public static readonly CB_CREATE_INSERT = 'cb-create-insert'
+    public static readonly CB_GETBLOCK_OPEN = 'cb-getblock-open'
 }
