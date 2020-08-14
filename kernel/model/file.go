@@ -132,10 +132,9 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 	tree.Name = path.Base(p)
 	tree.ID = treeID
 	tree.Root.ID = treeID
-	dir.IndexTree(tree)
 
-	// 更新索引
-	dir.IndexDoc(tree.Path, tree.Root.Text())
+	// 索引
+	dir.IndexTree(tree)
 
 	// 反向链接
 	backlinks = indexLink(tree)
@@ -187,7 +186,6 @@ func Rename(url, oldPath, newPath string) error {
 		if err := dir.Rename(oldPath, newPath); nil != err {
 			return err
 		}
-		dir.MoveIndexDocsDir(oldPath, newPath)
 		dir.MoveTreeDir(oldPath, newPath)
 		return nil
 	}
@@ -197,7 +195,6 @@ func Rename(url, oldPath, newPath string) error {
 	if err := dir.Rename(oldPath+".md.json", newPath+".md.json"); nil != err {
 		return err
 	}
-	dir.MoveIndexDoc(oldPath, newPath)
 	dir.MoveTree(oldPath, newPath)
 
 	// 如果存在 md 文件的话也进行重命名，否则重启时会索引生成 AST
@@ -241,7 +238,6 @@ func Remove(url, p string) error {
 		if err := dir.Rename(p, newPath); nil != err {
 			return err
 		}
-		dir.RemoveIndexDocDir(p)
 		dir.RemoveTreeDir(p)
 		return nil
 	}
@@ -251,7 +247,6 @@ func Remove(url, p string) error {
 	if err := dir.Rename(p+".md.json", p+".md.json"+deletedSuffix); nil != err {
 		return err
 	}
-	dir.RemoveIndexDoc(p)
 	dir.RemoveTree(p)
 
 	// 如果存在 md 文件的话也进行重命名

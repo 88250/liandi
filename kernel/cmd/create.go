@@ -33,13 +33,16 @@ func (cmd *create) Exec() {
 		return
 	}
 
+	tree := model.Conf.Dir(url).Tree(p)
 	name := path.Base(p)
 	dir := model.Conf.Dir(url)
 	files, _ := model.Ls(url, path.Dir(p))
 	ret.Data = map[string]interface{}{
-		"dir":  dir,
-		"files": files,
-		"name": name,
+		"dir":      dir,
+		"files":    files,
+		"name":     name,
+		"id":       tree.Root.ID,
+		"callback": cmd.param["callback"],
 	}
 	cmd.Push(ret.Bytes())
 }

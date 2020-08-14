@@ -170,7 +170,7 @@ func SearchBlock(url, keyword string) (ret []*Block) {
 				ret = append(ret, block)
 			}
 
-			if 64 <= len(ret) { // TODO: 这里需要按树分组优化
+			if 16 <= len(ret) { // TODO: 这里需要按树分组优化
 				return ast.WalkStop
 			}
 

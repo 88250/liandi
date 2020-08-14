@@ -11,9 +11,10 @@
 package model
 
 import (
-	"path"
 	"strings"
 	"unicode/utf8"
+
+	"github.com/88250/lute/ast"
 )
 
 func InitIndex() {
@@ -21,11 +22,6 @@ func InitIndex() {
 		go dir.Index()
 	}
 }
-
-var (
-	// docs 用于维护所有已挂载的文档。
-	docs []*Doc
-)
 
 type Doc struct {
 	URL     string
@@ -36,100 +32,75 @@ type Doc struct {
 type Snippet struct {
 	Dir     *Dir   `json:"dir"`
 	Path    string `json:"path"`
-	Ln      int    `json:"ln"`
-	Col     int    `json:"col"`
 	Index   int    `json:"index"`
 	Content string `json:"content"`
 	Type    string `json:"type"`
 }
 
-func (dir *Dir) RemoveIndexDocDir(dirPath string) {
-	for i := 0; i < len(docs); i++ {
-		if dir.URL == docs[i].URL && strings.HasPrefix(docs[i].Path, dirPath) {
-			docs = append(docs[:i], docs[i+1:]...)
-			i--
-		}
-	}
-}
-
-func (dir *Dir) MoveIndexDocsDir(dirPath, newDirPath string) {
-	for _, d := range docs {
-		if dir.URL == d.URL && strings.HasPrefix(d.Path, dirPath) {
-			d.Path = strings.Replace(d.Path, dirPath, newDirPath, -1)
-		}
-	}
-}
-
-func (dir *Dir) MoveIndexDoc(path, newPath string) {
-	for _, d := range docs {
-		if dir.URL == d.URL && path == d.Path {
-			d.Path = newPath
-			break
-		}
-	}
-}
-
-func (dir *Dir) RemoveIndexDoc(path string) {
-	for i, doc := range docs {
-		if doc.URL == dir.URL && doc.Path == path {
-			docs = docs[:i+copy(docs[i:], docs[i+1:])]
-			break
-		}
-	}
-}
-
-func (dir *Dir) IndexDoc(path, content string) {
-	doc := &Doc{URL: dir.URL, Path: path, Content: content}
-	for i, d := range docs {
-		if doc.URL == d.URL && doc.Path == d.Path {
-			docs = docs[:i+copy(docs[i:], docs[i+1:])]
-			break
-		}
-	}
-	docs = append(docs, doc)
-}
-
 func Search(keyword string) (ret []*Snippet) {
 	ret = []*Snippet{}
-	for _, doc := range docs {
-		snippets := searchDoc(keyword, doc)
-		ret = append(ret, snippets...)
-	}
-	return
-}
-
-func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
-	index := 0
-	dir := Conf.Dir(doc.URL)
-	// 搜索文档名
-	pos, marked := markSearch(path.Base(doc.Path), keyword)
-	if -1 < pos {
-		ret = append(ret, &Snippet{
-			Dir:  dir,
-			Path: doc.Path,
-			Ln:   0, Col: pos + 1, Index: index,
-			Content: marked,
-			Type:    "title",
-		})
-		index++
+	if "" == keyword {
+		return
 	}
 
-	// 搜索内容
-	lines := strings.Split(doc.Content, "\n")
-	for idx, line := range lines {
-		pos, marked = markSearch(line, keyword)
+	idx := 0
+	for _, tree := range trees {
+		dir := Conf.Dir(tree.URL)
+		pos, marked := markSearch(tree.Name, keyword)
 		if -1 < pos {
 			ret = append(ret, &Snippet{
-				Dir:  dir,
-				Path: doc.Path,
-				Ln:   idx + 1, Col: pos + 1, Index: index,
+				Dir:     dir,
+				Path:    tree.Path,
+				Index:   idx,
 				Content: marked,
-				Type:    "content",
+				Type:    "title",
 			})
-			index++
+			idx++
 		}
 	}
-	return ret
+
+	for _, tree := range trees {
+		dir := Conf.Dir(tree.URL)
+		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+			if !entering {
+				return ast.WalkContinue
+			}
+
+			if ast.NodeDocument == n.Type || ast.NodeDocument != n.Parent.Type {
+				// 仅支持根节点的直接子节点
+				return ast.WalkContinue
+			}
+
+			if isSearchBlockSkipNode(n) {
+				return ast.WalkStop
+			}
+
+			text := n.Text()
+
+			pos, marked := markSearch(text, keyword)
+			if -1 < pos {
+				ret = append(ret, &Snippet{
+					Dir:     dir,
+					Path:    tree.Path,
+					Index:   idx,
+					Content: marked,
+					Type:    "content",
+				})
+				idx++
+			}
+
+			if 16 <= len(ret) {
+				return ast.WalkStop
+			}
+
+			if ast.NodeList == n.Type {
+				return ast.WalkSkipChildren
+			}
+			return ast.WalkContinue
+		})
+		idx++
+	}
+	return
 }
 
 func markSearch(text, keyword string) (pos int, marked string) {
