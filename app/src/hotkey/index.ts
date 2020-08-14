@@ -11,6 +11,7 @@ export const initGlobalKeyPress = (liandi: ILiandi) => {
             if (thisKeypressTime - lastKeypressTime <= Constants.DOUBLE_DELTA
                 && thisKeypressTime - lastKeypressTime >= 50) { // 防止 win32 长按
                 lastKeypressTime = 0;
+                // shift + shift + c
                 timeoutId = window.setTimeout(() => {
                     initSearch(liandi);
                 }, 200);
