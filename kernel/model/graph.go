@@ -152,7 +152,7 @@ func checkBadNodes(nodes []interface{}, node interface{}, links *[]interface{}) 
 		existNode := n.(map[string]interface{})
 		if currentNode["name"] == existNode["name"] {
 			currentNode["name"] = currentNode["name"].(string) + "-" + gulu.Rand.String(7)
-			currentNode["category"] = 2
+			currentNode["category"] = 3
 			*links = append(*links, map[string]interface{}{
 				"source": existNode["name"],
 				"target": currentNode["name"],
