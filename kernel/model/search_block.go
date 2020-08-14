@@ -160,6 +160,10 @@ func SearchBlock(url, keyword string) (ret []*Block) {
 			}
 
 			text := n.Text()
+			if ast.NodeDocument == n.Type {
+				text = tree.Name + "  " + text
+			}
+
 			pos, marked := markSearch(text, keyword)
 			if -1 < pos {
 				block := &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Type: n.Type.String(), Content: marked}
