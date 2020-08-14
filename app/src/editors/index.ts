@@ -36,6 +36,7 @@ export class Editors {
             // _lutePath: `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}`,
             // debugger: true,
             icon: 'material',
+            lang: liandi.config.lang,
             outline: liandi.config.markdown.outline,
             toolbarConfig: {
                 hide: liandi.config.markdown.hideToolbar,
