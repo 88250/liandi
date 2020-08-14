@@ -5,7 +5,7 @@ import {i18n} from '../i18n';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
-import {setRangeByWbr} from "../../vditore/src/ts/util/selection";
+import {setRangeByWbr, setSelectionFocus} from "../../vditore/src/ts/util/selection";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
@@ -141,7 +141,7 @@ export class WebSocketUtil {
                     liandi.navigation.getLeaf(liandi, liandi.menus.itemData.target, response.data.dir);
                     destroyDialog();
                     if (response.data.callback === Constants.CB_CREATE_INSERT) {
-                        setRangeByWbr(liandi.editors.currentEditor.vditor.vditor.ir.element, liandi.editors.currentEditor.range);
+                        setSelectionFocus(liandi.editors.currentEditor.range);
                         liandi.editors.currentEditor.vditor.insertValue(`((${response.data.id} "${response.data.name}"))`)
                     }
                     break;
