@@ -54,7 +54,7 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 
 			maxTextLen := 16
 			if !isRoot {
-				maxTextLen = 128
+				maxTextLen = 64
 			}
 
 			var runes []rune
