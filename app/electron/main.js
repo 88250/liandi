@@ -12,6 +12,7 @@ const createWindow = () => {
     show: false,
     width: screen.getPrimaryDisplay().size.width,
     height: screen.getPrimaryDisplay().workAreaSize.height,
+    fullscreen: process.platform !== 'darwin',
     webPreferences: {
       nodeIntegration: true,
       nativeWindowOpen: true,
