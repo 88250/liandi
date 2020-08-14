@@ -75,17 +75,26 @@ export class Graph {
                     right: 20,
                     orient: 'vertical',
                     textStyle: {
-                        color: '#161719',
+                        padding: [2, 4, 2, 4],
+                        color: '#d1d5da',
+                        backgroundColor: 'rgba(50,50,50,0.7)',
+                        borderRadius: 3,
+                        lineHeight: 14,
+                        fontSize: 12,
                     },
-                    inactiveColor: '#7c828b',
+                    inactiveColor: '#959da5',
                 },
                 tooltip: {
+                    textStyle: {
+                        color: '#d1d5da',
+                    },
+                    padding: [2, 4, 2, 4],
                     formatter: (params: IEchartsFormatter) => {
                         if (params.dataType === "edge") {
-                            return `<div style="font-size: 12px">${params.data.lineStyle.type === "dotted" ? i18n[liandi.config.lang].relativeRelation : i18n[liandi.config.lang].parentRelation}</div>`
+                            return `<div style="font-size: 10px;line-height: 12px">${params.data.lineStyle.type === "dotted" ? i18n[liandi.config.lang].relativeRelation : i18n[liandi.config.lang].parentRelation}</div>`
                         } else {
-                            return `<div style="font-size: 12px">${params.data.content}</div>
-<div style="font-size: 12px;color: #ccc">${params.data.name}</div>`
+                            return `<div style="font-size: 12px;line-height: 14px; word-break: break-all;width: 220px;white-space: normal;">${params.data.content}</div>
+<div style="font-size: 10px;color:#959da5;line-height: 12px">${params.data.name}</div>`
                         }
                     },
                 },
@@ -110,12 +119,17 @@ export class Graph {
                         draggable: true,
                         label: {
                             position: 'right',
-                            color: 'auto',
-                            shadowColor: 'red',
-                            shadowBlur: 2,
+                            padding: [2, 4, 2, 4],
+                            color: '#d1d5da',
+                            backgroundColor: 'rgba(50,50,50,0.48)',
+                            fontSize: 10,
+                            borderRadius: 3,
+                            lineHeight: 12,
                             formatter: (params: IEchartsFormatter) => {
                                 if (params.data.category === 0) {
                                     return path.posix.basename(params.data.path);
+                                } else {
+                                    return params.data.content.substr(0, 8)
                                 }
                             },
                         },
@@ -137,13 +151,13 @@ export class Graph {
                         focusNodeAdjacency: true,
                         roam: true,
                         itemStyle: {
-                            borderColor: 'rgba(255, 255, 255, 0.68)',
+                            borderColor: 'rgba(255, 255, 255, 0.38)',
                             borderWidth: 1,
                         },
                         lineStyle: {
                             color: 'source',
                             curveness: 0,
-                            opacity: 0.36,
+                            opacity: 0.48,
                         },
                         emphasis: {
                             lineStyle: {
@@ -152,6 +166,9 @@ export class Graph {
                             itemStyle: {
                                 borderColor: '#fff',
                             },
+                            label: {
+                                show: true
+                            }
                         },
                         edgeSymbol: ['none', 'arrow'],
                         edgeSymbolSize: [0, 8],
