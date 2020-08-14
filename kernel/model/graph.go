@@ -44,18 +44,6 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 				return ast.WalkContinue
 			}
 
-			var runes []rune
-			for i := 0; i < len(text); {
-				r, size := utf8.DecodeRuneInString(text[i:])
-				runes = append(runes, r)
-				i += size
-				if 16 < len(runes) {
-					runes = append(runes, []rune("...")...)
-					break
-				}
-			}
-			text = string(runes)
-
 			isRoot := ast.NodeDocument == n.Type
 			value := 0
 			show := true
@@ -63,6 +51,24 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 				value = 1
 				show = false
 			}
+
+			maxTextLen := 16
+			if !isRoot {
+				maxTextLen = 64
+			}
+
+			var runes []rune
+			for i := 0; i < len(text); {
+				r, size := utf8.DecodeRuneInString(text[i:])
+				runes = append(runes, r)
+				i += size
+				if maxTextLen < len(runes) {
+					runes = append(runes, []rune("...")...)
+					break
+				}
+			}
+			text = string(runes)
+
 			nodes = append(nodes, map[string]interface{}{
 				"name":     n.ID,
 				"category": value,
@@ -110,6 +116,10 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 
 	for _, node := range nodes {
 		n := node.(map[string]interface{})
+		if 0 == n["category"] {
+			// 跳过根块
+			continue
+		}
 		for _, link := range links {
 			l := link.(map[string]interface{})
 			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
