@@ -1,6 +1,7 @@
 import * as echarts from 'echarts';
 import * as path from 'path';
 import {i18n} from "../i18n";
+import {escapeHtml} from "../util/escape";
 
 export class Graph {
     private inputElement: HTMLInputElement;
@@ -94,7 +95,7 @@ export class Graph {
                         if (params.dataType === "edge") {
                             return `<div style="font-size: 10px;line-height: 12px">${params.data.lineStyle.type === "dotted" ? i18n[liandi.config.lang].relativeRelation : i18n[liandi.config.lang].parentRelation}</div>`
                         } else {
-                            return `<div style="font-size: 12px;line-height: 14px; word-break: break-all;width: 220px;white-space: normal;">${params.data.content}</div>
+                            return `<div style="font-size: 12px;line-height: 14px; word-break: break-all;width: 220px;white-space: normal;">${params.data.category === 3 ? 'This is a bug block, pls @88250' : escapeHtml(params.data.content)}</div>
 <div style="font-size: 10px;color:#959da5;line-height: 12px">${params.data.name}</div>`
                         }
                     },
@@ -115,6 +116,11 @@ export class Graph {
                             name: i18n[liandi.config.lang].relativeBlock,
                             itemStyle: {
                                 color: "#d23f31"
+                            },
+                        }, {
+                            name: 'bug',
+                            itemStyle: {
+                                color: "#ea4aaa"
                             },
                         }],
                         draggable: true,
