@@ -78,6 +78,11 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 				"label": map[string]interface{}{
 					"show": show,
 				},
+				"emphasis": map[string]interface{}{
+					"label": map[string]interface{}{
+						"show": true,
+					},
+				},
 			})
 
 			if tree.ID != n.ID {
