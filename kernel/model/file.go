@@ -19,6 +19,7 @@ import (
 	"strings"
 
 	"github.com/88250/gowebdav"
+	"github.com/88250/gulu"
 	"github.com/88250/lute/ast"
 )
 
@@ -235,6 +236,13 @@ func Remove(url, p string) error {
 
 	if strings.HasSuffix(p, "/") {
 		newPath := p[:len(p)-1] + deletedSuffix + "/"
+		exist, err := Exist(url, newPath)
+		if nil != err {
+			return err
+		}
+		if exist {
+			newPath = p[:len(p)-1] + "-" + gulu.Rand.String(7) + deletedSuffix + "/"
+		}
 		if err := dir.Rename(p, newPath); nil != err {
 			return err
 		}
@@ -243,14 +251,22 @@ func Remove(url, p string) error {
 	}
 
 	// 删除文件
+	newPath := p + ".md.json" + deletedSuffix
+	exist, err := Exist(url, newPath)
+	if nil != err {
+		return err
+	}
+	if exist {
+		newPath = p + "-" + gulu.Rand.String(7) + ".md.json" + deletedSuffix
+	}
 
-	if err := dir.Rename(p+".md.json", p+".md.json"+deletedSuffix); nil != err {
+	if err := dir.Rename(p+".md.json", newPath); nil != err {
 		return err
 	}
 	dir.RemoveTree(p)
 
 	// 如果存在 md 文件的话也进行重命名
-	exist, err := dir.Exist(p + ".md")
+	exist, err = dir.Exist(p + ".md")
 	if nil != err {
 		return err
 	}
