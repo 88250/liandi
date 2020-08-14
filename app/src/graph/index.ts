@@ -84,10 +84,6 @@ export class Graph {
                         if (params.dataType === "edge") {
                             return `<div style="font-size: 12px">${params.data.lineStyle.type === "dotted" ? i18n[liandi.config.lang].relativeRelation : i18n[liandi.config.lang].parentRelation}</div>`
                         } else {
-                            let text = params.data.content.substr(0, 16)
-                            if (params.data.content.length > 16) {
-                                text += '...'
-                            }
                             return `<div style="font-size: 12px">${text}</div>
 <div style="font-size: 12px;color: #ccc">${params.data.name}</div>`
                         }
@@ -115,6 +111,8 @@ export class Graph {
                         label: {
                             position: 'right',
                             color: 'auto',
+                            shadowColor: 'red',
+                            shadowBlur: 2,
                             formatter: (params: IEchartsFormatter) => {
                                 if (params.data.category === 0) {
                                     return path.posix.basename(params.data.path);
@@ -145,6 +143,7 @@ export class Graph {
                         lineStyle: {
                             color: 'source',
                             curveness: 0,
+                            opacity: 0.36,
                         },
                         emphasis: {
                             lineStyle: {
