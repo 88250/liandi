@@ -5,7 +5,7 @@ import {i18n} from '../i18n';
 import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
-import {setRangeByWbr, setSelectionFocus} from "../../vditore/src/ts/util/selection";
+import {setSelectionFocus} from "../../vditore/src/ts/util/selection";
 
 export class WebSocketUtil {
     public webSocket: WebSocket;
