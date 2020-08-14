@@ -59,8 +59,6 @@ export class Graph {
             this.resize()
         }
         this.chart.setOption({
-                animationDurationUpdate: 1500,
-                animationEasingUpdate: 'quinticInOut',
                 legend: {
                     data: [{
                         name: i18n[liandi.config.lang].rootBlock,
@@ -102,6 +100,7 @@ export class Graph {
                 },
                 series: [
                     {
+                        animation: false,
                         categories: [{
                             name: i18n[liandi.config.lang].rootBlock,
                             itemStyle: {
