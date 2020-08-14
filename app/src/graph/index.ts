@@ -84,7 +84,7 @@ export class Graph {
                         if (params.dataType === "edge") {
                             return `<div style="font-size: 12px">${params.data.lineStyle.type === "dotted" ? i18n[liandi.config.lang].relativeRelation : i18n[liandi.config.lang].parentRelation}</div>`
                         } else {
-                            return `<div style="font-size: 12px">${text}</div>
+                            return `<div style="font-size: 12px">${params.data.content}</div>
 <div style="font-size: 12px;color: #ccc">${params.data.name}</div>`
                         }
                     },
