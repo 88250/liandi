@@ -7,6 +7,7 @@ import {BlockHint} from "./BlockHint";
 import {hasTopClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {getEditorRange} from "../../vditore/src/ts/util/selection";
 import {escapeHtml} from "../util/escape";
+import {i18n} from "../i18n";
 
 export class Editors {
     private editors: IEditor[] = [];
@@ -33,8 +34,8 @@ export class Editors {
             editor.vditor.destroy();
         }
         editor.vditor = new Vditor(editor.editorElement, {
-            // _lutePath: `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}`,
-            // debugger: true,
+            _lutePath: `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}`,
+            debugger: true,
             icon: 'material',
             lang: liandi.config.lang,
             outline: liandi.config.markdown.outline,
@@ -260,7 +261,10 @@ export class Editors {
             nodeId = currentBlockElement.getAttribute("data-node-id")
         }
         const dataList: IHintData[] = [];
-        data.blocks.forEach(item => {
+        data.blocks.forEach((item, index) => {
+            if (index > 6) {
+                return
+            }
             let iconName = ''
             switch (item.type) {
                 case "NodeDocument":
@@ -292,6 +296,10 @@ export class Editors {
 <span class="ft__smaller ft__secondary">${item.path.substr(1)}</span></span>`,
                 });
             }
+        });
+        dataList.push({
+            value: `((${Lute.NewNodeID()} "${Lute.NewNodeID()}"))`,
+            html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#iconMD"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${i18n[liandi.config.lang].newFile}</span></span>`,
         });
         this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);
     }
