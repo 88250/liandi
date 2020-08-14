@@ -77,7 +77,7 @@ export class Graph {
                     textStyle: {
                         padding: [2, 4, 2, 4],
                         color: '#d1d5da',
-                        backgroundColor: 'rgba(50,50,50,0.7)',
+                        backgroundColor: 'rgba(68, 77, 86, .68)',
                         borderRadius: 3,
                         lineHeight: 14,
                         fontSize: 12,
@@ -88,6 +88,7 @@ export class Graph {
                     textStyle: {
                         color: '#d1d5da',
                     },
+                    backgroundColor: 'rgba(36, 41, 46, .86)',
                     padding: [2, 4, 2, 4],
                     formatter: (params: IEchartsFormatter) => {
                         if (params.dataType === "edge") {
@@ -121,7 +122,7 @@ export class Graph {
                             position: 'right',
                             padding: [2, 4, 2, 4],
                             color: '#d1d5da',
-                            backgroundColor: 'rgba(50,50,50,0.48)',
+                            backgroundColor: 'rgba(68, 77, 86, .68)',
                             fontSize: 10,
                             borderRadius: 3,
                             lineHeight: 12,
