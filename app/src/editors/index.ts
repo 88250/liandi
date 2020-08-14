@@ -34,7 +34,7 @@ export class Editors {
             editor.vditor.destroy();
         }
         editor.vditor = new Vditor(editor.editorElement, {
-            _lutePath: `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}`,
+            // _lutePath: `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}`,
             debugger: true,
             icon: 'material',
             lang: liandi.config.lang,

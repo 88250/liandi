@@ -7,11 +7,11 @@ export abstract class Constants {
     public static readonly UPLOAD_FETCH_ADDRESS: string = 'http://127.0.0.1:6806/upload/fetch';
     public static readonly DOUBLE_DELTA: number = 468;
 
+    public static readonly LIANDI_FIND_SHOW: string = 'liandi-find-show';
     public static readonly LIANDI_EDITOR_SAVE: string = 'liandi-editor-save';
+    public static readonly LIANDI_FILE_NEW: string = 'liandi-file-new';
 
     public static readonly LIANDI_WEBSOCKET_PUT: string = 'liandi-websocket-put';
-
-    public static readonly LIANDI_FIND_SHOW: string = 'liandi-find-show';
 
     public static readonly LIANDI_CONFIG_THEME: string = 'liandi-config-theme';
 

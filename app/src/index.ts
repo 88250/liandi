@@ -167,6 +167,9 @@ class App {
         ipcRenderer.on(Constants.LIANDI_EDITOR_SAVE, () => {
             this.liandi.editors.save(this.liandi);
         });
+        ipcRenderer.on(Constants.LIANDI_FILE_NEW, () => {
+            // TODO newFile(this.liandi)
+        });
     }
 
     private initWindow() {
