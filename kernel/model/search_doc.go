@@ -11,6 +11,7 @@
 package model
 
 import (
+	"path"
 	"strings"
 	"unicode/utf8"
 )
@@ -39,6 +40,7 @@ type Snippet struct {
 	Col     int    `json:"col"`
 	Index   int    `json:"index"`
 	Content string `json:"content"`
+	Type    string `json:"type"`
 }
 
 func (dir *Dir) RemoveIndexDocDir(dirPath string) {
@@ -97,16 +99,33 @@ func Search(keyword string) (ret []*Snippet) {
 }
 
 func searchDoc(keyword string, doc *Doc) (ret []*Snippet) {
-	lines := strings.Split(doc.Content, "\n")
 	index := 0
+	dir := Conf.Dir(doc.URL)
+	// 搜索文档名
+	pos, marked := markSearch(path.Base(doc.Path), keyword)
+	if -1 < pos {
+		ret = append(ret, &Snippet{
+			Dir:  dir,
+			Path: doc.Path,
+			Ln:   0, Col: pos + 1, Index: index,
+			Content: marked,
+			Type:    "title",
+		})
+		index++
+	}
+
+	// 搜索内容
+	lines := strings.Split(doc.Content, "\n")
 	for idx, line := range lines {
-		pos, marked := markSearch(line, keyword)
+		pos, marked = markSearch(line, keyword)
 		if -1 < pos {
-			dir := Conf.Dir(doc.URL)
-			snippet := &Snippet{Dir: dir,
+			ret = append(ret, &Snippet{
+				Dir:  dir,
 				Path: doc.Path,
-				Ln:   idx + 1, Col: pos + 1, Index: index, Content: marked}
-			ret = append(ret, snippet)
+				Ln:   idx + 1, Col: pos + 1, Index: index,
+				Content: marked,
+				Type:    "content",
+			})
 			index++
 		}
 	}
