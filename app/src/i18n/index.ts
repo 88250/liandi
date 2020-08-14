@@ -1,5 +1,6 @@
 export const i18n: II18n = {
     en_US: {
+        debug: 'Developer Tools',
         fileTree:"File Explorer",
         graphView:"Graph View",
         sponsor:"Sponsor",
@@ -62,6 +63,7 @@ export const i18n: II18n = {
         image: 'Image',
     },
     zh_CN: {
+        debug: '开发者工具',
         fileTree:"文件树",
         graphView:"关系图",
         sponsor:"靠爱发电",

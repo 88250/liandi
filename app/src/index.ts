@@ -99,6 +99,11 @@ class App {
                 <use xlink:href="#iconHelp"></use>
             </svg>
         </div>
+        <div id="barBug" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="${i18n[liandi.config.lang].debug}">
+            <svg>
+                <use xlink:href="#iconBug"></use>
+            </svg>
+        </div>
         <div id="barSettings" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="${i18n[liandi.config.lang].config} <Double Shift>">
             <svg>
                 <use xlink:href="#iconSettings"></use>
@@ -139,6 +144,9 @@ class App {
                 url: `${Constants.WEBDAV_ADDRESS}/`,
                 path: path.posix.join(Constants.APP_DIR, 'public/zh_CN/help')
             });
+        });
+        document.getElementById('barBug').addEventListener('click', function () {
+            remote.getCurrentWindow().webContents.openDevTools({mode: 'bottom'})
         });
         document.getElementById('barSettings').addEventListener('click', () => {
             initSearch(this.liandi, 'settings');
