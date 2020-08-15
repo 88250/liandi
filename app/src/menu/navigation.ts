@@ -20,6 +20,7 @@ export const initNavigationMenu = (liandi: ILiandi) => {
                 url: itemData.dir.url
             });
             itemData.target.parentElement.remove();
+            liandi.graph.render(liandi);
         }
     }));
     menu.append(showInFolder(liandi));

@@ -2,11 +2,19 @@ import {hasClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {Constants} from "../constants";
 
 export class BlockHint {
-    private element: HTMLElement
+    private element = document.getElementById("editorBlockHint")
     private blockRefElement: HTMLElement
+    private timeoutId: number
 
     constructor() {
-        this.element = document.getElementById("editorBlockHint")
+        this.element.addEventListener("mouseenter", (event: MouseEvent & { target: HTMLElement }) => {
+            clearTimeout(this.timeoutId);
+        });
+        this.element.addEventListener("mouseleave", (event: MouseEvent & { target: HTMLElement }) => {
+            this.timeoutId = window.setTimeout(() => {
+                this.element.style.display = "none"
+            }, 300)
+        });
     }
 
     public initEvent(liandi: ILiandi, element: HTMLElement) {
@@ -14,12 +22,13 @@ export class BlockHint {
             const blockRefElement = hasClosestByAttribute(event.target, "data-type", "block-ref")
             if (blockRefElement) {
                 this.show(liandi, blockRefElement)
+                clearTimeout(this.timeoutId);
+                blockRefElement.onmouseleave = () => {
+                    this.timeoutId = window.setTimeout(() => {
+                        this.element.style.display = "none"
+                    }, 300)
+                }
             }
-        });
-
-        element.addEventListener("mouseout", () => {
-            console.log('out')
-            // this.element.style.display = "none"
         });
     }
 
@@ -30,7 +39,7 @@ export class BlockHint {
         })
     }
 
-    public getBlock(liandi:ILiandi, data: { id: string, block: IBlock, callback: string }) {
+    public getBlock(liandi: ILiandi, data: { id: string, block: IBlock, callback: string }) {
         if (!data.block) {
             return;
         }
@@ -43,7 +52,7 @@ export class BlockHint {
         }
         const elementRect = this.blockRefElement.getBoundingClientRect()
         this.element.innerHTML = data.block.content;
-        const top = elementRect.top + elementRect.height
+        const top = elementRect.top + elementRect.height + 5
         const left = elementRect.left
         this.element.setAttribute("style", `display:block;top:${top}px;left:${left}px`)
         // 展现在上部
