@@ -109,6 +109,7 @@ export class WebSocketUtil {
                 case 'mountremote':
                     destroyDialog();
                     liandi.navigation.onMount(liandi, response.data)
+                    liandi.graph.render(liandi);
                     break;
                 case 'ls':
                     liandi.navigation.onLs(liandi, response.data);
