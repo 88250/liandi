@@ -5,7 +5,7 @@ go 1.12
 require (
 	github.com/88250/gowebdav v1.0.0
 	github.com/88250/gulu v1.1.1
-	github.com/88250/lute v1.6.1-0.20200815081430-0a2ae13e08f6
+	github.com/88250/lute v1.6.1-0.20200815103830-a0ce77921023
 	github.com/elazarl/goproxy v0.0.0-20200315184450-1f3cb6622dad // indirect
 	github.com/elazarl/goproxy/ext v0.0.0-20200315184450-1f3cb6622dad // indirect
 	github.com/gin-gonic/gin v1.6.3
