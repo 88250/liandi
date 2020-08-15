@@ -8,6 +8,7 @@ import {hasTopClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {getEditorRange} from "../../vditore/src/ts/util/selection";
 import {escapeHtml} from "../util/escape";
 import {i18n} from "../i18n";
+import {processRemoveDataRender1} from "../../vditore/src/ts/ir/process";
 
 export class Editors {
     private editors: IEditor[] = [];
@@ -186,6 +187,7 @@ export class Editors {
         if (!liandi.current.dir || !this.currentEditor || (this.currentEditor && this.currentEditor.saved)) {
             return;
         }
+        processRemoveDataRender1(this.currentEditor.vditor.vditor.ir.element);
         liandi.ws.send('put', {
             url: liandi.current.dir.url,
             path: liandi.current.path,
