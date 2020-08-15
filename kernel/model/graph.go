@@ -12,13 +12,19 @@ package model
 
 import (
 	"strings"
+	"sync"
 	"unicode/utf8"
 
 	"github.com/88250/gulu"
 	"github.com/88250/lute/ast"
 )
 
+var graphLock = &sync.Mutex{}
+
 func Graph(keyword string) (nodes []interface{}, links []interface{}) {
+	graphLock.Lock()
+	defer graphLock.Unlock()
+
 	for _, tree := range trees {
 		delete(treeBacklinks, tree)
 	}
