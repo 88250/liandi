@@ -75,8 +75,7 @@ func Search(keyword string) (ret []*Snippet) {
 				return ast.WalkStop
 			}
 
-			text := n.Text()
-
+			text := renderSearchBlockText(n)
 			pos, marked := markSearch(text, keyword)
 			if -1 < pos {
 				ret = append(ret, &Snippet{

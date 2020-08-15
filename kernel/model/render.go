@@ -17,7 +17,7 @@ import (
 	"github.com/88250/lute/util"
 )
 
-func renderSearchBlock(node *ast.Node) (ret string) {
+func renderSearchBlockText(node *ast.Node) (ret string) {
 	ast.Walk(node, func(n *ast.Node, entering bool) ast.WalkStatus {
 		if (ast.NodeText == n.Type || ast.NodeLinkText == n.Type || ast.NodeBlockRefText == n.Type || ast.NodeCodeSpanContent == n.Type ||
 			ast.NodeCodeBlockCode == n.Type || ast.NodeLinkTitle == n.Type || ast.NodeMathBlockContent == n.Type || ast.NodeInlineMathContent == n.Type ||
@@ -29,7 +29,7 @@ func renderSearchBlock(node *ast.Node) (ret string) {
 	return
 }
 
-func renderBlock(node *ast.Node) string {
+func renderBlockHTML(node *ast.Node) string {
 	root := &ast.Node{Type: ast.NodeDocument}
 	root.AppendChild(node)
 	tree := &parse.Tree{Root: root, Context: &parse.Context{Option: Lute.Options}}
