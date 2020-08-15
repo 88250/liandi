@@ -8,10 +8,10 @@ export class BlockHint {
     private timeoutId: number
 
     constructor() {
-        this.element.addEventListener("mouseenter", (event: MouseEvent & { target: HTMLElement }) => {
+        this.element.addEventListener("mouseenter", (event) => {
             clearTimeout(this.timeoutId);
         });
-        this.element.addEventListener("mouseleave", (event: MouseEvent & { target: HTMLElement }) => {
+        this.element.addEventListener("mouseleave", () => {
             this.timeoutId = window.setTimeout(() => {
                 this.element.style.display = "none"
             }, 300)
@@ -80,5 +80,5 @@ export class BlockHint {
                 callback: Constants.CB_GETBLOCK_EMBED
             })
         });
-    };
+    }
 }

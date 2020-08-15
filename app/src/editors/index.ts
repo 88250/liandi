@@ -2,6 +2,7 @@ import {rename} from '../util/rename';
 import Vditor from '../../vditore/src';
 import {Constants} from '../constants';
 import * as path from 'path';
+import * as process from 'process';
 import {ipcRenderer} from 'electron';
 import {BlockHint} from "./BlockHint";
 import {hasTopClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
@@ -35,8 +36,8 @@ export class Editors {
             editor.vditor.destroy();
         }
         editor.vditor = new Vditor(editor.editorElement, {
-            _lutePath: `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}`,
-            debugger: true,
+            _lutePath: process.env.NODE_ENV === 'development' ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
+            debugger: process.env.NODE_ENV === 'development',
             icon: 'material',
             lang: liandi.config.lang,
             outline: liandi.config.markdown.outline,
