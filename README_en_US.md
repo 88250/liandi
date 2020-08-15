@@ -89,7 +89,7 @@ Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi
 
 ### Source building
 
-(I'm very sorry, part of the editor code is not yet open source, please don't waste time trying to compile)
+(I'm very sorry, part of the editor code is not yet open source in the latest codebase, please don't waste time trying to compile. If you want to keep trying, please use tag [v1.1.3](https://github.com/88250/liandi/tree/v1.1.3).)
 
 1. Install Go, Node environment
 2. Run the build script in the root directory of the project
