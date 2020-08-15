@@ -1,5 +1,6 @@
 import {hasClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {Constants} from "../constants";
+import {scrollCenter} from "../../vditore/src/ts/util/editorCommonEvent";
 
 export class BlockHint {
     private element = document.getElementById("editorBlockHint")
@@ -53,6 +54,7 @@ export class BlockHint {
         if (data.callback === Constants.CB_GETBLOCK_EMBED) {
             this.blockRefElement.setAttribute("data-render", "1")
             this.blockRefElement.innerHTML = data.block.content
+            scrollCenter(liandi.editors.currentEditor.vditor.vditor);
             return;
         }
         const elementRect = this.blockRefElement.getBoundingClientRect()
