@@ -124,7 +124,7 @@ func GetBlock(id string) (ret *Block) {
 			}
 
 			if id == n.ID {
-				text := n.Text()
+				text := renderBlock(n)
 				ret = &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Type: n.Type.String(), Content: text}
 				return ast.WalkStop
 			}
@@ -159,7 +159,7 @@ func SearchBlock(url, keyword string) (ret []*Block) {
 				return ast.WalkStop
 			}
 
-			text := n.Text()
+			text := renderSearchBlock(n)
 			if ast.NodeDocument == n.Type {
 				text = tree.Name + "  " + text
 			}
