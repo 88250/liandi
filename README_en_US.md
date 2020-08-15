@@ -89,6 +89,8 @@ Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi
 
 ### Source building
 
+(I'm very sorry, part of the editor code is not yet open source, please don't waste time trying to compile)
+
 1. Install Go, Node environment
 2. Run the build script in the root directory of the project
 3. After the build is successful, the installation package will be generated under app / build
@@ -110,7 +112,8 @@ If you want to modify the source code, please set up the development environment
 * The kernel implements WebDAV server and client
 * File access (including operation of local files) through WebDAV client
 * Markdown files are loaded into memory when starting and mounting to achieve full-text search
-* Achieve Markdown Instant Rendering editing mode with Vditor editor
+* Markdown Instant Rendering editing with Vditor editor
+* Use JSON to persist note data
 
 ## 📜 Documentation
 
