@@ -99,7 +99,6 @@ export class WebSocketUtil {
                     this.isFirst = false;
                     break;
                 case 'put':
-                    showMessage(i18n[liandi.config.lang].saveSuccess);
                     liandi.backlinks.getBacklinks(liandi);
                     liandi.graph.render(liandi);
                     break;
