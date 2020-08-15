@@ -142,7 +142,7 @@ class App {
             liandi.navigation.show();
             liandi.ws.send('mount', {
                 url: `${Constants.WEBDAV_ADDRESS}/`,
-                path: path.posix.join(Constants.APP_DIR, 'public/zh_CN/帮助文档')
+                path: path.posix.join(Constants.APP_DIR, 'public/zh_CN/链滴笔记用户指南')
             });
         });
         document.getElementById('barBug').addEventListener('click', function () {
