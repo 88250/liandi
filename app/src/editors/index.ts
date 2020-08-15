@@ -150,6 +150,7 @@ export class Editors {
             },
             input: () => {
                 editor.saved = false;
+                this.currentEditor.inputElement.classList.add("editor__input--unsave")
                 // TODO auto save
             }
         });
@@ -191,6 +192,7 @@ export class Editors {
             content: this.currentEditor.vditor.vditor.ir.element.innerHTML
         });
         this.currentEditor.saved = true;
+        this.currentEditor.inputElement.classList.remove("editor__input--unsave")
     }
 
     public open(liandi: ILiandi, url: string, path: string) {

@@ -11,6 +11,11 @@
     line-height: 20px;
     text-align: center;
 
+    &--unsave {
+      color: var(--text-secondary-color);
+      font-weight: 900;
+    }
+
     &:focus {
       background-color: var(--textarea-background-color);
     }
@@ -24,6 +29,7 @@
 
     .item {
       padding: 10px;
+      font-size: 18px;
     }
   }
 
