@@ -1,5 +1,6 @@
 .editor {
   min-width: 180px;
+
   &__input {
     font-size: 16px;
     border: 0;
@@ -34,17 +35,14 @@
   }
 
   &__blockhint {
-    background-color: var(--panel-background-color);
+    background-color: var(--focus-background-color);
     position: absolute;
     box-shadow: var(--panel-shadow);
     border-radius: 3px;
     z-index: 4;
-    line-height: 20px;
     display: none;
-    padding: 6px 10px;
-    font-size: 14px;
+    padding: 10px;
     max-width: 50%;
-    color: var(--text-secondary-color);
     overflow: auto;
     word-break: break-word;
   }
