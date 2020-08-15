@@ -190,7 +190,7 @@ export class Editors {
         liandi.ws.send('put', {
             url: liandi.current.dir.url,
             path: liandi.current.path,
-            content: processRemoveDataRender1(this.currentEditor.vditor.vditor.ir.element, 'innerHTML');
+            content: processRemoveDataRender1(this.currentEditor.vditor.vditor.ir.element, 'innerHTML')
         });
         this.currentEditor.saved = true;
         this.currentEditor.inputElement.classList.remove("editor__input--unsave")
