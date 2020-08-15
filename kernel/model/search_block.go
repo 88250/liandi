@@ -159,7 +159,7 @@ func SearchBlock(url, keyword string) (ret []*Block) {
 				return ast.WalkStop
 			}
 
-			text := renderSearchBlockText(n)
+			text := renderBlockText(n)
 			if ast.NodeDocument == n.Type {
 				text = tree.Name + "  " + text
 			}

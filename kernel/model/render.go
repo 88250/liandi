@@ -17,11 +17,11 @@ import (
 	"github.com/88250/lute/util"
 )
 
-func renderSearchBlockText(node *ast.Node) (ret string) {
+func renderBlockText(node *ast.Node) (ret string) {
 	ast.Walk(node, func(n *ast.Node, entering bool) ast.WalkStatus {
-		if (ast.NodeText == n.Type || ast.NodeLinkText == n.Type || ast.NodeBlockRefText == n.Type || ast.NodeCodeSpanContent == n.Type ||
+		if entering && (ast.NodeText == n.Type || ast.NodeLinkText == n.Type || ast.NodeBlockRefText == n.Type || ast.NodeCodeSpanContent == n.Type ||
 			ast.NodeCodeBlockCode == n.Type || ast.NodeLinkTitle == n.Type || ast.NodeMathBlockContent == n.Type || ast.NodeInlineMathContent == n.Type ||
-			ast.NodeYamlFrontMatterContent == n.Type) && entering {
+			ast.NodeYamlFrontMatterContent == n.Type) {
 			ret += util.BytesToStr(n.Tokens)
 		}
 		return ast.WalkContinue
@@ -31,8 +31,11 @@ func renderSearchBlockText(node *ast.Node) (ret string) {
 
 func renderBlockHTML(node *ast.Node) string {
 	root := &ast.Node{Type: ast.NodeDocument}
-	root.AppendChild(node)
 	tree := &parse.Tree{Root: root, Context: &parse.Context{Option: Lute.Options}}
 	renderer := render.NewHtmlRenderer(tree)
-	return util.BytesToStr(renderer.Render())
+	ast.Walk(node, func(n *ast.Node, entering bool) ast.WalkStatus {
+		rendererFunc := renderer.RendererFuncs[n.Type]
+		return rendererFunc(n, entering)
+	})
+	return renderer.Writer.String()
 }
