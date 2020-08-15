@@ -13,13 +13,16 @@ package model
 import (
 	"bytes"
 	"errors"
+	"sync"
+
 	"github.com/88250/gulu"
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
 )
 
 var (
-	treeBacklinks = map[*parse.Tree]map[*ast.Node][]*BacklinkRef{} // 反向链接关系：块被哪些块用了
+	treeBacklinks     = map[*parse.Tree]map[*ast.Node][]*BacklinkRef{} // 反向链接关系：块被哪些块用了
+	treeBacklinksLock = &sync.Mutex{}                                  // 全局反链锁，构建反链和图的时候需要加锁
 )
 
 type BacklinkRef struct {
@@ -45,6 +48,9 @@ func Backlinks(url, path string) (ret []*BacklinkRefBlock, err error) {
 }
 
 func indexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
+	treeBacklinksLock.Lock()
+	defer treeBacklinksLock.Unlock()
+
 	ret = []*BacklinkRefBlock{}
 	// 找到当前块列表
 	var currentBlocks []*ast.Node

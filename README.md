@@ -91,6 +91,8 @@
 
 ### 源码构建
 
+（非常抱歉，目前最新代码库中编辑器部分代码尚未开源，请勿浪费时间尝试编译。如果你想继续尝试编译，可以用 [v1.1.3](https://github.com/88250/liandi/tree/v1.1.3) 版本的代码）
+
 1. 安装 Go、Node 环境
 2. 运行项目根目录下的 build 脚本
 3. 构建成功后将在 app/build 下生成安装包
@@ -112,11 +114,13 @@
 * 内核实现 WebDAV 服务端和客户端
 * 文件存取（包括操作本地文件）通过 WebDAV 客户端进行
 * Markdown 文件启动和挂载时加载到内存实现全文搜索
-* 通过 Vditor 编辑器实现 Markdown 即时渲染编辑模式
+* Vditor 编辑器实现 Markdown 即时渲染编辑
+* 使用 JSON 持久化笔记数据
 
 ## 📜 文档
 
 * [链滴笔记 - 一款桌面端笔记应用，支持 Windows、Mac 和 Linux](https://hacpai.com/article/1582274499427)
+* [Markdown 实现块级引用双向链接的探索](https://hacpai.com/article/1597226949061)
 * [链滴笔记路线图](https://hacpai.com/article/1579786655216)
 
 ## 🏘️ 社区

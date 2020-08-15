@@ -89,6 +89,8 @@ Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi
 
 ### Source building
 
+(I'm very sorry, part of the editor code is not yet open source in the latest codebase, please don't waste time trying to compile. If you want to keep trying, please use tag [v1.1.3](https://github.com/88250/liandi/tree/v1.1.3))
+
 1. Install Go, Node environment
 2. Run the build script in the root directory of the project
 3. After the build is successful, the installation package will be generated under app / build
@@ -110,11 +112,13 @@ If you want to modify the source code, please set up the development environment
 * The kernel implements WebDAV server and client
 * File access (including operation of local files) through WebDAV client
 * Markdown files are loaded into memory when starting and mounting to achieve full-text search
-* Achieve Markdown Instant Rendering editing mode with Vditor editor
+* Markdown Instant Rendering editing with Vditor editor
+* Use JSON to persist note data
 
 ## 📜 Documentation
 
 * [LianDi Note - an open source desktop note application that supports Windows, Mac and Linux](https://hacpai.com/article/1582274499427)
+* [Markdown implements the exploration of block-level reference bidirectional links](https://hacpai.com/article/1597226949061)
 * [LianDi Note roadmap](https://hacpai.com/article/1579786655216)
 
 ## 🏘️ Community
