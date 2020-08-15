@@ -294,10 +294,11 @@ export class Editors {
                     break;
             }
             if (nodeId !== item.id) {
+                const title = escapeHtml(item.path.substr(1))
                 dataList.push({
-                    value: `((${item.id} ""))`,
+                    value: `((${item.id} "${iconName === "iconMD" ? title : ""}"))`,
                     html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#${iconName}"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span><span class="fn__flex-1 fn__flex-shrink0" style="min-width: 10px"></span>
-<span class="ft__smaller ft__secondary">${escapeHtml(item.path.substr(1))}</span></span>`,
+<span class="ft__smaller ft__secondary">${title}</span></span>`,
                 });
             }
         });
@@ -308,7 +309,7 @@ export class Editors {
         this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);
     }
 
-    public onGetBlock(liandi:ILiandi, data: { id: string, block: IBlock, callback: string }) {
+    public onGetBlock(liandi: ILiandi, data: { id: string, block: IBlock, callback: string }) {
         this.blockHint.getBlock(liandi, data);
     }
 }
