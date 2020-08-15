@@ -95,7 +95,7 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 		for _, backlinkRef := range backlinks[currentBlock] {
 			var blocks []*Block
 			for _, refNode := range backlinkRef.RefNodes {
-				content := renderBlockHTML(refNode)
+				content := renderBlockText(refNode)
 				block := &Block{URL: backlinkRef.URL, Path: backlinkRef.Path, ID: refNode.ID, Type: refNode.Type.String(), Content: content}
 				blocks = append(blocks, block)
 			}
