@@ -40,7 +40,7 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 				return ast.WalkContinue
 			}
 
-			text := n.Text()
+			text := renderBlockText(n)
 			if ast.NodeDocument == n.Type {
 				text = tree.Name + "  " + text
 			}

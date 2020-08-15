@@ -13,8 +13,6 @@ package model
 import (
 	"bytes"
 	"errors"
-	"strings"
-
 	"github.com/88250/gulu"
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
@@ -97,8 +95,8 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 		for _, backlinkRef := range backlinks[currentBlock] {
 			var blocks []*Block
 			for _, refNode := range backlinkRef.RefNodes {
-				text := strings.TrimSpace(refNode.Text())
-				block := &Block{URL: backlinkRef.URL, Path: backlinkRef.Path, ID: refNode.ID, Type: refNode.Type.String(), Content: text}
+				content := renderBlockHTML(refNode)
+				block := &Block{URL: backlinkRef.URL, Path: backlinkRef.Path, ID: refNode.ID, Type: refNode.Type.String(), Content: content}
 				blocks = append(blocks, block)
 			}
 			if nil != blocks {

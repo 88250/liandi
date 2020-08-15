@@ -15,6 +15,7 @@ import (
 	"github.com/88250/lute/parse"
 	"github.com/88250/lute/render"
 	"github.com/88250/lute/util"
+	"strings"
 )
 
 func renderBlockText(node *ast.Node) (ret string) {
@@ -26,6 +27,7 @@ func renderBlockText(node *ast.Node) (ret string) {
 		}
 		return ast.WalkContinue
 	})
+	ret = strings.TrimSpace(ret)
 	return
 }
 
@@ -37,5 +39,5 @@ func renderBlockHTML(node *ast.Node) string {
 		rendererFunc := renderer.RendererFuncs[n.Type]
 		return rendererFunc(n, entering)
 	})
-	return renderer.Writer.String()
+	return strings.TrimSpace(renderer.Writer.String())
 }
