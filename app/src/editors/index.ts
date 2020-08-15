@@ -187,11 +187,10 @@ export class Editors {
         if (!liandi.current.dir || !this.currentEditor || (this.currentEditor && this.currentEditor.saved)) {
             return;
         }
-        processRemoveDataRender1(this.currentEditor.vditor.vditor.ir.element);
         liandi.ws.send('put', {
             url: liandi.current.dir.url,
             path: liandi.current.path,
-            content: this.currentEditor.vditor.vditor.ir.element.innerHTML
+            content: processRemoveDataRender1(this.currentEditor.vditor.vditor.ir.element, 'innerHTML');
         });
         this.currentEditor.saved = true;
         this.currentEditor.inputElement.classList.remove("editor__input--unsave")
