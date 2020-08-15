@@ -50,6 +50,11 @@ export class BlockHint {
         if (data.block.content.trim() === "") {
             return;
         }
+        if (data.callback === Constants.CB_GETBLOCK_EMBED) {
+            this.blockRefElement.setAttribute("data-render", "1")
+            this.blockRefElement.innerHTML = data.block.content
+            return;
+        }
         const elementRect = this.blockRefElement.getBoundingClientRect()
         this.element.innerHTML = data.block.content;
         const top = elementRect.top + elementRect.height + 5
@@ -64,4 +69,14 @@ export class BlockHint {
             this.element.style.right = "0";
         }
     }
+
+    public blockRender(liandi: ILiandi) {
+        liandi.editors.currentEditor.vditor.vditor.ir.element.querySelectorAll("span[data-type='block-ref-embed'] span[data-render='2']").forEach((item: HTMLElement) => {
+            this.blockRefElement = item
+            liandi.ws.send("getblock", {
+                id: item.getAttribute("data-block-def-id"),
+                callback: Constants.CB_GETBLOCK_EMBED
+            })
+        });
+    };
 }

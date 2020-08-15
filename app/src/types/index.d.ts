@@ -47,6 +47,10 @@ declare interface IEchartsFormatter {
     }
 }
 
+declare interface IBlockHint {
+    blockRender: (liandi: ILiandi) => void
+}
+
 declare interface IEditor {
     inputElement: HTMLInputElement;
     editorElement: HTMLElement;
@@ -118,6 +122,7 @@ declare interface ILiandi {
     };
     editors?: {
         currentEditor: IEditor;
+        blockHint: IBlockHint;
         focus: () => void;
         resize: () => void;
         save: (liandi: ILiandi) => void;

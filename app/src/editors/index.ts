@@ -12,7 +12,7 @@ import {i18n} from "../i18n";
 export class Editors {
     private editors: IEditor[] = [];
     private editorsElement: HTMLElement;
-    private blockHint: BlockHint;
+    public blockHint: BlockHint;
     public currentEditor: IEditor;
 
     constructor() {
