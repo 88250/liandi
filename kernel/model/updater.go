@@ -16,22 +16,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/88250/gulu"
 	"github.com/parnurzeal/gorequest"
 )
-
-func CheckUpdatePeriodically() {
-	go func() {
-		for range time.Tick(time.Minute * 30) {
-			CheckUpdate(false)
-		}
-	}()
-}
 
 var checkUpdateLock = &sync.Mutex{}
 
 func CheckUpdate(now bool) {
-	defer gulu.Panic.Recover(nil)
 	checkUpdateLock.Lock()
 	defer checkUpdateLock.Unlock()
 

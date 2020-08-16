@@ -37,7 +37,6 @@ func init() {
 
 	model.InitProcess()
 	go model.ParentExited()
-	model.CheckUpdatePeriodically()
 }
 
 func main() {
