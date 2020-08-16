@@ -13,6 +13,7 @@ package model
 import (
 	"path"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
@@ -28,8 +29,22 @@ type Block struct {
 	URL     string `json:"url"`
 	Path    string `json:"path"`
 	ID      string `json:"id"`
-	Type    string `json:"type"`
 	Content string `json:"content"`
+	Type    string `json:"type"`
+}
+
+type Snippet struct {
+	Dir     *Dir   `json:"dir"`
+	Path    string `json:"path"`
+	Index   int    `json:"index"`
+	Content string `json:"content"`
+	Type    string `json:"type"`
+}
+
+func InitIndex() {
+	for _, dir := range Conf.Dirs {
+		go dir.Index()
+	}
 }
 
 func (dir *Dir) MoveTree(p, newPath string) {
@@ -190,4 +205,87 @@ func isSearchBlockSkipNode(node *ast.Node) bool {
 		ast.NodeMathBlock == node.Type || ast.NodeInlineMath == node.Type ||
 		ast.NodeCodeSpan == node.Type || ast.NodeHardBreak == node.Type || ast.NodeSoftBreak == node.Type ||
 		ast.NodeHTMLEntity == node.Type || ast.NodeYamlFrontMatter == node.Type
+}
+
+func Search(keyword string) (ret []*Snippet) {
+	ret = []*Snippet{}
+	if "" == keyword {
+		return
+	}
+
+	idx := 0
+	for _, tree := range trees {
+		dir := Conf.Dir(tree.URL)
+		pos, marked := markSearch(tree.Name, keyword)
+		if -1 < pos {
+			ret = append(ret, &Snippet{
+				Dir:     dir,
+				Path:    tree.Path,
+				Index:   idx,
+				Content: marked,
+				Type:    "title",
+			})
+			idx++
+		}
+	}
+
+	for _, tree := range trees {
+		dir := Conf.Dir(tree.URL)
+		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+			if !entering {
+				return ast.WalkContinue
+			}
+
+			if ast.NodeDocument == n.Type || ast.NodeDocument != n.Parent.Type {
+				// 仅支持根节点的直接子节点
+				return ast.WalkContinue
+			}
+
+			if isSearchBlockSkipNode(n) {
+				return ast.WalkStop
+			}
+
+			text := renderBlockText(n)
+			pos, marked := markSearch(text, keyword)
+			if -1 < pos {
+				ret = append(ret, &Snippet{
+					Dir:     dir,
+					Path:    tree.Path,
+					Index:   idx,
+					Content: marked,
+					Type:    "content",
+				})
+				idx++
+			}
+
+			if 16 <= len(ret) {
+				return ast.WalkStop
+			}
+
+			if ast.NodeList == n.Type {
+				return ast.WalkSkipChildren
+			}
+			return ast.WalkContinue
+		})
+		idx++
+	}
+	return
+}
+
+func markSearch(text, keyword string) (pos int, marked string) {
+	if pos = strings.Index(strings.ToLower(text), strings.ToLower(keyword)); -1 != pos {
+		var before []rune
+		var count int
+		for i := pos; 0 < i; { // 关键字前面太长的话缩短一些
+			r, size := utf8.DecodeLastRuneInString(text[:i])
+			i -= size
+			before = append([]rune{r}, before...)
+			count++
+			if 32 < count {
+				break
+			}
+		}
+		marked = string(before) + "<mark>" + text[pos:pos+len(keyword)] + "</mark>" + text[pos+len(keyword):]
+	}
+	return
 }
