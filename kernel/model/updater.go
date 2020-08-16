@@ -21,13 +21,10 @@ import (
 
 var checkUpdateLock = &sync.Mutex{}
 
-func CheckUpdate(now bool) {
+func CheckUpdate() {
 	checkUpdateLock.Lock()
 	defer checkUpdateLock.Unlock()
 
-	if !now {
-		time.Sleep(16 * time.Second)
-	}
 	Logger.Info("开始检查更新")
 
 	result := map[string]interface{}{}
@@ -43,9 +40,7 @@ func CheckUpdate(now bool) {
 	ver := result["ver"].(string)
 	if ver <= Ver {
 		Logger.Infof(Conf.lang(10)+" v%s", Ver)
-		if now { // 定时检查的话不弹提示，只有用户手动触发更新检查才弹
-			pushMsg(Conf.lang(10), 3000)
-		}
+		pushMsg(Conf.lang(10), 3000)
 		return
 	}
 

@@ -17,7 +17,7 @@ type checkupdate struct {
 }
 
 func (cmd *checkupdate) Exec() {
-	model.CheckUpdate(true)
+	model.CheckUpdate()
 }
 
 func (cmd *checkupdate) Name() string {
