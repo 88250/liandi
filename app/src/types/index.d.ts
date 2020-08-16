@@ -1,5 +1,13 @@
 interface Window {
     liandi: ILiandi
+    layouts: ILayoutOptions[]
+}
+
+declare interface ILayoutOptions {
+    parent?: { element: HTMLElement, direction: string };
+    direction?: string;
+    size?: string
+    index?: number
 }
 
 declare interface IFile {
