@@ -7,7 +7,8 @@ declare interface ILayoutOptions {
     parent?: { element: HTMLElement, direction: string };
     direction?: string;
     size?: string
-    index?: number
+    id?: string
+    resize?:string
 }
 
 declare interface IFile {

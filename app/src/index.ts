@@ -22,8 +22,8 @@ class App {
         ]
         layouts[1].children = [
             new Layout({parent: layouts[1], size: "25%"}),
-            new Layout({parent: layouts[1]}),
-            new Layout({parent: layouts[1], size: "25%"}),
+            new Layout({parent: layouts[1], resize:'lr'}),
+            new Layout({parent: layouts[1], size: "25%", resize:'lr'}),
         ];
 
         (layouts[1].children[0] as Layout).addChild(new Wnd({layout: layouts[1].children[0] as Layout}));

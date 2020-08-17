@@ -1,13 +1,15 @@
 import {Layout} from "./index";
 import {genUUID} from "../util/genUUID";
+import {addResize} from "./util";
 
 export class Wnd {
     public id: string
     public layout: Layout
     public element: HTMLElement
+    public resizeElement: HTMLElement
     public close: boolean
 
-    constructor(options: { layout: Layout, close?: boolean }) {
+    constructor(options: { layout: Layout, close?: boolean, resize?: string }) {
         count++;
         this.id = genUUID()
         this.close = typeof options.close === "undefined" ? true : options.close
@@ -22,6 +24,7 @@ export class Wnd {
 </div>`
         this.layout = options.layout
         this.layout.element.append(this.element)
+        addResize(this, options.resize);
         this.element.querySelector("button[data-type='lr']").addEventListener('click', () => {
             this.spilt('lr')
         })
@@ -41,14 +44,14 @@ export class Wnd {
     private spilt(direction: string) {
         // TODO new panel & ws
         if (direction === this.layout.direction) {
-            this.layout.addChild(new Wnd({layout: this.layout}))
+            this.layout.addChild(new Wnd({layout: this.layout, resize: direction}))
         } else {
             this.layout.children.find((item, index) => {
                 if (item.id === this.id) {
                     const layout = new Layout({
                         direction,
                         parent: this.layout,
-                        index
+                        id: item.id
                     })
                     this.layout.addChild(layout, index);
                     this.layout.children.splice(index + 1, 1);
@@ -56,7 +59,7 @@ export class Wnd {
                     layout.element.append(item.element);
                     layout.children.push(item);
                     (item as Wnd).layout = layout;
-                    layout.addChild(new Wnd({layout}));
+                    layout.addChild(new Wnd({layout, resize: direction}));
                     return true
                 }
             })
@@ -64,33 +67,30 @@ export class Wnd {
     }
 
     remove() {
-        // TODO destroy panel & ws
-        if (this.layout.children.length === 1) {
-            if (this.layout.direction !== this.layout.parent.direction && this.layout.parent.children.length === 1) {
-                this.element.parentElement.parentElement.remove()
-                this.layout.parent.parent.children.find((item, index) => {
-                    if (item.id === this.layout.parent.id) {
-                        this.layout.parent.parent.children.splice(index, 1);
-                        return true
+        const removeIt = (element: HTMLElement, layout: Layout, id: string) => {
+            element.remove();
+            layout.children.find((item, index) => {
+                if (item.id === id) {
+                    // TODO destroy panel & ws
+                    if (item.resizeElement) {
+                        item.resizeElement.remove();
+                    } else if (index === 0) {
+                        layout.children[index + 1].resizeElement.remove();
                     }
-                })
-            } else {
-                this.element.parentElement.remove()
-                this.layout.parent.children.find((item, index) => {
-                    if (item.id === this.layout.id) {
-                        this.layout.parent.children.splice(index, 1);
-                        return true
-                    }
-                })
-            }
-        } else {
-            this.element.remove();
-            this.layout.children.find((item, index) => {
-                if (item.id === this.id) {
-                    this.layout.children.splice(index, 1);
+                    layout.children.splice(index, 1);
                     return true
                 }
             })
+        }
+
+        if (this.layout.children.length === 1) {
+            if (this.layout.direction !== this.layout.parent.direction && this.layout.parent.children.length === 1) {
+                removeIt(this.element.parentElement.parentElement, this.layout.parent.parent, this.layout.parent.id)
+            } else {
+                removeIt(this.element.parentElement, this.layout.parent, this.layout.id)
+            }
+        } else {
+            removeIt(this.element, this.layout, this.id)
         }
     }
 }
