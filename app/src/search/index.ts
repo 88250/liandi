@@ -9,7 +9,8 @@ import {image} from '../config/image';
 import {help} from '../config/help';
 import {escapeHtml} from "../util/escape";
 
-export const initSearch = (liandi: ILiandi, type = 'search') => {
+export const initSearch = (type = 'search') => {
+    const liandi = window.liandi
     dialog({
         content: `<tab-panel>
   <ul slot="tab" class="tab fn__flex">

@@ -9,6 +9,9 @@ import {i18n} from "./i18n";
 import {initSearch} from "./search";
 import {Layout} from "./layout";
 import {Wnd} from "./layout/wnd";
+import {WebSocketUtil} from "./websocket";
+import {Find} from "./search/Find";
+import {doubleShift} from "./util/doubleShift";
 
 class App {
     public liandi: ILiandi;
@@ -25,106 +28,89 @@ class App {
             new Layout({parent: layouts[1], size: "25%", resize: 'lr'}),
         ];
 
-        layouts[0].addChild(new Wnd({layout: layouts[0], close: 'none'}));
-        (layouts[1].children[0] as Layout).addChild(new Wnd({layout: layouts[1].children[0] as Layout, close: 'none'}));
-        (layouts[1].children[1] as Layout).addChild(new Wnd({layout: layouts[1].children[1] as Layout, close: 'empty'}));
-        (layouts[1].children[2] as Layout).addChild(new Wnd({layout: layouts[1].children[2] as Layout, close: 'none'}));
-        layouts[2].addChild(new Wnd({layout: layouts[2], close: 'none'}));
-        // this.initBar()
-        window.layouts = layouts
-        // this.liandi = {
-        //     current: {
-        //         path: '',
-        //     },
-        // };
-        // this.liandi.ws = new WebSocketUtil(this.liandi, () => {
-        //     this.liandi.navigation = new Navigation(this.liandi);
-        //     this.liandi.editors = new Editors();
-        //     this.liandi.menus = new Menus(this.liandi);
-        //     this.liandi.find = new Find();
-        //     this.liandi.backlinks = new Backlinks(this.liandi);
-        //     this.liandi.graph = new Graph(this.liandi);
-        //
-        //     resize('resize');
-        //     resize('resize2', true);
-        //     resize('resize3', true);
-        //
-        //     initGlobalKeyPress(this.liandi);
-        //
-        //     this.onIpc();
-        //     this.initWindow();
-        //     this.initBar();
-        //
-        //     // 打开新窗口的处理
-        //     remote.process.argv.forEach((item, index) => {
-        //         if (item.indexOf("--liandi-url") === 0) {
-        //             this.liandi.current = {
-        //                 dir: {
-        //                     url: decodeURIComponent(remote.process.argv[index]).substr(13)
-        //                 },
-        //                 path: decodeURIComponent(remote.process.argv[index + 1]).substr(14)
-        //             }
-        //             this.liandi.navigation.hide()
-        //             this.liandi.backlinks.hide(this.liandi);
-        //             this.liandi.ws.send('get', {
-        //                 url: this.liandi.current.dir.url,
-        //                 path: this.liandi.current.path,
-        //             }, true)
-        //         }
-        //     });
-        //
-        //     window.onresize = () => {
-        //         this.liandi.graph.resize();
-        //         this.liandi.editors.resize();
-        //     };
-        // });
-        //
-        // window.liandi = this.liandi;
+        layouts[0].addChild(new Wnd({layout: layouts[0]}));
+        (layouts[1].children[0] as Layout).addChild(new Wnd({layout: layouts[1].children[0] as Layout}));
+        (layouts[1].children[2] as Layout).addChild(new Wnd({layout: layouts[1].children[2] as Layout}));
+        layouts[2].addChild(new Wnd({layout: layouts[2]}));
+        this.liandi = {
+            layouts
+        };
+        this.liandi.ws = new WebSocketUtil(this.liandi, () => {
+            //     this.liandi.navigation = new Navigation(this.liandi);
+            //     this.liandi.editors = new Editors();
+            //     this.liandi.menus = new Menus(this.liandi);
+            this.liandi.find = new Find();
+            //     this.liandi.backlinks = new Backlinks(this.liandi);
+            //     this.liandi.graph = new Graph(this.liandi);
+            doubleShift();
+            //
+            this.onIpc();
+            this.initBar();
+            (layouts[1].children[1] as Layout).addChild(new Wnd({
+                layout: layouts[1].children[1] as Layout,
+                html: `<div>
+                    <div class="item fn__flex-inline">${i18n[this.liandi.config.lang].search}/${i18n[this.liandi.config.lang].config} &lt;Double Shift></div>
+                    <div class="item fn__a fn__pointer" id="editorEmptyMount">${i18n[this.liandi.config.lang].mount}</div>
+                    <div class="item fn__a fn__pointer" id="editorEmptyMountDAV">${i18n[this.liandi.config.lang].mountWebDAV}</div>
+                </div>`
+            }));
+            this.initWindow();
+
+            //     window.onresize = () => {
+            //         this.liandi.graph.resize();
+            //         this.liandi.editors.resize();
+            //     };
+
+
+            // document.getElementById('editorEmptyMount').addEventListener('click', () => {
+            //     mountFile(this.liandi);
+            // });
+            // document.getElementById('editorEmptyMountDAV').addEventListener('click', () => {
+            //     mountWebDAV(this.liandi);
+            // });
+        });
+        window.liandi = this.liandi;
     }
 
     private initBar() {
         const liandi = this.liandi
-        document.querySelector('.toolbar').innerHTML = `<div id="barNavigation" class="item vditor-tooltipped fn__a vditor-tooltipped__w item--current" aria-label="${i18n[liandi.config.lang].fileTree}">
+        document.querySelector('.toolbar').innerHTML = `<div id="barNavigation" class="item fn__a">
             <svg>
                 <use xlink:href="#iconFolder"></use>
             </svg>
+            ${i18n[liandi.config.lang].fileTree}
         </div>
-        <div id="barBacklinks" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="${i18n[liandi.config.lang].backlinks}">
+        <div id="barBacklinks" class="item fn__a">
             <svg>
                 <use xlink:href="#iconLink"></use>
-            </svg>
+            </svg>${i18n[liandi.config.lang].backlinks}
         </div>
-        <div id="barGraph" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="${i18n[liandi.config.lang].graphView}">
+        <div id="barGraph" class="item fn__a">
             <svg>
                 <use xlink:href="#iconGraph"></use>
-            </svg>
+            </svg>${i18n[liandi.config.lang].graphView}
         </div>
-        <div class="fn__flex-1"></div>
-        <a href="https://hacpai.com/sponsor" class="item vditor-tooltipped vditor-tooltipped__w ft__pink" aria-label="${i18n[liandi.config.lang].sponsor}">
+        <div class="fn__flex-1" id="drag"></div>
+        <a href="https://hacpai.com/sponsor" class="item ft__pink">
             <svg>
                 <use xlink:href="#iconFavorite"></use>
-            </svg>
+            </svg>${i18n[liandi.config.lang].sponsor}
         </a>
-        <div id="barHelp" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="${i18n[liandi.config.lang].help}">
+        <div id="barHelp" class="item fn__a">
             <svg>
                 <use xlink:href="#iconHelp"></use>
-            </svg>
+            </svg>${i18n[liandi.config.lang].help}
         </div>
-        <div id="barBug" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="${i18n[liandi.config.lang].debug}">
+        <div id="barBug" class="item fn__a">
             <svg>
                 <use xlink:href="#iconBug"></use>
-            </svg>
+            </svg>${i18n[liandi.config.lang].debug}
         </div>
-        <div id="barSettings" class="item vditor-tooltipped fn__a vditor-tooltipped__w" aria-label="${i18n[liandi.config.lang].config} <Double Shift>">
+        <div id="barSettings" class="item fn__a">
             <svg>
                 <use xlink:href="#iconSettings"></use>
-            </svg>
+            </svg>${i18n[liandi.config.lang].config}
         </div>`
-        document.querySelector('.editor__empty').innerHTML = `<div>
-                <div class="item fn__flex-inline">${i18n[liandi.config.lang].search}/${i18n[liandi.config.lang].config} &lt;Double Shift></div>
-                <div class="item fn__a fn__pointer" id="editorEmptyMount">${i18n[liandi.config.lang].mount}</div>
-                <div class="item fn__a fn__pointer" id="editorEmptyMountDAV">${i18n[liandi.config.lang].mountWebDAV}</div>
-            </div>`
         document.getElementById('barNavigation').addEventListener('click', function () {
             if (this.classList.contains("item--current")) {
                 liandi.navigation.hide()
@@ -133,40 +119,34 @@ class App {
             }
             window.dispatchEvent(new CustomEvent('resize'));
         });
-        document.getElementById('barGraph').addEventListener('click', function () {
-            if (this.classList.contains("item--current")) {
-                liandi.graph.hide(liandi);
-            } else {
-                liandi.graph.show(liandi)
-            }
-            window.dispatchEvent(new CustomEvent('resize'));
-        });
-        document.getElementById('barBacklinks').addEventListener('click', function () {
-            if (this.classList.contains('item--current')) {
-                liandi.backlinks.hide(liandi);
-            } else {
-                liandi.backlinks.show(liandi);
-            }
-            window.dispatchEvent(new CustomEvent('resize'));
-        });
-        document.getElementById('barHelp').addEventListener('click', function () {
-            liandi.navigation.show();
-            liandi.ws.send('mount', {
-                url: `${Constants.WEBDAV_ADDRESS}/`,
-                path: path.posix.join(Constants.APP_DIR, 'public/zh_CN/链滴笔记用户指南')
-            });
-        });
+        // document.getElementById('barGraph').addEventListener('click', function () {
+        //     if (this.classList.contains("item--current")) {
+        //         liandi.graph.hide(liandi);
+        //     } else {
+        //         liandi.graph.show(liandi)
+        //     }
+        //     window.dispatchEvent(new CustomEvent('resize'));
+        // });
+        // document.getElementById('barBacklinks').addEventListener('click', function () {
+        //     if (this.classList.contains('item--current')) {
+        //         liandi.backlinks.hide(liandi);
+        //     } else {
+        //         liandi.backlinks.show(liandi);
+        //     }
+        //     window.dispatchEvent(new CustomEvent('resize'));
+        // });
+        // document.getElementById('barHelp').addEventListener('click', function () {
+        //     liandi.navigation.show();
+        //     liandi.ws.send('mount', {
+        //         url: `${Constants.WEBDAV_ADDRESS}/`,
+        //         path: path.posix.join(Constants.APP_DIR, 'public/zh_CN/链滴笔记用户指南')
+        //     });
+        // });
         document.getElementById('barBug').addEventListener('click', function () {
             remote.getCurrentWindow().webContents.openDevTools({mode: 'bottom'})
         });
         document.getElementById('barSettings').addEventListener('click', () => {
-            initSearch(this.liandi, 'settings');
-        });
-        document.getElementById('editorEmptyMount').addEventListener('click', () => {
-            mountFile(this.liandi);
-        });
-        document.getElementById('editorEmptyMountDAV').addEventListener('click', () => {
-            mountWebDAV(this.liandi);
+            initSearch('settings');
         });
     }
 
@@ -176,7 +156,7 @@ class App {
             this.liandi.find.open();
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_SAVE, () => {
-            this.liandi.editors.save(this.liandi);
+            // TODO this.liandi.editors.save(this.liandi);
         });
         ipcRenderer.on(Constants.LIANDI_FILE_NEW, () => {
             // TODO newFile(this.liandi)
@@ -187,7 +167,7 @@ class App {
         // window action
         const currentWindow = remote.getCurrentWindow();
         if (process.platform === 'darwin') {
-            document.querySelector('.drag').addEventListener('dblclick', () => {
+            document.getElementById('drag').addEventListener('dblclick', () => {
                 if (currentWindow.isMaximized()) {
                     currentWindow.unmaximize();
                 } else {
@@ -197,17 +177,16 @@ class App {
             return;
         }
 
-        currentWindow.on('blur', () => {
-            document.body.classList.add('body--blur');
-        });
-
-        currentWindow.on('focus', () => {
-            document.body.classList.remove('body--blur');
-        });
-
         if (process.platform === 'win32') {
             document.body.classList.add('body--win32');
         }
+
+        currentWindow.on('blur', () => {
+            document.body.classList.add('body--blur');
+        });
+        currentWindow.on('focus', () => {
+            document.body.classList.remove('body--blur');
+        });
 
         const maxBtnElement = document.getElementById('maxWindow');
         const restoreBtnElement = document.getElementById('restoreWindow');
@@ -247,4 +226,6 @@ class App {
     }
 }
 
-new App();
+new
+
+App();

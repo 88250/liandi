@@ -21,8 +21,14 @@ body {
   &.body--win32 {
     border: 1px solid #707070;
     border-top-color: transparent;
+
     &.body--blur {
       border-color: #aaa;
+    }
+
+    .toolbar {
+      padding-left: 0;
+      padding-right: 106px;
     }
 
     .editors__webview--fullscreen {
@@ -36,6 +42,7 @@ body {
       width: 8px;
       background: transparent;
     }
+
     ::-webkit-scrollbar-thumb {
       background-color: var(--scroll-bar-thumb-background-color);
       cursor: pointer;

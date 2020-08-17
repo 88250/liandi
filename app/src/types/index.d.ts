@@ -1,6 +1,5 @@
 interface Window {
     liandi: ILiandi
-    layouts: ILayoutOptions[]
 }
 
 declare interface ILayoutOptions {
@@ -104,6 +103,7 @@ declare interface IImage {
 type TTheme = 'light' | 'dark'
 
 declare interface ILiandi {
+    layouts: ILayoutOptions[],
     config?: {
         lang: keyof II18n
         theme: TTheme,

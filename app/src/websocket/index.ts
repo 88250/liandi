@@ -88,14 +88,14 @@ export class WebSocketUtil {
                     liandi.config = response.data;
                     document.title = i18n[liandi.config.lang].slogan;
                     callback();
-                    liandi.editors.onSetTheme(liandi, response.data.theme);
-                    if (response.data.dirs.length === 0) {
-                        liandi.navigation.hide();
-                    } else {
-                        response.data.dirs.map((item: IDir) => {
-                            liandi.navigation.onMount(liandi, {dir: item});
-                        });
-                    }
+                    // liandi.editors.onSetTheme(liandi, response.data.theme);
+                    // if (response.data.dirs.length === 0) {
+                    //     liandi.navigation.hide();
+                    // } else {
+                    //     response.data.dirs.map((item: IDir) => {
+                    //         liandi.navigation.onMount(liandi, {dir: item});
+                    //     });
+                    // }
                     this.isFirst = false;
                     break;
                 case 'put':

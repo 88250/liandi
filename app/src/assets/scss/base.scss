@@ -9,14 +9,14 @@
 @import "navigation";
 @import "editor";
 @import "list";
-@import "bar";
+@import "toolbar";
 @import "backlinks";
 @import "layout";
 
 .window-controls {
   position: fixed;
   top: 0;
-  left: 0;
+  right: 0;
   height: $barHeight;
   z-index: 1;
 
@@ -87,16 +87,6 @@
       color: var(--text-secondary-color);
     }
   }
-}
-
-.drag {
-  -webkit-app-region: drag;
-  height: 12px;
-  right: 34px;
-  left: 128px;
-  position: absolute;
-  top: 0;
-  z-index: 100;
 }
 
 .wrap {

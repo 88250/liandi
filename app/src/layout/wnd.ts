@@ -7,16 +7,14 @@ export class Wnd {
     public layout: Layout
     public element: HTMLElement
     public resizeElement: HTMLElement
-    public close: string
 
-    constructor(options: { layout: Layout, close?: "empty" | "none", resize?: string, splitId?: string }) {
+    constructor(options: { layout: Layout, resize?: string, splitId?: string, html?: string }) {
         count++;
         this.id = genUUID()
-        this.close = options.close
         this.element = document.createElement("div")
         this.element.classList.add('fn__flex-1')
         this.element.style.backgroundColor = randomHexColorCode();
-        this.element.innerHTML = `<ul slot="tab" class="tab fn__flex">
+        this.element.innerHTML = options.html || `<ul slot="tab" class="tab fn__flex">
     <li data-name="tab${count}" class="fn__pointer">${count}</li>
     <li><button data-type="lr">lr</button><button data-type="tb">tb</button><button data-type="close">x</button></li>
 </ul>
@@ -39,19 +37,18 @@ export class Wnd {
         }
 
         addResize(this, options.resize);
-        this.element.querySelector("button[data-type='lr']").addEventListener('click', () => {
-            this.spilt('lr')
-        })
-        this.element.querySelector("button[data-type='tb']").addEventListener('click', () => {
-            this.spilt('tb')
-        })
-        this.element.querySelector("button[data-type='close']").addEventListener('click', () => {
-            if (this.close === "empty") {
-                this.element.innerHTML = 'create/mount....'
-            } else {
+
+        if (!options.html) {
+            this.element.querySelector("button[data-type='lr']").addEventListener('click', () => {
+                this.spilt('lr')
+            })
+            this.element.querySelector("button[data-type='tb']").addEventListener('click', () => {
+                this.spilt('tb')
+            })
+            this.element.querySelector("button[data-type='close']").addEventListener('click', () => {
                 this.remove()
-            }
-        })
+            })
+        }
         return this
     }
 

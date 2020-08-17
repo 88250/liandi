@@ -6,14 +6,14 @@
     <meta http-equiv="Content-Security-Policy" content="script-src 'self'"/>-->
 </head>
 <body class="fn__flex fn__flex-column">
-<div id="toolbar" class="toolbar"></div>
+<div id="toolbar" class="toolbar fn__flex"></div>
 <div class="fn__flex-1">
     <div id="layouts" class="fn__flex-1 fn__flex fn__flex-column layout"></div>
 </div>
-<!--div class="window-controls">
-    <div class="window-controls__item window-controls__item--close" id="closeWindow">
+<div class="window-controls">
+    <div class="window-controls__item" id="minWindow">
         <svg>
-            <use xlink:href="#iconClose"></use>
+            <use xlink:href="#iconMin"></use>
         </svg>
     </div>
     <div class="window-controls__item" id="maxWindow">
@@ -26,9 +26,9 @@
             <use xlink:href="#iconRestore"></use>
         </svg>
     </div>
-    <div class="window-controls__item" id="minWindow">
+    <div class="window-controls__item window-controls__item--close" id="closeWindow">
         <svg>
-            <use xlink:href="#iconMin"></use>
+            <use xlink:href="#iconClose"></use>
         </svg>
     </div>
 </div>
@@ -47,23 +47,6 @@
         <use xlink:href="#iconClose"></use>
     </svg>
 </div>
-<div class="fn__flex wrap">
-    <div class="navigation" id="navigation"></div>
-    <div class="resize" id="resize"></div>
-    <div class="fn__flex-1 editor" id="editors">
-        <div id="editorBlockHint" class="editor__blockhint vditor-reset"></div>
-        <div class="editor__empty"></div>
-    </div>
-    <div class="resize fn__none" id="resize2"></div>
-    <div class="backlinks fn__none" id="backlinks"></div>
-    <div class="resize fn__none" id="resize3"></div>
-    <div id="graph" class="fn__none backlinks backlinks--graph" style="width: 520px;display: none">
-        <div class="graph__input"><input class="input"></div>
-        <div class="fn__flex-1"></div>
-    </div>
-    <div class="bar fn__flex-column"></div>
-</div>
-<div class="drag"></div-->
 <script src="../dist/main.js"></script>
 </body>
 </html>

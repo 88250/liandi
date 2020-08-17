@@ -1,0 +1,25 @@
+.toolbar {
+  background-color: var(--toolbar-background-color);
+  box-sizing: border-box;
+  padding-left: 69px;
+  height: 20px;
+
+  #drag {
+    -webkit-app-region: drag;
+  }
+
+  .item {
+    padding: 0 10px;
+    line-height: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    &:hover {
+      text-decoration: none;
+    }
+    svg {
+      margin-right: 5px;
+    }
+  }
+}

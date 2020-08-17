@@ -1,7 +1,7 @@
-import {Constants} from '../constants';
 import {initSearch} from '../search';
+import {Constants} from "../constants";
 
-export const initGlobalKeyPress = (liandi: ILiandi) => {
+export const doubleShift = () => {
     let lastKeypressTime = 0;
     let timeoutId = 0;
     window.addEventListener('keydown', (event) => {
@@ -13,7 +13,7 @@ export const initGlobalKeyPress = (liandi: ILiandi) => {
                 lastKeypressTime = 0;
                 // shift + shift + c
                 timeoutId = window.setTimeout(() => {
-                    initSearch(liandi);
+                    initSearch();
                 }, 200);
             }
             lastKeypressTime = thisKeypressTime;
