@@ -19,6 +19,8 @@ github.com/88250/lute v1.6.1-0.20200815162659-e7321affaf05 h1:s2zonXvO8gSt5TrFy6
 github.com/88250/lute v1.6.1-0.20200815162659-e7321affaf05/go.mod h1:ZCUa9CmvpTx9GmYpsjuSa6IJgM5hoD8CAWdNQ6/cg6Q=
 github.com/88250/lute v1.6.1-0.20200817084707-33d74bc16fd0 h1:Ipnmn1arQKF/PqSYd93PVGY59quRb/NSsPBaOJM2gt8=
 github.com/88250/lute v1.6.1-0.20200817084707-33d74bc16fd0/go.mod h1:ZCUa9CmvpTx9GmYpsjuSa6IJgM5hoD8CAWdNQ6/cg6Q=
+github.com/88250/lute v1.6.1-0.20200817134635-108435153345 h1:vK4YN2jzMlEsfxH6ZyQNA4Vqn55DmOsLWIDUfDAKJ8Y=
+github.com/88250/lute v1.6.1-0.20200817134635-108435153345/go.mod h1:ZCUa9CmvpTx9GmYpsjuSa6IJgM5hoD8CAWdNQ6/cg6Q=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38 h1:smF2tmSOzy2Mm+0dGI2AIUHY+w0BUc+4tn40djz7+6U=
 github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38/go.mod h1:r7bzyVFMNntcxPZXK3/+KdruV1H5KSlyVY0gc+NgInI=
