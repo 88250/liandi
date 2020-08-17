@@ -11,27 +11,29 @@
 package model
 
 import (
-	"gopkg.in/olahol/melody.v1"
+	"github.com/88250/lute/ast"
+	"github.com/88250/lute/parse"
+	"github.com/88250/lute/util"
 )
 
-var sessions map[string]*melody.Session
+func convertWikiLinks(trees []*parse.Tree) {
+	for _, tree := range trees {
+		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+			if !entering || ast.NodeText != n.Type {
+				return ast.WalkContinue
+			}
 
-func InitSessions() {
-	sessions = map[string]*melody.Session{}
-}
-
-func AddPushChan(session *melody.Session) {
-	id, _ := session.Get("id")
-	sessions[id.(string)] = session
-}
-
-func RemovePushChan(session *melody.Session) {
-	id, _ := session.Get("id")
-	delete(sessions, id.(string))
-}
-
-func Broadcast(msg []byte) {
-	for _, session := range sessions {
-		session.Write(msg)
+			links := extractWikiLinks(util.BytesToStr(n.Tokens))
+			if 0 < len(links) {
+				for _, link := range links {
+					_ = link
+				}
+			}
+			return ast.WalkContinue
+		})
 	}
+}
+
+func extractWikiLinks(text string) []string {
+	return nil
 }
