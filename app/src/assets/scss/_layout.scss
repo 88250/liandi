@@ -1,0 +1,19 @@
+.layout {
+  &__resize {
+    cursor: row-resize;
+    margin: -5px 0;
+    background-color: #0f140f;
+    height: 10px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+
+    &--lr {
+      cursor: col-resize;
+      width: 10px;
+      margin: 0 -5px;
+      height: auto;
+      background-color: red;
+    }
+  }
+}

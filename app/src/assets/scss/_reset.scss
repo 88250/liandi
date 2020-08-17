@@ -15,7 +15,7 @@ body {
   height: 100%;
   transition: $transition;
   box-sizing: border-box;
-  overflow: hidden;
+  max-height: 100%;
 
 
   &.body--win32 {

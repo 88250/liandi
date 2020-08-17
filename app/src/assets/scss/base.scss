@@ -11,6 +11,7 @@
 @import "list";
 @import "bar";
 @import "backlinks";
+@import "layout";
 
 .window-controls {
   position: fixed;
@@ -100,13 +101,6 @@
 
 .wrap {
   height: 100%;
-}
-
-.resize {
-  width: 10px;
-  cursor: col-resize;
-  margin: 0 -5px;
-  position: relative;
 }
 
 tab-panel {

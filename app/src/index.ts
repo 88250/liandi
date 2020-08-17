@@ -1,74 +1,85 @@
 import './assets/scss/base.scss';
-import {Navigation} from './navigation';
-import {WebSocketUtil} from './websocket';
 import './components/tab-panel';
 import './icons/index';
-import {Editors} from './editors';
-import {Menus} from './menu';
-import {resize} from './util/resize';
-import {initGlobalKeyPress} from './hotkey';
 import {ipcRenderer, remote} from 'electron';
-import {Find} from './search/Find';
 import {Constants} from './constants';
 import {mountFile, mountWebDAV} from './util/mount';
 import * as path from "path";
-import {Backlinks} from './backlinks';
-import {Graph} from "./graph";
 import {i18n} from "./i18n";
 import {initSearch} from "./search";
+import {Layout} from "./layout";
+import {Wnd} from "./layout/wnd";
 
 class App {
     public liandi: ILiandi;
 
     constructor() {
-        this.liandi = {
-            current: {
-                path: '',
-            },
-        };
-        this.liandi.ws = new WebSocketUtil(this.liandi, () => {
-            this.liandi.navigation = new Navigation(this.liandi);
-            this.liandi.editors = new Editors();
-            this.liandi.menus = new Menus(this.liandi);
-            this.liandi.find = new Find();
-            this.liandi.backlinks = new Backlinks(this.liandi);
-            this.liandi.graph = new Graph(this.liandi);
+        const layouts = [
+            new Layout({size: "100px"}),
+            new Layout({direction: 'lr', resize: 'tb'}),
+            new Layout({size: "100px", resize: 'tb'}),
+        ]
+        layouts[1].children = [
+            new Layout({parent: layouts[1], size: "25%"}),
+            new Layout({parent: layouts[1], resize: 'lr'}),
+            new Layout({parent: layouts[1], size: "25%", resize: 'lr'}),
+        ];
 
-            resize('resize');
-            resize('resize2', true);
-            resize('resize3', true);
+        layouts[0].addChild(new Wnd({layout: layouts[0], close: 'none'}));
+        (layouts[1].children[0] as Layout).addChild(new Wnd({layout: layouts[1].children[0] as Layout, close: 'none'}));
+        (layouts[1].children[1] as Layout).addChild(new Wnd({layout: layouts[1].children[1] as Layout, close: 'empty'}));
+        (layouts[1].children[2] as Layout).addChild(new Wnd({layout: layouts[1].children[2] as Layout, close: 'none'}));
+        layouts[2].addChild(new Wnd({layout: layouts[2], close: 'none'}));
 
-            initGlobalKeyPress(this.liandi);
-
-            this.onIpc();
-            this.initWindow();
-            this.initBar();
-
-            // 打开新窗口的处理
-            remote.process.argv.forEach((item, index) => {
-                if (item.indexOf("--liandi-url") === 0) {
-                    this.liandi.current = {
-                        dir: {
-                            url: decodeURIComponent(remote.process.argv[index]).substr(13)
-                        },
-                        path: decodeURIComponent(remote.process.argv[index + 1]).substr(14)
-                    }
-                    this.liandi.navigation.hide()
-                    this.liandi.backlinks.hide(this.liandi);
-                    this.liandi.ws.send('get', {
-                        url: this.liandi.current.dir.url,
-                        path: this.liandi.current.path,
-                    }, true)
-                }
-            });
-
-            window.onresize = () => {
-                this.liandi.graph.resize();
-                this.liandi.editors.resize();
-            };
-        });
-
-        window.liandi = this.liandi;
+        window.layouts = layouts
+        // this.liandi = {
+        //     current: {
+        //         path: '',
+        //     },
+        // };
+        // this.liandi.ws = new WebSocketUtil(this.liandi, () => {
+        //     this.liandi.navigation = new Navigation(this.liandi);
+        //     this.liandi.editors = new Editors();
+        //     this.liandi.menus = new Menus(this.liandi);
+        //     this.liandi.find = new Find();
+        //     this.liandi.backlinks = new Backlinks(this.liandi);
+        //     this.liandi.graph = new Graph(this.liandi);
+        //
+        //     resize('resize');
+        //     resize('resize2', true);
+        //     resize('resize3', true);
+        //
+        //     initGlobalKeyPress(this.liandi);
+        //
+        //     this.onIpc();
+        //     this.initWindow();
+        //     this.initBar();
+        //
+        //     // 打开新窗口的处理
+        //     remote.process.argv.forEach((item, index) => {
+        //         if (item.indexOf("--liandi-url") === 0) {
+        //             this.liandi.current = {
+        //                 dir: {
+        //                     url: decodeURIComponent(remote.process.argv[index]).substr(13)
+        //                 },
+        //                 path: decodeURIComponent(remote.process.argv[index + 1]).substr(14)
+        //             }
+        //             this.liandi.navigation.hide()
+        //             this.liandi.backlinks.hide(this.liandi);
+        //             this.liandi.ws.send('get', {
+        //                 url: this.liandi.current.dir.url,
+        //                 path: this.liandi.current.path,
+        //             }, true)
+        //         }
+        //     });
+        //
+        //     window.onresize = () => {
+        //         this.liandi.graph.resize();
+        //         this.liandi.editors.resize();
+        //     };
+        // });
+        //
+        // window.liandi = this.liandi;
     }
 
     private initBar() {

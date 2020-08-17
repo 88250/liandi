@@ -5,8 +5,14 @@
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag
     <meta http-equiv="Content-Security-Policy" content="script-src 'self'"/>-->
 </head>
-<body>
-<div class="window-controls">
+<body class="fn__flex fn__flex-column">
+<div class="toolbar">
+    file | graph | backlink....
+</div>
+<div class="fn__flex-1">
+    <div id="layouts" class="fn__flex-1 fn__flex fn__flex-column layout"></div>
+</div>
+<!--div class="window-controls">
     <div class="window-controls__item window-controls__item--close" id="closeWindow">
         <svg>
             <use xlink:href="#iconClose"></use>
@@ -59,7 +65,7 @@
     </div>
     <div class="bar fn__flex-column"></div>
 </div>
-<div class="drag"></div>
+<div class="drag"></div-->
 <script src="../dist/main.js"></script>
 </body>
 </html>
