@@ -14,4 +14,18 @@
       height: auto;
     }
   }
+
+  &__empty {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    flex-direction: column;
+    width: 280px;
+    margin: 0 auto;
+
+    .item {
+      padding: 20px 10px;
+      font-size: 18px;
+    }
+  }
 }

@@ -15,9 +15,11 @@
     display: inline-flex;
     align-items: center;
     font-size: 13px;
+
     &:hover {
       text-decoration: none;
     }
+
     svg {
       margin-right: 5px;
     }

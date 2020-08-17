@@ -41,7 +41,7 @@ const resizeWnd = (resizeElement: HTMLElement, direction: string) => {
         documentSelf.onmousemove = (moveEvent: MouseEvent) => {
             const previousNowSize = (previousSize + (moveEvent[direction === 'lr' ? 'clientX' : 'clientY'] - x))
             const nextNowSize = (nextSize - (moveEvent[direction === 'lr' ? 'clientX' : 'clientY'] - x))
-            if (previousNowSize < 60 || nextNowSize < 60) {
+            if (previousNowSize < 6 || nextNowSize < 6) {
                 return;
             }
             previousElement.style[direction === 'lr' ? 'width' : 'height'] = previousNowSize + 'px';
@@ -56,8 +56,11 @@ const resizeWnd = (resizeElement: HTMLElement, direction: string) => {
             documentSelf.onselectstart = null;
             documentSelf.onselect = null;
 
-            nextElement.style[direction === 'lr' ? 'width' : 'height'] = 'auto';
-            nextElement.classList.add("fn__flex-1")
+            if (!nextElement.nextElementSibling) {
+                nextElement.style[direction === 'lr' ? 'width' : 'height'] = 'auto';
+                nextElement.classList.add("fn__flex-1")
+            }
+
             window.dispatchEvent(new CustomEvent('resize'));
         };
     });

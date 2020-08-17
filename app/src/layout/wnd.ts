@@ -8,19 +8,19 @@ export class Wnd {
     public element: HTMLElement
     public resizeElement: HTMLElement
 
-    constructor(options: { layout: Layout, resize?: string, splitId?: string, html?: string }) {
+    constructor(options: { layout: Layout, resize?: string, splitId?: string, html?: string, callback?: Function }) {
         count++;
         this.id = genUUID()
         this.element = document.createElement("div")
         this.element.classList.add('fn__flex-1')
         this.element.style.backgroundColor = randomHexColorCode();
-        this.element.innerHTML = options.html || `<ul slot="tab" class="tab fn__flex">
+        this.element.innerHTML = typeof options.html === "undefined" ? `<ul slot="tab" class="tab fn__flex">
     <li data-name="tab${count}" class="fn__pointer">${count}</li>
     <li><button data-type="lr">lr</button><button data-type="tb">tb</button><button data-type="close">x</button></li>
 </ul>
 <div data-name="tab${count}">
     ${count}content 
-</div>`
+</div>` : options.html
         this.layout = options.layout
         if (options.splitId) {
             this.layout.children.find((item) => {
@@ -36,9 +36,13 @@ export class Wnd {
             this.layout.element.append(this.element)
         }
 
+        if (options.callback) {
+            options.callback(this.element)
+        }
+
         addResize(this, options.resize);
 
-        if (!options.html) {
+        if (typeof options.html === "undefined") {
             this.element.querySelector("button[data-type='lr']").addEventListener('click', () => {
                 this.spilt('lr')
             })

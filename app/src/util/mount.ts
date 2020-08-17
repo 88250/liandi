@@ -5,7 +5,7 @@ import {destroyDialog, dialog} from './dialog';
 import {i18n} from '../i18n';
 import {showMessage} from './message';
 
-export const mountFile = async (liandi: ILiandi) => {
+export const mountFile = async () => {
     const filePath = await remote.dialog.showOpenDialog({
         defaultPath: homedir(),
         properties: ['openDirectory', 'openFile'],
@@ -13,14 +13,15 @@ export const mountFile = async (liandi: ILiandi) => {
     if (filePath.filePaths.length === 0) {
         return;
     }
-    liandi.ws.send('mount', {
+    window.liandi.ws.send('mount', {
         url: `${Constants.WEBDAV_ADDRESS}/`,
         path: filePath.filePaths[0]
     });
 };
 
 
-export const mountWebDAV = (liandi: ILiandi) => {
+export const mountWebDAV = () => {
+    const liandi = window.liandi
     dialog({
         title: i18n[liandi.config.lang].mountWebDAV,
         content: `<input placeholder="URL" class="input">

@@ -6,15 +6,18 @@ import {onSearch} from '../search';
 import {markdown} from '../config/markdown';
 import {image} from '../config/image';
 import {setSelectionFocus} from "../../vditore/src/ts/util/selection";
+import {Layout} from "../layout";
+import {Wnd} from "../layout/wnd";
+import {mountFile, mountWebDAV} from "../util/mount";
+import {onGetConfig} from "./onGetConfig";
+import {onSetTheme} from "./onSetTheme";
 
 export class WebSocketUtil {
-    public webSocket: WebSocket;
+    private webSocket: WebSocket;
     private reqId: number;
-    private isFirst: boolean;
 
-    constructor(liandi: ILiandi, callback: () => void) {
-        this.isFirst = true;
-        this.connect(liandi, callback);
+    constructor(callback: Function) {
+       this.connect(callback);
     }
 
     public send(cmd: string, param: Record<string, unknown>, process = false) {
@@ -26,17 +29,18 @@ export class WebSocketUtil {
         }));
     }
 
-    private connect(liandi: ILiandi, callback?: () => void) {
+    private connect(callback?: Function) {
+        const liandi = window.liandi
         this.webSocket = new WebSocket(Constants.WEBSOCKET_ADDREDD);
         this.webSocket.onopen = () => {
-            if (this.isFirst) {
-                this.send('getconf', {});
+            if (callback) {
+                callback(this)
             }
         };
         this.webSocket.onclose = (e) => {
             console.warn('WebSocket is closed. Reconnect will be attempted in 1 second.', e);
             setTimeout(() => {
-                this.connect(liandi);
+                this.connect();
             }, 1000);
         };
         this.webSocket.onerror = (err) => {
@@ -82,21 +86,11 @@ export class WebSocketUtil {
                     markdown.onSetMD(liandi, response.data);
                     break;
                 case 'settheme':
-                    liandi.editors.onSetTheme(liandi, response.data);
+                    onSetTheme(response.data);
                     break;
                 case 'getconf':
-                    liandi.config = response.data;
-                    document.title = i18n[liandi.config.lang].slogan;
-                    callback();
-                    // liandi.editors.onSetTheme(liandi, response.data.theme);
-                    // if (response.data.dirs.length === 0) {
-                    //     liandi.navigation.hide();
-                    // } else {
-                    //     response.data.dirs.map((item: IDir) => {
-                    //         liandi.navigation.onMount(liandi, {dir: item});
-                    //     });
-                    // }
-                    this.isFirst = false;
+                    onGetConfig(response.data)
+                    onSetTheme(response.data.theme)
                     break;
                 case 'put':
                     liandi.backlinks.getBacklinks(liandi);

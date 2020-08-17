@@ -7,7 +7,8 @@ declare interface ILayoutOptions {
     direction?: string;
     size?: string
     id?: string
-    resize?:string
+    resize?: string
+    children?:ILayoutOptions[]
 }
 
 declare interface IFile {
@@ -111,7 +112,6 @@ declare interface ILiandi {
         image: IImage,
     };
     ws?: {
-        webSocket: WebSocket
         send: (cmd: string, param: Record<string, unknown>, process?: boolean) => void
     };
     navigation?: {
@@ -140,7 +140,6 @@ declare interface ILiandi {
         reloadEditor: (liandi: ILiandi) => void;
         onGet: (liandi: ILiandi, editorData?: { content: string, name: string }) => void;
         showSearchBlock: (liandi: ILiandi, data: { k: string, blocks: IBlock[] }) => void;
-        onSetTheme: (liandi: ILiandi, theme: TTheme) => void;
         onGetBlock: (liandi: ILiandi, data: { id: string, block: IBlock }) => void;
     };
     menus?: {

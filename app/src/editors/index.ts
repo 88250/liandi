@@ -231,21 +231,6 @@ export class Editors {
         }
     }
 
-    public onSetTheme(liandi: ILiandi, theme: TTheme) {
-        liandi.config.theme = theme;
-        ipcRenderer.send(Constants.LIANDI_CONFIG_THEME, theme);
-        if (theme === 'dark') {
-            document.body.classList.add('theme--dark');
-        } else {
-            document.body.classList.remove('theme--dark');
-        }
-        this.editors.forEach((item) => {
-            if (item.vditor) {
-                item.vditor.setTheme(liandi.config.theme === 'dark' ? 'dark' : 'classic', liandi.config.theme)
-            }
-        })
-    }
-
     public onGet(liandi: ILiandi, editorData: { content: string, name: string }) {
         if (this.currentEditor) {
             this.initVditor(liandi, this.currentEditor, editorData.content);
