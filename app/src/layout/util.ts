@@ -12,21 +12,25 @@ export const addResize = (obj: Layout | Wnd, resize?: string) => {
         resizeWnd(resizeElement, resize)
     }
 }
+
+const setSize = (item: HTMLElement, direction: string) => {
+    if (item.classList.contains("fn__flex-1")) {
+        if (direction === 'lr') {
+            item.style.width = item.clientWidth + 'px'
+        } else {
+            item.style.height = item.clientHeight + 'px'
+        }
+        item.classList.remove("fn__flex-1")
+    }
+}
+
 const resizeWnd = (resizeElement: HTMLElement, direction: string) => {
     resizeElement.addEventListener('mousedown', (event: MouseEvent) => {
         const documentSelf = document;
         const nextElement = resizeElement.nextElementSibling as HTMLElement;
         const previousElement = resizeElement.previousElementSibling as HTMLElement;
-        if (direction === 'lr') {
-            nextElement.style.width = nextElement.clientWidth + 'px'
-            previousElement.style.width = previousElement.clientWidth + 'px'
-        } else {
-            nextElement.style.height = nextElement.clientHeight + 'px'
-            previousElement.style.height = previousElement.clientHeight + 'px'
-        }
-        nextElement.classList.remove("fn__flex-1")
-        previousElement.classList.remove("fn__flex-1")
-
+        setSize(nextElement, direction)
+        setSize(previousElement, direction)
         const x = event[direction === 'lr' ? 'clientX' : 'clientY'];
         const previousSize = direction === 'lr' ? previousElement.clientWidth : previousElement.clientHeight
         const nextSize = direction === 'lr' ? nextElement.clientWidth : nextElement.clientHeight;
@@ -51,6 +55,9 @@ const resizeWnd = (resizeElement: HTMLElement, direction: string) => {
             documentSelf.ondragstart = null;
             documentSelf.onselectstart = null;
             documentSelf.onselect = null;
+
+            nextElement.style[direction === 'lr' ? 'width' : 'height'] = 'auto';
+            nextElement.classList.add("fn__flex-1")
             window.dispatchEvent(new CustomEvent('resize'));
         };
     });

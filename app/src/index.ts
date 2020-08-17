@@ -30,7 +30,7 @@ class App {
         (layouts[1].children[1] as Layout).addChild(new Wnd({layout: layouts[1].children[1] as Layout, close: 'empty'}));
         (layouts[1].children[2] as Layout).addChild(new Wnd({layout: layouts[1].children[2] as Layout, close: 'none'}));
         layouts[2].addChild(new Wnd({layout: layouts[2], close: 'none'}));
-
+        // this.initBar()
         window.layouts = layouts
         // this.liandi = {
         //     current: {
@@ -84,7 +84,7 @@ class App {
 
     private initBar() {
         const liandi = this.liandi
-        document.querySelector('.bar').innerHTML = `<div id="barNavigation" class="item vditor-tooltipped fn__a vditor-tooltipped__w item--current" aria-label="${i18n[liandi.config.lang].fileTree}">
+        document.querySelector('.toolbar').innerHTML = `<div id="barNavigation" class="item vditor-tooltipped fn__a vditor-tooltipped__w item--current" aria-label="${i18n[liandi.config.lang].fileTree}">
             <svg>
                 <use xlink:href="#iconFolder"></use>
             </svg>
