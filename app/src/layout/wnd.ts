@@ -7,14 +7,15 @@ export class Wnd {
     public layout: Layout
     public element: HTMLElement
     public resizeElement: HTMLElement
-    public close: boolean
+    public close: string
 
-    constructor(options: { layout: Layout, close?: boolean, resize?: string }) {
+    constructor(options: { layout: Layout, close?: "empty" | "none", resize?: string, splitId?: string }) {
         count++;
         this.id = genUUID()
-        this.close = typeof options.close === "undefined" ? true : options.close
+        this.close = options.close
         this.element = document.createElement("div")
         this.element.classList.add('fn__flex-1')
+        this.element.style.backgroundColor = randomHexColorCode();
         this.element.innerHTML = `<ul slot="tab" class="tab fn__flex">
     <li data-name="tab${count}" class="fn__pointer">${count}</li>
     <li><button data-type="lr">lr</button><button data-type="tb">tb</button><button data-type="close">x</button></li>
@@ -23,7 +24,20 @@ export class Wnd {
     ${count}content 
 </div>`
         this.layout = options.layout
-        this.layout.element.append(this.element)
+        if (options.splitId) {
+            this.layout.children.find((item) => {
+                if (item.id === options.splitId) {
+                    item.element.style.width = 'auto'
+                    item.element.style.height = 'auto'
+                    item.element.classList.add('fn__flex-1')
+                    item.element.after(this.element)
+                    return true
+                }
+            })
+        } else {
+            this.layout.element.append(this.element)
+        }
+
         addResize(this, options.resize);
         this.element.querySelector("button[data-type='lr']").addEventListener('click', () => {
             this.spilt('lr')
@@ -32,7 +46,7 @@ export class Wnd {
             this.spilt('tb')
         })
         this.element.querySelector("button[data-type='close']").addEventListener('click', () => {
-            if (!this.close) {
+            if (this.close === "empty") {
                 this.element.innerHTML = 'create/mount....'
             } else {
                 this.remove()
@@ -44,7 +58,7 @@ export class Wnd {
     private spilt(direction: string) {
         // TODO new panel & ws
         if (direction === this.layout.direction) {
-            this.layout.addChild(new Wnd({layout: this.layout, resize: direction}))
+            this.layout.addChild(new Wnd({layout: this.layout, resize: direction, splitId: this.id}), this.id)
         } else {
             this.layout.children.find((item, index) => {
                 if (item.id === this.id) {
@@ -53,46 +67,60 @@ export class Wnd {
                         parent: this.layout,
                         id: item.id
                     })
-                    this.layout.addChild(layout, index);
-                    this.layout.children.splice(index + 1, 1);
+                    this.layout.addChild(layout, item.id);
+                    this.layout.children.splice(index, 1);
 
                     layout.element.append(item.element);
                     layout.children.push(item);
                     (item as Wnd).layout = layout;
-                    layout.addChild(new Wnd({layout, resize: direction}));
+                    layout.addChild(new Wnd({layout, resize: direction, splitId: item.id}));
                     return true
                 }
             })
         }
     }
 
-    remove() {
-        const removeIt = (element: HTMLElement, layout: Layout, id: string) => {
-            element.remove();
-            layout.children.find((item, index) => {
-                if (item.id === id) {
-                    // TODO destroy panel & ws
-                    if (item.resizeElement) {
-                        item.resizeElement.remove();
-                    } else if (index === 0) {
-                        layout.children[index + 1].resizeElement.remove();
-                    }
-                    layout.children.splice(index, 1);
-                    return true
-                }
-            })
+    private remove() {
+        let layout = this.layout
+        let id = this.id
+        let element = this.element
+        while (layout && layout.children.length === 1) {
+            id = layout.id
+            element = layout.element
+            layout = layout.parent
+            // TODO destroy panel & ws
         }
 
-        if (this.layout.children.length === 1) {
-            if (this.layout.direction !== this.layout.parent.direction && this.layout.parent.children.length === 1) {
-                removeIt(this.element.parentElement.parentElement, this.layout.parent.parent, this.layout.parent.id)
-            } else {
-                removeIt(this.element.parentElement, this.layout.parent, this.layout.id)
+        layout.children.find((item, index) => {
+            if (item.id === id) {
+                if (layout.children.length > 1) {
+                    let sideElement = layout.children[index - 1]
+                    if (index === 0) {
+                        sideElement = layout.children[1]
+                    }
+                    if (layout.direction === "lr") {
+                        sideElement.element.style.width = (sideElement.element.clientWidth + element.clientWidth) + "px"
+                    } else {
+                        sideElement.element.style.height = (sideElement.element.clientHeight + element.clientHeight) + "px"
+                    }
+                }
+                layout.children.splice(index, 1);
+                return true
             }
-        } else {
-            removeIt(this.element, this.layout, this.id)
+        })
+        if (element.previousElementSibling && element.previousElementSibling.classList.contains("layout__resize")) {
+            element.previousElementSibling.remove()
+        } else if (element.nextElementSibling && element.nextElementSibling.classList.contains("layout__resize")) {
+            element.nextElementSibling.remove()
         }
+        // TODO destroy panel & ws
+        element.remove();
     }
 }
 
 let count = 0
+
+const randomHexColorCode = () => {
+    let n = (Math.random() * 0xfffff * 1000000).toString(16);
+    return '#' + n.slice(0, 6);
+};

@@ -1,7 +1,6 @@
 import './assets/scss/base.scss';
 import './components/tab-panel';
 import './icons/index';
-import {resize} from './util/resize';
 import {ipcRenderer, remote} from 'electron';
 import {Constants} from './constants';
 import {mountFile, mountWebDAV} from './util/mount';
@@ -16,19 +15,21 @@ class App {
 
     constructor() {
         const layouts = [
-            new Layout({size: "25%"}),
-            new Layout({direction: 'lr'}),
-            new Layout({size: "25%"}),
+            new Layout({size: "100px"}),
+            new Layout({direction: 'lr', resize: 'tb'}),
+            new Layout({size: "100px", resize: 'tb'}),
         ]
         layouts[1].children = [
             new Layout({parent: layouts[1], size: "25%"}),
-            new Layout({parent: layouts[1], resize:'lr'}),
-            new Layout({parent: layouts[1], size: "25%", resize:'lr'}),
+            new Layout({parent: layouts[1], resize: 'lr'}),
+            new Layout({parent: layouts[1], size: "25%", resize: 'lr'}),
         ];
 
-        (layouts[1].children[0] as Layout).addChild(new Wnd({layout: layouts[1].children[0] as Layout}));
-        (layouts[1].children[1] as Layout).addChild(new Wnd({layout: layouts[1].children[1] as Layout, close: false}));
-        (layouts[1].children[2] as Layout).addChild(new Wnd({layout: layouts[1].children[2] as Layout}));
+        layouts[0].addChild(new Wnd({layout: layouts[0], close: 'none'}));
+        (layouts[1].children[0] as Layout).addChild(new Wnd({layout: layouts[1].children[0] as Layout, close: 'none'}));
+        (layouts[1].children[1] as Layout).addChild(new Wnd({layout: layouts[1].children[1] as Layout, close: 'empty'}));
+        (layouts[1].children[2] as Layout).addChild(new Wnd({layout: layouts[1].children[2] as Layout, close: 'none'}));
+        layouts[2].addChild(new Wnd({layout: layouts[2], close: 'none'}));
 
         window.layouts = layouts
         // this.liandi = {

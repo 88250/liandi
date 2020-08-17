@@ -4,7 +4,6 @@ import {addResize} from "./util";
 
 export class Layout {
     public element: HTMLElement
-    public resizeElement?: HTMLElement
     public children?: Array<Layout | Wnd>
     public parent?: Layout
     public wnd?: Wnd
@@ -29,7 +28,7 @@ export class Layout {
         this.id = genUUID()
         this.direction = mergedOptions.direction
         this.element = document.createElement("div")
-        this.element.classList.add('fn__flex', 'layout')
+        this.element.classList.add('fn__flex')
         if (mergedOptions.direction === "tb") {
             this.element.classList.add('fn__flex-column');
         }
@@ -53,11 +52,17 @@ export class Layout {
         return this
     }
 
-    addChild?(child: Layout | Wnd, index?: number) {
-        if (typeof index === 'undefined') {
-            index = this.children.length
+    addChild?(child: Layout | Wnd, id?: string) {
+        if (!id) {
+            this.children.splice(this.children.length, 0, child)
+        } else {
+            this.children.find((item, index) => {
+                if (item.id === id) {
+                    this.children.splice(index + 1, 0, child)
+                    return true
+                }
+            })
         }
-        this.children.splice(index, 0, child)
     }
 
     moveChild?(child: Layout | Wnd) {
