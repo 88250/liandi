@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	// trees 用于维护所有已挂载的文档抽象语法树。
+	// trees 用于维护文档抽象语法树。
 	trees []*parse.Tree
 )
 
