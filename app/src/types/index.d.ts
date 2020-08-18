@@ -21,14 +21,22 @@ declare interface ILayoutOptions {
     size?: string
     resize?: TDirection
     type?: TLayout
-    element?:HTMLElement
+    element?: HTMLElement
 }
 
 declare interface IWndOptions {
     resize?: TDirection
     html?: string
     title?: string
-    callback?: (wnd:  import("../layout/Wnd").Wnd,) => void
+    callback?: (wnd: import("../layout/Wnd").Wnd,) => void
+}
+
+declare interface ITab {
+    model?: any
+    id: string
+    headElement?: HTMLElement,
+    panelElement?: HTMLElement,
+    ws?: import("../websocket").WebSocketUtil
 }
 
 declare interface IConfig {

@@ -5,10 +5,12 @@ import {destroyDialog} from "../util/dialog";
 import {WebSocketUtil} from "../websocket";
 
 export class File {
-    public element: HTMLElement
+    private element: HTMLElement
+    private tab: ITab
 
-    constructor(element: HTMLElement) {
-        this.element = element;
+    constructor(tab: ITab) {
+        this.tab = tab;
+        this.element = tab.panelElement;
         this.element.addEventListener("dblclick", (event) => {
             let target = event.target as HTMLElement;
             const ulElement = hasTopClosestByTag(target, "UL");
@@ -86,7 +88,7 @@ export class File {
   <span class="fn__ellipsis">${escapeHtml(item.name)}</span>
 </span>
 </li>`;
-                window.liandi.ws.send("ls", {
+                this.tab.ws.send("ls", {
                     url: dir.url,
                     path: item.path,
                 }, true);
@@ -139,7 +141,7 @@ export class File {
         }
     }
 
-    public onMount(data: { dir: IDir, existed?: boolean }, ws:WebSocketUtil) {
+    public onMount(data: { dir: IDir, existed?: boolean }) {
         if (data.existed) {
             return;
         }
@@ -154,7 +156,7 @@ export class File {
         this.element.insertAdjacentHTML("beforeend", html);
 
         // 首次挂载多个目录并发时，需要永远都执行回调
-        ws.send("ls", {
+        this.tab.ws.send("ls", {
             url: data.dir.url,
             path: "/",
         }, true);

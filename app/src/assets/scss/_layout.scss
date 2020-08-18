@@ -48,6 +48,10 @@
   }
 
   &__tab {
+    .tab__panels {
+      display: flex;
+    }
+
     .tab__headers {
       list-style: none;
       align-items: center;
