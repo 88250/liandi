@@ -15,9 +15,11 @@ import {onSetTheme} from "./onSetTheme";
 export class WebSocketUtil {
     private webSocket: WebSocket;
     private reqId: number;
+    private id: string
 
-    constructor(callback: Function) {
-       this.connect(callback);
+    constructor(id: string, callback: Function) {
+        this.id = id;
+        this.connect(id, callback);
     }
 
     public send(cmd: string, param: Record<string, unknown>, process = false) {
@@ -29,9 +31,9 @@ export class WebSocketUtil {
         }));
     }
 
-    private connect(callback?: Function) {
+    private connect(id: string, callback?: Function) {
         const liandi = window.liandi
-        this.webSocket = new WebSocket(Constants.WEBSOCKET_ADDREDD);
+        this.webSocket = new WebSocket(`${Constants.WEBSOCKET_ADDREDD}?id=${id}`);
         this.webSocket.onopen = () => {
             if (callback) {
                 callback(this)
@@ -40,7 +42,7 @@ export class WebSocketUtil {
         this.webSocket.onclose = (e) => {
             console.warn('WebSocket is closed. Reconnect will be attempted in 1 second.', e);
             setTimeout(() => {
-                this.connect();
+                this.connect(id);
             }, 1000);
         };
         this.webSocket.onerror = (err) => {
@@ -132,7 +134,7 @@ export class WebSocketUtil {
                         liandi.menus.itemData.target.nextElementSibling.remove();
                     }
                     liandi.menus.itemData.target.setAttribute('data-files', JSON.stringify(response.data.files));
-                    liandi.navigation.getLeaf(liandi, liandi.menus.itemData.target, response.data.dir);
+                    liandi.navigation.getLeaf(liandi.menus.itemData.target, response.data.dir);
                     destroyDialog();
                     if (response.data.callback === Constants.CB_CREATE_INSERT) {
                         setSelectionFocus(liandi.editors.currentEditor.range);

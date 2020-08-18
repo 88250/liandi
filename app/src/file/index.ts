@@ -2,11 +2,13 @@ import * as path from 'path';
 import {hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
 import {escapeHtml} from "../util/escape";
 import {destroyDialog} from "../util/dialog";
+import {WebSocketUtil} from "../websocket";
 
-export class Navigation {
-    public element = document.getElementById('navigation');
+export class File {
+    public element: HTMLElement
 
-    constructor(liandi: ILiandi) {
+    constructor(element: HTMLElement) {
+        this.element = element
         this.element.addEventListener('dblclick', (event) => {
             let target = event.target as HTMLElement
             const ulElement = hasTopClosestByTag(target, "UL")
@@ -19,7 +21,7 @@ export class Navigation {
                         break
                     }
                     if (target.tagName === "LI" && target.getAttribute("data-type") !== "navigation-file") {
-                        this.getLeaf(liandi, target, dir)
+                        this.getLeaf(target, dir)
                         this.setCurrent(target)
                         event.preventDefault()
                         event.stopPropagation()
@@ -36,7 +38,7 @@ export class Navigation {
                 const dir = JSON.parse(decodeURIComponent(ulElement.getAttribute("data-dir")))
                 while (target && !target.isEqualNode(ulElement)) {
                     if (target.classList.contains('item__arrow')) {
-                        this.getLeaf(liandi, target.parentElement, dir)
+                        this.getLeaf(target.parentElement, dir)
                         this.setCurrent(target.parentElement)
                         event.preventDefault()
                         event.stopPropagation()
@@ -45,7 +47,7 @@ export class Navigation {
 
                     if (target.getAttribute("data-type") === "navigation-file") {
                         this.setCurrent(target)
-                        liandi.editors.open(liandi, dir.url, decodeURIComponent(target.getAttribute('data-path')))
+                        window.liandi.editors.open(window.liandi, dir.url, decodeURIComponent(target.getAttribute('data-path')))
                         event.preventDefault()
                         event.stopPropagation()
                         break
@@ -61,9 +63,10 @@ export class Navigation {
                 }
             }
         })
+        return this
     }
 
-    public getLeaf(liandi: ILiandi, liElement: HTMLElement, dir: IDir) {
+    public getLeaf(liElement: HTMLElement, dir: IDir) {
         const files = JSON.parse(liElement.getAttribute('data-files'))
         if (liElement.firstElementChild.classList.contains('item__arrow--open')) {
             liElement.firstElementChild.classList.remove('item__arrow--open')
@@ -84,7 +87,7 @@ export class Navigation {
   <span class="fn__ellipsis">${escapeHtml(item.name)}</span>
 </span>
 </li>`
-                liandi.ws.send('ls', {
+                window.liandi.ws.send('ls', {
                     url: dir.url,
                     path: item.path,
                 }, true)
@@ -137,7 +140,7 @@ export class Navigation {
         }
     }
 
-    public onMount(liandi: ILiandi, data: { dir: IDir, existed: boolean }) {
+    public onMount(data: { dir: IDir, existed?: boolean }, ws:WebSocketUtil) {
         if (data.existed) {
             return;
         }
@@ -152,7 +155,7 @@ export class Navigation {
         this.element.insertAdjacentHTML('beforeend', html);
 
         // 首次挂载多个目录并发时，需要永远都执行回调
-        liandi.ws.send('ls', {
+        ws.send('ls', {
             url: data.dir.url,
             path: '/',
         }, true)

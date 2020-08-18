@@ -4,29 +4,26 @@ import {i18n} from "../i18n";
 import {mountFile, mountWebDAV} from "../util/mount";
 import {initSearch} from "../search";
 import {remote} from "electron";
+import {WebSocketUtil} from "./index";
+import {File} from '../file/index'
 
-export const onGetConfig = (data: {
-    lang: keyof II18n
-    theme: TTheme,
-    markdown: IMD,
-    image: IImage,
-}) => {
+export const onGetConfig = (data: IConfig) => {
     window.liandi.config = data;
     document.title = i18n[window.liandi.config.lang].slogan;
     initBar();
     initWindow();
     (window.liandi.layouts[1].children[1] as Layout).addChild(new Wnd({
-        layout: window.liandi.layouts[1].children[1] as Layout,
+        parent: window.liandi.layouts[1].children[1] as Layout,
         html: `<div class="layout__empty">
                     <div class="item fn__flex-inline">${i18n[window.liandi.config.lang].search}/${i18n[window.liandi.config.lang].config} &lt;Double Shift></div>
                     <div class="item fn__a fn__pointer" id="editorEmptyMount">${i18n[window.liandi.config.lang].mount}</div>
                     <div class="item fn__a fn__pointer" id="editorEmptyMountDAV">${i18n[window.liandi.config.lang].mountWebDAV}</div>
                 </div>`,
-        callback(element: HTMLElement) {
-            element.querySelector('#editorEmptyMount').addEventListener('click', () => {
+        callback(wnd: Wnd) {
+            wnd.element.querySelector('#editorEmptyMount').addEventListener('click', () => {
                 mountFile();
             });
-            element.querySelector('#editorEmptyMountDAV').addEventListener('click', () => {
+            wnd.element.querySelector('#editorEmptyMountDAV').addEventListener('click', () => {
                 mountWebDAV();
             });
         }
@@ -34,49 +31,63 @@ export const onGetConfig = (data: {
 }
 
 const initBar = () => {
-    const liandi = window.liandi
     document.querySelector('.toolbar').innerHTML = `<div id="barNavigation" class="item fn__a">
             <svg>
                 <use xlink:href="#iconFolder"></use>
             </svg>
-            ${i18n[liandi.config.lang].fileTree}
+            ${i18n[window.liandi.config.lang].fileTree}
         </div>
         <div id="barBacklinks" class="item fn__a">
             <svg>
                 <use xlink:href="#iconLink"></use>
-            </svg>${i18n[liandi.config.lang].backlinks}
+            </svg>${i18n[window.liandi.config.lang].backlinks}
         </div>
         <div id="barGraph" class="item fn__a">
             <svg>
                 <use xlink:href="#iconGraph"></use>
-            </svg>${i18n[liandi.config.lang].graphView}
+            </svg>${i18n[window.liandi.config.lang].graphView}
         </div>
         <div class="fn__flex-1" id="drag"></div>
         <a href="https://hacpai.com/sponsor" class="item ft__pink">
             <svg>
                 <use xlink:href="#iconFavorite"></use>
-            </svg>${i18n[liandi.config.lang].sponsor}
+            </svg>${i18n[window.liandi.config.lang].sponsor}
         </a>
         <div id="barHelp" class="item fn__a">
             <svg>
                 <use xlink:href="#iconHelp"></use>
-            </svg>${i18n[liandi.config.lang].help}
+            </svg>${i18n[window.liandi.config.lang].help}
         </div>
         <div id="barBug" class="item fn__a">
             <svg>
                 <use xlink:href="#iconBug"></use>
-            </svg>${i18n[liandi.config.lang].debug}
+            </svg>${i18n[window.liandi.config.lang].debug}
         </div>
         <div id="barSettings" class="item fn__a">
             <svg>
                 <use xlink:href="#iconSettings"></use>
-            </svg>${i18n[liandi.config.lang].config}
+            </svg>${i18n[window.liandi.config.lang].config}
         </div>`
     document.getElementById('barNavigation').addEventListener('click', function () {
-        if (this.classList.contains("item--current")) {
-            liandi.navigation.hide()
+        if (window.liandi.activeWnd) {
+            // TODO
         } else {
-            liandi.navigation.show()
+            (window.liandi.layouts[1].children[0] as Layout).addChild(new Wnd({
+        parent: window.liandi.layouts[1].children[0] as Layout,
+                title: i18n[window.liandi.config.lang].fileTree,
+                callback: function (wnd: Wnd) {
+                    if (wnd.element.parentElement.clientWidth === 6) {
+                        wnd.element.parentElement.style.width = '200px'
+                    }
+                    wnd.tabs.data[0].model = new File(wnd.tabs.data[0].panelElement);
+
+                    wnd.tabs.data[0].ws = new WebSocketUtil(wnd.tabs.data[0].id, () => {
+                        window.liandi.config.dirs.map((item: IDir) => {
+                            wnd.tabs.data[0].model.onMount({dir: item}, wnd.tabs.data[0].ws);
+                        });
+                    })
+                }
+            }));
         }
         window.dispatchEvent(new CustomEvent('resize'));
     });
@@ -113,7 +124,7 @@ const initBar = () => {
 }
 
 
-const initWindow = () =>{
+const initWindow = () => {
     // window action
     const currentWindow = remote.getCurrentWindow();
     if (process.platform === 'darwin') {

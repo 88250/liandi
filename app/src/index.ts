@@ -32,7 +32,7 @@ class App {
         this.liandi = {
             layouts
         };
-        this.liandi.ws = new WebSocketUtil((ws: WebSocketUtil) => {
+        this.liandi.ws = new WebSocketUtil(genUUID(), (ws: WebSocketUtil) => {
             ws.send('getconf', {});
             this.liandi.find = new Find();
             doubleShift();
@@ -43,11 +43,6 @@ class App {
         //         this.liandi.graph.resize();
         //         this.liandi.editors.resize();
         //     };
-        //     this.liandi.navigation = new Navigation(this.liandi);
-        //     this.liandi.editors = new Editors();
-        //     this.liandi.menus = new Menus(this.liandi);
-        //     this.liandi.backlinks = new Backlinks(this.liandi);
-        //     this.liandi.graph = new Graph(this.liandi);
         window.liandi = this.liandi;
     }
 
