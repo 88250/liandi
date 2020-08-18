@@ -63,6 +63,7 @@
         border-bottom: 2px solid transparent;
         line-height: 18px;
         cursor: pointer;
+        user-select: none;
 
         &:hover {
           background-color: var(--panel-background-color);

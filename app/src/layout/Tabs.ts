@@ -1,17 +1,9 @@
-import {WebSocketUtil} from "../websocket";
 import {Wnd} from "./Wnd";
 import {genUUID} from "../util/genUUID";
-import {File} from "../file";
 
 export class Tabs {
-    public children: {
-        model?: File
-        id: string
-        headElement: HTMLElement,
-        panelElement: HTMLElement,
-        ws?: WebSocketUtil
-    }[] = []
-    private parent:Wnd
+    public children: ITab[] = []
+    private parent: Wnd
 
     constructor(wnd: Wnd) {
         this.parent = wnd;
@@ -34,25 +26,33 @@ export class Tabs {
         });
     }
 
-    public addTab(tab: { title: string, panel: string }) {
-        const titleElement = document.createElement("li");
-        titleElement.classList.add("item")
+    public addTab(tab: { title?: string, panel?: string, callback?: (element: HTMLElement) => void }) {
+        this.children.forEach((item) => {
+            item.headElement?.classList.remove('item--current')
+            item.panelElement.classList.add('fn__none')
+        })
+
+        let headElement
         if (tab.title) {
-            titleElement.innerHTML = tab.title;
+            headElement = document.createElement("li");
+            headElement.classList.add("item", "item--current")
+            headElement.innerHTML = tab.title;
+            this.parent.element.querySelector(".tab__headers").append(headElement);
         }
+
         const panelElement = document.createElement("div");
         panelElement.classList.add("fn__flex-1")
-        if (tab.panel) {
-            panelElement.innerHTML = tab.panel;
-        }
+        panelElement.innerHTML = tab.panel || "";
+        this.parent.element.querySelector(".tab__panels").append(panelElement);
 
         this.children.push({
             id: genUUID(),
-            headElement: titleElement,
-            panelElement: panelElement,
+            headElement,
+            panelElement,
         });
 
-        this.parent.element.querySelector(".tab__headers").append(titleElement);
-        this.parent.element.querySelector(".tab__panels").append(panelElement);
+        if (tab.callback) {
+            tab.callback(panelElement)
+        }
     }
 }

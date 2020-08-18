@@ -10,51 +10,38 @@ import {escapeHtml} from "../util/escape";
 import {i18n} from "../i18n";
 import {processRemoveDataRender1} from "../../vditore/src/ts/ir/process";
 
-export class Editors {
-    private editors: IEditor[] = [];
-    private editorsElement: HTMLElement;
-    public blockHint: BlockHint;
-    public currentEditor: IEditor;
+export class Editor {
+    private element: HTMLElement;
+    private saved = false
+    private vditore:Vditor
+    private url:string
+    private path:string
 
-    constructor() {
-        this.editorsElement = document.getElementById("editors");
-        this.blockHint = new BlockHint();
+    constructor(element: HTMLElement) {
+        this.element = element
     }
 
-    public resize() {
-        if (this.currentEditor?.vditor) {
-            this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + "px";
-        }
-    }
-
-    private initVditor(liandi: ILiandi, editor: IEditor, html?: string) {
-        if (typeof html === "undefined" && editor.vditor) {
-            html = editor.vditor.vditor.ir.element.innerHTML;
-        }
-        if (editor.vditor) {
-            editor.vditor.destroy();
-        }
-        editor.vditor = new Vditor(editor.editorElement, {
-            _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
+    public initVditor(html?: string) {
+        this.vditore = new Vditor(this.element, {
+            // _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
             debugger: process.env.NODE_ENV === "development",
             icon: "material",
-            lang: liandi.config.lang,
-            outline: liandi.config.markdown.outline,
+            lang: window.liandi.config.lang,
+            outline: window.liandi.config.markdown.outline,
             toolbarConfig: {
-                hide: liandi.config.markdown.hideToolbar,
+                hide: window.liandi.config.markdown.hideToolbar,
             },
             typewriterMode: true,
-            height: window.innerHeight - editor.inputElement.clientHeight,
             hint: {
                 emojiPath: path.posix.join(Constants.APP_DIR, "vditore/dist/images/emoji"),
                 extend: [
                     {
                         key: "((",
                         hint: (key) => {
-                            liandi.ws.send("searchblock", {
+                            window.liandi.ws.send("searchblock", {
                                 k: key,
-                                url: liandi.current.dir.url,
-                                path: liandi.current.path
+                                url: window.liandi.current.dir.url,
+                                path: window.liandi.current.path
                             });
                             return [];
                         },
@@ -100,7 +87,7 @@ export class Editors {
                     ],
                 }],
             tab: "\t",
-            theme: liandi.config.theme === "dark" ? "dark" : "classic",
+            theme: window.liandi.config.theme === "dark" ? "dark" : "classic",
             cache: {
                 enable: false
             },
@@ -110,31 +97,31 @@ export class Editors {
             cdn: path.posix.join(Constants.APP_DIR, "vditore"),
             preview: {
                 markdown: {
-                    autoSpace: liandi.config.markdown.autoSpace,
-                    chinesePunct: liandi.config.markdown.chinesePunct,
-                    fixTermTypo: liandi.config.markdown.fixTermTypo,
-                    toc: liandi.config.markdown.toc,
-                    footnotes: liandi.config.markdown.footnotes,
-                    paragraphBeginningSpace: liandi.config.markdown.paragraphBeginningSpace
+                    autoSpace: window.liandi.config.markdown.autoSpace,
+                    chinesePunct: window.liandi.config.markdown.chinesePunct,
+                    fixTermTypo: window.liandi.config.markdown.fixTermTypo,
+                    toc: window.liandi.config.markdown.toc,
+                    footnotes: window.liandi.config.markdown.footnotes,
+                    paragraphBeginningSpace: window.liandi.config.markdown.paragraphBeginningSpace
                 },
                 math: {
-                    inlineDigit: liandi.config.markdown.inlineMathAllowDigitAfterOpenMarker,
-                    engine: liandi.config.markdown.mathEngine,
+                    inlineDigit: window.liandi.config.markdown.inlineMathAllowDigitAfterOpenMarker,
+                    engine: window.liandi.config.markdown.mathEngine,
                 },
                 hljs: {
-                    style: liandi.config.theme === "dark" ? "native" : "github"
+                    style: window.liandi.config.theme === "dark" ? "native" : "github"
                 },
                 theme: {
-                    current: liandi.config.theme,
+                    current: window.liandi.config.theme,
                     path: path.posix.join(Constants.APP_DIR, "vditore/dist/css/content-theme"),
                 },
             },
             upload: {
                 setHeaders: () => {
                     return {
-                        "X-URL": encodeURIComponent(liandi.current.dir.url),
-                        "X-PATH": encodeURIComponent(liandi.current.path),
-                        "X-Mode": editor.vditor.getCurrentMode()
+                        "X-URL": encodeURIComponent(window.liandi.current.dir.url),
+                        "X-PATH": encodeURIComponent(window.liandi.current.path),
+                        "X-Mode": this.vditore.getCurrentMode()
                     };
                 },
                 max: 128 * 1024 * 1024,
@@ -143,18 +130,24 @@ export class Editors {
                 url: Constants.UPLOAD_ADDRESS,
             },
             after: () => {
-                const lnkBase = path.posix.join(liandi.current.dir.url, path.posix.dirname(liandi.current.path));
-                editor.vditor.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + "/");
-                editor.vditor.setHTML(html);
-                editor.vditor.focus();
-                this.blockHint.initEvent(liandi, editor.vditor.vditor.ir.element);
+                const lnkBase = path.posix.join(window.liandi.current.dir.url, path.posix.dirname(window.liandi.current.path));
+                this.vditore.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + "/");
+                this.vditore.setHTML(html);
+                this.vditore.focus();
+                // this.blockHint.initEvent(window.liandi, this.vditore.vditor.ir.element);
             },
             input: () => {
-                editor.saved = false;
-                this.currentEditor.inputElement.classList.add("editor__input--unsave");
+                this.saved = false;
+                // this.currentEditor.inputElement.classList.add("editor__input--unsave");
                 // TODO auto save
             }
         });
+    }
+
+    public resize() {
+        // if (this.currentEditor?.vditor) {
+        //     this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + "px";
+        // }
     }
 
     private newEditor(liandi: ILiandi, html: string) {
@@ -170,7 +163,7 @@ export class Editors {
         const divElement = document.createElement("div");
         divElement.append(inputElement);
         divElement.append(editorElement);
-        this.editorsElement.insertAdjacentElement("beforeend", divElement);
+        this.element.insertAdjacentElement("beforeend", divElement);
 
         const editor: IEditor = {
             inputElement,
@@ -178,22 +171,22 @@ export class Editors {
             saved: true,
             active: true
         };
-        this.initVditor(liandi, editor, html);
-        this.currentEditor = editor;
-        this.editors.push(editor);
+        this.initVditor(html);
+        // this.currentEditor = editor;
+        // this.editors.push(editor);
     }
 
     public save(liandi: ILiandi) {
-        if (!liandi.current.dir || !this.currentEditor || (this.currentEditor && this.currentEditor.saved)) {
-            return;
-        }
-        liandi.ws.send("put", {
-            url: liandi.current.dir.url,
-            path: liandi.current.path,
-            content: processRemoveDataRender1(this.currentEditor.vditor.vditor.ir.element, "innerHTML")
-        });
-        this.currentEditor.saved = true;
-        this.currentEditor.inputElement.classList.remove("editor__input--unsave");
+        // if (!liandi.current.dir || !this.currentEditor || (this.currentEditor && this.currentEditor.saved)) {
+        //     return;
+        // }
+        // liandi.ws.send("put", {
+        //     url: liandi.current.dir.url,
+        //     path: liandi.current.path,
+        //     content: processRemoveDataRender1(this.currentEditor.vditor.vditor.ir.element, "innerHTML")
+        // });
+        // this.currentEditor.saved = true;
+        // this.currentEditor.inputElement.classList.remove("editor__input--unsave");
     }
 
     public open(liandi: ILiandi, url: string, path: string) {
@@ -209,43 +202,43 @@ export class Editors {
     }
 
     public close(liandi: ILiandi) {
-        if (!this.currentEditor) {
-            return;
-        }
-        this.save(liandi);
-        if (this.currentEditor.vditor) {
-            this.currentEditor.vditor.destroy();
-        }
-        this.currentEditor.inputElement.parentElement.classList.add("fn__none");
-        document.querySelector<HTMLElement>(".editor__empty").style.display = "flex";
+        // if (!this.currentEditor) {
+        //     return;
+        // }
+        // this.save(liandi);
+        // if (this.currentEditor.vditor) {
+        //     this.currentEditor.vditor.destroy();
+        // }
+        // this.currentEditor.inputElement.parentElement.classList.add("fn__none");
+        // document.querySelector<HTMLElement>(".editor__empty").style.display = "flex";
     }
 
     public focus() {
-        this.currentEditor?.vditor?.focus();
+        // this.currentEditor?.vditor?.focus();
     }
 
     public reloadEditor(liandi: ILiandi) {
-        if (this.currentEditor) {
-            this.initVditor(liandi, this.currentEditor);
-        }
+        // if (this.currentEditor) {
+        //     this.initVditor();
+        // }
     }
 
     public onGet(liandi: ILiandi, editorData: { content: string, name: string }) {
-        if (this.currentEditor) {
-            this.initVditor(liandi, this.currentEditor, editorData.content);
-            this.editorsElement.lastElementChild.classList.remove("fn__none");
-        } else {
-            this.newEditor(liandi, editorData.content);
-        }
-        this.currentEditor.inputElement.value = editorData.name;
-        document.querySelector<HTMLElement>(".editor__empty").style.display = "none";
+        // if (this.currentEditor) {
+        //     this.initVditor(editorData.content);
+        //     this.editorsElement.lastElementChild.classList.remove("fn__none");
+        // } else {
+        //     this.newEditor(liandi, editorData.content);
+        // }
+        // this.currentEditor.inputElement.value = editorData.name;
+        // document.querySelector<HTMLElement>(".editor__empty").style.display = "none";
     }
 
     public showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[], url: string, path: string }) {
         if (liandi.current.dir.url !== data.url || liandi.current.path !== data.path) {
             return;
         }
-        const currentBlockElement = hasTopClosestByAttribute(getEditorRange(this.currentEditor.vditor.vditor.ir.element).startContainer, "data-block", "0");
+        const currentBlockElement = hasTopClosestByAttribute(getEditorRange(this.vditore.vditor.ir.element).startContainer, "data-block", "0");
         let nodeId = "";
         if (currentBlockElement) {
             nodeId = currentBlockElement.getAttribute("data-node-id");
@@ -292,10 +285,10 @@ export class Editors {
             value: "((newFile))",
             html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#iconMD"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${i18n[liandi.config.lang].newFile}</span></span>`,
         });
-        this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);
+        // this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);
     }
 
     public onGetBlock(liandi: ILiandi, data: { id: string, block: IBlock, callback: string }) {
-        this.blockHint.getBlock(liandi, data);
+        // this.blockHint.getBlock(liandi, data);
     }
 }

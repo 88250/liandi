@@ -2,7 +2,7 @@ import * as path from "path";
 import {hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
 import {escapeHtml} from "../util/escape";
 import {destroyDialog} from "../util/dialog";
-import {WebSocketUtil} from "../websocket";
+import {openFile} from "../editors/util";
 
 export class File {
     private element: HTMLElement
@@ -11,6 +11,7 @@ export class File {
     constructor(tab: ITab) {
         this.tab = tab;
         this.element = tab.panelElement;
+        this.element.classList.add('file')
         this.element.addEventListener("dblclick", (event) => {
             let target = event.target as HTMLElement;
             const ulElement = hasTopClosestByTag(target, "UL");
@@ -49,7 +50,7 @@ export class File {
 
                     if (target.getAttribute("data-type") === "navigation-file") {
                         this.setCurrent(target);
-                        window.liandi.editors.open(window.liandi, dir.url, decodeURIComponent(target.getAttribute("data-path")));
+                        openFile(dir.url, decodeURIComponent(target.getAttribute("data-path")));
                         event.preventDefault();
                         event.stopPropagation();
                         break;

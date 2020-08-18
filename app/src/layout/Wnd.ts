@@ -1,6 +1,6 @@
 import {Layout} from "./index";
 import {genUUID} from "../util/genUUID";
-import {addCenterWnd, addResize} from "./util";
+import {addCenterWnd} from "./util";
 import {Tabs} from "./Tabs";
 
 export class Wnd {
@@ -29,7 +29,7 @@ export class Wnd {
     public spilt(direction: TDirection) {
         // TODO new panel & ws
         if (direction === this.parent.direction) {
-            this.parent.addWnd(new Wnd({resize: direction, html: (count++).toString()}), this.id);
+            this.parent.addWnd(new Wnd({resize: direction, html: ""}), this.id);
         } else {
             this.parent.children.find((item, index) => {
                 if (item.id === this.id) {
@@ -104,5 +104,3 @@ export class Wnd {
         }
     }
 }
-
-let count = 0

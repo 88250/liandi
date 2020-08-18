@@ -15,6 +15,7 @@
     display: inline-flex;
     align-items: center;
     font-size: 13px;
+    user-select: none;
 
     &:hover {
       text-decoration: none;

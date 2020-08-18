@@ -73,7 +73,6 @@ const initBar = () => {
                         currentTab.model.onMount({dir: item});
                     });
                 });
-
             }
         }));
         window.dispatchEvent(new CustomEvent("resize"));

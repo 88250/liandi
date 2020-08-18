@@ -28,7 +28,7 @@ declare interface IWndOptions {
     resize?: TDirection
     html?: string
     title?: string
-    callback?: (wnd: import("../layout/Wnd").Wnd,) => void
+    callback?: (wnd: import("../layout/Wnd").Wnd) => void
 }
 
 declare interface ITab {
