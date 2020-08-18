@@ -19,12 +19,6 @@ import (
 	"github.com/88250/lute/util"
 )
 
-// WikiLink 描述了 [[link|text]] 结构。
-type WikiLink struct {
-	link string // 链接
-	text string // 自定义锚文本
-}
-
 func convertWikiLinks(trees []*parse.Tree) {
 	for _, tree := range trees {
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
@@ -55,6 +49,8 @@ func convertWikiLinks(trees []*parse.Tree) {
 					link = linkParts[0]
 					linkText = linkParts[1]
 				}
+				link = strings.TrimSpace(link)
+				linkText = strings.TrimSpace(linkText)
 				if !strings.Contains(link, "#") {
 					// 在结尾统一带上锚点
 					link += "#"
