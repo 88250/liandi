@@ -53,8 +53,7 @@ func convertWikiLinks(trees []*parse.Tree) {
 				}
 				link, linkText = strings.TrimSpace(link), strings.TrimSpace(linkText)
 				if !strings.Contains(link, "#") {
-					// 在结尾统一带上锚点方便后续查找
-					link += "#"
+					link += "#" // 在结尾统一带上锚点方便后续查找
 				}
 
 				id := searchLinkID(trees, link)
