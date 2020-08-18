@@ -53,15 +53,15 @@ func WriteASTJSON(tree *parse.Tree) error {
 	renderer := NewJSONRenderer(tree)
 	output := renderer.Render()
 
-	dir := Conf.Dir(tree.URL)
-	if err := dir.Put(tree.Path+".md.json", output); nil != err {
+	box := Conf.Box(tree.URL)
+	if err := box.Put(tree.Path+".md.json", output); nil != err {
 		return err
 	}
 	return nil
 }
 
 func ReadASTJSON(url, p string) (jsonStr string, err error) {
-	dir := Conf.Dir(url)
-	jsonStr, err = dir.Get(p)
+	box := Conf.Box(url)
+	jsonStr, err = box.Get(p)
 	return
 }

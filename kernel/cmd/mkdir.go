@@ -32,12 +32,12 @@ func (cmd *mkdir) Exec() {
 		return
 	}
 
-	dir := model.Conf.Dir(url)
+	box := model.Conf.Box(url)
 	files, _ := model.Ls(url, path.Dir(p))
 	ret.Data = map[string]interface{}{
-		"dir":  dir,
+		"box":   box,
 		"files": files,
-		"name": path.Base(p),
+		"name":  path.Base(p),
 	}
 	cmd.Push(ret.Bytes())
 }

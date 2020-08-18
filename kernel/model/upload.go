@@ -43,8 +43,8 @@ func Upload(c *gin.Context) {
 	//if "ir" == mode {
 	linkBase = ""
 	//}
-	dir := Conf.Dir(u)
-	if nil == dir {
+	box := Conf.Box(u)
+	if nil == box {
 		ret.Code = -1
 		ret.Msg = Conf.lang(0)
 		return
@@ -131,8 +131,8 @@ func UploadFetch(c *gin.Context) {
 	//if "ir" == mode {
 	linkBase = ""
 	//}
-	dir := Conf.Dir(u)
-	if nil == dir {
+	box := Conf.Box(u)
+	if nil == box {
 		ret.Code = -1
 		msg := Conf.lang(0)
 		Logger.Error(msg)

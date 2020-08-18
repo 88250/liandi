@@ -25,7 +25,7 @@ func (cmd *mountremote) Exec() {
 	url, _ = model.MountRemote(url, user, password)
 	model.RestartServeWebDAV()
 	ret.Data = map[string]interface{}{
-		"dir": model.Conf.Dir(url),
+		"dir": model.Conf.Box(url),
 	}
 	cmd.Push(ret.Bytes())
 }
