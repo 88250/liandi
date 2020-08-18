@@ -24,6 +24,7 @@ import (
 	"github.com/88250/gowebdav"
 	"github.com/88250/gulu"
 	"github.com/88250/lute"
+	"github.com/88250/lute/parse"
 )
 
 // Mode 标识了运行模式，默认开发环境。
@@ -289,6 +290,7 @@ func (dir *Dir) Remove(path string) error {
 func (dir *Dir) Index() {
 	Logger.Debugf("开始导入目录 [%s] 下新的 Markdown 文件", dir.URL)
 	markdowns := dir.ListNewMarkdowns("/")
+	var importTrees []*parse.Tree
 	for _, file := range markdowns {
 		p := file.(*gowebdav.File).Path()
 		markdown, err := dir.Get(p)
@@ -296,8 +298,12 @@ func (dir *Dir) Index() {
 			Logger.Fatalf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, p, err)
 		}
 		tree := dir.ParseIndexTree(p, markdown)
-		if err = WriteASTJSON(tree); nil != err {
-			Logger.Fatalf("生成目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
+		importTrees = append(importTrees, tree)
+	}
+	convertWikiLinks(importTrees) // 支持 [[link]] 语法的导入 https://github.com/88250/liandi/issues/131
+	for _, tree := range importTrees {
+		if err := WriteASTJSON(tree); nil != err {
+			Logger.Fatalf("生成目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, tree.Path, err)
 		}
 	}
 	Logger.Debugf("导入目录 [%s] 下新的 Markdown 文件 [%d] 完毕", dir.URL, len(markdowns))

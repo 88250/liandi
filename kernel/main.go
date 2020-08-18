@@ -68,6 +68,8 @@ func main() {
 	r.POST("/upload/fetch", model.UploadFetch)
 
 	m.HandleConnect(func(s *melody.Session) {
+		id := s.Request.URL.Query().Get("id")
+		s.Set("id", id)
 		model.AddPushChan(s)
 		//sessionId, _ := s.Get("id")
 		//model.Logger.Debugf("会话 [%s] 已连接", sessionId)
