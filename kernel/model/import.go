@@ -11,6 +11,7 @@
 package model
 
 import (
+	"path"
 	"strings"
 
 	"github.com/88250/lute/ast"
@@ -31,44 +32,77 @@ func convertWikiLinks(trees []*parse.Tree) {
 				return ast.WalkContinue
 			}
 
-			links := extractWikiLinks(util.BytesToStr(n.Tokens))
-			for _, link := range links {
-				_ = link
+			text := util.BytesToStr(n.Tokens)
+			length := len(text)
+			start := 0
+			end := length
+			for {
+				part := text[start:end]
+				start = strings.Index(part, "[[")
+				if 0 > start {
+					break
+				}
+				start += 2
+				end = strings.Index(part, "]]")
+				if 0 > end {
+					break
+				}
+
+				link := path.Join(path.Dir(tree.Path), text[start:end])
+				linkText := link
+				linkParts := strings.Split(link, "|")
+				if 1 < len(linkParts) {
+					link = linkParts[0]
+					linkText = linkParts[1]
+				}
+				if !strings.Contains(link, "#") {
+					// 在结尾统一带上锚点
+					link += "#"
+				}
+
+				id := searchLinkID(trees, link)
+				if "" == id {
+					start = end
+					end = length
+					continue
+				}
+
+				newText := text[:start-2] + "((" + id
+				if "" != linkText {
+					newText += " \"" + linkText + "\"))" + text[end+2:]
+				}
+				text = newText
+
+				start = end
+				end = length
 			}
+			n.Tokens = util.StrToBytes(text)
 			return ast.WalkContinue
 		})
 	}
 }
 
-func extractWikiLinks(text string) (wikiLinks []*WikiLink) {
-	length := len(text)
-	start := 0
-	end := length
-	for {
-		part := text[start:end]
-		start = strings.Index(part, "[[")
-		if 0 > start {
-			return
-		}
-		end = strings.Index(part, "]]")
-		if 0 > end {
-			return
-		}
+func searchLinkID(trees []*parse.Tree, link string) (id string) {
+	for _, tree := range trees {
+		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+			if !entering || (ast.NodeDocument != n.Type && ast.NodeHeading != n.Type) {
+				return ast.WalkContinue
+			}
 
-		link := text[start:end]
-		linkText := link
-		linkParts := strings.Split(link, "|")
-		if 1 < len(linkParts) {
-			link = linkParts[0]
-			linkText = linkParts[1]
+			nodePath := tree.Path + "#"
+			if ast.NodeHeading == n.Type {
+				nodePath += n.Text()
+			}
+
+			if nodePath == link {
+				id = n.ID
+				return ast.WalkStop
+			}
+			return ast.WalkContinue
+		})
+		if "" != id {
+			return
 		}
-		wikiLink := &WikiLink{
-			link: link,
-			text: linkText,
-		}
-		wikiLinks = append(wikiLinks, wikiLink)
-		start = end
-		end = length
 	}
 	return
 }
