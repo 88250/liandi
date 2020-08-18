@@ -31,15 +31,21 @@ func convertWikiLinks(trees []*parse.Tree) {
 			start, end := 0, length
 			for {
 				part := text[start:end]
-				if start = strings.Index(part, "[["); 0 > start {
+				if idx := strings.Index(part, "]]"); 0 > idx {
 					break
+				} else {
+					end = start + idx
 				}
-				start += 2
-				if end = strings.Index(part, "]]"); 0 > end {
+				if idx := strings.Index(part, "[["); 0 > idx {
+					break
+				} else {
+					start += idx
+				}
+				if end <= start {
 					break
 				}
 
-				link := path.Join(path.Dir(tree.Path), text[start:end]) // 统一转为绝对路径方便后续查找
+				link := path.Join(path.Dir(tree.Path), text[start+2:end]) // 统一转为绝对路径方便后续查找
 				linkText := link
 				if linkParts := strings.Split(link, "|"); 1 < len(linkParts) {
 					link = linkParts[0]
@@ -57,8 +63,10 @@ func convertWikiLinks(trees []*parse.Tree) {
 					continue
 				}
 
-				text = text[:start-2] + "((" + id + " \"" + linkText + "\"))" + text[end+2:]
-				start, end = end, length
+				repl := "((" + id + " \"" + linkText + "\"))"
+				end += 2
+				text = text[:start] + repl + text[end:]
+				start, end = start+len(repl), len(text)
 			}
 			n.Tokens = util.StrToBytes(text)
 			return ast.WalkContinue
