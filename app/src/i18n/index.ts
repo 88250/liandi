@@ -300,7 +300,7 @@ export const i18n: II18n = {
         outline: "大纲",
         newFile: "新建文档",
         newFolder: "新建文件夹",
-        unMount: "关闭盒子",
+        unMount: "关闭",
         delete: "删除",
         rename: "重命名",
         save: "保存",
