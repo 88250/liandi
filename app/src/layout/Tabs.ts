@@ -15,7 +15,7 @@ export class Tabs {
 
     constructor(wnd: Wnd) {
         this.parent = wnd;
-        wnd.element.innerHTML = `<div class="layout__tab fn__flex-column fn__flex">
+        wnd.element.innerHTML = `<div class="layout__tab fn__flex-column fn__flex fn__flex-1">
     <div class="fn__flex">
         <ul class="fn__flex fn__flex-1 tab__headers"></ul>
         <button data-type="lr">lr</button><button data-type="tb">tb</button><button data-type="close">x</button>

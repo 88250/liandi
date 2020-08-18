@@ -16,7 +16,7 @@ export class Wnd {
         this.resize = options.resize
         this.callback = options.callback
         this.element = document.createElement("div");
-        this.element.classList.add("fn__flex-1");
+        this.element.classList.add("fn__flex-1", "fn__flex");
         this.children = new Tabs(this);
         if (options.html || options.title) {
             this.children.addTab({

@@ -66,12 +66,14 @@ const initBar = () => {
                     leftLayout.parent.children[1].element.style.width = (leftLayout.parent.children[1].element.clientWidth - 200) + 'px'
                     leftLayout.element.style.width = "206px";
                 }
-                wnd.children.children[0].model = new File(wnd.children.children[0].panelElement);
-                wnd.children.children[0].ws = new WebSocketUtil(wnd.children.children[0].id, () => {
+                const currentTab = wnd.children.children[0]
+                currentTab.model = new File(currentTab);
+                currentTab.ws = new WebSocketUtil(currentTab,  ()=> {
                     window.liandi.config.boxes.map((item: IDir) => {
-                        wnd.children.children[0].model.onMount({dir: item}, wnd.children.children[0].ws);
+                        currentTab.model.onMount({dir: item});
                     });
                 });
+
             }
         }));
         window.dispatchEvent(new CustomEvent("resize"));

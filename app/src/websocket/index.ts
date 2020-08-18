@@ -11,11 +11,11 @@ import {onSetTheme} from "./onSetTheme";
 export class WebSocketUtil {
     private webSocket: WebSocket;
     private reqId: number;
-    private id: string
+    public tab: ITab
 
-    constructor(id: string, callback: (ws?: WebSocketUtil) => void) {
-        this.id = id;
-        this.connect(id, callback);
+    constructor(tab: ITab, callback: (ws?: WebSocketUtil) => void) {
+        this.tab = tab;
+        this.connect(callback);
     }
 
     public send(cmd: string, param: Record<string, unknown>, process = false) {
@@ -27,18 +27,18 @@ export class WebSocketUtil {
         }));
     }
 
-    private connect(id: string, callback?: (ws?: WebSocketUtil) => void) {
+    private connect(callback?: (ws?: WebSocketUtil) => void) {
         const liandi = window.liandi;
-        this.webSocket = new WebSocket(`${Constants.WEBSOCKET_ADDREDD}?id=${id}`);
+        this.webSocket = new WebSocket(`${Constants.WEBSOCKET_ADDREDD}?id=${this.tab.id}`);
         this.webSocket.onopen = () => {
             if (callback) {
-                callback(this);
+                callback.apply(this);
             }
         };
         this.webSocket.onclose = (e) => {
             console.warn("WebSocket is closed. Reconnect will be attempted in 1 second.", e);
             setTimeout(() => {
-                this.connect(id);
+                this.connect();
             }, 1000);
         };
         this.webSocket.onerror = (err) => {
@@ -104,7 +104,7 @@ export class WebSocketUtil {
                     liandi.graph.render(liandi);
                     break;
                 case "ls":
-                    liandi.navigation.onLs(liandi, response.data);
+                    this.tab.model.onLs(liandi, response.data);
                     break;
                 case "get":
                     liandi.editors.onGet(liandi, response.data);

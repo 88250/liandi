@@ -55,6 +55,8 @@
     &-1 {
       flex: 1;
       min-width: 1px;
+      overflow: auto;
+      min-height: 1px;
     }
 
     &-column {

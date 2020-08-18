@@ -29,8 +29,8 @@ class App {
         this.liandi = {
             layout
         };
-        this.liandi.ws = new WebSocketUtil(genUUID(), (ws: WebSocketUtil) => {
-            ws.send("getconf", {});
+        this.liandi.ws = new WebSocketUtil({id: genUUID()}, () => {
+            this.liandi.ws.send("getconf", {});
             this.liandi.find = new Find();
             doubleShift();
             this.onIpc();
