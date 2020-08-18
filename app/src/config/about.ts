@@ -1,5 +1,5 @@
-import {i18n} from '../i18n';
-import {VDITOR_VERSION} from '../../vditore/src/ts/constants';
+import {i18n} from "../i18n";
+import {VDITOR_VERSION} from "../../vditore/src/ts/constants";
 
 export const about = {
     genHTML: (liandi: ILiandi) => {
@@ -25,8 +25,8 @@ export const about = {
 </div>`;
     },
     bindEvent: (liandi: ILiandi, element: HTMLElement) => {
-        element.querySelector('button').addEventListener('click', () => {
-            liandi.ws.send('checkupdate', {});
+        element.querySelector("button").addEventListener("click", () => {
+            liandi.ws.send("checkupdate", {});
         });
     },
 };

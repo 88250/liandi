@@ -1,6 +1,6 @@
-import {remote} from 'electron';
-import {i18n} from '../i18n';
-import {mountFile, mountWebDAV} from '../util/mount';
+import {remote} from "electron";
+import {i18n} from "../i18n";
+import {mountFile, mountWebDAV} from "../util/mount";
 
 export const initMountMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();

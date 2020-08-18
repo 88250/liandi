@@ -1,7 +1,7 @@
-import {hideMessage, showMessage} from './message';
-import {i18n} from '../i18n';
-import * as path from 'path';
-import {destroyDialog} from './dialog';
+import {hideMessage, showMessage} from "./message";
+import {i18n} from "../i18n";
+import * as path from "path";
+import {destroyDialog} from "./dialog";
 
 export const validateName = (liandi: ILiandi, name: string) => {
     hideMessage();
@@ -25,8 +25,8 @@ export const rename = (liandi: ILiandi, name: string, url: string, oldPath: stri
         return false;
     }
 
-    const newPath = path.posix.join(path.posix.dirname(oldPath), name) + (oldPath.endsWith('/') ? '/' : '');
-    liandi.ws.send('rename', {
+    const newPath = path.posix.join(path.posix.dirname(oldPath), name) + (oldPath.endsWith("/") ? "/" : "");
+    liandi.ws.send("rename", {
         url,
         oldPath,
         newPath

@@ -1,9 +1,8 @@
-import {rename} from '../util/rename';
-import Vditor from '../../vditore/src';
-import {Constants} from '../constants';
-import * as path from 'path';
-import * as process from 'process';
-import {ipcRenderer} from 'electron';
+import {rename} from "../util/rename";
+import Vditor from "../../vditore/src";
+import {Constants} from "../constants";
+import * as path from "path";
+import * as process from "process";
 import {BlockHint} from "./BlockHint";
 import {hasTopClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {getEditorRange} from "../../vditore/src/ts/util/selection";
@@ -18,27 +17,27 @@ export class Editors {
     public currentEditor: IEditor;
 
     constructor() {
-        this.editorsElement = document.getElementById('editors');
-        this.blockHint = new BlockHint()
+        this.editorsElement = document.getElementById("editors");
+        this.blockHint = new BlockHint();
     }
 
     public resize() {
         if (this.currentEditor?.vditor) {
-            this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + 'px';
+            this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + "px";
         }
     }
 
     private initVditor(liandi: ILiandi, editor: IEditor, html?: string) {
-        if (typeof html === 'undefined' && editor.vditor) {
+        if (typeof html === "undefined" && editor.vditor) {
             html = editor.vditor.vditor.ir.element.innerHTML;
         }
         if (editor.vditor) {
             editor.vditor.destroy();
         }
         editor.vditor = new Vditor(editor.editorElement, {
-            _lutePath: process.env.NODE_ENV === 'development' ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
-            debugger: process.env.NODE_ENV === 'development',
-            icon: 'material',
+            _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
+            debugger: process.env.NODE_ENV === "development",
+            icon: "material",
             lang: liandi.config.lang,
             outline: liandi.config.markdown.outline,
             toolbarConfig: {
@@ -47,12 +46,12 @@ export class Editors {
             typewriterMode: true,
             height: window.innerHeight - editor.inputElement.clientHeight,
             hint: {
-                emojiPath: path.posix.join(Constants.APP_DIR, 'vditore/dist/images/emoji'),
+                emojiPath: path.posix.join(Constants.APP_DIR, "vditore/dist/images/emoji"),
                 extend: [
                     {
-                        key: '((',
+                        key: "((",
                         hint: (key) => {
-                            liandi.ws.send('searchblock', {
+                            liandi.ws.send("searchblock", {
                                 k: key,
                                 url: liandi.current.dir.url,
                                 path: liandi.current.path
@@ -62,53 +61,53 @@ export class Editors {
                     }],
             },
             toolbar: [
-                'emoji',
-                'headings',
-                'bold',
-                'italic',
-                'strike',
-                'link',
-                '|',
-                'list',
-                'ordered-list',
-                'check',
-                'outdent',
-                'indent',
-                '|',
-                'quote',
-                'line',
-                'code',
-                'inline-code',
-                'insert-before',
-                'insert-after',
-                '|',
-                'upload',
-                'table',
-                '|',
-                'undo',
-                'redo',
-                '|',
-                'fullscreen',
+                "emoji",
+                "headings",
+                "bold",
+                "italic",
+                "strike",
+                "link",
+                "|",
+                "list",
+                "ordered-list",
+                "check",
+                "outdent",
+                "indent",
+                "|",
+                "quote",
+                "line",
+                "code",
+                "inline-code",
+                "insert-before",
+                "insert-after",
+                "|",
+                "upload",
+                "table",
+                "|",
+                "undo",
+                "redo",
+                "|",
+                "fullscreen",
                 {
-                    name: 'more',
+                    name: "more",
                     toolbar: [
-                        'code-theme',
-                        'content-theme',
-                        'export',
-                        'outline',
-                        'preview',
-                        'devtools',
+                        "code-theme",
+                        "content-theme",
+                        "export",
+                        "outline",
+                        "preview",
+                        "devtools",
                     ],
                 }],
-            tab: '\t',
-            theme: liandi.config.theme === 'dark' ? 'dark' : 'classic',
+            tab: "\t",
+            theme: liandi.config.theme === "dark" ? "dark" : "classic",
             cache: {
                 enable: false
             },
             counter: {
                 enable: true
             },
-            cdn: path.posix.join(Constants.APP_DIR, 'vditore'),
+            cdn: path.posix.join(Constants.APP_DIR, "vditore"),
             preview: {
                 markdown: {
                     autoSpace: liandi.config.markdown.autoSpace,
@@ -123,55 +122,55 @@ export class Editors {
                     engine: liandi.config.markdown.mathEngine,
                 },
                 hljs: {
-                    style: liandi.config.theme === 'dark' ? 'native' : 'github'
+                    style: liandi.config.theme === "dark" ? "native" : "github"
                 },
                 theme: {
                     current: liandi.config.theme,
-                    path: path.posix.join(Constants.APP_DIR, 'vditore/dist/css/content-theme'),
+                    path: path.posix.join(Constants.APP_DIR, "vditore/dist/css/content-theme"),
                 },
             },
             upload: {
                 setHeaders: () => {
                     return {
-                        'X-URL': encodeURIComponent(liandi.current.dir.url),
-                        'X-PATH': encodeURIComponent(liandi.current.path),
-                        'X-Mode': editor.vditor.getCurrentMode()
+                        "X-URL": encodeURIComponent(liandi.current.dir.url),
+                        "X-PATH": encodeURIComponent(liandi.current.path),
+                        "X-Mode": editor.vditor.getCurrentMode()
                     };
                 },
                 max: 128 * 1024 * 1024,
                 linkToImgUrl: Constants.UPLOAD_FETCH_ADDRESS,
-                filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, '').replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, '').replace('/\\s/g', ''),
+                filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, "").replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, "").replace("/\\s/g", ""),
                 url: Constants.UPLOAD_ADDRESS,
             },
             after: () => {
-                const lnkBase = path.posix.join(liandi.current.dir.url, path.posix.dirname(liandi.current.path))
-                editor.vditor.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + '/');
+                const lnkBase = path.posix.join(liandi.current.dir.url, path.posix.dirname(liandi.current.path));
+                editor.vditor.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + "/");
                 editor.vditor.setHTML(html);
                 editor.vditor.focus();
-                this.blockHint.initEvent(liandi, editor.vditor.vditor.ir.element)
+                this.blockHint.initEvent(liandi, editor.vditor.vditor.ir.element);
             },
             input: () => {
                 editor.saved = false;
-                this.currentEditor.inputElement.classList.add("editor__input--unsave")
+                this.currentEditor.inputElement.classList.add("editor__input--unsave");
                 // TODO auto save
             }
         });
     }
 
     private newEditor(liandi: ILiandi, html: string) {
-        const inputElement = document.createElement('input');
-        inputElement.className = 'editor__input';
-        inputElement.addEventListener('blur', () => {
+        const inputElement = document.createElement("input");
+        inputElement.className = "editor__input";
+        inputElement.addEventListener("blur", () => {
             rename(liandi, inputElement.value, liandi.current.dir.url, liandi.current.path);
         });
 
-        const editorElement = document.createElement('div');
-        editorElement.className = 'editor__vditor fn__flex-1';
+        const editorElement = document.createElement("div");
+        editorElement.className = "editor__vditor fn__flex-1";
 
-        const divElement = document.createElement('div');
+        const divElement = document.createElement("div");
         divElement.append(inputElement);
         divElement.append(editorElement);
-        this.editorsElement.insertAdjacentElement('beforeend', divElement);
+        this.editorsElement.insertAdjacentElement("beforeend", divElement);
 
         const editor: IEditor = {
             inputElement,
@@ -188,13 +187,13 @@ export class Editors {
         if (!liandi.current.dir || !this.currentEditor || (this.currentEditor && this.currentEditor.saved)) {
             return;
         }
-        liandi.ws.send('put', {
+        liandi.ws.send("put", {
             url: liandi.current.dir.url,
             path: liandi.current.path,
-            content: processRemoveDataRender1(this.currentEditor.vditor.vditor.ir.element, 'innerHTML')
+            content: processRemoveDataRender1(this.currentEditor.vditor.vditor.ir.element, "innerHTML")
         });
         this.currentEditor.saved = true;
-        this.currentEditor.inputElement.classList.remove("editor__input--unsave")
+        this.currentEditor.inputElement.classList.remove("editor__input--unsave");
     }
 
     public open(liandi: ILiandi, url: string, path: string) {
@@ -202,11 +201,11 @@ export class Editors {
         liandi.current = {
             dir: {url},
             path
-        }
-        liandi.ws.send('get', {
+        };
+        liandi.ws.send("get", {
             url,
             path
-        })
+        });
     }
 
     public close(liandi: ILiandi) {
@@ -217,8 +216,8 @@ export class Editors {
         if (this.currentEditor.vditor) {
             this.currentEditor.vditor.destroy();
         }
-        this.currentEditor.inputElement.parentElement.classList.add('fn__none');
-        document.querySelector<HTMLElement>('.editor__empty').style.display = "flex"
+        this.currentEditor.inputElement.parentElement.classList.add("fn__none");
+        document.querySelector<HTMLElement>(".editor__empty").style.display = "flex";
     }
 
     public focus() {
@@ -239,49 +238,49 @@ export class Editors {
             this.newEditor(liandi, editorData.content);
         }
         this.currentEditor.inputElement.value = editorData.name;
-        document.querySelector<HTMLElement>('.editor__empty').style.display = "none"
+        document.querySelector<HTMLElement>(".editor__empty").style.display = "none";
     }
 
     public showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[], url: string, path: string }) {
         if (liandi.current.dir.url !== data.url || liandi.current.path !== data.path) {
-            return
+            return;
         }
-        const currentBlockElement = hasTopClosestByAttribute(getEditorRange(this.currentEditor.vditor.vditor.ir.element).startContainer, "data-block", '0')
-        let nodeId = ''
+        const currentBlockElement = hasTopClosestByAttribute(getEditorRange(this.currentEditor.vditor.vditor.ir.element).startContainer, "data-block", "0");
+        let nodeId = "";
         if (currentBlockElement) {
-            nodeId = currentBlockElement.getAttribute("data-node-id")
+            nodeId = currentBlockElement.getAttribute("data-node-id");
         }
         const dataList: IHintData[] = [];
         data.blocks.forEach((item, index) => {
             if (index > 6) {
-                return
+                return;
             }
-            let iconName = ''
+            let iconName = "";
             switch (item.type) {
                 case "NodeDocument":
-                    iconName = "iconMD"
+                    iconName = "iconMD";
                     break;
                 case "NodeParagraph":
-                    iconName = "iconParagraph"
+                    iconName = "iconParagraph";
                     break;
                 case "NodeHeading":
-                    iconName = "vditor-icon-headings"
+                    iconName = "vditor-icon-headings";
                     break;
                 case "NodeBlockquote":
-                    iconName = "vditor-icon-quote"
+                    iconName = "vditor-icon-quote";
                     break;
                 case "NodeList":
-                    iconName = "vditor-icon-list"
+                    iconName = "vditor-icon-list";
                     break;
                 case "NodeCodeBlock":
-                    iconName = "vditor-icon-code"
+                    iconName = "vditor-icon-code";
                     break;
                 case "NodeTable":
-                    iconName = "vditor-icon-table"
+                    iconName = "vditor-icon-table";
                     break;
             }
             if (nodeId !== item.id) {
-                const title = escapeHtml(item.path.substr(1))
+                const title = escapeHtml(item.path.substr(1));
                 dataList.push({
                     value: `((${item.id} "${iconName === "iconMD" ? title : ""}"))`,
                     html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#${iconName}"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span><span class="fn__flex-1 fn__flex-shrink0" style="min-width: 10px"></span>
@@ -290,7 +289,7 @@ export class Editors {
             }
         });
         dataList.push({
-            value: `((newFile))`,
+            value: "((newFile))",
             html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#iconMD"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${i18n[liandi.config.lang].newFile}</span></span>`,
         });
         this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);

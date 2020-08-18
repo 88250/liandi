@@ -1,6 +1,6 @@
-import {remote} from 'electron';
-import {i18n} from '../i18n';
-import {newFileMenu, newFolderMenu, showInFolder} from './commonMenuItem';
+import {remote} from "electron";
+import {i18n} from "../i18n";
+import {newFileMenu, newFolderMenu, showInFolder} from "./commonMenuItem";
 
 export const initNavigationMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
@@ -13,10 +13,10 @@ export const initNavigationMenu = (liandi: ILiandi) => {
             if (liandi.current.dir && liandi.current.dir.url === itemData.dir.url) {
                 liandi.editors.close(liandi);
                 liandi.current = {
-                    path: '',
+                    path: "",
                 };
             }
-            liandi.ws.send('unmount', {
+            liandi.ws.send("unmount", {
                 url: itemData.dir.url
             });
             itemData.target.parentElement.remove();

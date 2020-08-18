@@ -2,6 +2,17 @@ interface Window {
     liandi: ILiandi
 }
 
+interface IObject {
+    [key: string]: string;
+}
+
+declare interface II18n {
+    en_US: IObject;
+    zh_CN: IObject;
+    ja_JP?: IObject;
+    ko_KR?: IObject;
+}
+
 declare interface ILayoutOptions {
     parent?: { element: HTMLElement, direction: string };
     direction?: string;
@@ -11,9 +22,6 @@ declare interface ILayoutOptions {
     children?: ILayoutOptions[]
 }
 
-declare interface IWnd {
-
-}
 declare interface IConfig {
     dirs:IDir[]
     lang: keyof II18n
@@ -100,7 +108,7 @@ declare interface IMD {
     chinesePunct: boolean;
     fixTermTypo: boolean;
     inlineMathAllowDigitAfterOpenMarker: boolean;
-    mathEngine: 'KaTeX' | 'MathJax';
+    mathEngine: "KaTeX" | "MathJax";
     hideToolbar: boolean;
     toc: boolean;
     footnotes: boolean;
@@ -112,7 +120,7 @@ declare interface IImage {
     autoFetch: boolean;
 }
 
-type TTheme = 'light' | 'dark'
+type TTheme = "light" | "dark"
 
 declare interface ILiandi {
     layouts: ILayoutOptions[],
@@ -120,7 +128,6 @@ declare interface ILiandi {
     ws?: {
         send: (cmd: string, param: Record<string, unknown>, process?: boolean) => void
     };
-    activeWnd?: IWnd,
     navigation?: {
         element: HTMLElement
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
@@ -166,11 +173,4 @@ declare interface ILiandi {
         render: (liandi: ILiandi) => void;
         resize: () => void;
     }
-}
-
-declare interface II18n {
-    en_US: IObject;
-    zh_CN: IObject;
-    ja_JP?: IObject;
-    ko_KR?: IObject;
 }

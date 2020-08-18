@@ -5,7 +5,7 @@ import {mountFile, mountWebDAV} from "../util/mount";
 import {initSearch} from "../search";
 import {remote} from "electron";
 import {WebSocketUtil} from "./index";
-import {File} from '../file/index'
+import {File} from "../file/index";
 
 export const onGetConfig = (data: IConfig) => {
     window.liandi.config = data;
@@ -20,18 +20,18 @@ export const onGetConfig = (data: IConfig) => {
                     <div class="item fn__a fn__pointer" id="editorEmptyMountDAV">${i18n[window.liandi.config.lang].mountWebDAV}</div>
                 </div>`,
         callback(wnd: Wnd) {
-            wnd.element.querySelector('#editorEmptyMount').addEventListener('click', () => {
+            wnd.element.querySelector("#editorEmptyMount").addEventListener("click", () => {
                 mountFile();
             });
-            wnd.element.querySelector('#editorEmptyMountDAV').addEventListener('click', () => {
+            wnd.element.querySelector("#editorEmptyMountDAV").addEventListener("click", () => {
                 mountWebDAV();
             });
         }
     }));
-}
+};
 
 const initBar = () => {
-    document.querySelector('.toolbar').innerHTML = `<div id="barNavigation" class="item fn__a">
+    document.querySelector(".toolbar").innerHTML = `<div id="barNavigation" class="item fn__a">
             <svg>
                 <use xlink:href="#iconFolder"></use>
             </svg>
@@ -67,8 +67,8 @@ const initBar = () => {
             <svg>
                 <use xlink:href="#iconSettings"></use>
             </svg>${i18n[window.liandi.config.lang].config}
-        </div>`
-    document.getElementById('barNavigation').addEventListener('click', function () {
+        </div>`;
+    document.getElementById("barNavigation").addEventListener("click", function () {
         if (window.liandi.activeWnd) {
             // TODO
         } else {
@@ -77,7 +77,7 @@ const initBar = () => {
                 title: i18n[window.liandi.config.lang].fileTree,
                 callback: function (wnd: Wnd) {
                     if (wnd.element.parentElement.clientWidth === 6) {
-                        wnd.element.parentElement.style.width = '200px'
+                        wnd.element.parentElement.style.width = "200px";
                     }
                     wnd.tabs.data[0].model = new File(wnd.tabs.data[0].panelElement);
 
@@ -85,11 +85,11 @@ const initBar = () => {
                         window.liandi.config.dirs.map((item: IDir) => {
                             wnd.tabs.data[0].model.onMount({dir: item}, wnd.tabs.data[0].ws);
                         });
-                    })
+                    });
                 }
             }));
         }
-        window.dispatchEvent(new CustomEvent('resize'));
+        window.dispatchEvent(new CustomEvent("resize"));
     });
     // TODO
     // document.getElementById('barGraph').addEventListener('click', function () {
@@ -115,20 +115,20 @@ const initBar = () => {
     //         path: path.posix.join(Constants.APP_DIR, 'public/zh_CN/链滴笔记用户指南')
     //     });
     // });
-    document.getElementById('barBug').addEventListener('click', () => {
-        remote.getCurrentWindow().webContents.openDevTools({mode: 'bottom'})
+    document.getElementById("barBug").addEventListener("click", () => {
+        remote.getCurrentWindow().webContents.openDevTools({mode: "bottom"});
     });
-    document.getElementById('barSettings').addEventListener('click', () => {
-        initSearch('settings');
+    document.getElementById("barSettings").addEventListener("click", () => {
+        initSearch("settings");
     });
-}
+};
 
 
 const initWindow = () => {
     // window action
     const currentWindow = remote.getCurrentWindow();
-    if (process.platform === 'darwin') {
-        document.getElementById('drag').addEventListener('dblclick', () => {
+    if (process.platform === "darwin") {
+        document.getElementById("drag").addEventListener("dblclick", () => {
             if (currentWindow.isMaximized()) {
                 currentWindow.unmaximize();
             } else {
@@ -138,50 +138,50 @@ const initWindow = () => {
         return;
     }
 
-    if (process.platform === 'win32') {
-        document.body.classList.add('body--win32');
+    if (process.platform === "win32") {
+        document.body.classList.add("body--win32");
     }
 
-    currentWindow.on('blur', () => {
-        document.body.classList.add('body--blur');
+    currentWindow.on("blur", () => {
+        document.body.classList.add("body--blur");
     });
-    currentWindow.on('focus', () => {
-        document.body.classList.remove('body--blur');
+    currentWindow.on("focus", () => {
+        document.body.classList.remove("body--blur");
     });
 
-    const maxBtnElement = document.getElementById('maxWindow');
-    const restoreBtnElement = document.getElementById('restoreWindow');
-    const minBtnElement = document.getElementById('minWindow');
-    const closeBtnElement = document.getElementById('closeWindow');
+    const maxBtnElement = document.getElementById("maxWindow");
+    const restoreBtnElement = document.getElementById("restoreWindow");
+    const minBtnElement = document.getElementById("minWindow");
+    const closeBtnElement = document.getElementById("closeWindow");
 
-    minBtnElement.addEventListener('click', () => {
+    minBtnElement.addEventListener("click", () => {
         currentWindow.minimize();
     });
-    minBtnElement.style.display = 'block';
+    minBtnElement.style.display = "block";
 
-    maxBtnElement.addEventListener('click', () => {
+    maxBtnElement.addEventListener("click", () => {
         currentWindow.maximize();
     });
 
-    restoreBtnElement.addEventListener('click', () => {
+    restoreBtnElement.addEventListener("click", () => {
         currentWindow.unmaximize();
     });
 
-    closeBtnElement.addEventListener('click', () => {
+    closeBtnElement.addEventListener("click", () => {
         currentWindow.close();
     });
-    closeBtnElement.style.display = 'block';
+    closeBtnElement.style.display = "block";
 
     const toggleMaxRestoreButtons = () => {
         if (currentWindow.isMaximized()) {
-            restoreBtnElement.style.display = 'block';
-            maxBtnElement.style.display = 'none';
+            restoreBtnElement.style.display = "block";
+            maxBtnElement.style.display = "none";
         } else {
-            restoreBtnElement.style.display = 'none';
-            maxBtnElement.style.display = 'block';
+            restoreBtnElement.style.display = "none";
+            maxBtnElement.style.display = "block";
         }
     };
     toggleMaxRestoreButtons();
-    currentWindow.on('maximize', toggleMaxRestoreButtons);
-    currentWindow.on('unmaximize', toggleMaxRestoreButtons);
-}
+    currentWindow.on("maximize", toggleMaxRestoreButtons);
+    currentWindow.on("unmaximize", toggleMaxRestoreButtons);
+};
