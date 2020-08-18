@@ -1,5 +1,5 @@
-import * as echarts from 'echarts';
-import * as path from 'path';
+import * as echarts from "echarts";
+import * as path from "path";
 import {i18n} from "../i18n";
 import {escapeHtml} from "../util/escape";
 
@@ -9,16 +9,16 @@ export class Graph {
     private chart: echarts.ECharts
 
     constructor(liandi: ILiandi) {
-        this.inputElement = this.element.previousElementSibling.firstElementChild as HTMLInputElement
-        this.inputElement.placeholder = i18n[liandi.config.lang].search
-        this.inputElement.addEventListener('compositionend', () => {
-            this.render(liandi)
+        this.inputElement = this.element.previousElementSibling.firstElementChild as HTMLInputElement;
+        this.inputElement.placeholder = i18n[liandi.config.lang].search;
+        this.inputElement.addEventListener("compositionend", () => {
+            this.render(liandi);
         });
-        this.inputElement.addEventListener('input', (event: InputEvent) => {
+        this.inputElement.addEventListener("input", (event: InputEvent) => {
             if (event.isComposing) {
                 return;
             }
-            this.render(liandi)
+            this.render(liandi);
         });
     }
 
@@ -35,15 +35,15 @@ export class Graph {
         liandi.ws.send("graph", {
             k: this.inputElement.value
         });
-        document.getElementById('resize3').classList.remove('fn__none');
-        document.getElementById('barGraph').classList.add("item--current");
+        document.getElementById("resize3").classList.remove("fn__none");
+        document.getElementById("barGraph").classList.add("item--current");
         liandi.backlinks.hide(liandi);
     }
 
     hide() {
         this.element.parentElement.style.display = "none";
-        document.getElementById('resize3').classList.add('fn__none');
-        document.getElementById('barGraph').classList.remove("item--current");
+        document.getElementById("resize3").classList.add("fn__none");
+        document.getElementById("barGraph").classList.remove("item--current");
     }
 
     resize() {
@@ -54,9 +54,9 @@ export class Graph {
 
     onGraph(liandi: ILiandi, data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[] }) {
         if (!this.chart) {
-            this.chart = echarts.init(this.element)
+            this.chart = echarts.init(this.element);
         } else {
-            this.resize()
+            this.resize();
         }
         this.chart.setOption({
                 legend: {
@@ -72,29 +72,29 @@ export class Graph {
                     }],
                     top: 20,
                     right: 20,
-                    orient: 'vertical',
+                    orient: "vertical",
                     textStyle: {
                         padding: [2, 4, 2, 4],
-                        color: '#d1d5da',
-                        backgroundColor: 'rgba(68, 77, 86, .68)',
+                        color: "#d1d5da",
+                        backgroundColor: "rgba(68, 77, 86, .68)",
                         borderRadius: 3,
                         lineHeight: 14,
                         fontSize: 12,
                     },
-                    inactiveColor: '#959da5',
+                    inactiveColor: "#959da5",
                 },
                 tooltip: {
                     textStyle: {
-                        color: '#d1d5da',
+                        color: "#d1d5da",
                     },
-                    backgroundColor: 'rgba(36, 41, 46, .86)',
+                    backgroundColor: "rgba(36, 41, 46, .86)",
                     padding: [2, 4, 2, 4],
                     formatter: (params: IEchartsFormatter) => {
                         if (params.dataType === "edge") {
-                            return `<div style="font-size: 10px;line-height: 12px">${params.data.lineStyle.type === "dotted" ? i18n[liandi.config.lang].relativeRelation : i18n[liandi.config.lang].parentRelation}</div>`
+                            return `<div style="font-size: 10px;line-height: 12px">${params.data.lineStyle.type === "dotted" ? i18n[liandi.config.lang].relativeRelation : i18n[liandi.config.lang].parentRelation}</div>`;
                         } else {
-                            return `<div style="font-size: 12px;line-height: 14px; word-break: break-all;width: 220px;white-space: normal;">${params.data.category === 3 ? 'This is a bug block, please go to https://github.com/88250/liandi/issues/new for feedback' : escapeHtml(params.data.content)}</div>
-<div style="font-size: 10px;color:#959da5;line-height: 12px">${params.data.name}</div>`
+                            return `<div style="font-size: 12px;line-height: 14px; word-break: break-all;width: 220px;white-space: normal;">${params.data.category === 3 ? "This is a bug block, please go to https://github.com/88250/liandi/issues/new for feedback" : escapeHtml(params.data.content)}</div>
+<div style="font-size: 10px;color:#959da5;line-height: 12px">${params.data.name}</div>`;
                         }
                     },
                 },
@@ -117,17 +117,17 @@ export class Graph {
                                 color: "#d23f31"
                             },
                         }, {
-                            name: 'bug',
+                            name: "bug",
                             itemStyle: {
                                 color: "#ea4aaa"
                             },
                         }],
                         draggable: true,
                         label: {
-                            position: 'right',
+                            position: "right",
                             padding: [2, 4, 2, 4],
-                            color: '#d1d5da',
-                            backgroundColor: 'rgba(68, 77, 86, .68)',
+                            color: "#d1d5da",
+                            backgroundColor: "rgba(68, 77, 86, .68)",
                             fontSize: 10,
                             borderRadius: 3,
                             lineHeight: 12,
@@ -135,15 +135,15 @@ export class Graph {
                                 if (params.data.category === 0) {
                                     return path.posix.basename(params.data.path);
                                 } else {
-                                    return params.data.content.substr(0, 8)
+                                    return params.data.content.substr(0, 8);
                                 }
                             },
                         },
                         symbolSize: (value: number, params: IEchartsFormatter) => {
                             if (params.data.category === 0) {
-                                return 18
+                                return 18;
                             } else {
-                                return 12
+                                return 12;
                             }
                         },
                         force: {
@@ -152,16 +152,16 @@ export class Graph {
                             // @ts-ignores
                             friction: 0.15
                         },
-                        type: 'graph',
-                        layout: 'force',
+                        type: "graph",
+                        layout: "force",
                         focusNodeAdjacency: true,
                         roam: true,
                         itemStyle: {
-                            borderColor: 'rgba(255, 255, 255, 0.38)',
+                            borderColor: "rgba(255, 255, 255, 0.38)",
                             borderWidth: 1,
                         },
                         lineStyle: {
-                            color: 'source',
+                            color: "source",
                             curveness: 0,
                             opacity: 0.48,
                         },
@@ -170,13 +170,13 @@ export class Graph {
                                 width: 3
                             },
                             itemStyle: {
-                                borderColor: '#fff',
+                                borderColor: "#fff",
                             },
                             label: {
                                 show: true
                             }
                         },
-                        edgeSymbol: ['none', 'arrow'],
+                        edgeSymbol: ["none", "arrow"],
                         edgeSymbolSize: [0, 8],
                         data: data.nodes,
                         links: data.links,
@@ -185,9 +185,9 @@ export class Graph {
             }
         );
 
-        this.chart.on('click', (params: IEchartsFormatter) => {
+        this.chart.on("click", (params: IEchartsFormatter) => {
             if (params.dataType === "node" && params.data.label.show) {
-                liandi.editors.open(liandi, params.data.url, params.data.path)
+                liandi.editors.open(liandi, params.data.url, params.data.path);
             }
         });
     }

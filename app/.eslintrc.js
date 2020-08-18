@@ -9,6 +9,8 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
   ],
   rules: {
+    semi:[2, "always"],
+    quotes:[2, "double", { "avoidEscape": true }],
     'no-prototype-builtins': "off",
     'no-useless-escape': "off",
     'no-irregular-whitespace': "off",

@@ -1,19 +1,19 @@
-import {remote} from 'electron';
-import {homedir} from 'os';
-import {Constants} from '../constants';
-import {destroyDialog, dialog} from './dialog';
-import {i18n} from '../i18n';
-import {showMessage} from './message';
+import {remote} from "electron";
+import {homedir} from "os";
+import {Constants} from "../constants";
+import {destroyDialog, dialog} from "./dialog";
+import {i18n} from "../i18n";
+import {showMessage} from "./message";
 
 export const mountFile = async () => {
     const filePath = await remote.dialog.showOpenDialog({
         defaultPath: homedir(),
-        properties: ['openDirectory', 'openFile'],
+        properties: ["openDirectory", "openFile"],
     });
     if (filePath.filePaths.length === 0) {
         return;
     }
-    window.liandi.ws.send('mount', {
+    window.liandi.ws.send("mount", {
         url: `${Constants.WEBDAV_ADDRESS}/`,
         path: filePath.filePaths[0]
     });
@@ -21,7 +21,7 @@ export const mountFile = async () => {
 
 
 export const mountWebDAV = () => {
-    const liandi = window.liandi
+    const liandi = window.liandi;
     dialog({
         title: i18n[liandi.config.lang].mountWebDAV,
         content: `<input placeholder="URL" class="input">
@@ -36,18 +36,18 @@ export const mountWebDAV = () => {
         width: 400
     });
 
-    const dialogElement = document.querySelector('#dialog');
-    dialogElement.querySelector('input').focus();
-    dialogElement.querySelector('.button--cancel').addEventListener('click', () => {
+    const dialogElement = document.querySelector("#dialog");
+    dialogElement.querySelector("input").focus();
+    dialogElement.querySelector(".button--cancel").addEventListener("click", () => {
         destroyDialog();
     });
-    dialogElement.querySelector('.button').addEventListener('click', () => {
-        const inputs = dialogElement.querySelectorAll('input');
-        if (!inputs[0].value.startsWith('http')) {
+    dialogElement.querySelector(".button").addEventListener("click", () => {
+        const inputs = dialogElement.querySelectorAll("input");
+        if (!inputs[0].value.startsWith("http")) {
             showMessage(i18n[liandi.config.lang].urlError);
             return;
         }
-        liandi.ws.send('mountremote', {
+        liandi.ws.send("mountremote", {
             url: inputs[0].value,
             user: inputs[1].value,
             password: inputs[2].value,

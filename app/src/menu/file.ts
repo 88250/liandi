@@ -1,5 +1,5 @@
-import {remote} from 'electron';
-import {deleteMenu, newFileMenu, newFolderMenu, renameMenu, showInFolder} from './commonMenuItem';
+import {remote} from "electron";
+import {deleteMenu, newFileMenu, newFolderMenu, renameMenu, showInFolder} from "./commonMenuItem";
 
 export const initFolderMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();

@@ -1,14 +1,9 @@
-import './assets/scss/base.scss';
-import './components/tab-panel';
-import './icons/index';
-import {ipcRenderer, remote} from 'electron';
-import {Constants} from './constants';
-import {mountFile, mountWebDAV} from './util/mount';
-import * as path from "path";
-import {i18n} from "./i18n";
-import {initSearch} from "./search";
+import "./assets/scss/base.scss";
+import "./components/tab-panel";
+import "./icons/index";
+import {ipcRenderer} from "electron";
+import {Constants} from "./constants";
 import {Layout} from "./layout";
-import {Wnd} from "./layout/wnd";
 import {WebSocketUtil} from "./websocket";
 import {Find} from "./search/Find";
 import {doubleShift} from "./util/doubleShift";
@@ -19,25 +14,25 @@ class App {
 
     constructor() {
         const layouts = [
-            new Layout({direction: 'lr', size: '6px'}),
-            new Layout({direction: 'lr', size: (window.innerHeight - 32) + 'px', resize: 'tb'}),
-            new Layout({direction: 'lr', resize: 'tb'}),
-        ]
+            new Layout({direction: "lr", size: "6px"}),
+            new Layout({direction: "lr", size: (window.innerHeight - 32) + "px", resize: "tb"}),
+            new Layout({direction: "lr", resize: "tb"}),
+        ];
         layouts[1].children = [
             new Layout({parent: layouts[1], size: "6px"}),
-            new Layout({parent: layouts[1], size: (window.innerWidth - 12) + 'px', resize: 'lr'}),
-            new Layout({parent: layouts[1], resize: 'lr'}),
+            new Layout({parent: layouts[1], size: (window.innerWidth - 12) + "px", resize: "lr"}),
+            new Layout({parent: layouts[1], resize: "lr"}),
         ];
 
         this.liandi = {
             layouts
         };
         this.liandi.ws = new WebSocketUtil(genUUID(), (ws: WebSocketUtil) => {
-            ws.send('getconf', {});
+            ws.send("getconf", {});
             this.liandi.find = new Find();
             doubleShift();
             this.onIpc();
-        })
+        });
 
         //     window.onresize = () => {
         //         this.liandi.graph.resize();

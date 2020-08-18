@@ -14,33 +14,33 @@ export class Tabs {
     private parent:Wnd
 
     constructor(wnd: Wnd) {
-        this.parent = wnd
+        this.parent = wnd;
         wnd.element.innerHTML = `<div class="fn__flex-column fn__flex">
     <div class="fn__flex">
         <ul class="fn__flex fn__flex-1 tab__headers"></ul>
         <button data-type="lr">lr</button><button data-type="tb">tb</button><button data-type="close">x</button>
     </div>
     <div class="tab__panels fn__flex-1"></div>
-</div>`
+</div>`;
 
-        wnd.element.querySelector("button[data-type='lr']").addEventListener('click', () => {
-            wnd.spilt('lr')
-        })
-        wnd.element.querySelector("button[data-type='tb']").addEventListener('click', () => {
-            wnd.spilt('tb')
-        })
-        wnd.element.querySelector("button[data-type='close']").addEventListener('click', () => {
-            wnd.remove()
-        })
-        return this
+        wnd.element.querySelector("button[data-type='lr']").addEventListener("click", () => {
+            wnd.spilt("lr");
+        });
+        wnd.element.querySelector("button[data-type='tb']").addEventListener("click", () => {
+            wnd.spilt("tb");
+        });
+        wnd.element.querySelector("button[data-type='close']").addEventListener("click", () => {
+            wnd.remove();
+        });
+        return this;
     }
 
     public addTab(tab: { title: string, panel: string }) {
-        const titleElement = document.createElement("li")
+        const titleElement = document.createElement("li");
         if (tab.title) {
             titleElement.innerHTML = tab.title;
         }
-        const panelElement = document.createElement("div")
+        const panelElement = document.createElement("div");
         if (tab.panel) {
             panelElement.innerHTML = tab.panel;
         }
@@ -49,9 +49,9 @@ export class Tabs {
             id: genUUID(),
             headElement: titleElement,
             panelElement: panelElement,
-        })
+        });
 
-        this.parent.element.querySelector('.tab__headers').append(titleElement)
-        this.parent.element.querySelector('.tab__panels').append(panelElement)
+        this.parent.element.querySelector(".tab__headers").append(titleElement);
+        this.parent.element.querySelector(".tab__panels").append(panelElement);
     }
 }

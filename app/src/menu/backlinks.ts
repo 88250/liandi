@@ -1,6 +1,6 @@
-import {remote} from 'electron';
-import * as path from 'path';
-import {i18n} from '../i18n';
+import {remote} from "electron";
+import * as path from "path";
+import {i18n} from "../i18n";
 
 export const initBacklinksMenu = (liandi: ILiandi) => {
     const menu = new remote.Menu();
@@ -11,7 +11,7 @@ export const initBacklinksMenu = (liandi: ILiandi) => {
             liandi.ws.send("exec", {
                 bin: remote.process.execPath,
                 args: [path.posix.join(remote.app.getAppPath(), "main.js"), `--liandi-url=${itemData.dir.url}`, `--liandi-path=${itemData.path}`]
-            })
+            });
         }
     }));
     return menu;
