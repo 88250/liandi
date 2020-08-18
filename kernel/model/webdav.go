@@ -34,83 +34,83 @@ func InitMount() {
 
 func Unmount(url string) {
 	var i int
-	var dir, found *Dir
-	for i, dir = range Conf.Dirs {
-		if dir.URL == url {
-			found = dir
+	var box, found *Box
+	for i, box = range Conf.Boxes {
+		if box.URL == url {
+			found = box
 			break
 		}
 	}
 
 	if nil == found {
-		Logger.Debugf("未找到待取消挂载的目录 [%s]", url)
+		Logger.Debugf("未找到待关闭的盒子 [%s]", url)
 		return
 	}
 
-	dir.Unindex()
-	Conf.Dirs = append(Conf.Dirs[:i], Conf.Dirs[i+1:]...)
+	box.Unindex()
+	Conf.Boxes = append(Conf.Boxes[:i], Conf.Boxes[i+1:]...)
 	found.CloseClient()
 	routeWebDAV()
 	Conf.Save()
-	Logger.Debugf("取消挂载目录 [%s] 完毕", url)
+	Logger.Debugf("关闭盒子 [%s] 完毕", url)
 }
 
 func MountRemote(url, user, password string) (ret string, alreadyMount bool) {
-	for _, dir := range Conf.Dirs {
-		if dir.URL == url {
-			return dir.URL, true
+	for _, box := range Conf.Boxes {
+		if box.URL == url {
+			return box.URL, true
 		}
 	}
 
-	dir := &Dir{URL: url, LocalPath: ""}
+	box := &Box{URL: url, LocalPath: ""}
 	if "" != user || "" != password {
-		dir.User = user
-		dir.Password = password
-		dir.Auth = "basic"
+		box.User = user
+		box.Password = password
+		box.Auth = "basic"
 	}
 
-	Conf.Dirs = append(Conf.Dirs, dir)
+	Conf.Boxes = append(Conf.Boxes, box)
 	routeWebDAV()
 	Conf.Save()
-	dir.InitClient()
-	go dir.Index()
-	Logger.Debugf("挂载远程目录 [%s] 完毕", url)
+	box.InitClient()
+	go box.Index()
+	Logger.Debugf("打开远程盒子 [%s] 完毕", url)
 	return url, false
 }
 
 func Mount(url, localPath string) (ret string, alreadyMount bool) {
-	for _, dir := range Conf.Dirs {
-		if "" != localPath && dir.LocalPath == localPath {
-			return dir.URL, true
+	for _, box := range Conf.Boxes {
+		if "" != localPath && box.LocalPath == localPath {
+			return box.URL, true
 		}
 	}
 
 	id := gulu.Rand.String(7)
 	url = url + id + "/" + filepath.Base(localPath) + "/"
 
-	dir := &Dir{URL: url, LocalPath: localPath}
-	Conf.Dirs = append(Conf.Dirs, dir)
+	box := &Box{URL: url, LocalPath: localPath}
+	Conf.Boxes = append(Conf.Boxes, box)
 	routeWebDAV()
 	Conf.Save()
-	dir.InitClient()
-	go dir.Index()
-	Logger.Debugf("挂载目录 [%s] 完毕", url)
+	box.InitClient()
+	go box.Index()
+	Logger.Debugf("打开本地盒子 [%s] 完毕", url)
 	return url, false
 }
 
 func routeWebDAV() {
 	http.DefaultServeMux = http.NewServeMux()
-	for _, dir := range Conf.Dirs {
-		if dir.IsRemote() {
+	for _, box := range Conf.Boxes {
+		if box.IsRemote() {
 			continue
 		}
 
-		// 本地目录伺服
+		// 本地伺服
 
-		prefix := dir.URL[strings.Index(dir.URL, "/webdav/"):]
+		prefix := box.URL[strings.Index(box.URL, "/webdav/"):]
 		webdavHandler := &webdav.Handler{
 			Prefix:     prefix,
-			FileSystem: webdav.Dir(dir.LocalPath),
+			FileSystem: webdav.Dir(box.LocalPath),
 			LockSystem: webdav.NewMemLS(),
 		}
 

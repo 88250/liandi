@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	// trees 用于维护所有已挂载的文档抽象语法树。
+	// trees 用于维护文档抽象语法树。
 	trees []*parse.Tree
 )
 
@@ -34,7 +34,7 @@ type Block struct {
 }
 
 type Snippet struct {
-	Dir     *Dir   `json:"dir"`
+	Box     *Box   `json:"box"`
 	Path    string `json:"path"`
 	Index   int    `json:"index"`
 	Content string `json:"content"`
@@ -42,14 +42,14 @@ type Snippet struct {
 }
 
 func InitIndex() {
-	for _, dir := range Conf.Dirs {
-		go dir.Index()
+	for _, box := range Conf.Boxes {
+		go box.Index()
 	}
 }
 
-func (dir *Dir) MoveTree(p, newPath string) {
+func (box *Box) MoveTree(p, newPath string) {
 	for _, tree := range trees {
-		if tree.URL == dir.URL && tree.Path == p {
+		if tree.URL == box.URL && tree.Path == p {
 			tree.Path = newPath
 			tree.Name = path.Base(p)
 			break
@@ -57,35 +57,35 @@ func (dir *Dir) MoveTree(p, newPath string) {
 	}
 }
 
-func (dir *Dir) RemoveTreeDir(dirPath string) {
+func (box *Box) RemoveTreeDir(dirPath string) {
 	for i := 0; i < len(trees); i++ {
-		if trees[i].URL == dir.URL && strings.HasPrefix(trees[i].Path, dirPath) {
+		if trees[i].URL == box.URL && strings.HasPrefix(trees[i].Path, dirPath) {
 			trees = append(trees[:i], trees[i+1:]...)
 			i--
 		}
 	}
 }
 
-func (dir *Dir) MoveTreeDir(dirPath, newDirPath string) {
+func (box *Box) MoveTreeDir(dirPath, newDirPath string) {
 	for _, tree := range trees {
-		if tree.URL == dir.URL && strings.HasPrefix(tree.Path, dirPath) {
+		if tree.URL == box.URL && strings.HasPrefix(tree.Path, dirPath) {
 			tree.Path = strings.Replace(tree.Path, dirPath, newDirPath, -1)
 		}
 	}
 }
 
-func (dir *Dir) RemoveTree(path string) {
+func (box *Box) RemoveTree(path string) {
 	for i, tree := range trees {
-		if tree.URL == dir.URL && tree.Path == path {
+		if tree.URL == box.URL && tree.Path == path {
 			trees = trees[:i+copy(trees[i:], trees[i+1:])]
 			break
 		}
 	}
 }
 
-func (dir *Dir) ParseIndexTree(p, markdown string) (ret *parse.Tree) {
+func (box *Box) ParseIndexTree(p, markdown string) (ret *parse.Tree) {
 	ret = parse.Parse("", util.StrToBytes(markdown), Lute.Options)
-	ret.URL = dir.URL
+	ret.URL = box.URL
 	ret.Path = p[:len(p)-len(path.Ext(p))]
 	ret.Name = path.Base(ret.Path)
 	ret.ID = ast.NewNodeID()
@@ -103,7 +103,7 @@ func (dir *Dir) ParseIndexTree(p, markdown string) (ret *parse.Tree) {
 	return
 }
 
-func (dir *Dir) IndexTree(tree *parse.Tree) {
+func (box *Box) IndexTree(tree *parse.Tree) {
 	for i, t := range trees {
 		if tree.URL == t.URL && tree.Path == t.Path {
 			trees = trees[:i+copy(trees[i:], trees[i+1:])]
@@ -113,9 +113,9 @@ func (dir *Dir) IndexTree(tree *parse.Tree) {
 	trees = append(trees, tree)
 }
 
-func (dir *Dir) Tree(path string) *parse.Tree {
+func (box *Box) Tree(path string) *parse.Tree {
 	for _, t := range trees {
-		if dir.URL == t.URL && path == t.Path {
+		if box.URL == t.URL && path == t.Path {
 			return t
 		}
 	}
@@ -215,11 +215,11 @@ func Search(keyword string) (ret []*Snippet) {
 
 	idx := 0
 	for _, tree := range trees {
-		dir := Conf.Dir(tree.URL)
+		box := Conf.Box(tree.URL)
 		pos, marked := markSearch(tree.Name, keyword)
 		if -1 < pos {
 			ret = append(ret, &Snippet{
-				Dir:     dir,
+				Box:     box,
 				Path:    tree.Path,
 				Index:   idx,
 				Content: marked,
@@ -230,7 +230,7 @@ func Search(keyword string) (ret []*Snippet) {
 	}
 
 	for _, tree := range trees {
-		dir := Conf.Dir(tree.URL)
+		box := Conf.Box(tree.URL)
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			if !entering {
 				return ast.WalkContinue
@@ -249,7 +249,7 @@ func Search(keyword string) (ret []*Snippet) {
 			pos, marked := markSearch(text, keyword)
 			if -1 < pos {
 				ret = append(ret, &Snippet{
-					Dir:     dir,
+					Box:     box,
 					Path:    tree.Path,
 					Index:   idx,
 					Content: marked,

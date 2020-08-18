@@ -33,12 +33,12 @@ func (cmd *create) Exec() {
 		return
 	}
 
-	tree := model.Conf.Dir(url).Tree(p)
+	tree := model.Conf.Box(url).Tree(p)
 	name := path.Base(p)
-	dir := model.Conf.Dir(url)
+	box := model.Conf.Box(url)
 	files, _ := model.Ls(url, path.Dir(p))
 	ret.Data = map[string]interface{}{
-		"dir":      dir,
+		"box":      box,
 		"files":    files,
 		"name":     name,
 		"id":       tree.Root.ID,

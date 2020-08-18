@@ -55,7 +55,7 @@ func Close() {
 }
 
 func InitConf() {
-	Conf = &AppConf{LogLevel: "debug", Theme: "light", Lang: "zh_CN", Dirs: []*Dir{}}
+	Conf = &AppConf{LogLevel: "debug", Theme: "light", Lang: "zh_CN", Boxes: []*Box{}}
 	Lute = lute.New()
 	if gulu.File.IsExist(ConfPath) {
 		data, err := ioutil.ReadFile(ConfPath)
@@ -69,11 +69,11 @@ func InitConf() {
 		Logger.Debugf("加载配置文件 [%s] 完毕", ConfPath)
 	}
 
-	for i := 0; i < len(Conf.Dirs); i++ {
-		dir := Conf.Dirs[i]
-		if !dir.IsRemote() && !gulu.File.IsExist(dir.LocalPath) {
-			Conf.Dirs = append(Conf.Dirs[:i], Conf.Dirs[i+1:]...)
-			Logger.Debugf("目录 [%s] 不存在，已从配置中移除", dir.LocalPath)
+	for i := 0; i < len(Conf.Boxes); i++ {
+		box := Conf.Boxes[i]
+		if !box.IsRemote() && !gulu.File.IsExist(box.LocalPath) {
+			Conf.Boxes = append(Conf.Boxes[:i], Conf.Boxes[i+1:]...)
+			Logger.Debugf("盒子 [%s] 不存在，已从配置中移除", box.LocalPath)
 			continue
 		}
 	}
@@ -99,7 +99,7 @@ func InitConf() {
 // AppConf 维护应用元数据，保存在 ~/.liandi/conf.json ，记录已经打开的文件夹、各种配置项等。
 type AppConf struct {
 	LogLevel string    `json:"logLevel"` // 日志级别：Off, Trace, Debug, Info, Warn, Error, Fatal
-	Dirs     []*Dir    `json:"dirs"`     // 已经挂载的目录
+	Boxes    []*Box    `json:"boxes"`    // 已经打开的盒子
 	Theme    string    `json:"theme"`    // 界面主题：light, dark
 	Lang     string    `json:"lang"`     // 界面语言
 	Markdown *Markdown `json:"markdown"` // Markdown 引擎配置
@@ -164,22 +164,22 @@ func (conf *AppConf) Save() {
 }
 
 func (conf *AppConf) InitClient() {
-	for _, dir := range conf.Dirs {
-		dir.InitClient()
+	for _, box := range conf.Boxes {
+		box.InitClient()
 	}
 }
 
 func (conf *AppConf) Close() {
-	for _, dir := range conf.Dirs {
-		dir.CloseClient()
+	for _, box := range conf.Boxes {
+		box.CloseClient()
 	}
 	conf.Save()
 }
 
-func (conf *AppConf) Dir(url string) *Dir {
-	for _, dir := range conf.Dirs {
-		if dir.URL == url {
-			return dir
+func (conf *AppConf) Box(url string) *Box {
+	for _, box := range conf.Boxes {
+		if box.URL == url {
+			return box
 		}
 	}
 	return nil
@@ -189,8 +189,8 @@ func (conf *AppConf) lang(num int) string {
 	return langs[conf.Lang][num]
 }
 
-// Dir 维护了打开的 WebDAV 目录。
-type Dir struct {
+// Box 维护了打开的 WebDAV 端点。
+type Box struct {
 	URL       string `json:"url"`      // WebDAV URL
 	Auth      string `json:"auth"`     // WebDAV 鉴权方式，空值表示不需要鉴权
 	User      string `json:"user"`     // WebDAV 用户名
@@ -200,58 +200,58 @@ type Dir struct {
 	client *gowebdav.Client // WebDAV 客户端
 }
 
-func (dir *Dir) IsRemote() bool {
-	return "" == dir.LocalPath
+func (box *Box) IsRemote() bool {
+	return "" == box.LocalPath
 }
 
-func (dir *Dir) InitClient() {
-	dir.client = gowebdav.NewClient(dir.URL, dir.User, dir.Password)
-	dir.client.SetTimeout(7 * time.Second)
+func (box *Box) InitClient() {
+	box.client = gowebdav.NewClient(box.URL, box.User, box.Password)
+	box.client.SetTimeout(7 * time.Second)
 }
 
-func (dir *Dir) CloseClient() {
-	dir.client = nil
+func (box *Box) CloseClient() {
+	box.client = nil
 }
 
-func (dir *Dir) Ls(path string) (ret []os.FileInfo, err error) {
-	if ret, err = dir.client.ReadDir(path); nil != err {
-		msg := fmt.Sprintf(Conf.lang(2), dir.URL, path, err)
+func (box *Box) Ls(path string) (ret []os.FileInfo, err error) {
+	if ret, err = box.client.ReadDir(path); nil != err {
+		msg := fmt.Sprintf(Conf.lang(2), box.URL, path, err)
 		Logger.Errorf(msg)
 		return nil, errors.New(msg)
 	}
 	return
 }
 
-func (dir *Dir) Get(path string) (ret string, err error) {
-	data, err := dir.client.Read(path)
+func (box *Box) Get(path string) (ret string, err error) {
+	data, err := box.client.Read(path)
 	if nil != err {
-		msg := fmt.Sprintf(Conf.lang(3), dir.URL, path, err)
+		msg := fmt.Sprintf(Conf.lang(3), box.URL, path, err)
 		Logger.Errorf(msg)
 		return "", errors.New(msg)
 	}
 	return gulu.Str.FromBytes(data), nil
 }
 
-func (dir *Dir) Put(path string, content []byte) error {
-	if err := dir.client.Write(path, content, 0644); nil != err {
-		msg := fmt.Sprintf(Conf.lang(3), dir.URL, path, err)
+func (box *Box) Put(path string, content []byte) error {
+	if err := box.client.Write(path, content, 0644); nil != err {
+		msg := fmt.Sprintf(Conf.lang(3), box.URL, path, err)
 		Logger.Errorf(msg)
 		return errors.New(msg)
 	}
 	return nil
 }
 
-func (dir *Dir) Stat(path string) (ret os.FileInfo, err error) {
-	if ret, err = dir.client.Stat(path); nil != err {
-		msg := fmt.Sprintf(Conf.lang(4), dir.URL, path, err)
+func (box *Box) Stat(path string) (ret os.FileInfo, err error) {
+	if ret, err = box.client.Stat(path); nil != err {
+		msg := fmt.Sprintf(Conf.lang(4), box.URL, path, err)
 		Logger.Errorf(msg)
 		return nil, errors.New(msg)
 	}
 	return
 }
 
-func (dir *Dir) Exist(path string) (ret bool, err error) {
-	if _, err = dir.client.Stat(path); nil != err {
+func (box *Box) Exist(path string) (ret bool, err error) {
+	if _, err = box.client.Stat(path); nil != err {
 		if _, ok := err.(*os.PathError); ok {
 			return false, nil
 		}
@@ -260,109 +260,109 @@ func (dir *Dir) Exist(path string) (ret bool, err error) {
 	return true, nil
 }
 
-func (dir *Dir) Rename(oldPath, newPath string) error {
-	if err := dir.client.Rename(oldPath, newPath, false); nil != err {
-		msg := fmt.Sprintf(Conf.lang(5), dir.URL, oldPath, err)
+func (box *Box) Rename(oldPath, newPath string) error {
+	if err := box.client.Rename(oldPath, newPath, false); nil != err {
+		msg := fmt.Sprintf(Conf.lang(5), box.URL, oldPath, err)
 		Logger.Errorf(msg)
 		return errors.New(msg)
 	}
 	return nil
 }
 
-func (dir *Dir) Mkdir(path string) error {
-	if err := dir.client.Mkdir(path, 0755); nil != err {
-		msg := fmt.Sprintf(Conf.lang(6), dir.URL, path, err)
+func (box *Box) Mkdir(path string) error {
+	if err := box.client.Mkdir(path, 0755); nil != err {
+		msg := fmt.Sprintf(Conf.lang(6), box.URL, path, err)
 		Logger.Errorf(msg)
 		return errors.New(msg)
 	}
 	return nil
 }
 
-func (dir *Dir) Remove(path string) error {
-	if err := dir.client.Remove(path); nil != err {
-		msg := fmt.Sprintf(Conf.lang(7), dir.URL, path, err)
+func (box *Box) Remove(path string) error {
+	if err := box.client.Remove(path); nil != err {
+		msg := fmt.Sprintf(Conf.lang(7), box.URL, path, err)
 		Logger.Errorf(msg)
 		return errors.New(msg)
 	}
 	return nil
 }
 
-func (dir *Dir) Index() {
-	Logger.Debugf("开始导入目录 [%s] 下新的 Markdown 文件", dir.URL)
-	markdowns := dir.ListNewMarkdowns("/")
+func (box *Box) Index() {
+	Logger.Debugf("开始导入盒子 [%s] 下新的 Markdown 文件", box.URL)
+	markdowns := box.ListNewMarkdowns("/")
 	var importTrees []*parse.Tree
 	for _, file := range markdowns {
 		p := file.(*gowebdav.File).Path()
-		markdown, err := dir.Get(p)
+		markdown, err := box.Get(p)
 		if nil != err {
-			Logger.Fatalf("读取目录 [%s] 下的文件 [%s] 失败：%s", dir.URL, p, err)
+			Logger.Fatalf("读取盒子 [%s] 下的文件 [%s] 失败：%s", box.URL, p, err)
 		}
-		tree := dir.ParseIndexTree(p, markdown)
+		tree := box.ParseIndexTree(p, markdown)
 		importTrees = append(importTrees, tree)
 	}
 	convertWikiLinks(importTrees) // 支持 [[link]] 语法的导入 https://github.com/88250/liandi/issues/131
 	for _, tree := range importTrees {
 		if err := WriteASTJSON(tree); nil != err {
-			Logger.Fatalf("生成目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, tree.Path, err)
+			Logger.Fatalf("生成盒子 [%s] 下的文件 [%s] 的元数据失败：%s", box.URL, tree.Path, err)
 		}
 	}
-	Logger.Debugf("导入目录 [%s] 下新的 Markdown 文件 [%d] 完毕", dir.URL, len(markdowns))
+	Logger.Debugf("导入盒子 [%s] 下新的 Markdown 文件 [%d] 完毕", box.URL, len(markdowns))
 
-	Logger.Debugf("开始索引 [%s] 目录", dir.URL)
-	files := dir.ListJSONs("/")
+	Logger.Debugf("开始索引 [%s] 盒子", box.URL)
+	files := box.ListJSONs("/")
 	for _, file := range files {
 		p := file.(*gowebdav.File).Path()
-		astJSONStr, err := ReadASTJSON(dir.URL, p)
+		astJSONStr, err := ReadASTJSON(box.URL, p)
 		if nil != err {
-			Logger.Fatalf("读取目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
+			Logger.Fatalf("读取盒子 [%s] 下的文件 [%s] 的元数据失败：%s", box.URL, p, err)
 		}
 		tree, err := ParseJSON(astJSONStr)
 		if nil != err {
-			Logger.Fatalf("解析目录 [%s] 下的文件 [%s] 的元数据失败：%s", dir.URL, p, err)
+			Logger.Fatalf("解析盒子 [%s] 下的文件 [%s] 的元数据失败：%s", box.URL, p, err)
 		}
-		tree.URL = dir.URL
+		tree.URL = box.URL
 		tree.Path = p[:len(p)-len(".md.json")]
 		tree.Name = path.Base(tree.Path)
-		dir.IndexTree(tree)
+		box.IndexTree(tree)
 	}
-	Logger.Debugf("索引目录 [%s] 完毕", dir.URL)
+	Logger.Debugf("索引盒子 [%s] 完毕", box.URL)
 }
 
-func (dir *Dir) Unindex() {
-	Logger.Debugf("开始删除索引 [%s] 目录", dir.URL)
+func (box *Box) Unindex() {
+	Logger.Debugf("开始删除索引 [%s] 盒子", box.URL)
 	var paths []string
 	for _, tree := range trees {
 		paths = append(paths, tree.Path)
 	}
 	for _, p := range paths {
-		dir.RemoveTree(p)
+		box.RemoveTree(p)
 	}
 }
 
-func (dir *Dir) ListJSONs(path string) (ret []os.FileInfo) {
-	fs, err := dir.Ls(path)
+func (box *Box) ListJSONs(path string) (ret []os.FileInfo) {
+	fs, err := box.Ls(path)
 	if nil != err {
 		return
 	}
-	dir.listJSONs(&fs, &ret)
+	box.listJSONs(&fs, &ret)
 	return
 }
 
-func (dir *Dir) listJSONs(files, ret *[]os.FileInfo) {
+func (box *Box) listJSONs(files, ret *[]os.FileInfo) {
 	for _, file := range *files {
 		f := file.(*gowebdav.File)
 		if strings.HasPrefix(f.Name(), ".") {
 			continue
 		}
 
-		if dir.isSkipDir(f.Name()) {
+		if box.isSkipDir(f.Name()) {
 			continue
 		}
 
 		if f.IsDir() {
-			fs, err := dir.Ls(f.Path())
+			fs, err := box.Ls(f.Path())
 			if nil == err {
-				dir.listJSONs(&fs, ret)
+				box.listJSONs(&fs, ret)
 			}
 		} else {
 			if isJSON(f) {
@@ -373,34 +373,34 @@ func (dir *Dir) listJSONs(files, ret *[]os.FileInfo) {
 	return
 }
 
-func (dir *Dir) ListNewMarkdowns(path string) (ret []os.FileInfo) {
-	fs, err := dir.Ls(path)
+func (box *Box) ListNewMarkdowns(path string) (ret []os.FileInfo) {
+	fs, err := box.Ls(path)
 	if nil != err {
 		return
 	}
-	dir.listNewMarkdowns(&fs, &ret)
+	box.listNewMarkdowns(&fs, &ret)
 	return
 }
 
-func (dir *Dir) listNewMarkdowns(files, ret *[]os.FileInfo) {
+func (box *Box) listNewMarkdowns(files, ret *[]os.FileInfo) {
 	for _, file := range *files {
 		f := file.(*gowebdav.File)
 		if strings.HasPrefix(f.Name(), ".") {
 			continue
 		}
 
-		if dir.isSkipDir(f.Name()) {
+		if box.isSkipDir(f.Name()) {
 			continue
 		}
 
 		if f.IsDir() {
-			fs, err := dir.Ls(f.Path())
+			fs, err := box.Ls(f.Path())
 			if nil == err {
-				dir.listNewMarkdowns(&fs, ret)
+				box.listNewMarkdowns(&fs, ret)
 			}
 		} else {
 			if isMarkdown(f) {
-				exist, _ := dir.Exist(f.Path() + ".json")
+				exist, _ := box.Exist(f.Path() + ".json")
 				if !exist {
 					*ret = append(*ret, f)
 				}
@@ -410,19 +410,19 @@ func (dir *Dir) listNewMarkdowns(files, ret *[]os.FileInfo) {
 	return
 }
 
-func (dir *Dir) isSkipDir(filename string) bool {
+func (box *Box) isSkipDir(filename string) bool {
 	return "node_modules" == filename || "dist" == filename || "target" == filename || strings.HasSuffix(filename, deletedSuffix)
 }
 
 var zhCN = map[int]string{
-	0:  "查询目录失败",
+	0:  "查询盒子失败",
 	1:  "文件名重复",
-	2:  "列出目录 [%s] 下路径为 [%s] 的文件列表失败：%s",
-	3:  "读取目录 [%s] 下的文件 [%s] 失败：%s",
-	4:  "查看目录 [%s] 下 [%s] 的元信息失败：%s",
-	5:  "重命名目录 [%s] 下的文件 [%s] 失败：%s",
-	6:  "在目录 [%s] 下创建新文件夹 [%s] 失败：%s",
-	7:  "在目录 [%s] 下删除 [%s] 失败：%s",
+	2:  "列出盒子 [%s] 下路径为 [%s] 的文件列表失败：%s",
+	3:  "读取盒子 [%s] 下的文件 [%s] 失败：%s",
+	4:  "查看盒子 [%s] 下 [%s] 的元信息失败：%s",
+	5:  "重命名盒子 [%s] 下的文件 [%s] 失败：%s",
+	6:  "在盒子 [%s] 下创建新文件夹 [%s] 失败：%s",
+	7:  "在盒子 [%s] 下删除 [%s] 失败：%s",
 	8:  "检查更新失败",
 	9:  "新版本可用 %s",
 	10: "已是最新版",
@@ -432,14 +432,14 @@ var zhCN = map[int]string{
 }
 
 var enUS = map[int]string{
-	0:  "Query dir failed",
+	0:  "Query box failed",
 	1:  "Duplicated filename",
-	2:  "List files of dir [%s] and path [%s] failed: %s",
-	3:  "Read dir [%s] file [%s] failed: %s",
-	4:  "Get dir [%s] file [%s] meta info failed: %s",
-	5:  "Rename dir [%s] file [%s] failed: %s",
-	6:  "Create dir [%s] folder [%s] failed: %s",
-	7:  "Remove dir [%s] path [%s] failed: %s",
+	2:  "List files of box [%s] and path [%s] failed: %s",
+	3:  "Read box [%s] file [%s] failed: %s",
+	4:  "Get box [%s] file [%s] meta info failed: %s",
+	5:  "Rename box [%s] file [%s] failed: %s",
+	6:  "Create box [%s] folder [%s] failed: %s",
+	7:  "Remove box [%s] path [%s] failed: %s",
 	8:  "Check update failed",
 	9:  "New version is available %s",
 	10: "Is the latest version",

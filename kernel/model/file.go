@@ -61,19 +61,19 @@ func Ls(url, path string) (ret []*File, err error) {
 
 	ret = []*File{}
 
-	dir := Conf.Dir(url)
-	if nil == dir {
+	box := Conf.Box(url)
+	if nil == box {
 		return nil, errors.New(Conf.lang(0))
 	}
 
-	files, err := dir.Ls(path)
+	files, err := box.Ls(path)
 	if nil != err {
 		return nil, err
 	}
 
 	var dirs, docs []*File
 	for _, f := range files {
-		if strings.HasPrefix(f.Name(), ".") || dir.isSkipDir(f.Name()) {
+		if strings.HasPrefix(f.Name(), ".") || box.isSkipDir(f.Name()) {
 			continue
 		}
 
@@ -96,12 +96,12 @@ func Ls(url, path string) (ret []*File, err error) {
 }
 
 func Get(url, path string) (dom string, err error) {
-	dir := Conf.Dir(url)
-	if nil == dir {
+	box := Conf.Box(url)
+	if nil == box {
 		return "", errors.New(Conf.lang(0))
 	}
 
-	tree := dir.Tree(path)
+	tree := box.Tree(path)
 	if nil == tree {
 		return "", errors.New(Conf.lang(13))
 	}
@@ -110,13 +110,13 @@ func Get(url, path string) (dom string, err error) {
 }
 
 func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error) {
-	dir := Conf.Dir(url)
-	if nil == dir {
+	box := Conf.Box(url)
+	if nil == box {
 		return nil, errors.New(Conf.lang(0))
 	}
 
 	treeID := ast.NewNodeID()
-	tree := dir.Tree(p)
+	tree := box.Tree(p)
 	if nil != tree {
 		treeID = tree.ID
 	}
@@ -135,7 +135,7 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 	tree.Root.ID = treeID
 
 	// 索引
-	dir.IndexTree(tree)
+	box.IndexTree(tree)
 
 	// 反向链接
 	backlinks = indexLink(tree)
@@ -148,12 +148,12 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 }
 
 func PutBlob(url, path string, data []byte) (err error) {
-	dir := Conf.Dir(url)
-	if nil == dir {
+	box := Conf.Box(url)
+	if nil == box {
 		return errors.New(Conf.lang(0))
 	}
 
-	err = dir.Put(path, data)
+	err = box.Put(path, data)
 	return
 }
 
@@ -170,58 +170,58 @@ func Create(url, path string) (err error) {
 }
 
 func Exist(url, path string) (bool, error) {
-	dir := Conf.Dir(url)
-	if nil == dir {
+	box := Conf.Box(url)
+	if nil == box {
 		return false, errors.New(Conf.lang(0))
 	}
-	return dir.Exist(path)
+	return box.Exist(path)
 }
 
 func Rename(url, oldPath, newPath string) error {
-	dir := Conf.Dir(url)
-	if nil == dir {
+	box := Conf.Box(url)
+	if nil == box {
 		return errors.New(Conf.lang(0))
 	}
 	if strings.HasSuffix(oldPath, "/") {
 		// 重命名文件夹
-		if err := dir.Rename(oldPath, newPath); nil != err {
+		if err := box.Rename(oldPath, newPath); nil != err {
 			return err
 		}
-		dir.MoveTreeDir(oldPath, newPath)
+		box.MoveTreeDir(oldPath, newPath)
 		return nil
 	}
 
 	// 重命名文件
 
-	if err := dir.Rename(oldPath+".md.json", newPath+".md.json"); nil != err {
+	if err := box.Rename(oldPath+".md.json", newPath+".md.json"); nil != err {
 		return err
 	}
-	dir.MoveTree(oldPath, newPath)
+	box.MoveTree(oldPath, newPath)
 
 	// 如果存在 md 文件的话也进行重命名，否则重启时会索引生成 AST
-	exist, err := dir.Exist(oldPath + ".md")
+	exist, err := box.Exist(oldPath + ".md")
 	if nil != err {
 		return err
 	}
 	if exist {
-		return dir.Rename(oldPath+".md", newPath+".md")
+		return box.Rename(oldPath+".md", newPath+".md")
 	}
 	return nil
 }
 
 func Mkdir(url, path string) error {
-	dir := Conf.Dir(url)
-	if nil == dir {
+	box := Conf.Box(url)
+	if nil == box {
 		return errors.New(Conf.lang(0))
 	}
-	exist, err := dir.Exist(path)
+	exist, err := box.Exist(path)
 	if nil != err {
 		return err
 	}
 	if exist {
 		return errors.New(Conf.lang(1))
 	}
-	return dir.Mkdir(path)
+	return box.Mkdir(path)
 }
 
 // deletedSuffix 文件/文件夹删除后缀。
@@ -229,8 +229,8 @@ func Mkdir(url, path string) error {
 const deletedSuffix = ".deleted"
 
 func Remove(url, p string) error {
-	dir := Conf.Dir(url)
-	if nil == dir {
+	box := Conf.Box(url)
+	if nil == box {
 		return errors.New(Conf.lang(0))
 	}
 
@@ -243,10 +243,10 @@ func Remove(url, p string) error {
 		if exist {
 			newPath = p[:len(p)-1] + "-" + gulu.Rand.String(7) + deletedSuffix + "/"
 		}
-		if err := dir.Rename(p, newPath); nil != err {
+		if err := box.Rename(p, newPath); nil != err {
 			return err
 		}
-		dir.RemoveTreeDir(p)
+		box.RemoveTreeDir(p)
 		return nil
 	}
 
@@ -260,18 +260,18 @@ func Remove(url, p string) error {
 		newPath = p + "-" + gulu.Rand.String(7) + ".md.json" + deletedSuffix
 	}
 
-	if err := dir.Rename(p+".md.json", newPath); nil != err {
+	if err := box.Rename(p+".md.json", newPath); nil != err {
 		return err
 	}
-	dir.RemoveTree(p)
+	box.RemoveTree(p)
 
 	// 如果存在 md 文件的话也进行重命名
-	exist, err = dir.Exist(p + ".md")
+	exist, err = box.Exist(p + ".md")
 	if nil != err {
 		return err
 	}
 	if exist {
-		return dir.Rename(p+".md", p+".md"+deletedSuffix)
+		return box.Rename(p+".md", p+".md"+deletedSuffix)
 	}
 	return nil
 }

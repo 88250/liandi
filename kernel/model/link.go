@@ -37,12 +37,12 @@ type BacklinkRefBlock struct {
 }
 
 func Backlinks(url, path string) (ret []*BacklinkRefBlock, err error) {
-	dir := Conf.Dir(url)
-	if nil == dir {
+	box := Conf.Box(url)
+	if nil == box {
 		return nil, errors.New(Conf.lang(0))
 	}
 
-	tree := dir.Tree(path)
+	tree := box.Tree(path)
 	ret = indexLink(tree)
 	return
 }

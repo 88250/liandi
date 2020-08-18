@@ -11,10 +11,18 @@
 package model
 
 import (
+	"strings"
+
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
 	"github.com/88250/lute/util"
 )
+
+// WikiLink 描述了 [[link|text]] 结构。
+type WikiLink struct {
+	link string // 链接
+	text string // 自定义锚文本
+}
 
 func convertWikiLinks(trees []*parse.Tree) {
 	for _, tree := range trees {
@@ -24,16 +32,43 @@ func convertWikiLinks(trees []*parse.Tree) {
 			}
 
 			links := extractWikiLinks(util.BytesToStr(n.Tokens))
-			if 0 < len(links) {
-				for _, link := range links {
-					_ = link
-				}
+			for _, link := range links {
+				_ = link
 			}
 			return ast.WalkContinue
 		})
 	}
 }
 
-func extractWikiLinks(text string) []string {
-	return nil
+func extractWikiLinks(text string) (wikiLinks []*WikiLink) {
+	length := len(text)
+	start := 0
+	end := length
+	for {
+		part := text[start:end]
+		start = strings.Index(part, "[[")
+		if 0 > start {
+			return
+		}
+		end = strings.Index(part, "]]")
+		if 0 > end {
+			return
+		}
+
+		link := text[start:end]
+		linkText := link
+		linkParts := strings.Split(link, "|")
+		if 1 < len(linkParts) {
+			link = linkParts[0]
+			linkText = linkParts[1]
+		}
+		wikiLink := &WikiLink{
+			link: link,
+			text: linkText,
+		}
+		wikiLinks = append(wikiLinks, wikiLink)
+		start = end
+		end = length
+	}
+	return
 }

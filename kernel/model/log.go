@@ -30,7 +30,7 @@ var (
 func InitLog() {
 	if !gulu.File.IsExist(LianDiDir) {
 		if err := os.Mkdir(LianDiDir, 0755); nil != err && !os.IsExist(err) {
-			Logger.Fatalf("创建配置目录 [%s] 失败：%s", LianDiDir, err)
+			Logger.Fatalf("创建配置盒子 [%s] 失败：%s", LianDiDir, err)
 		}
 	}
 
