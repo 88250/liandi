@@ -28,49 +28,37 @@ func convertWikiLinks(trees []*parse.Tree) {
 
 			text := util.BytesToStr(n.Tokens)
 			length := len(text)
-			start := 0
-			end := length
+			start, end := 0, length
 			for {
 				part := text[start:end]
-				start = strings.Index(part, "[[")
-				if 0 > start {
+				if start = strings.Index(part, "[["); 0 > start {
 					break
 				}
 				start += 2
-				end = strings.Index(part, "]]")
-				if 0 > end {
+				if end = strings.Index(part, "]]"); 0 > end {
 					break
 				}
 
-				link := path.Join(path.Dir(tree.Path), text[start:end])
+				link := path.Join(path.Dir(tree.Path), text[start:end]) // 统一转为绝对路径方便后续查找
 				linkText := link
-				linkParts := strings.Split(link, "|")
-				if 1 < len(linkParts) {
+				if linkParts := strings.Split(link, "|"); 1 < len(linkParts) {
 					link = linkParts[0]
 					linkText = linkParts[1]
 				}
-				link = strings.TrimSpace(link)
-				linkText = strings.TrimSpace(linkText)
+				link, linkText = strings.TrimSpace(link), strings.TrimSpace(linkText)
 				if !strings.Contains(link, "#") {
-					// 在结尾统一带上锚点
+					// 在结尾统一带上锚点方便后续查找
 					link += "#"
 				}
 
 				id := searchLinkID(trees, link)
 				if "" == id {
-					start = end
-					end = length
+					start, end = end, length
 					continue
 				}
 
-				newText := text[:start-2] + "((" + id
-				if "" != linkText {
-					newText += " \"" + linkText + "\"))" + text[end+2:]
-				}
-				text = newText
-
-				start = end
-				end = length
+				text = text[:start-2] + "((" + id + " \"" + linkText + "\"))" + text[end+2:]
+				start, end = end, length
 			}
 			n.Tokens = util.StrToBytes(text)
 			return ast.WalkContinue
