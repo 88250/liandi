@@ -308,7 +308,7 @@ export const i18n: II18n = {
         confirm: "确定",
         confirmDelete: "确定删除",
         back: "返回上一层",
-        mount: "打开本地目录",
+        mount: "打开文件夹",
         mountWebDAV: "连接 WebDAV",
         fileNameRule: '不能包含 \\/:*?"<>| 字符',
         slogan: "链滴笔记，连接点滴",
