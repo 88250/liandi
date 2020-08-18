@@ -12,8 +12,10 @@
       width: 100%;
       height: 1px;
       display: block;
-      margin-top: 2.5px;
       background-color: var(--border-color);
+      top: 2px;
+      position: absolute;
+      left: 0;
     }
 
     &--lr {
@@ -23,10 +25,10 @@
       height: auto;
 
       &:after {
+        top: 0;
         width: 1px;
+        left: 2px;
         height: 100%;
-        display: block;
-        margin-left: 2.5px;
       }
     }
   }
@@ -42,6 +44,39 @@
     .item {
       padding: 20px 10px;
       font-size: 18px;
+    }
+  }
+
+  &__tab {
+    .tab__headers {
+      list-style: none;
+      align-items: center;
+      background-color: var(--focus-background-color);
+
+      .item {
+        font-size: 12px;
+        padding: 0 5px;
+        border-bottom: 2px solid transparent;
+        line-height: 18px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: var(--panel-background-color);
+        }
+
+        svg {
+          height: 12px;
+          width: 12px;
+          margin: 3px 3px 3px 0;
+          float: left;
+          color: var(--toolbar-icon-color);
+        }
+
+        &--current {
+          background-color: var(--background-color);
+          border-color: $blue;
+        }
+      }
     }
   }
 }

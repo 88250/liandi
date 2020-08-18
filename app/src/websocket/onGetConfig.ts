@@ -1,33 +1,20 @@
 import {Layout} from "../layout";
 import {Wnd} from "../layout/wnd";
 import {i18n} from "../i18n";
-import {mountFile, mountWebDAV} from "../util/mount";
 import {initSearch} from "../search";
 import {remote} from "electron";
 import {WebSocketUtil} from "./index";
-import {File} from "../file/index";
+import {File} from "../file";
+import {addCenterWnd} from "../layout/util";
+import {Constants} from "../constants";
+import * as path from "path";
 
 export const onGetConfig = (data: IConfig) => {
     window.liandi.config = data;
     document.title = i18n[window.liandi.config.lang].slogan;
     initBar();
     initWindow();
-    (window.liandi.layouts[1].children[1] as Layout).addChild(new Wnd({
-        parent: window.liandi.layouts[1].children[1] as Layout,
-        html: `<div class="layout__empty">
-                    <div class="item fn__flex-inline">${i18n[window.liandi.config.lang].search}/${i18n[window.liandi.config.lang].config} &lt;Double Shift></div>
-                    <div class="item fn__a fn__pointer" id="editorEmptyMount">${i18n[window.liandi.config.lang].mount}</div>
-                    <div class="item fn__a fn__pointer" id="editorEmptyMountDAV">${i18n[window.liandi.config.lang].mountWebDAV}</div>
-                </div>`,
-        callback(wnd: Wnd) {
-            wnd.element.querySelector("#editorEmptyMount").addEventListener("click", () => {
-                mountFile();
-            });
-            wnd.element.querySelector("#editorEmptyMountDAV").addEventListener("click", () => {
-                mountWebDAV();
-            });
-        }
-    }));
+    addCenterWnd();
 };
 
 const initBar = () => {
@@ -69,26 +56,24 @@ const initBar = () => {
             </svg>${i18n[window.liandi.config.lang].config}
         </div>`;
     document.getElementById("barNavigation").addEventListener("click", function () {
-        if (window.liandi.activeWnd) {
-            // TODO
-        } else {
-            (window.liandi.layouts[1].children[0] as Layout).addChild(new Wnd({
-        parent: window.liandi.layouts[1].children[0] as Layout,
-                title: i18n[window.liandi.config.lang].fileTree,
-                callback: function (wnd: Wnd) {
-                    if (wnd.element.parentElement.clientWidth === 6) {
-                        wnd.element.parentElement.style.width = "200px";
-                    }
-                    wnd.tabs.data[0].model = new File(wnd.tabs.data[0].panelElement);
 
-                    wnd.tabs.data[0].ws = new WebSocketUtil(wnd.tabs.data[0].id, () => {
-                        window.liandi.config.dirs.map((item: IDir) => {
-                            wnd.tabs.data[0].model.onMount({dir: item}, wnd.tabs.data[0].ws);
-                        });
-                    });
+        const leftLayout = (window.liandi.layout.children[1] as Layout).children[0] as Layout
+        leftLayout.addWnd(new Wnd({
+            title: `<svg><use xlink:href="#iconFolder"></use></svg> ${i18n[window.liandi.config.lang].fileTree}`,
+            resize: leftLayout.children.length === 0 ? undefined : 'tb',
+            callback: function (wnd: Wnd) {
+                if (leftLayout.element.clientWidth < 7) {
+                    leftLayout.parent.children[1].element.style.width = (leftLayout.parent.children[1].element.clientWidth - 200) + 'px'
+                    leftLayout.element.style.width = "206px";
                 }
-            }));
-        }
+                wnd.children.children[0].model = new File(wnd.children.children[0].panelElement);
+                wnd.children.children[0].ws = new WebSocketUtil(wnd.children.children[0].id, () => {
+                    window.liandi.config.boxes.map((item: IDir) => {
+                        wnd.children.children[0].model.onMount({dir: item}, wnd.children.children[0].ws);
+                    });
+                });
+            }
+        }));
         window.dispatchEvent(new CustomEvent("resize"));
     });
     // TODO
@@ -108,13 +93,13 @@ const initBar = () => {
     //     }
     //     window.dispatchEvent(new CustomEvent('resize'));
     // });
-    // document.getElementById('barHelp').addEventListener('click', function () {
-    //     liandi.navigation.show();
-    //     liandi.ws.send('mount', {
-    //         url: `${Constants.WEBDAV_ADDRESS}/`,
-    //         path: path.posix.join(Constants.APP_DIR, 'public/zh_CN/链滴笔记用户指南')
-    //     });
-    // });
+    document.getElementById('barHelp').addEventListener('click', function () {
+        window.liandi.ws.send('mount', {
+            url: `${Constants.WEBDAV_ADDRESS}/`,
+            path: path.posix.join(Constants.APP_DIR, 'public/zh_CN/链滴笔记用户指南')
+        });
+        // TODO open file
+    });
     document.getElementById("barBug").addEventListener("click", () => {
         remote.getCurrentWindow().webContents.openDevTools({mode: "bottom"});
     });

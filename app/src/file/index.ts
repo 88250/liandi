@@ -63,7 +63,6 @@ export class File {
                 }
             }
         });
-        return this;
     }
 
     public getLeaf(liElement: HTMLElement, dir: IDir) {
