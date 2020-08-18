@@ -13,17 +13,26 @@ declare interface II18n {
     ko_KR?: IObject;
 }
 
+type TLayout = "normal" | "top" | "bottom" | "left" | "right" | "center"
+type TDirection = "lr" | "tb"
+
 declare interface ILayoutOptions {
-    parent?: { element: HTMLElement, direction: string };
-    direction?: string;
+    direction?: TDirection;
     size?: string
-    id?: string
-    resize?: string
-    children?: ILayoutOptions[]
+    resize?: TDirection
+    type?: TLayout
+    element?:HTMLElement
+}
+
+declare interface IWndOptions {
+    resize?: TDirection
+    html?: string
+    title?: string
+    callback?: (wnd:  import("../layout/Wnd").Wnd,) => void
 }
 
 declare interface IConfig {
-    dirs:IDir[]
+    boxes: IDir[]
     lang: keyof II18n
     theme: TTheme,
     markdown: IMD,
@@ -123,7 +132,7 @@ declare interface IImage {
 type TTheme = "light" | "dark"
 
 declare interface ILiandi {
-    layouts: ILayoutOptions[],
+    layout: import("../layout").Layout,
     config?: IConfig;
     ws?: {
         send: (cmd: string, param: Record<string, unknown>, process?: boolean) => void

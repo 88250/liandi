@@ -13,19 +13,21 @@ class App {
     public liandi: ILiandi;
 
     constructor() {
-        const layouts = [
-            new Layout({direction: "lr", size: "6px"}),
-            new Layout({direction: "lr", size: (window.innerHeight - 32) + "px", resize: "tb"}),
-            new Layout({direction: "lr", resize: "tb"}),
-        ];
-        layouts[1].children = [
-            new Layout({parent: layouts[1], size: "6px"}),
-            new Layout({parent: layouts[1], size: (window.innerWidth - 12) + "px", resize: "lr"}),
-            new Layout({parent: layouts[1], resize: "lr"}),
-        ];
+        const layout = new Layout({element: document.getElementById("layouts")});
+        layout.addLayout(new Layout({direction: "lr", size: "6px", type: "top"}))
+        layout.addLayout(new Layout({direction: "lr", size: (window.innerHeight - 32) + "px", resize: "tb"}))
+        layout.addLayout(new Layout({direction: "lr", resize: "tb", type: "bottom"}));
+
+        (layout.children[1] as Layout).addLayout(new Layout({size: "6px", type: "left"}));
+        (layout.children[1] as Layout).addLayout(new Layout({
+            size: (window.innerWidth - 12) + "px",
+            resize: "lr",
+            type: "center"
+        }));
+        (layout.children[1] as Layout).addLayout(new Layout({resize: "lr", type: "right"}));
 
         this.liandi = {
-            layouts
+            layout
         };
         this.liandi.ws = new WebSocketUtil(genUUID(), (ws: WebSocketUtil) => {
             ws.send("getconf", {});

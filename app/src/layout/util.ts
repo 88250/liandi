@@ -1,17 +1,37 @@
 import {Layout} from "./index";
 import {Wnd} from "./wnd";
+import {i18n} from "../i18n";
+import {mountFile, mountWebDAV} from "../util/mount";
 
-export const addResize = (obj: Layout | Wnd, resize?: string) => {
-    if (resize) {
+export const addResize = (obj: Layout | Wnd) => {
+    if (obj.resize) {
         const resizeElement = document.createElement("div");
-        if (resize === "lr") {
+        if (obj.resize === "lr") {
             resizeElement.classList.add("layout__resize--lr");
         }
         resizeElement.classList.add("layout__resize");
         obj.element.insertAdjacentElement("beforebegin", resizeElement);
-        resizeWnd(resizeElement, resize);
+        resizeWnd(resizeElement, obj.resize);
     }
 };
+
+export const addCenterWnd = () => {
+    ((window.liandi.layout.children[1] as Layout).children[1] as Layout).addWnd(new Wnd({
+        html: `<div class="layout__empty">
+                    <div class="item fn__flex-inline">${i18n[window.liandi.config.lang].search}/${i18n[window.liandi.config.lang].config} &lt;Double Shift></div>
+                    <div class="item fn__a fn__pointer" id="editorEmptyMount">${i18n[window.liandi.config.lang].mount}</div>
+                    <div class="item fn__a fn__pointer" id="editorEmptyMountDAV">${i18n[window.liandi.config.lang].mountWebDAV}</div>
+                </div>`,
+        callback(wnd: Wnd) {
+            wnd.element.querySelector("#editorEmptyMount").addEventListener("click", () => {
+                mountFile();
+            });
+            wnd.element.querySelector("#editorEmptyMountDAV").addEventListener("click", () => {
+                mountWebDAV();
+            });
+        }
+    }));
+}
 
 const setSize = (item: HTMLElement, direction: string) => {
     if (item.classList.contains("fn__flex-1")) {

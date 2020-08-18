@@ -1,68 +1,44 @@
 import {Layout} from "./index";
 import {genUUID} from "../util/genUUID";
-import {addResize} from "./util";
+import {addCenterWnd, addResize} from "./util";
 import {Tabs} from "./Tabs";
 
 export class Wnd {
     public id: string
     public parent?: Layout
     public element: HTMLElement
-    public resizeElement?: HTMLElement
-    public tabs?: Tabs
+    public children?: Tabs
+    public resize?: TDirection
+    public callback?: (wnd: Wnd) => void
 
-    constructor(options: { parent: Layout, resize?: string, splitId?: string, html?: string, title?: string, callback?: (wnd:Wnd) => void }) {
+    constructor(options: IWndOptions) {
         this.id = genUUID();
+        this.resize = options.resize
+        this.callback = options.callback
         this.element = document.createElement("div");
         this.element.classList.add("fn__flex-1");
-        this.tabs = new Tabs(this);
+        this.children = new Tabs(this);
         if (options.html || options.title) {
-            this.tabs.addTab({
+            this.children.addTab({
                 title: options.title,
                 panel: options.html
             });
         }
-        this.parent = options.parent;
-        if (options.splitId) {
-            this.parent.children.find((item) => {
-                if (item.id === options.splitId) {
-                    item.element.style.width = "auto";
-                    item.element.style.height = "auto";
-                    item.element.classList.add("fn__flex-1");
-                    item.element.after(this.element);
-                    return true;
-                }
-            });
-        } else {
-            this.parent.element.append(this.element);
-        }
-
-        if (options.callback) {
-            options.callback(this);
-        }
-
-        addResize(this, options.resize);
-        return this;
     }
 
-    public spilt(direction: string) {
+    public spilt(direction: TDirection) {
         // TODO new panel & ws
         if (direction === this.parent.direction) {
-            this.parent.addChild(new Wnd({parent: this.parent, resize: direction, splitId: this.id}), this.id);
+            this.parent.addWnd(new Wnd({resize: direction, html: (count++).toString()}), this.id);
         } else {
             this.parent.children.find((item, index) => {
                 if (item.id === this.id) {
                     const layout = new Layout({
                         direction,
-                        parent: this.parent,
-                        id: item.id
                     });
-                    this.parent.addChild(layout, item.id);
-                    this.parent.children.splice(index, 1);
-
-                    layout.element.append(item.element);
-                    layout.children.push(item);
-                    (item as Wnd).parent = layout;
-                    layout.addChild(new Wnd({parent:layout, resize: direction, splitId: item.id}));
+                    this.parent.addLayout(layout, item.id);
+                    layout.addWnd.apply(layout, this.parent.children.splice(index, 1));
+                    layout.addWnd.call(layout, new Wnd({resize: direction}));
                     return true;
                 }
             });
@@ -73,7 +49,7 @@ export class Wnd {
         let layout = this.parent;
         let id = this.id;
         let element = this.element;
-        while (layout && layout.children.length === 1) {
+        while (layout && layout.children.length === 1 && !["top", "bottom", "left", "right", "center"].includes(layout.type)) {
             id = layout.id;
             element = layout.element;
             layout = layout.parent;
@@ -104,5 +80,29 @@ export class Wnd {
         }
         // TODO destroy panel & ws
         element.remove();
+        if (layout.type === "center" && layout.children.length === 0) {
+            addCenterWnd();
+        }
+        if (layout.type !== "center" && layout.type !== "normal" && layout.children.length === 0) {
+            if (layout.type === 'left' || layout.type === 'right') {
+                layout.parent.children[1].element.style.width = (layout.parent.children[1].element.clientWidth + layout.element.clientWidth - 6) + 'px'
+                if (layout.type === 'left') {
+                    layout.element.style.width = '6px'
+                } else {
+                    layout.element.style.width = 'auto'
+                    layout.element.classList.add("fn__flex-1")
+                }
+            } else {
+                layout.parent.children[1].element.style.height = (layout.parent.children[1].element.clientHeight + layout.element.clientHeight - 6) + 'px'
+                if (layout.type === 'top') {
+                    layout.element.style.height = '6px'
+                } else {
+                    layout.element.style.height = 'auto'
+                    layout.element.classList.add("fn__flex-1")
+                }
+            }
+        }
     }
 }
+
+let count = 0
