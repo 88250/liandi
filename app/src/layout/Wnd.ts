@@ -1,29 +1,29 @@
 import {Layout} from "./index";
 import {genUUID} from "../util/genUUID";
 import {addResize} from "./util";
+import {Tabs} from "./Tabs";
 
 export class Wnd {
     public id: string
-    public layout: Layout
+    public parent?: Layout
     public element: HTMLElement
-    public resizeElement: HTMLElement
+    public resizeElement?: HTMLElement
+    public tabs?: Tabs
 
-    constructor(options: { layout: Layout, resize?: string, splitId?: string, html?: string, callback?: Function }) {
-        count++;
+    constructor(options: { parent: Layout, resize?: string, splitId?: string, html?: string, title?: string, callback?: Function }) {
         this.id = genUUID()
         this.element = document.createElement("div")
         this.element.classList.add('fn__flex-1')
-        this.element.style.backgroundColor = randomHexColorCode();
-        this.element.innerHTML = typeof options.html === "undefined" ? `<ul slot="tab" class="tab fn__flex">
-    <li data-name="tab${count}" class="fn__pointer">${count}</li>
-    <li><button data-type="lr">lr</button><button data-type="tb">tb</button><button data-type="close">x</button></li>
-</ul>
-<div data-name="tab${count}">
-    ${count}content 
-</div>` : options.html
-        this.layout = options.layout
+        this.tabs = new Tabs(this)
+        if (options.html || options.title) {
+            this.tabs.addTab({
+                title: options.title,
+                panel: options.html
+            })
+        }
+        this.parent = options.parent;
         if (options.splitId) {
-            this.layout.children.find((item) => {
+            this.parent.children.find((item) => {
                 if (item.id === options.splitId) {
                     item.element.style.width = 'auto'
                     item.element.style.height = 'auto'
@@ -33,56 +33,44 @@ export class Wnd {
                 }
             })
         } else {
-            this.layout.element.append(this.element)
+            this.parent.element.append(this.element)
         }
 
         if (options.callback) {
-            options.callback(this.element)
+            options.callback(this)
         }
 
         addResize(this, options.resize);
-
-        if (typeof options.html === "undefined") {
-            this.element.querySelector("button[data-type='lr']").addEventListener('click', () => {
-                this.spilt('lr')
-            })
-            this.element.querySelector("button[data-type='tb']").addEventListener('click', () => {
-                this.spilt('tb')
-            })
-            this.element.querySelector("button[data-type='close']").addEventListener('click', () => {
-                this.remove()
-            })
-        }
         return this
     }
 
-    private spilt(direction: string) {
+    public spilt(direction: string) {
         // TODO new panel & ws
-        if (direction === this.layout.direction) {
-            this.layout.addChild(new Wnd({layout: this.layout, resize: direction, splitId: this.id}), this.id)
+        if (direction === this.parent.direction) {
+            this.parent.addChild(new Wnd({parent: this.parent, resize: direction, splitId: this.id}), this.id)
         } else {
-            this.layout.children.find((item, index) => {
+            this.parent.children.find((item, index) => {
                 if (item.id === this.id) {
                     const layout = new Layout({
                         direction,
-                        parent: this.layout,
+                        parent: this.parent,
                         id: item.id
                     })
-                    this.layout.addChild(layout, item.id);
-                    this.layout.children.splice(index, 1);
+                    this.parent.addChild(layout, item.id);
+                    this.parent.children.splice(index, 1);
 
                     layout.element.append(item.element);
                     layout.children.push(item);
-                    (item as Wnd).layout = layout;
-                    layout.addChild(new Wnd({layout, resize: direction, splitId: item.id}));
+                    (item as Wnd).parent = layout;
+                    layout.addChild(new Wnd({parent:layout, resize: direction, splitId: item.id}));
                     return true
                 }
             })
         }
     }
 
-    private remove() {
-        let layout = this.layout
+    public remove() {
+        let layout = this.parent
         let id = this.id
         let element = this.element
         while (layout && layout.children.length === 1) {
@@ -118,10 +106,3 @@ export class Wnd {
         element.remove();
     }
 }
-
-let count = 0
-
-const randomHexColorCode = () => {
-    let n = (Math.random() * 0xfffff * 1000000).toString(16);
-    return '#' + n.slice(0, 6);
-};

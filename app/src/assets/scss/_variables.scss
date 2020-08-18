@@ -1,23 +1,26 @@
 // colors
 $white: #fff !default;
 $blue: #4285f4 !default;
+$errorColor: #d23f31 !default;
 
 // font
 $font-family-base: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", "Hiragino Sans GB", "Microsoft Yahei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Segoe UI Symbol", "Android Emoji", "EmojiSymbols" !default;
+$font-family-code: mononoki, Consolas, "Liberation Mono", Menlo, Courier, monospace, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Segoe UI Symbol", "Android Emoji", "EmojiSymbols" !default;
 
-// transition
 $transition: all .15s ease-in-out !default;
 
 // size
-$barHeight: 20px !default;
+$max-width: 520px !default;
+$bar-height: 20px !default;
 
 :root {
   --background-color: #fff;
+  --focus-background-color: #ebeef1;
+
   --text-color: #24292e;
   --text-secondary-color: #6a737d;
-  --border-color: #e1e4eb;
 
-  --focus-background-color: #ebeef1;
+  --border-color: #e1e4eb;
 
   --scroll-bar-thumb-background-color: rgba(0, 0, 0, 0.2);
   --scroll-bar-thumb-background-color-active: rgba(0, 0, 0, 0.3);
@@ -28,6 +31,31 @@ $barHeight: 20px !default;
 
   --panel-background-color: #fff;
   --panel-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+
+  --second-color: rgba(88, 96, 105, 0.36);
+
+  --toolbar-icon-color: #586069;
+  --toolbar-icon-hover-color: #{$blue};
+  --toolbar-height: 35px;
+  --toolbar-divider-margin-top: 8px;
+
+  --textarea-text-color: #24292e;
+
+  --resize-icon-color: var(--toolbar-icon-color);
+  --resize-background-color: var(--toolbar-background-color);
+  --resize-hover-icon-color: var(--panel-background-color);
+  --resize-hover-background-color: var(--toolbar-icon-hover-color);
+
+  --count-background-color: rgba(27, 31, 35, .05);
+  --heading-border-color: #eaecef;
+  --blockquote-color: #6a737d;
+
+  --ir-heading-color: #660e7a;
+  --ir-title-color: #808080;
+  --ir-bi-color: #0033b3;
+  --ir-link-color: #008000;
+  --ir-bracket-color: #0000ff;
+  --ir-paren-color: #008000;
 }
 
 body.theme--dark {
@@ -47,5 +75,28 @@ body.theme--dark {
 
   --panel-background-color: #24292e;
   --panel-shadow: 0 1px 2px rgba(255, 255, 255, .2);
+
+  --second-color: rgba(185, 185, 185, .36);
+
+  --toolbar-icon-color: #b9b9b9;
+  --toolbar-icon-hover-color: #fff;
+
+  --textarea-text-color: #d1d5da;
+
+  --resize-icon-color: var(--border-color);
+  --resize-background-color: var(--second-color);
+  --resize-hover-icon-color: var(--toolbar-icon-hover-color);
+  --resize-hover-background-color: rgba(185, 185, 185, .86);
+
+  --count-background-color: #{rgba($blue, .36)};
+  --heading-border-color: var(--textarea-text-color);
+  --blockquote-color: var(--toolbar-icon-color);
+
+  --ir-heading-color: #9876aa;
+  --ir-title-color: #808080;
+  --ir-bi-color: #cc7832;
+  --ir-link-color: #ffc66d;
+  --ir-bracket-color: #287bde;
+  --ir-paren-color: #6a8759;
 }
 

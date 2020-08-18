@@ -8,7 +8,18 @@ declare interface ILayoutOptions {
     size?: string
     id?: string
     resize?: string
-    children?:ILayoutOptions[]
+    children?: ILayoutOptions[]
+}
+
+declare interface IWnd {
+
+}
+declare interface IConfig {
+    dirs:IDir[]
+    lang: keyof II18n
+    theme: TTheme,
+    markdown: IMD,
+    image: IImage,
 }
 
 declare interface IFile {
@@ -105,21 +116,17 @@ type TTheme = 'light' | 'dark'
 
 declare interface ILiandi {
     layouts: ILayoutOptions[],
-    config?: {
-        lang: keyof II18n
-        theme: TTheme,
-        markdown: IMD,
-        image: IImage,
-    };
+    config?: IConfig;
     ws?: {
         send: (cmd: string, param: Record<string, unknown>, process?: boolean) => void
     };
+    activeWnd?: IWnd,
     navigation?: {
         element: HTMLElement
         onLs: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
         onMount: (liandi: ILiandi, data: { dir: IDir }) => void
         onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
-        getLeaf: (liandi: ILiandi, liElement: HTMLElement, dir: IDir) => void;
+        getLeaf: (liElement: HTMLElement, dir: IDir) => void;
         show: () => void;
         hide: () => void;
     };
