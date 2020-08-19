@@ -13,14 +13,13 @@ package model
 import (
 	"errors"
 	"fmt"
+	"github.com/88250/gowebdav"
+	"github.com/88250/gulu"
+	"github.com/88250/lute/ast"
 	"os"
 	"path"
 	"sort"
 	"strings"
-
-	"github.com/88250/gowebdav"
-	"github.com/88250/gulu"
-	"github.com/88250/lute/ast"
 )
 
 type File struct {
@@ -109,10 +108,10 @@ func Get(url, path string) (dom string, err error) {
 	return
 }
 
-func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error) {
+func Put(url, p string, domStr string) (err error) {
 	box := Conf.Box(url)
 	if nil == box {
-		return nil, errors.New(Conf.lang(0))
+		return errors.New(Conf.lang(0))
 	}
 
 	treeID := ast.NewNodeID()
@@ -126,7 +125,7 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 	if nil != err {
 		msg := fmt.Sprintf(Conf.lang(12), err)
 		Logger.Errorf(msg)
-		return nil, errors.New(msg)
+		return errors.New(msg)
 	}
 	tree.URL = url
 	tree.Path = p
@@ -137,12 +136,9 @@ func Put(url, p string, domStr string) (backlinks []*BacklinkRefBlock, err error
 	// 索引
 	box.IndexTree(tree)
 
-	// 反向链接
-	backlinks = indexLink(tree)
-
-	// 持久化数据
+	// 持久化
 	if err = WriteASTJSON(tree); nil != err {
-		return nil, err
+		return err
 	}
 	return
 }
@@ -165,7 +161,7 @@ func Create(url, path string) (err error) {
 	if exist {
 		return errors.New(Conf.lang(1))
 	}
-	_, err = Put(url, path, "")
+	err = Put(url, path, "")
 	return
 }
 

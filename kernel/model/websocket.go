@@ -30,6 +30,10 @@ func RemovePushChan(session *melody.Session) {
 	delete(sessions, id.(string))
 }
 
+func BroadcastEvent(event *Result) {
+	Broadcast(event.Bytes())
+}
+
 func Broadcast(msg []byte) {
 	for _, session := range sessions {
 		session.Write(msg)
