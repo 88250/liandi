@@ -96,10 +96,11 @@ export class Wnd {
         });
     }
 
-    private spilt(direction: TDirection) {
+    public spilt(direction: TDirection) {
         // TODO new panel & ws
+        const wnd = new Wnd(direction)
         if (direction === this.parent.direction) {
-            this.parent.addWnd(new Wnd(direction), this.id);
+            this.parent.addWnd(wnd, this.id);
         } else {
             this.parent.children.find((item, index) => {
                 if (item.id === this.id) {
@@ -108,11 +109,12 @@ export class Wnd {
                     });
                     this.parent.addLayout(layout, item.id);
                     layout.addWnd.call(layout, this.parent.children.splice(index, 1)[0]);
-                    layout.addWnd.call(layout, new Wnd(direction));
+                    layout.addWnd.call(layout, wnd);
                     return true;
                 }
             });
         }
+        return wnd
     }
 
     private remove() {

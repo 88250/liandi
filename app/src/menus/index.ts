@@ -5,7 +5,7 @@ import {hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
 import {initVditorMenu} from "./vditor";
 import {clipboard} from "electron";
 import {initBacklinksMenu} from "./backlinks";
-import {initTabMenu} from "./tab";
+import {initEditorMenu, initTabMenu} from "./tab";
 
 export class Menus {
     public itemData: IMenuData;
@@ -15,6 +15,15 @@ export class Menus {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector("body"))) {
                 const dataType = target.getAttribute("data-type");
+
+                if (dataType === "tab-header-editor") {
+                    this.itemData = {
+                        target,
+                    };
+                    initEditorMenu().popup();
+                    event.preventDefault();
+                    break;
+                }
                 if (dataType === "tab-header") {
                     initTabMenu().popup();
                     event.preventDefault();

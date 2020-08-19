@@ -18,7 +18,7 @@ interface ILiandi {
     find?: import("../search/Find").Find,
     config?: IConfig;
     ws: import("../layout/Model").Model,
-    resizeList?: any[]
+    // resizeList?: any[]
     menus: import("../menus").Menus
     current?: {
         dir?: IBox
@@ -119,7 +119,7 @@ declare interface IEchartsFormatter {
 
 declare interface IMenuData {
     target: HTMLElement
-    path: string
-    url: string
+    path?: string
+    url?: string
     name?: string
 }

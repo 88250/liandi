@@ -16,7 +16,7 @@ export class Graph extends Model {
             id: tab.id,
             callback() {
                 this.send("graph", {
-                    k: tab.model.inputElement.value
+                    k: this.inputElement.value
                 });
             }
         });
