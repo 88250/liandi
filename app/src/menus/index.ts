@@ -25,6 +25,9 @@ export class Menus {
                     break;
                 }
                 if (dataType === "tab-header") {
+                    this.itemData = {
+                        target,
+                    };
                     initTabMenu().popup();
                     event.preventDefault();
                     break;

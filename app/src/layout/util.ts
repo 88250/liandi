@@ -9,36 +9,38 @@ import {Editor} from "../editor";
 import {Backlinks} from "../backlinks";
 import {Files} from "../files";
 
-export const copyTab = (tab:Tab) => {
-    let model:Model
+export const copyTab = (tab: Tab) => {
     let panel = ''
-    if (tab.model instanceof Editor) {
-        model = new Editor({
-            tab,
-            url: tab.model.url,
-            path: tab.model.path
-        })
-    } else if (tab.model instanceof Backlinks) {
-        model = new Backlinks({
-            tab,
-            url: tab.model.url,
-            path: tab.model.path
-        })
-    } else if (tab.model instanceof Graph) {
-        panel = '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
-        model = new Graph({
-            tab,
-            url: tab.model.url,
-            path: tab.model.path
-        })
-    } else if (tab.model instanceof File) {
-        model = new Files(tab);
+    if (tab.model instanceof Graph) {
+        panel = '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>'
     }
     return new Tab({
-        title: tab.headElement.innerHTML,
+        title: tab.headElement.innerHTML.replace('<svg class="item__svg item__svg--close"><use xlink:href="#iconClose"></use></svg>', ""),
         panel,
-        callback(tab: Tab) {
-            tab.addModel(model);
+        callback(newTab: Tab) {
+            let model: Model
+            if (tab.model instanceof Editor) {
+                model = new Editor({
+                    tab: newTab,
+                    url: tab.model.url,
+                    path: tab.model.path
+                })
+            } else if (tab.model instanceof Backlinks) {
+                model = new Backlinks({
+                    tab: newTab,
+                    url: tab.model.url,
+                    path: tab.model.path
+                })
+            } else if (tab.model instanceof Graph) {
+                model = new Graph({
+                    tab: newTab,
+                    url: tab.model.url,
+                    path: tab.model.path
+                })
+            } else if (tab.model instanceof Files) {
+                model = new Files(newTab);
+            }
+            newTab.addModel(model);
         }
     });
 }
