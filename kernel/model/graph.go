@@ -78,7 +78,7 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 	}
 }
 
-func connectBacklinks(nodeBacklinks map[*ast.Node][]*BacklinkRef, links *[]interface{}) {
+func connectBacklinks(nodeBacklinks map[BacklinkDef][]*BacklinkRef, links *[]interface{}) {
 	for target, refs := range nodeBacklinks {
 		for _, sources := range refs {
 			for _, source := range sources.RefNodes {

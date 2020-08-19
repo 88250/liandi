@@ -21,9 +21,11 @@ import (
 )
 
 var (
-	treeBacklinks     = map[*parse.Tree]map[*ast.Node][]*BacklinkRef{} // 反向链接关系：块被哪些块用了
-	treeBacklinksLock = &sync.Mutex{}                                  // 全局反链锁，构建反链和图的时候需要加锁
+	treeBacklinks     = map[*parse.Tree]map[BacklinkDef][]*BacklinkRef{} // 反向链接关系：块被哪些块用了
+	treeBacklinksLock = &sync.Mutex{}                                    // 全局反链锁，构建反链和图的时候需要加锁
 )
+
+type BacklinkDef *ast.Node
 
 type BacklinkRef struct {
 	URL, Path string
@@ -53,7 +55,7 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 
 	ret = []*BacklinkRefBlock{}
 	// 找到当前块列表
-	var currentBlocks []*ast.Node
+	var currentBlocks []BacklinkDef
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		if !entering {
 			return ast.WalkStop
@@ -71,7 +73,7 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 	delete(treeBacklinks, tree)
 
 	// 构建链接关系
-	backlinks := map[*ast.Node][]*BacklinkRef{}
+	backlinks := map[BacklinkDef][]*BacklinkRef{}
 	for _, currentBlock := range currentBlocks {
 		for _, tree := range trees {
 			var refNodes []*ast.Node
