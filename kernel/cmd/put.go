@@ -24,15 +24,31 @@ func (cmd *put) Exec() {
 	url = model.NormalizeURL(url)
 	path := cmd.param["path"].(string)
 	content := cmd.param["content"].(string)
-	backlinks, err := model.Put(url, path, content)
+	err := model.Put(url, path, content)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
 	}
-	ret.Data = map[string]interface{}{
-		"backlinks": backlinks,
-	}
 	cmd.Push(ret.Bytes())
+
+	// 反向链接
+	backlinks, err := model.Backlinks(url, path)
+	if nil != err {
+		backlinksEvent := model.NewCmdResult("backlinks", 0)
+		backlinksEvent.Data = map[string]interface{}{
+			"backlinks": backlinks,
+		}
+		model.BroadcastEvent(backlinksEvent)
+	}
+
+	// 关系图
+	nodes, links := model.Graph("")
+	graph := model.NewCmdResult("graph", 0)
+	graph.Data = map[string]interface{}{
+		"nodes": nodes,
+		"links": links,
+	}
+	model.BroadcastEvent(graph)
 }
 
 func (cmd *put) Name() string {

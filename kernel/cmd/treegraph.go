@@ -8,34 +8,28 @@
 // THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 // See the Mulan PSL v2 for more details.
 
-package model
+package cmd
 
-import (
-	"gopkg.in/olahol/melody.v1"
-)
+import "github.com/88250/liandi/kernel/model"
 
-var sessions map[string]*melody.Session
-
-func InitSessions() {
-	sessions = map[string]*melody.Session{}
+type treegraph struct {
+	*BaseCmd
 }
 
-func AddPushChan(session *melody.Session) {
-	id, _ := session.Get("id")
-	sessions[id.(string)] = session
-}
-
-func RemovePushChan(session *melody.Session) {
-	id, _ := session.Get("id")
-	delete(sessions, id.(string))
-}
-
-func BroadcastEvent(event *Result) {
-	Broadcast(event.Bytes())
-}
-
-func Broadcast(msg []byte) {
-	for _, session := range sessions {
-		session.Write(msg)
+func (cmd *treegraph) Exec() {
+	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	keyword := cmd.param["k"].(string)
+	url := cmd.param["url"].(string)
+	url = model.NormalizeURL(url)
+	p := cmd.param["path"].(string)
+	nodes, links := model.TreeGraph(keyword, url, p)
+	ret.Data = map[string]interface{}{
+		"nodes": nodes,
+		"links": links,
 	}
+	cmd.Push(ret.Bytes())
+}
+
+func (cmd *treegraph) Name() string {
+	return "treegraph"
 }
