@@ -10,12 +10,28 @@ import {Backlinks} from "../backlinks";
 import {Files} from "../files";
 import {hasClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 
-export const getCurrentWnd = () => {
+const getFirstWnd = (layout: Layout) => {
+    for (let i = 0; i < layout.children.length; i++) {
+        if (layout.children[i] instanceof Wnd) {
+            return layout.children[i]
+        } else if (layout.children[i] instanceof Layout) {
+            getFirstWnd(layout.children[i] as Layout);
+        }
+    }
+    return null;
+}
+
+export const getCenterActiveWnd = () => {
     if (getSelection().rangeCount === 0) {
-        return null
+        return getFirstWnd(window.liandi.centerLayout)
     }
     const range = getSelection().getRangeAt(0)
-    return hasClosestByAttribute(range.startContainer, "data-type", "wnd")
+    const element = hasClosestByAttribute(range.startContainer, "data-type", "wnd", true)
+    if (element && window.liandi.centerLayout.element.contains(element)) {
+        return getInstanceById(element.getAttribute("data-id"))
+    } else {
+        return getFirstWnd(window.liandi.centerLayout)
+    }
 }
 
 export const copyTab = (tab: Tab) => {
@@ -55,7 +71,7 @@ export const copyTab = (tab: Tab) => {
 }
 
 export const getInstanceById = (id: string) => {
-    const _getInstanceById = (item: Layout|Wnd, id: string) => {
+    const _getInstanceById = (item: Layout | Wnd, id: string) => {
         if (item.id === id) {
             return item
         }
