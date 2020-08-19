@@ -16,7 +16,7 @@ body {
   transition: $transition;
   box-sizing: border-box;
   max-height: 100%;
-
+  overflow: hidden;
 
   &.body--win32 {
     border: 1px solid #707070;

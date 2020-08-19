@@ -19,42 +19,41 @@ export const onGetConfig = (data: IConfig) => {
 };
 
 const initBar = () => {
-    document.querySelector(".toolbar").innerHTML = `<div id="barNavigation" class="item fn__a">
+    document.querySelector(".toolbar").innerHTML = `<div id="barNavigation" aria-label="${i18n[window.liandi.config.lang].fileTree}" class="item fn__a">
             <svg>
                 <use xlink:href="#iconFolder"></use>
             </svg>
-            ${i18n[window.liandi.config.lang].fileTree}
         </div>
-        <div id="barBacklinks" class="item fn__a">
+        <div id="barBacklinks" class="item fn__a" aria-label="${i18n[window.liandi.config.lang].backlinks}">
             <svg>
                 <use xlink:href="#iconLink"></use>
-            </svg>${i18n[window.liandi.config.lang].backlinks}
+            </svg>
         </div>
-        <div id="barGraph" class="item fn__a">
+        <div id="barGraph" class="item fn__a" aria-label="${i18n[window.liandi.config.lang].graphView}">
             <svg>
                 <use xlink:href="#iconGraph"></use>
-            </svg>${i18n[window.liandi.config.lang].graphView}
+            </svg>
         </div>
         <div class="fn__flex-1" id="drag"></div>
-        <a href="https://hacpai.com/sponsor" class="item ft__pink">
+        <a href="https://hacpai.com/sponsor" class="item ft__pink" aria-label="${i18n[window.liandi.config.lang].sponsor}">
             <svg>
                 <use xlink:href="#iconFavorite"></use>
-            </svg>${i18n[window.liandi.config.lang].sponsor}
+            </svg>
         </a>
-        <div id="barHelp" class="item fn__a">
+        <div id="barHelp" class="item fn__a" aria-label="${i18n[window.liandi.config.lang].help}">
             <svg>
                 <use xlink:href="#iconHelp"></use>
-            </svg>${i18n[window.liandi.config.lang].help}
+            </svg>
         </div>
-        <div id="barBug" class="item fn__a">
+        <div id="barBug" class="item fn__a" aria-label="${i18n[window.liandi.config.lang].debug}">
             <svg>
                 <use xlink:href="#iconBug"></use>
-            </svg>${i18n[window.liandi.config.lang].debug}
+            </svg>
         </div>
-        <div id="barSettings" class="item fn__a">
+        <div id="barSettings" class="item fn__a" aria-label="${i18n[window.liandi.config.lang].config}">
             <svg>
                 <use xlink:href="#iconSettings"></use>
-            </svg>${i18n[window.liandi.config.lang].config}
+            </svg>
         </div>`;
     document.getElementById("barNavigation").addEventListener("click", () => {
         const wnd = new Wnd( window.liandi.leftLayout.children.length === 0 ? undefined : "tb");
@@ -99,6 +98,7 @@ const initBar = () => {
                 if (window.liandi.rightLayout.element.clientWidth < 7) {
                     window.liandi.rightLayout.parent.children[1].element.style.width = (window.liandi.rightLayout.parent.children[1].element.clientWidth - 200) + "px";
                     window.liandi.rightLayout.element.style.width = "206px";
+                    window.liandi.rightLayoutWidth = 206;
                 }
                 tab.addModel(new Backlinks({tab}));
             }

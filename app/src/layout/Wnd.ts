@@ -41,10 +41,10 @@ export class Wnd {
         });
     }
 
-    private switchTab(target:HTMLElement) {
+    private switchTab(target: HTMLElement) {
         this.children.forEach((item) => {
-            if (target.isSameNode(item.headElement)) {
-                item.headElement.classList.add("item--current");
+            if (target === item.headElement) {
+                item.headElement?.classList.add("item--current");
                 item.panelElement.classList.remove("fn__none");
             } else {
                 item.headElement?.classList.remove("item--current");
@@ -77,6 +77,10 @@ export class Wnd {
     }
 
     private removeTab(id: string) {
+        if (this.children.length === 1) {
+            this.children = []
+            this.remove();
+        }
         this.children.find((item, index) => {
             if (item.id === id) {
                 if (item.headElement.classList.contains("item--current")) {
@@ -89,7 +93,6 @@ export class Wnd {
                 item.headElement.remove();
                 item.panelElement.remove();
                 // TODO distory
-                // TODO if length === 0 call  this.remove();
                 this.children.splice(index, 1);
                 return true;
             }
@@ -158,19 +161,23 @@ export class Wnd {
         if (layout.type !== "center" && layout.type !== "normal" && layout.children.length === 0) {
             if (layout.type === "left" || layout.type === "right") {
                 layout.parent.children[1].element.style.width = (layout.parent.children[1].element.clientWidth + layout.element.clientWidth - 6) + "px";
+                layout.parent.children[1].element.classList.remove("fn__flex-1")
                 if (layout.type === "left") {
                     layout.element.style.width = "6px";
                 } else {
                     layout.element.style.width = "auto";
                     layout.element.classList.add("fn__flex-1");
+                    window.liandi.rightLayoutWidth = 6;
                 }
             } else {
                 layout.parent.children[1].element.style.height = (layout.parent.children[1].element.clientHeight + layout.element.clientHeight - 6) + "px";
+                layout.parent.children[1].element.classList.remove("fn__flex-1")
                 if (layout.type === "top") {
                     layout.element.style.height = "6px";
                 } else {
                     layout.element.style.height = "auto";
                     layout.element.classList.add("fn__flex-1");
+                    window.liandi.bottomLayoutHeight = 6;
                 }
             }
         }
