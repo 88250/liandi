@@ -42,7 +42,7 @@ func (cmd *remove) Exec() {
 	cmd.Push(ret.Bytes())
 
 	// 反向链接
-	backlinks, err := model.Backlinks(url, p)
+	backlinks, err := model.TreeBacklinks(url, p)
 	if nil != err {
 		backlinksEvent := model.NewCmdResult("backlinks", 0)
 		backlinksEvent.Data = map[string]interface{}{

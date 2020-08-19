@@ -14,45 +14,28 @@ import (
 	"github.com/88250/liandi/kernel/model"
 )
 
-type put struct {
+type treebacklinks struct {
 	*BaseCmd
 }
 
-func (cmd *put) Exec() {
+func (cmd *treebacklinks) Exec() {
 	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
-	content := cmd.param["content"].(string)
-	err := model.Put(url, p, content)
+	backlinks, err := model.TreeBacklinks(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
 	}
+	ret.Data = map[string]interface{}{
+		"url":       url,
+		"path":      p,
+		"backlinks": backlinks,
+	}
 	cmd.Push(ret.Bytes())
-
-	// 反向链接
-	backlinks, err := model.TreeBacklinks(url, p)
-	if nil == err {
-		backlinksEvent := model.NewCmdResult("backlinks", 0)
-		backlinksEvent.Data = map[string]interface{}{
-			"url":       url,
-			"path":      p,
-			"backlinks": backlinks,
-		}
-		model.BroadcastEvent(backlinksEvent)
-	}
-
-	// 关系图
-	nodes, links := model.Graph("")
-	graph := model.NewCmdResult("graph", 0)
-	graph.Data = map[string]interface{}{
-		"nodes": nodes,
-		"links": links,
-	}
-	model.BroadcastEvent(graph)
 }
 
-func (cmd *put) Name() string {
-	return "put"
+func (cmd *treebacklinks) Name() string {
+	return "treebacklinks"
 }

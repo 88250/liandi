@@ -20,17 +20,8 @@ type backlinks struct {
 
 func (cmd *backlinks) Exec() {
 	ret := model.NewCmdResult(cmd.Name(), cmd.id)
-	url := cmd.param["url"].(string)
-	url = model.NormalizeURL(url)
-	p := cmd.param["path"].(string)
-	backlinks, err := model.Backlinks(url, p)
-	if nil != err {
-		ret.Code = -1
-		ret.Msg = err.Error()
-	}
+	backlinks := model.Backlinks()
 	ret.Data = map[string]interface{}{
-		"url":       url,
-		"path":      p,
 		"backlinks": backlinks,
 	}
 	cmd.Push(ret.Bytes())
