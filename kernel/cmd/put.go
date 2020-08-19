@@ -33,11 +33,11 @@ func (cmd *put) Exec() {
 
 	// 反向链接
 	backlinks, err := model.Backlinks(url, p)
-	if nil != err {
+	if nil == err {
 		backlinksEvent := model.NewCmdResult("backlinks", 0)
 		backlinksEvent.Data = map[string]interface{}{
-			"url": url,
-			"path": p,
+			"url":       url,
+			"path":      p,
 			"backlinks": backlinks,
 		}
 		model.BroadcastEvent(backlinksEvent)
