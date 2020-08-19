@@ -36,6 +36,8 @@ func (cmd *put) Exec() {
 	if nil != err {
 		backlinksEvent := model.NewCmdResult("backlinks", 0)
 		backlinksEvent.Data = map[string]interface{}{
+			"url": url,
+			"path": p,
 			"backlinks": backlinks,
 		}
 		model.BroadcastEvent(backlinksEvent)
