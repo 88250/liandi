@@ -33,7 +33,7 @@ export const addCenterWnd = () => {
             });
         }
     }));
-    ((window.liandi.layout.children[1] as Layout).children[1] as Layout).addWnd(wnd);
+    window.liandi.centerLayout.addWnd(wnd);
 };
 
 const setSize = (item: HTMLElement, direction: string) => {
@@ -83,8 +83,9 @@ const resizeWnd = (resizeElement: HTMLElement, direction: string) => {
                 nextElement.style[direction === "lr" ? "width" : "height"] = "auto";
                 nextElement.classList.add("fn__flex-1");
             }
-
-            window.dispatchEvent(new CustomEvent("resize"));
+            window.liandi.rightLayoutWidth = window.liandi.rightLayout.element.clientWidth
+            window.liandi.bottomLayoutHeight = window.liandi.bottomLayout.element.clientHeight
+            // window.dispatchEvent(new CustomEvent("resize"));
         };
     });
 };

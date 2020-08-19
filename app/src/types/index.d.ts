@@ -6,6 +6,26 @@ interface Window {
     liandi: ILiandi
 }
 
+interface ILiandi {
+    layout: import("../layout").Layout,
+    topLayout: import("../layout").Layout,
+    leftLayout: import("../layout").Layout,
+    centerLayout: import("../layout").Layout,
+    rightLayout: import("../layout").Layout,
+    bottomLayout: import("../layout").Layout,
+    rightLayoutWidth?: number,
+    bottomLayoutHeight?: number
+    find?: import("../search/Find").Find,
+    config?: IConfig;
+    ws: import("../layout/Model").Model,
+    resizeList?: any[]
+    menus: import("../menus").Menus
+    current?: {
+        dir?: IBox
+        path?: string
+    };
+}
+
 interface IObject {
     [key: string]: string;
 }
@@ -102,17 +122,4 @@ declare interface IMenuData {
     path: string
     url: string
     name?: string
-}
-
-declare interface ILiandi {
-    layout: import("../layout").Layout,
-    find?: import("../search/Find").Find,
-    config?: IConfig;
-    ws: import("../layout/Model").Model,
-    resizeList?: any[]
-    menus: import("../menus").Menus
-    current?: {
-        dir?: IBox
-        path?: string
-    };
 }

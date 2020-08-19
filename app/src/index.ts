@@ -16,8 +16,6 @@ import {onGetConfig} from "./websocket/onGetConfig";
 import {destroyDialog} from "./util/dialog";
 
 class App {
-    public liandi: ILiandi;
-
     constructor() {
         const layout = new Layout({element: document.getElementById("layouts")});
         layout.addLayout(new Layout({direction: "lr", size: "6px", type: "top"}));
@@ -35,18 +33,23 @@ class App {
         doubleShift();
         // 监听主线程发送的消息
         ipcRenderer.on(Constants.LIANDI_FIND_SHOW, () => {
-            this.liandi.find.open();
+            liandi.find.open();
         });
         ipcRenderer.on(Constants.LIANDI_EDITOR_SAVE, () => {
-            // TODO this.liandi.editors.save(this.liandi);
+            // TODO liandi.editors.save(liandi);
         });
         ipcRenderer.on(Constants.LIANDI_FILE_NEW, () => {
             // TODO newFile(this.liandi)
         });
 
-        this.liandi = {
-            find : new Find(),
+        const liandi: ILiandi = {
+            find: new Find(),
             layout,
+            topLayout: layout.children[0] as Layout,
+            leftLayout: layout.children[1].children[0] as Layout,
+            centerLayout: layout.children[1].children[1] as Layout,
+            rightLayout: layout.children[1].children[2] as Layout,
+            bottomLayout: layout.children[2] as Layout,
             ws: new Model({
                 id: genUUID(),
                 callback() {
@@ -56,8 +59,8 @@ class App {
             menus: new Menus()
         };
 
-        this.liandi.ws.ws.onmessage = (event) => {
-            const data = processMessage(event.data, this.liandi.ws.reqId)
+        liandi.ws.ws.onmessage = (event) => {
+            const data = processMessage(event.data, liandi.ws.reqId)
             if (data) {
                 switch (data.cmd) {
                     case "search":
@@ -126,11 +129,38 @@ class App {
                 }
             }
         }
-        //     window.onresize = () => {
-        //         this.liandi.graph.resize();
-        //         this.liandi.editors.resize();
-        //     };
-        window.liandi = this.liandi;
+        window.liandi = liandi;
+
+        setTimeout(() => {
+            // 需等待重绘完成后
+            window.liandi.rightLayoutWidth = liandi.rightLayout.element.clientWidth;
+            window.liandi.bottomLayoutHeight = liandi.bottomLayout.element.clientHeight;
+            console.log( liandi.rightLayoutWidth )
+        }, 100)
+
+        let running = false;
+        window.addEventListener("resize", () => {
+            if (running) {
+                return;
+            }
+            running = true;
+            requestAnimationFrame(() => {
+                window.dispatchEvent(new CustomEvent("optimizedResize"));
+                running = false;
+            });
+        });
+
+        window.addEventListener("optimizedResize", () => {
+            window.liandi.bottomLayout.element.style.height = window.liandi.bottomLayoutHeight + "px"
+            window.liandi.bottomLayout.element.classList.remove('fn__flex-1')
+            layout.children[1].element.style.height = "auto"
+            layout.children[1].element.classList.add('fn__flex-1')
+
+            window.liandi.rightLayout.element.style.width = window.liandi.rightLayoutWidth + "px"
+            window.liandi.rightLayout.element.classList.remove('fn__flex-1')
+            window.liandi.centerLayout.element.style.width = "auto"
+            window.liandi.centerLayout.element.classList.add('fn__flex-1')
+        });
     }
 }
 
