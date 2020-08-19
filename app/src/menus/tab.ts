@@ -17,4 +17,4 @@ export const initTabMenu = () => {
         }
     }));
     return menu;
-}
+};

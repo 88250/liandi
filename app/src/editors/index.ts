@@ -32,10 +32,10 @@ export class Editor extends Model {
                 });
 
             }
-        })
+        });
 
         this.ws.onmessage = (event) => {
-            const data = processMessage(event.data, this.reqId)
+            const data = processMessage(event.data, this.reqId);
             if (data) {
                 switch (data.cmd) {
                     case "get":
@@ -43,7 +43,7 @@ export class Editor extends Model {
                         break;
                 }
             }
-        }
+        };
 
         this.element = options.tab.panelElement;
         this.url = options.url;
@@ -165,9 +165,21 @@ export class Editor extends Model {
                 this.vditore.focus();
                 // this.blockHint.initEvent(window.liandi, this.vditore.vditor.ir.element);
             },
+            save: (content:string) => {
+                if (this.saved) {
+                    return;
+                }
+                this.send("put", {
+                    url: this.url,
+                    path: this.path,
+                    content,
+                });
+                this.saved = true;
+                this.parent.headElement.classList.remove("item--unsave");
+            },
             input: () => {
                 this.saved = false;
-                // this.currentEditor.inputElement.classList.add("editor__input--unsave");
+                this.parent.headElement.classList.add("item--unsave");
                 // TODO auto save
             }
         });
@@ -203,19 +215,6 @@ export class Editor extends Model {
         this.initVditor(html);
         // this.currentEditor = editor;
         // this.editors.push(editor);
-    }
-
-    public save() {
-        // if (!liandi.current.dir || !this.currentEditor || (this.currentEditor && this.currentEditor.saved)) {
-        //     return;
-        // }
-        // liandi.ws.send("put", {
-        //     url: liandi.current.dir.url,
-        //     path: liandi.current.path,
-        //     content: processRemoveDataRender1(this.currentEditor.vditor.vditor.ir.element, "innerHTML")
-        // });
-        // this.currentEditor.saved = true;
-        // this.currentEditor.inputElement.classList.remove("editor__input--unsave");
     }
 
     public open(liandi: ILiandi, url: string, path: string) {

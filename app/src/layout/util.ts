@@ -83,8 +83,8 @@ const resizeWnd = (resizeElement: HTMLElement, direction: string) => {
                 nextElement.style[direction === "lr" ? "width" : "height"] = "auto";
                 nextElement.classList.add("fn__flex-1");
             }
-            window.liandi.rightLayoutWidth = window.liandi.rightLayout.element.clientWidth
-            window.liandi.bottomLayoutHeight = window.liandi.bottomLayout.element.clientHeight
+            window.liandi.rightLayoutWidth = window.liandi.rightLayout.element.clientWidth;
+            window.liandi.bottomLayoutHeight = window.liandi.bottomLayout.element.clientHeight;
             // window.dispatchEvent(new CustomEvent("resize"));
         };
     });

@@ -35,9 +35,6 @@ class App {
         ipcRenderer.on(Constants.LIANDI_FIND_SHOW, () => {
             liandi.find.open();
         });
-        ipcRenderer.on(Constants.LIANDI_EDITOR_SAVE, () => {
-            // TODO liandi.editors.save(liandi);
-        });
         ipcRenderer.on(Constants.LIANDI_FILE_NEW, () => {
             // TODO newFile(this.liandi)
         });
@@ -60,7 +57,7 @@ class App {
         };
 
         liandi.ws.ws.onmessage = (event) => {
-            const data = processMessage(event.data, liandi.ws.reqId)
+            const data = processMessage(event.data, liandi.ws.reqId);
             if (data) {
                 switch (data.cmd) {
                     case "search":
@@ -88,10 +85,6 @@ class App {
                     case "getconf":
                         onGetConfig(data.data);
                         onSetTheme(data.data.theme);
-                        break;
-                    case "put":
-                        // liandi.backlinks.getBacklinks(liandi);
-                        // liandi.graph.render(liandi);
                         break;
                     case "mount":
                     case "mountremote":
@@ -128,15 +121,14 @@ class App {
                         break;
                 }
             }
-        }
+        };
         window.liandi = liandi;
 
         setTimeout(() => {
             // 需等待重绘完成后
             window.liandi.rightLayoutWidth = liandi.rightLayout.element.clientWidth;
             window.liandi.bottomLayoutHeight = liandi.bottomLayout.element.clientHeight;
-            console.log( liandi.rightLayoutWidth )
-        }, 100)
+        }, 100);
 
         let running = false;
         window.addEventListener("resize", () => {
@@ -151,15 +143,15 @@ class App {
         });
 
         window.addEventListener("optimizedResize", () => {
-            window.liandi.bottomLayout.element.style.height = window.liandi.bottomLayoutHeight + "px"
-            window.liandi.bottomLayout.element.classList.remove('fn__flex-1')
-            layout.children[1].element.style.height = "auto"
-            layout.children[1].element.classList.add('fn__flex-1')
+            window.liandi.bottomLayout.element.style.height = window.liandi.bottomLayoutHeight + "px";
+            window.liandi.bottomLayout.element.classList.remove("fn__flex-1");
+            layout.children[1].element.style.height = "auto";
+            layout.children[1].element.classList.add("fn__flex-1");
 
-            window.liandi.rightLayout.element.style.width = window.liandi.rightLayoutWidth + "px"
-            window.liandi.rightLayout.element.classList.remove('fn__flex-1')
-            window.liandi.centerLayout.element.style.width = "auto"
-            window.liandi.centerLayout.element.classList.add('fn__flex-1')
+            window.liandi.rightLayout.element.style.width = window.liandi.rightLayoutWidth + "px";
+            window.liandi.rightLayout.element.classList.remove("fn__flex-1");
+            window.liandi.centerLayout.element.style.width = "auto";
+            window.liandi.centerLayout.element.classList.add("fn__flex-1");
         });
     }
 }

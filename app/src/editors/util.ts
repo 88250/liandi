@@ -1,5 +1,4 @@
 import * as path from "path";
-import {Layout} from "../layout";
 import {Tab} from "../layout/Tab";
 import {escapeHtml} from "../util/escape";
 import {Editor} from "./index";
@@ -19,7 +18,7 @@ export const openFile = (url: string, filePath: string) => {
                     url,
                     path: filePath
                 });
-                tab.addModel(editor)
+                tab.addModel(editor);
             }
         }));
     }

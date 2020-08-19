@@ -101,10 +101,6 @@ const createWindow = () => {
     globalShortcut.register('CommandOrControl+N', () => {
       mainWindow.webContents.send('liandi-file-new')
     })
-
-    globalShortcut.register('CommandOrControl+S', () => {
-      mainWindow.webContents.send('liandi-editor-save')
-    })
   })
 
   // 全局对象

@@ -22,7 +22,7 @@ export class Wnd {
     </div>
     <div class="tab__panels fn__flex-1"></div>
 </div>`;
-        this.headersElement = this.element.querySelector(".tab__headers")
+        this.headersElement = this.element.querySelector(".tab__headers");
         // this.element.querySelector("button[data-type='lr']").addEventListener("click", () => {
         //     this.spilt("lr");
         // });
@@ -34,23 +34,23 @@ export class Wnd {
             while (target && !target.isEqualNode(this.headersElement)) {
                 if (target.tagName === "LI") {
                     this.switchTab(target);
-                    break
+                    break;
                 }
                 target = target.parentElement;
             }
-        })
+        });
     }
 
     private switchTab(target:HTMLElement) {
         this.children.forEach((item) => {
             if (target.isSameNode(item.headElement)) {
-                item.headElement.classList.add("item--current")
-                item.panelElement.classList.remove("fn__none")
+                item.headElement.classList.add("item--current");
+                item.panelElement.classList.remove("fn__none");
             } else {
-                item.headElement?.classList.remove("item--current")
-                item.panelElement.classList.add("fn__none")
+                item.headElement?.classList.remove("item--current");
+                item.panelElement.classList.add("fn__none");
             }
-        })
+        });
     }
 
     public addTab(tab: Tab) {
@@ -80,20 +80,20 @@ export class Wnd {
         this.children.find((item, index) => {
             if (item.id === id) {
                 if (item.headElement.classList.contains("item--current")) {
-                    let currentIndex = index + 1
+                    let currentIndex = index + 1;
                     if (index === this.children.length - 1) {
-                        currentIndex = index - 1
+                        currentIndex = index - 1;
                     }
                     this.switchTab(this.children[currentIndex].headElement);
                 }
-                item.headElement.remove()
-                item.panelElement.remove()
+                item.headElement.remove();
+                item.panelElement.remove();
                 // TODO distory
                 // TODO if length === 0 call  this.remove();
-                this.children.splice(index, 1)
-                return true
+                this.children.splice(index, 1);
+                return true;
             }
-        })
+        });
     }
 
     private spilt(direction: TDirection) {

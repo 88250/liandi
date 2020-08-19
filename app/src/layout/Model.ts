@@ -1,8 +1,10 @@
 import {Constants} from "../constants";
+import {Tab} from "./Tab";
 
 export class Model {
     public ws: WebSocket;
     public reqId: number;
+    public parent: Tab
 
     constructor(options: {
         id: string,
@@ -28,7 +30,7 @@ export class Model {
             console.error("WebSocket Error:", err);
             this.ws.close();
         };
-        return ws
+        return ws;
     }
 
     public send(cmd: string, param: Record<string, unknown>, process = false) {

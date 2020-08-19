@@ -1,4 +1,3 @@
-import {Layout} from "../layout";
 import {Wnd} from "../layout/wnd";
 import {i18n} from "../i18n";
 import {initSearch} from "../search";

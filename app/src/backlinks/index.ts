@@ -24,7 +24,7 @@ export class Backlinks extends Model {
         });
 
         this.ws.onmessage = (event) => {
-            const data = processMessage(event.data, this.reqId)
+            const data = processMessage(event.data, this.reqId);
             if (data) {
                 switch (data.cmd) {
                     case "backlinks":
@@ -32,7 +32,7 @@ export class Backlinks extends Model {
                         break;
                 }
             }
-        }
+        };
 
         this.element = tab.panelElement;
         this.element.addEventListener("click", (event) => {

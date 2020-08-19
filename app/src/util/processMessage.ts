@@ -16,5 +16,5 @@ export const processMessage =(data:string, reqId:number)=> {
         return false;
     }
 
-    return response
-}
+    return response;
+};

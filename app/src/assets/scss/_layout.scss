@@ -96,6 +96,11 @@
           background-color: var(--background-color);
           border-color: $blue;
         }
+
+        &--unsave {
+          color: var(--text-secondary-color);
+          font-weight: 900;
+        }
       }
     }
   }
