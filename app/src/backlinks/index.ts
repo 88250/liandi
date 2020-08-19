@@ -1,16 +1,19 @@
 import * as path from "path";
 import {i18n} from "../i18n";
 import {escapeHtml} from "../util/escape";
+import {WebSocketUtil} from "../websocket";
 
 export class Backlinks {
-    private element = document.getElementById("backlinks") as HTMLDivElement;
+    private element: HTMLElement
+    public ws: WebSocketUtil
 
-    constructor(liandi: ILiandi) {
+    constructor(element: HTMLElement) {
+        this.element = element;
         this.element.addEventListener("click", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.isEqualNode(this.element)) {
                 if (target.tagName === "H2") {
-                    liandi.editors.open(liandi, decodeURIComponent(target.getAttribute("data-url")), decodeURIComponent(target.getAttribute("data-path")));
+                    // window.liandi.editors.open(window.liandi, decodeURIComponent(target.getAttribute("data-url")), decodeURIComponent(target.getAttribute("data-path")));
                     event.preventDefault();
                     event.stopPropagation();
                     break;
@@ -20,25 +23,10 @@ export class Backlinks {
         });
     }
 
-    public getBacklinks(liandi: ILiandi) {
-        if (liandi.current.dir && !this.element.classList.contains("fn__none")) {
-            liandi.ws.send("backlinks", {
-                url: liandi.current.dir.url,
-                path: liandi.current.path
-            });
-        } else {
-            this.element.innerHTML = `<div class="backlinks__title">
-<div class="ft__secondary ft__smaller">${i18n[liandi.config.lang].backlinks}</div>
-<div class="fn__ellipsis">${escapeHtml(liandi.current.path ? path.posix.join(path.posix.basename(liandi.current.dir.url), liandi.current.path) : "")}</div>
-</div>
-<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[liandi.config.lang].noBacklinks}</div></div>`;
-        }
-    }
-
-    public onBacklinks(liandi: ILiandi, backlinks: IBacklinks[]) {
+    public onBacklinks(backlinks: IBacklinks[]) {
         let backlinksHTML = `<div class="backlinks__title">
-<div class="ft__secondary ft__smaller">${i18n[liandi.config.lang].backlinks}</div>
-<div class="fn__ellipsis">${escapeHtml(path.posix.join(path.posix.basename(liandi.current.dir.url), liandi.current.path))}</div>
+<div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].backlinks}</div>
+<div class="fn__ellipsis">${escapeHtml(path.posix.join(path.posix.basename(window.liandi.current.dir.url), window.liandi.current.path))}</div>
 </div>`;
         backlinks.forEach((files) => {
             backlinksHTML += '<div class="item">';
@@ -54,22 +42,8 @@ export class Backlinks {
             backlinksHTML += "</div>";
         });
         if (backlinks.length === 0) {
-            backlinksHTML += `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[liandi.config.lang].noBacklinks}</div></div>`;
+            backlinksHTML += `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
         }
         this.element.innerHTML = backlinksHTML;
-    }
-
-    public show(liandi: ILiandi) {
-        this.element.classList.remove("fn__none");
-        this.getBacklinks(liandi);
-        document.getElementById("resize2").classList.remove("fn__none");
-        document.getElementById("barBacklinks").classList.add("item--current");
-        liandi.graph.hide(liandi);
-    }
-
-    public hide() {
-        this.element.classList.add("fn__none");
-        document.getElementById("resize2").classList.add("fn__none");
-        document.getElementById("barBacklinks").classList.remove("item--current");
     }
 }

@@ -6,12 +6,12 @@ import {Constants} from "../constants";
 
 export const newFile = (liandi: ILiandi, callback = "") => {
     if (callback === Constants.CB_CREATE_INSERT) {
-        const itemDataPath = path.posix.dirname(liandi.current.path);
-        liandi.menus.itemData = {
-            target: liandi.navigation.element.querySelector(`ul[data-url="${encodeURIComponent(liandi.current.dir.url)}"] li[data-path="${encodeURIComponent(itemDataPath + (itemDataPath.endsWith("/") ? "" : "/"))}"]`),
-            dir: {url: liandi.current.dir.url},
-            path: itemDataPath,
-        };
+        // const itemDataPath = path.posix.dirname(liandi.current.path);
+        // liandi.menus.itemData = {
+        //     target: liandi.navigation.element.querySelector(`ul[data-url="${encodeURIComponent(liandi.current.dir.url)}"] li[data-path="${encodeURIComponent(itemDataPath + (itemDataPath.endsWith("/") ? "" : "/"))}"]`),
+        //     url: liandi.current.dir.url,
+        //     path: itemDataPath,
+        // };
     }
     const itemData = liandi.menus.itemData;
     dialog({
@@ -36,7 +36,7 @@ export const newFile = (liandi: ILiandi, callback = "") => {
         }
         const currentNewPath = path.posix.join(itemData.path, name);
         liandi.ws.send("create", {
-            url: itemData.dir.url,
+            url: itemData.url,
             path: currentNewPath,
             callback
         });

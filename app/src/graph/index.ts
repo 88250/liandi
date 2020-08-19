@@ -2,72 +2,60 @@ import * as echarts from "echarts";
 import * as path from "path";
 import {i18n} from "../i18n";
 import {escapeHtml} from "../util/escape";
+import {WebSocketUtil} from "../websocket";
 
 export class Graph {
     private inputElement: HTMLInputElement;
-    private element = document.getElementById("graph").lastElementChild as HTMLDivElement;
+    private graphElement: HTMLDivElement;
     private chart: echarts.ECharts
+    public ws: WebSocketUtil
 
-    constructor(liandi: ILiandi) {
-        this.inputElement = this.element.previousElementSibling.firstElementChild as HTMLInputElement;
-        this.inputElement.placeholder = i18n[liandi.config.lang].search;
+    constructor(element: HTMLElement) {
+        element.classList.add("graph");
+        this.graphElement = element.lastElementChild as HTMLDivElement;
+        this.inputElement = element.firstElementChild.firstElementChild as HTMLInputElement;
+        this.inputElement.placeholder = i18n[window.liandi.config.lang].search;
         this.inputElement.addEventListener("compositionend", () => {
-            this.render(liandi);
+            this.render(window.liandi);
         });
         this.inputElement.addEventListener("input", (event: InputEvent) => {
             if (event.isComposing) {
                 return;
             }
-            this.render(liandi);
+            this.render(window.liandi);
         });
     }
 
     render(liandi: ILiandi) {
-        if (this.element.parentElement.style.display === "flex") {
+        if (this.graphElement.parentElement.style.display === "flex") {
             liandi.ws.send("graph", {
                 k: this.inputElement.value
             });
         }
     }
 
-    show(liandi: ILiandi) {
-        this.element.parentElement.style.display = "flex";
-        liandi.ws.send("graph", {
-            k: this.inputElement.value
-        });
-        document.getElementById("resize3").classList.remove("fn__none");
-        document.getElementById("barGraph").classList.add("item--current");
-        liandi.backlinks.hide(liandi);
-    }
-
-    hide() {
-        this.element.parentElement.style.display = "none";
-        document.getElementById("resize3").classList.add("fn__none");
-        document.getElementById("barGraph").classList.remove("item--current");
-    }
-
     resize() {
-        if (this.chart && this.element.parentElement.style.display === "flex") {
+        if (this.chart && this.graphElement.parentElement.style.display === "flex") {
             this.chart.resize();
         }
     }
 
-    onGraph(liandi: ILiandi, data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[] }) {
+    onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[] }) {
         if (!this.chart) {
-            this.chart = echarts.init(this.element);
+            this.chart = echarts.init(this.graphElement);
         } else {
             this.resize();
         }
         this.chart.setOption({
                 legend: {
                     data: [{
-                        name: i18n[liandi.config.lang].rootBlock,
+                        name: i18n[window.liandi.config.lang].rootBlock,
                         icon: "circle"
                     }, {
-                        name: i18n[liandi.config.lang].normalBlock,
+                        name: i18n[window.liandi.config.lang].normalBlock,
                         icon: "circle"
                     }, {
-                        name: i18n[liandi.config.lang].relativeBlock,
+                        name: i18n[window.liandi.config.lang].relativeBlock,
                         icon: "circle"
                     }],
                     top: 20,
@@ -91,9 +79,9 @@ export class Graph {
                     padding: [2, 4, 2, 4],
                     formatter: (params: IEchartsFormatter) => {
                         if (params.dataType === "edge") {
-                            return `<div style="font-size: 10px;line-height: 12px">${params.data.lineStyle.type === "dotted" ? i18n[liandi.config.lang].relativeRelation : i18n[liandi.config.lang].parentRelation}</div>`;
+                            return `<div style="font-size: 10px;line-height: 12px">${params.data.lineStyle.type === "dotted" ? i18n[window.liandi.config.lang].relativeRelation : i18n[window.liandi.config.lang].parentRelation}</div>`;
                         } else {
-                            return `<div style="font-size: 12px;line-height: 14px; word-break: break-all;width: 220px;white-space: normal;">${params.data.category === 3 ? "This is a bug block, please go to https://github.com/88250/liandi/issues/new for feedback" : escapeHtml(params.data.content)}</div>
+                            return `<div style="font-size: 12px;line-height: 14px; word-break: break-all;width: 220px;white-space: normal;">${params.data.category === 3 ? "This is a bug block, please go to https://github.com/88250/window.liandi/issues/new for feedback" : escapeHtml(params.data.content)}</div>
 <div style="font-size: 10px;color:#959da5;line-height: 12px">${params.data.name}</div>`;
                         }
                     },
@@ -102,17 +90,17 @@ export class Graph {
                     {
                         animation: false,
                         categories: [{
-                            name: i18n[liandi.config.lang].rootBlock,
+                            name: i18n[window.liandi.config.lang].rootBlock,
                             itemStyle: {
                                 color: "#161719"
                             },
                         }, {
-                            name: i18n[liandi.config.lang].normalBlock,
+                            name: i18n[window.liandi.config.lang].normalBlock,
                             itemStyle: {
                                 color: "#7c828b"
                             },
                         }, {
-                            name: i18n[liandi.config.lang].relativeBlock,
+                            name: i18n[window.liandi.config.lang].relativeBlock,
                             itemStyle: {
                                 color: "#d23f31"
                             },
@@ -187,7 +175,7 @@ export class Graph {
 
         this.chart.on("click", (params: IEchartsFormatter) => {
             if (params.dataType === "node" && params.data.label.show) {
-                liandi.editors.open(liandi, params.data.url, params.data.path);
+                // window.liandi.editors.open(window.liandi, params.data.url, params.data.path);
             }
         });
     }

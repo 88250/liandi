@@ -3,19 +3,17 @@ import Vditor from "../../vditore/src";
 import {Constants} from "../constants";
 import * as path from "path";
 import * as process from "process";
-import {BlockHint} from "./BlockHint";
 import {hasTopClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {getEditorRange} from "../../vditore/src/ts/util/selection";
 import {escapeHtml} from "../util/escape";
 import {i18n} from "../i18n";
-import {processRemoveDataRender1} from "../../vditore/src/ts/ir/process";
 
 export class Editor {
     private element: HTMLElement;
     private saved = false
-    private vditore:Vditor
-    private url:string
-    private path:string
+    private vditore: Vditor
+    private url: string
+    private path: string
 
     constructor(element: HTMLElement) {
         this.element = element;
@@ -165,18 +163,18 @@ export class Editor {
         divElement.append(editorElement);
         this.element.insertAdjacentElement("beforeend", divElement);
 
-        const editor: IEditor = {
-            inputElement,
-            editorElement,
-            saved: true,
-            active: true
-        };
+        // const editor = {
+        //     inputElement,
+        //     editorElement,
+        //     saved: true,
+        //     active: true
+        // };
         this.initVditor(html);
         // this.currentEditor = editor;
         // this.editors.push(editor);
     }
 
-    public save(liandi: ILiandi) {
+    public save() {
         // if (!liandi.current.dir || !this.currentEditor || (this.currentEditor && this.currentEditor.saved)) {
         //     return;
         // }
@@ -190,7 +188,7 @@ export class Editor {
     }
 
     public open(liandi: ILiandi, url: string, path: string) {
-        liandi.editors.save(liandi);
+        // liandi.editors.save(liandi);
         liandi.current = {
             dir: {url},
             path
@@ -201,7 +199,7 @@ export class Editor {
         });
     }
 
-    public close(liandi: ILiandi) {
+    public close() {
         // if (!this.currentEditor) {
         //     return;
         // }
@@ -217,13 +215,13 @@ export class Editor {
         // this.currentEditor?.vditor?.focus();
     }
 
-    public reloadEditor(liandi: ILiandi) {
+    public reloadEditor() {
         // if (this.currentEditor) {
         //     this.initVditor();
         // }
     }
 
-    public onGet(liandi: ILiandi, editorData: { content: string, name: string }) {
+    public onGet() {
         // if (this.currentEditor) {
         //     this.initVditor(editorData.content);
         //     this.editorsElement.lastElementChild.classList.remove("fn__none");
@@ -234,8 +232,8 @@ export class Editor {
         // document.querySelector<HTMLElement>(".editor__empty").style.display = "none";
     }
 
-    public showSearchBlock(liandi: ILiandi, data: { k: string, blocks: IBlock[], url: string, path: string }) {
-        if (liandi.current.dir.url !== data.url || liandi.current.path !== data.path) {
+    public showSearchBlock(data: { k: string, blocks: IBlock[], url: string, path: string }) {
+        if (window.liandi.current.dir.url !== data.url || window.liandi.current.path !== data.path) {
             return;
         }
         const currentBlockElement = hasTopClosestByAttribute(getEditorRange(this.vditore.vditor.ir.element).startContainer, "data-block", "0");
@@ -283,12 +281,12 @@ export class Editor {
         });
         dataList.push({
             value: "((newFile))",
-            html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#iconMD"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${i18n[liandi.config.lang].newFile}</span></span>`,
+            html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#iconMD"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${i18n[window.liandi.config.lang].newFile}</span></span>`,
         });
         // this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);
     }
 
-    public onGetBlock(liandi: ILiandi, data: { id: string, block: IBlock, callback: string }) {
+    public onGetBlock() {
         // this.blockHint.getBlock(liandi, data);
     }
 }

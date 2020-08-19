@@ -71,6 +71,6 @@ export const markdown = {
     },
     onSetMD: (liandi: ILiandi, md: IMD) => {
         liandi.config.markdown = md;
-        liandi.editors.reloadEditor(liandi);
+        // liandi.editors.reloadEditor(liandi);
     }
 };
