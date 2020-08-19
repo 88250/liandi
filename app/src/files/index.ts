@@ -3,14 +3,16 @@ import {hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
 import {escapeHtml} from "../util/escape";
 import {destroyDialog} from "../util/dialog";
 import {openFile} from "../editors/util";
+import {WebSocketUtil} from "../websocket";
+import {Tab} from "../layout/Tab";
 
-export class File {
+export class Files {
     private element: HTMLElement
-    private tab: ITab
+    public parent: Tab
+    public ws:WebSocketUtil
 
-    constructor(tab: ITab) {
-        this.tab = tab;
-        this.element = tab.panelElement;
+    constructor(element:HTMLElement) {
+        this.element = element;
         this.element.classList.add("file");
         this.element.addEventListener("dblclick", (event) => {
             let target = event.target as HTMLElement;
@@ -68,7 +70,7 @@ export class File {
         });
     }
 
-    public getLeaf(liElement: HTMLElement, dir: IDir) {
+    public getLeaf(liElement: HTMLElement, dir: IBox) {
         const files = JSON.parse(liElement.getAttribute("data-files"));
         if (liElement.firstElementChild.classList.contains("item__arrow--open")) {
             liElement.firstElementChild.classList.remove("item__arrow--open");
@@ -89,7 +91,7 @@ export class File {
   <span class="fn__ellipsis">${escapeHtml(item.name)}</span>
 </span>
 </li>`;
-                this.tab.ws.send("ls", {
+                this.ws.send("ls", {
                     url: dir.url,
                     path: item.path,
                 }, true);
@@ -118,7 +120,7 @@ export class File {
         fileItemElement.querySelector(".fn__ellipsis").innerHTML = escapeHtml(data.newName);
         if (liandi.current.dir && liandi.current.dir.url === data.url && liandi.current.path === data.oldPath) {
             if (!data.newPath.endsWith("/")) {
-                liandi.editors.currentEditor.inputElement.value = data.newName;
+                // liandi.editors.currentEditor.inputElement.value = data.newName;
                 liandi.current.path = data.newPath;
             }
         }
@@ -142,7 +144,7 @@ export class File {
         }
     }
 
-    public onMount(data: { dir: IDir, existed?: boolean }) {
+    public onMount(data: { dir: IBox, existed?: boolean }) {
         if (data.existed) {
             return;
         }
@@ -157,7 +159,7 @@ export class File {
         this.element.insertAdjacentHTML("beforeend", html);
 
         // 首次挂载多个目录并发时，需要永远都执行回调
-        this.tab.ws.send("ls", {
+        this.ws.send("ls", {
             url: data.dir.url,
             path: "/",
         }, true);

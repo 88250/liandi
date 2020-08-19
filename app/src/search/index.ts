@@ -49,7 +49,7 @@ export const initSearch = (type = "search") => {
         width: Math.max(window.innerWidth - 520, 600),
         height: 520,
         destroyDialogCallback: () => {
-            liandi.editors.focus();
+            // liandi.editors.focus();
         }
     });
 
@@ -77,7 +77,7 @@ export const initSearch = (type = "search") => {
         }
         if (event.key === "Escape") {
             destroyDialog(() => {
-                liandi.editors.focus();
+                // liandi.editors.focus();
             });
             event.preventDefault();
         }
@@ -134,7 +134,7 @@ export const initSearch = (type = "search") => {
 };
 
 export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
-    liandi.editors.save(liandi);
+    // liandi.editors.save(liandi);
 
     const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
     liandi.current.dir = JSON.parse(decodeURIComponent(currentList.getAttribute("data-dir")));
@@ -150,7 +150,7 @@ export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
 };
 
 export const onSearch = (liandi: ILiandi, data: {
-    dir: IDir
+    dir: IBox
     path: string
     content: string
     ln: number

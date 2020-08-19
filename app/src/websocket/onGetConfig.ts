@@ -4,10 +4,13 @@ import {i18n} from "../i18n";
 import {initSearch} from "../search";
 import {remote} from "electron";
 import {WebSocketUtil} from "./index";
-import {File} from "../file";
 import {addCenterWnd} from "../layout/util";
 import {Constants} from "../constants";
 import * as path from "path";
+import {Graph} from "../graph";
+import {Tab} from "../layout/Tab";
+import {Files} from "../files";
+import {Backlinks} from "../backlinks";
 
 export const onGetConfig = (data: IConfig) => {
     window.liandi.config = data;
@@ -55,45 +58,83 @@ const initBar = () => {
                 <use xlink:href="#iconSettings"></use>
             </svg>${i18n[window.liandi.config.lang].config}
         </div>`;
-    document.getElementById("barNavigation").addEventListener("click", function () {
-
+    document.getElementById("barNavigation").addEventListener("click", () => {
         const leftLayout = (window.liandi.layout.children[1] as Layout).children[0] as Layout;
-        leftLayout.addWnd(new Wnd({
+        const wnd = new Wnd( leftLayout.children.length === 0 ? undefined : "tb");
+        const tab = new Tab({
             title: `<svg><use xlink:href="#iconFolder"></use></svg> ${i18n[window.liandi.config.lang].fileTree}`,
-            resize: leftLayout.children.length === 0 ? undefined : "tb",
-            callback: function (wnd: Wnd) {
+            callback(tab: Tab) {
                 if (leftLayout.element.clientWidth < 7) {
                     leftLayout.parent.children[1].element.style.width = (leftLayout.parent.children[1].element.clientWidth - 200) + "px";
                     leftLayout.element.style.width = "206px";
                 }
-                const currentTab = wnd.children.children[0];
-                currentTab.model = new File(currentTab);
-                currentTab.ws = new WebSocketUtil(currentTab,  ()=> {
-                    window.liandi.config.boxes.map((item: IDir) => {
-                        currentTab.model.onMount({dir: item});
+                const files = new Files(tab.panelElement);
+                tab.addModel(files);
+                files.ws = new WebSocketUtil(files, () => {
+                    window.liandi.config.boxes.map((item: IBox) => {
+                        tab.model.onMount({dir: item});
                     });
                 });
             }
-        }));
+        });
+        wnd.addTab(tab);
+        leftLayout.addWnd(wnd);
         window.dispatchEvent(new CustomEvent("resize"));
     });
-    // TODO
-    // document.getElementById('barGraph').addEventListener('click', function () {
-    //     if (this.classList.contains("item--current")) {
-    //         liandi.graph.hide(liandi);
-    //     } else {
-    //         liandi.graph.show(liandi)
-    //     }
-    //     window.dispatchEvent(new CustomEvent('resize'));
-    // });
-    // document.getElementById('barBacklinks').addEventListener('click', function () {
-    //     if (this.classList.contains('item--current')) {
-    //         liandi.backlinks.hide(liandi);
-    //     } else {
-    //         liandi.backlinks.show(liandi);
-    //     }
-    //     window.dispatchEvent(new CustomEvent('resize'));
-    // });
+
+    document.getElementById("barGraph").addEventListener("click", function () {
+        const topLayout = window.liandi.layout.children[0] as Layout;
+        const wnd = new Wnd(topLayout.children.length === 0 ? undefined : "lr");
+        const tab = new Tab({
+            title: `<svg><use xlink:href="#iconGraph"></use></svg> ${i18n[window.liandi.config.lang].graphView}`,
+            panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
+            callback(tab: Tab) {
+                if (topLayout.element.clientHeight < 7) {
+                    topLayout.parent.children[1].element.style.height = (topLayout.parent.children[1].element.clientHeight - 200) + "px";
+                    topLayout.element.style.height = "206px";
+                }
+                const graph = new Graph(tab.panelElement);
+                tab.addModel(graph);
+                graph.ws = new WebSocketUtil(graph, () => {
+                    tab.model.ws.send("graph", {
+                        k: tab.model.inputElement.value
+                    });
+                });
+            }
+        });
+        wnd.addTab(tab);
+        topLayout.addWnd(wnd);
+        window.dispatchEvent(new CustomEvent("resize"));
+    });
+
+    document.getElementById("barBacklinks").addEventListener("click", function () {
+        const rightLayout =(window.liandi.layout.children[1] as Layout).children[2] as Layout;
+        const wnd = new Wnd(rightLayout.children.length === 0 ? undefined : "tb");
+        const tab = new Tab({
+            title: `<svg><use xlink:href="#iconLink"></use></svg> ${i18n[window.liandi.config.lang].backlinks}`,
+            callback(tab: Tab) {
+                if (rightLayout.element.clientWidth < 7) {
+                    rightLayout.parent.children[1].element.style.width = (rightLayout.parent.children[1].element.clientWidth - 200) + "px";
+                    rightLayout.element.style.width = "206px";
+                }
+                const backlinks = new Backlinks(tab.panelElement);
+                tab.addModel(backlinks);
+                backlinks.ws = new WebSocketUtil(backlinks, () => {
+                    if (window.liandi.current) {
+                        tab.model.ws.send("backlinks", {
+                            url: window.liandi.current.dir.url,
+                            path: window.liandi.current.path
+                        });
+                    } else {
+                        tab.panelElement.innerHTML = `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
+                    }
+                });
+            }
+        });
+        wnd.addTab(tab);
+        rightLayout.addWnd(wnd);
+        window.dispatchEvent(new CustomEvent("resize"));
+    });
     document.getElementById("barHelp").addEventListener("click", function () {
         window.liandi.ws.send("mount", {
             url: `${Constants.WEBDAV_ADDRESS}/`,

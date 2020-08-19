@@ -10,7 +10,7 @@ export const initBacklinksMenu = (liandi: ILiandi) => {
             const itemData = liandi.menus.itemData;
             liandi.ws.send("exec", {
                 bin: remote.process.execPath,
-                args: [path.posix.join(remote.app.getAppPath(), "main.js"), `--liandi-url=${itemData.dir.url}`, `--liandi-path=${itemData.path}`]
+                args: [path.posix.join(remote.app.getAppPath(), "main.js"), `--liandi-url=${itemData.url}`, `--liandi-path=${itemData.path}`]
             });
         }
     }));

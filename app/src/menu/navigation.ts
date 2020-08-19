@@ -10,17 +10,17 @@ export const initNavigationMenu = (liandi: ILiandi) => {
         label: i18n[liandi.config.lang].unMount,
         click: () => {
             const itemData = liandi.menus.itemData;
-            if (liandi.current.dir && liandi.current.dir.url === itemData.dir.url) {
-                liandi.editors.close(liandi);
+            if (liandi.current.dir && liandi.current.dir.url === itemData.url) {
+                // liandi.editors.close(liandi);
                 liandi.current = {
                     path: "",
                 };
             }
             liandi.ws.send("unmount", {
-                url: itemData.dir.url
+                url: itemData.url
             });
             itemData.target.parentElement.remove();
-            liandi.graph.render(liandi);
+            // liandi.graph.render(liandi);
         }
     }));
     menu.append(showInFolder(liandi));

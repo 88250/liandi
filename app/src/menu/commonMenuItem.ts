@@ -12,9 +12,9 @@ export const showInFolder = (liandi: ILiandi) => {
         click: () => {
             const itemData = liandi.menus.itemData;
             if (itemData.path.endsWith("/")) {
-                shell.openItem(path.posix.join(itemData.dir.path, itemData.path));
+                shell.openItem(path.posix.join(itemData.path, itemData.path));
             } else {
-                shell.showItemInFolder(path.posix.join(itemData.dir.path, itemData.path + ".md.json"));
+                shell.showItemInFolder(path.posix.join(itemData.path, itemData.path + ".md.json"));
             }
         }
     });
@@ -57,7 +57,7 @@ export const newFolderMenu = (liandi: ILiandi) => {
 
                 const currentNewPath = path.posix.join(itemData.path, name);
                 liandi.ws.send("mkdir", {
-                    url: itemData.dir.url,
+                    url: itemData.url,
                     path: currentNewPath
                 });
             });
@@ -88,14 +88,14 @@ export const deleteMenu = (liandi: ILiandi) => {
                 destroyDialog();
             });
             dialogElement.querySelector(".button").addEventListener("click", () => {
-                if (liandi.current.dir && liandi.current.dir.url === itemData.dir.url && itemData.path === liandi.current.path) {
-                    liandi.editors.close(liandi);
+                if (liandi.current.dir && liandi.current.dir.url === itemData.url && itemData.path === liandi.current.path) {
+                    // liandi.editors.close(liandi);
                     liandi.current = {
                         path: "",
                     };
                 }
                 liandi.ws.send("remove", {
-                    url: itemData.dir.url,
+                    url: itemData.url,
                     path: itemData.path
                 });
                 if (itemData.target.nextElementSibling?.tagName === "UL") {
@@ -129,7 +129,7 @@ export const renameMenu = (liandi: ILiandi) => {
                 destroyDialog();
             });
             dialogElement.querySelector(".button").addEventListener("click", () => {
-                rename(liandi, inputElement.value, itemData.dir.url, itemData.path);
+                rename(liandi, inputElement.value, itemData.url, itemData.path);
             });
             bindDialogInput(inputElement, () => {
                 (dialogElement.querySelector(".button") as HTMLButtonElement).click();

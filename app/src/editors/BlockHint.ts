@@ -1,6 +1,5 @@
 import {hasClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {Constants} from "../constants";
-import {scrollCenter} from "../../vditore/src/ts/util/editorCommonEvent";
 
 export class BlockHint {
     private element = document.getElementById("editorBlockHint")
@@ -45,7 +44,7 @@ export class BlockHint {
             return;
         }
         if (data.callback === Constants.CB_GETBLOCK_OPEN) {
-            liandi.editors.open(liandi, data.block.url, data.block.path);
+            // liandi.editors.open(liandi, data.block.url, data.block.path);
             return;
         }
         if (data.block.content.trim() === "") {
@@ -54,7 +53,7 @@ export class BlockHint {
         if (data.callback === Constants.CB_GETBLOCK_EMBED) {
             this.blockRefElement.setAttribute("data-render", "1");
             this.blockRefElement.innerHTML = data.block.content;
-            scrollCenter(liandi.editors.currentEditor.vditor.vditor);
+            // scrollCenter(liandi.editors.currentEditor.vditor.vditor);
             return;
         }
         const elementRect = this.blockRefElement.getBoundingClientRect();
@@ -72,13 +71,13 @@ export class BlockHint {
         }
     }
 
-    public blockRender(liandi: ILiandi) {
-        liandi.editors.currentEditor.vditor.vditor.ir.element.querySelectorAll("span[data-type='block-ref-embed'] span[data-render='2']").forEach((item: HTMLElement) => {
-            this.blockRefElement = item;
-            liandi.ws.send("getblock", {
-                id: item.getAttribute("data-block-def-id"),
-                callback: Constants.CB_GETBLOCK_EMBED
-            });
-        });
+    public blockRender() {
+        // liandi.editors.currentEditor.vditor.vditor.ir.element.querySelectorAll("span[data-type='block-ref-embed'] span[data-render='2']").forEach((item: HTMLElement) => {
+        //     this.blockRefElement = item;
+        //     liandi.ws.send("getblock", {
+        //         id: item.getAttribute("data-block-def-id"),
+        //         callback: Constants.CB_GETBLOCK_EMBED
+        //     });
+        // });
     }
 }

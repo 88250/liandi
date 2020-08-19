@@ -27,15 +27,14 @@ class App {
         (layout.children[1] as Layout).addLayout(new Layout({resize: "lr", type: "right"}));
 
         this.liandi = {
-            layout
+            layout,
+            ws: new WebSocketUtil({parent: {id: genUUID()}}, () => {
+                this.liandi.ws.send("getconf", {});
+                this.liandi.find = new Find();
+                doubleShift();
+                this.onIpc();
+            })
         };
-        this.liandi.ws = new WebSocketUtil({id: genUUID()}, () => {
-            this.liandi.ws.send("getconf", {});
-            this.liandi.find = new Find();
-            doubleShift();
-            this.onIpc();
-        });
-
         //     window.onresize = () => {
         //         this.liandi.graph.resize();
         //         this.liandi.editors.resize();

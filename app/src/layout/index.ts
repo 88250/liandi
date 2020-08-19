@@ -76,8 +76,5 @@ export class Layout {
         }
         addResize(child);
         child.parent = this;
-        if (child.callback) {
-            child.callback(child);
-        }
     }
 }

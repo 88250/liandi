@@ -1,35 +1,59 @@
 import {Layout} from "./index";
 import {genUUID} from "../util/genUUID";
 import {addCenterWnd} from "./util";
-import {Tabs} from "./Tabs";
+import {Tab} from "./Tab";
 
 export class Wnd {
     public id: string
     public parent?: Layout
     public element: HTMLElement
-    public children?: Tabs
+    public children: Tab[] = []
     public resize?: TDirection
-    public callback?: (wnd: Wnd) => void
 
-    constructor(options: IWndOptions) {
+    constructor(resize?: TDirection) {
         this.id = genUUID();
-        this.resize = options.resize;
-        this.callback = options.callback;
+        this.resize = resize;
         this.element = document.createElement("div");
         this.element.classList.add("fn__flex-1", "fn__flex");
-        this.children = new Tabs(this);
-        if (options.html || options.title) {
-            this.children.addTab({
-                title: options.title,
-                panel: options.html
-            });
+        this.element.innerHTML = `<div class="layout__tab fn__flex-column fn__flex fn__flex-1">
+    <div class="fn__flex">
+        <ul class="fn__flex fn__flex-1 tab__headers"></ul>
+        <button data-type="lr">lr</button><button data-type="tb">tb</button><button data-type="close">x</button>
+    </div>
+    <div class="tab__panels fn__flex-1"></div>
+</div>`;
+        this.element.querySelector("button[data-type='lr']").addEventListener("click", () => {
+            this.spilt("lr");
+        });
+        this.element.querySelector("button[data-type='tb']").addEventListener("click", () => {
+            this.spilt("tb");
+        });
+        this.element.querySelector("button[data-type='close']").addEventListener("click", () => {
+            this.remove();
+        });
+    }
+
+    public addTab(tab: Tab) {
+        this.children.forEach((item) => {
+            item.headElement?.classList.remove("item--current");
+            item.panelElement.classList.add("fn__none");
+        });
+        this.children.push(tab);
+        if (tab.headElement) {
+            this.element.querySelector(".tab__headers").append(tab.headElement);
+        }
+        this.element.querySelector(".tab__panels").append(tab.panelElement);
+
+        tab.parent = this;
+        if (tab.callback) {
+            tab.callback(tab);
         }
     }
 
-    public spilt(direction: TDirection) {
+    private spilt(direction: TDirection) {
         // TODO new panel & ws
         if (direction === this.parent.direction) {
-            this.parent.addWnd(new Wnd({resize: direction, html: ""}), this.id);
+            this.parent.addWnd(new Wnd( direction), this.id);
         } else {
             this.parent.children.find((item, index) => {
                 if (item.id === this.id) {
@@ -38,14 +62,14 @@ export class Wnd {
                     });
                     this.parent.addLayout(layout, item.id);
                     layout.addWnd.call(layout, this.parent.children.splice(index, 1)[0]);
-                    layout.addWnd.call(layout, new Wnd({resize: direction}));
+                    layout.addWnd.call(layout, new Wnd(direction));
                     return true;
                 }
             });
         }
     }
 
-    public remove() {
+    private remove() {
         let layout = this.parent;
         let id = this.id;
         let element = this.element;

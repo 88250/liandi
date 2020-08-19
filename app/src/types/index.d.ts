@@ -1,3 +1,7 @@
+type TLayout = "normal" | "top" | "bottom" | "left" | "right" | "center"
+type TDirection = "lr" | "tb"
+type TTheme = "light" | "dark"
+
 interface Window {
     liandi: ILiandi
 }
@@ -13,9 +17,6 @@ declare interface II18n {
     ko_KR?: IObject;
 }
 
-type TLayout = "normal" | "top" | "bottom" | "left" | "right" | "center"
-type TDirection = "lr" | "tb"
-
 declare interface ILayoutOptions {
     direction?: TDirection;
     size?: string
@@ -24,27 +25,31 @@ declare interface ILayoutOptions {
     element?: HTMLElement
 }
 
-declare interface IWndOptions {
-    resize?: TDirection
-    html?: string
+declare interface ITab {
     title?: string
-    callback?: (wnd: import("../layout/Wnd").Wnd) => void
+    panel?: string
+    callback?: (tab: import("../layout/Tab").Tab) => void
 }
 
-declare interface ITab {
-    model?: any
-    id: string
-    headElement?: HTMLElement,
-    panelElement?: HTMLElement,
-    ws?: import("../websocket").WebSocketUtil
+declare interface IMD {
+    autoSpace: boolean;
+    chinesePunct: boolean;
+    fixTermTypo: boolean;
+    inlineMathAllowDigitAfterOpenMarker: boolean;
+    mathEngine: "KaTeX" | "MathJax";
+    hideToolbar: boolean;
+    toc: boolean;
+    footnotes: boolean;
+    outline: boolean;
+    paragraphBeginningSpace: boolean;
 }
 
 declare interface IConfig {
-    boxes: IDir[]
+    boxes: IBox[]
     lang: keyof II18n
     theme: TTheme,
     markdown: IMD,
-    image: IImage,
+    image: { autoFetch: boolean }
 }
 
 declare interface IFile {
@@ -67,7 +72,7 @@ declare interface IBacklinks {
     blocks: IBlock[];
 }
 
-declare interface IDir {
+declare interface IBox {
     auth?: string;
     password?: string;
     path?: string;
@@ -92,102 +97,24 @@ declare interface IEchartsFormatter {
     }
 }
 
-declare interface IBlockHint {
-    blockRender: (liandi: ILiandi) => void
-}
-
-declare interface IEditor {
-    inputElement: HTMLInputElement;
-    editorElement: HTMLElement;
-    saved: boolean;
-    active: boolean;
-    range?: Range;
-    vditor?: {
-        vditor: IVditor
-        destroy: () => void
-        getCurrentMode: () => string
-        setTheme: (theme: string, contentTheme: string) => void
-        focus: () => void
-        setHTML: (html: string) => void
-        insertValue: (value: string, render?: boolean) => void
-    };
-}
-
 declare interface IMenuData {
     target: HTMLElement
     path: string
-    dir: IDir
+    url: string
     name?: string
 }
 
-declare interface IMD {
-    autoSpace: boolean;
-    chinesePunct: boolean;
-    fixTermTypo: boolean;
-    inlineMathAllowDigitAfterOpenMarker: boolean;
-    mathEngine: "KaTeX" | "MathJax";
-    hideToolbar: boolean;
-    toc: boolean;
-    footnotes: boolean;
-    outline: boolean;
-    paragraphBeginningSpace: boolean;
-}
-
-declare interface IImage {
-    autoFetch: boolean;
-}
-
-type TTheme = "light" | "dark"
-
 declare interface ILiandi {
     layout: import("../layout").Layout,
+    find?: import("../search/Find").Find,
     config?: IConfig;
-    ws?: {
-        send: (cmd: string, param: Record<string, unknown>, process?: boolean) => void
-    };
-    navigation?: {
-        element: HTMLElement
-        onLs: (liandi: ILiandi, data: { files: IFile[], url: string, path: string }) => void
-        onMount: (liandi: ILiandi, data: { dir: IDir }) => void
-        onRename: (liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string }) => void
-        getLeaf: (liElement: HTMLElement, dir: IDir) => void;
-        show: () => void;
-        hide: () => void;
-    };
-    backlinks?: {
-        onBacklinks: (liandi: ILiandi, backlinks: IBacklinks[]) => void
-        getBacklinks: (liandi: ILiandi) => void
-        show: (liandi: ILiandi) => void;
-        hide: (liandi: ILiandi) => void;
-    };
-    editors?: {
-        currentEditor: IEditor;
-        blockHint: IBlockHint;
-        focus: () => void;
-        resize: () => void;
-        save: (liandi: ILiandi) => void;
-        open: (liandi: ILiandi, url: string, path: string) => void;
-        close: (liandi: ILiandi) => void;
-        reloadEditor: (liandi: ILiandi) => void;
-        onGet: (liandi: ILiandi, editorData?: { content: string, name: string }) => void;
-        showSearchBlock: (liandi: ILiandi, data: { k: string, blocks: IBlock[] }) => void;
-        onGetBlock: (liandi: ILiandi, data: { id: string, block: IBlock }) => void;
-    };
+    ws?: import("../websocket").WebSocketUtil,
+    resizeList?: any[]
     menus?: {
         itemData: IMenuData
     };
     current?: {
-        dir?: IDir
+        dir?: IBox
         path?: string
     };
-    find?: {
-        open: (key?: string, index?: number) => void
-    };
-    graph?: {
-        onGraph: (liandi: ILiandi, data: Record<string, unknown>) => void
-        show: (liandi: ILiandi) => void;
-        hide: (liandi: ILiandi) => void;
-        render: (liandi: ILiandi) => void;
-        resize: () => void;
-    }
 }
