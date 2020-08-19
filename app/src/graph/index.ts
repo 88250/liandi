@@ -11,13 +11,25 @@ export class Graph extends Model {
     private graphElement: HTMLDivElement;
     private chart: echarts.ECharts
 
-    constructor(tab: Tab) {
+    constructor(options: {
+        tab: Tab
+        url?: string
+        path?: string
+    }) {
         super({
-            id: tab.id,
+            id: options.tab.id,
             callback() {
-                this.send("graph", {
-                    k: this.inputElement.value
-                });
+                if (options.url) {
+                    this.send("treegraph", {
+                        k: this.inputElement.value,
+                        url: options.url,
+                        path: options.path
+                    });
+                } else {
+                    this.send("graph", {
+                        k: this.inputElement.value
+                    });
+                }
             }
         });
 
@@ -26,15 +38,16 @@ export class Graph extends Model {
             if (data) {
                 switch (data.cmd) {
                     case "graph":
+                    case "treegraph":
                         this.onGraph(data.data);
                         break;
                 }
             }
         };
 
-        tab.panelElement.classList.add("graph");
-        this.graphElement = tab.panelElement.lastElementChild as HTMLDivElement;
-        this.inputElement = tab.panelElement.firstElementChild.firstElementChild as HTMLInputElement;
+        options.tab.panelElement.classList.add("graph");
+        this.graphElement = options.tab.panelElement.lastElementChild as HTMLDivElement;
+        this.inputElement = options.tab.panelElement.firstElementChild.firstElementChild as HTMLInputElement;
         this.inputElement.placeholder = i18n[window.liandi.config.lang].search;
         this.inputElement.addEventListener("compositionend", () => {
             this.render(window.liandi);
@@ -61,7 +74,7 @@ export class Graph extends Model {
         }
     }
 
-    onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[] }) {
+    onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
         if (!this.chart) {
             this.chart = echarts.init(this.graphElement);
         } else {
