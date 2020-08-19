@@ -71,14 +71,14 @@ func Ls(url, path string) (ret []*File, err error) {
 		return nil, err
 	}
 
-	var dirs, docs []*File
+	var boxes, docs []*File
 	for _, f := range files {
 		if strings.HasPrefix(f.Name(), ".") || box.isSkipDir(f.Name()) {
 			continue
 		}
 
 		if f.IsDir() {
-			dirs = append(dirs, fromFileInfo(f))
+			boxes = append(boxes, fromFileInfo(f))
 			continue
 		}
 
@@ -88,8 +88,8 @@ func Ls(url, path string) (ret []*File, err error) {
 		}
 	}
 
-	sort.Slice(dirs, func(i, j int) bool { return dirs[i].Name < dirs[j].Name })
-	ret = append(ret, dirs...)
+	sort.Slice(boxes, func(i, j int) bool { return boxes[i].Name < boxes[j].Name })
+	ret = append(ret, boxes...)
 	sort.Slice(docs, func(i, j int) bool { return docs[i].Name < docs[j].Name })
 	ret = append(ret, docs...)
 	return
