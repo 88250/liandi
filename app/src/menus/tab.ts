@@ -90,7 +90,10 @@ export const initEditorMenu = () => {
     menu.append(new remote.MenuItem({
         label: i18n[window.liandi.config.lang].splitTB,
         click: async () => {
-            mountWebDAV();
+            const itemData = window.liandi.menus.itemData;
+            const id = itemData.target.getAttribute("data-id")
+            const currentTab = getTabById(id) as Tab;
+            currentTab.parent.spilt("tb").addTab(copyTab(currentTab));
         }
     }));
     return menu;
