@@ -100,7 +100,7 @@ const initBar = () => {
                     window.liandi.rightLayout.parent.children[1].element.style.width = (window.liandi.rightLayout.parent.children[1].element.clientWidth - 200) + "px";
                     window.liandi.rightLayout.element.style.width = "206px";
                 }
-                tab.addModel(new Backlinks(tab));
+                tab.addModel(new Backlinks({tab}));
             }
         });
         wnd.addTab(tab);

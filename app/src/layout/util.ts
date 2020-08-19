@@ -4,6 +4,25 @@ import {i18n} from "../i18n";
 import {mountFile, mountWebDAV} from "../util/mount";
 import {Tab} from "./Tab";
 
+export const getTabById = (id: string) => {
+    const _getTabById = (item: Layout, id: string) => {
+        if (item.id === id) {
+            return item
+        }
+        if (!item.children) {
+            return
+        }
+        let ret: Tab
+        for (let i = 0; i < item.children.length; i++) {
+            ret = _getTabById(item.children[i] as Layout, id) as Tab
+            if (ret) {
+                return ret
+            }
+        }
+    }
+    return _getTabById(window.liandi.layout, id)
+}
+
 export const addResize = (obj: Layout | Wnd) => {
     if (obj.resize) {
         const resizeElement = document.createElement("div");

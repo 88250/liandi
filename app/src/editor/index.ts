@@ -15,8 +15,8 @@ export class Editor extends Model {
     private element: HTMLElement;
     private saved = false
     private vditore: Vditor
-    private url: string
-    private path: string
+    public url: string
+    public path: string
 
     constructor(options: {
         tab: Tab,

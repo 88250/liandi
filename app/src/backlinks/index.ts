@@ -8,14 +8,18 @@ import {processMessage} from "../util/processMessage";
 export class Backlinks extends Model {
     private element: HTMLElement
 
-    constructor(tab: Tab) {
+    constructor(options: {
+        tab: Tab
+        url?: string
+        path?: string
+    }) {
         super({
-            id: tab.id,
+            id: options.tab.id,
             callback() {
-                if (window.liandi.current) {
-                    tab.model.ws.send("backlinks", {
-                        url: window.liandi.current.dir.url,
-                        path: window.liandi.current.path
+                if (path) {
+                    this.send("backlinks", {
+                        url: options.url,
+                        path: options.path
                     });
                 } else {
                     this.element.innerHTML = `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
@@ -34,7 +38,7 @@ export class Backlinks extends Model {
             }
         };
 
-        this.element = tab.panelElement;
+        this.element = options.tab.panelElement;
         this.element.addEventListener("click", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.isEqualNode(this.element)) {
