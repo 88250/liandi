@@ -24,6 +24,8 @@ func (cmd *treegraph) Exec() {
 	p := cmd.param["path"].(string)
 	nodes, links := model.TreeGraph(keyword, url, p)
 	ret.Data = map[string]interface{}{
+		"url":   url,
+		"path":  p,
 		"nodes": nodes,
 		"links": links,
 	}
