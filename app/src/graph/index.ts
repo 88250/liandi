@@ -3,17 +3,39 @@ import * as path from "path";
 import {i18n} from "../i18n";
 import {escapeHtml} from "../util/escape";
 import {WebSocketUtil} from "../websocket";
+import {Model} from "../layout/Model";
+import {Tab} from "../layout/Tab";
+import {processMessage} from "../util/processMessage";
 
-export class Graph {
+export class Graph extends Model {
     private inputElement: HTMLInputElement;
     private graphElement: HTMLDivElement;
     private chart: echarts.ECharts
-    public ws: WebSocketUtil
 
-    constructor(element: HTMLElement) {
-        element.classList.add("graph");
-        this.graphElement = element.lastElementChild as HTMLDivElement;
-        this.inputElement = element.firstElementChild.firstElementChild as HTMLInputElement;
+    constructor(tab: Tab) {
+        super({
+            id: tab.id,
+            callback() {
+                this.send("graph", {
+                    k: tab.model.inputElement.value
+                });
+            }
+        });
+
+        this.ws.onmessage = (event) => {
+            const data = processMessage(event.data, this.reqId)
+            if (data) {
+                switch (data.cmd) {
+                    case "graph":
+                        this.onGraph(data.data);
+                        break;
+                }
+            }
+        }
+
+        tab.panelElement.classList.add("graph");
+        this.graphElement = tab.panelElement.lastElementChild as HTMLDivElement;
+        this.inputElement = tab.panelElement.firstElementChild.firstElementChild as HTMLInputElement;
         this.inputElement.placeholder = i18n[window.liandi.config.lang].search;
         this.inputElement.addEventListener("compositionend", () => {
             this.render(window.liandi);

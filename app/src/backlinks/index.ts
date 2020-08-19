@@ -1,14 +1,40 @@
 import * as path from "path";
 import {i18n} from "../i18n";
 import {escapeHtml} from "../util/escape";
-import {WebSocketUtil} from "../websocket";
+import {Model} from "../layout/Model";
+import {Tab} from "../layout/Tab";
+import {processMessage} from "../util/processMessage";
 
-export class Backlinks {
+export class Backlinks extends Model {
     private element: HTMLElement
-    public ws: WebSocketUtil
 
-    constructor(element: HTMLElement) {
-        this.element = element;
+    constructor(tab: Tab) {
+        super({
+            id: tab.id,
+            callback() {
+                if (window.liandi.current) {
+                    tab.model.ws.send("backlinks", {
+                        url: window.liandi.current.dir.url,
+                        path: window.liandi.current.path
+                    });
+                } else {
+                    this.element.innerHTML = `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
+                }
+            }
+        });
+
+        this.ws.onmessage = (event) => {
+            const data = processMessage(event.data, this.reqId)
+            if (data) {
+                switch (data.cmd) {
+                    case "backlinks":
+                        this.onBacklinks(data.data.backlinks);
+                        break;
+                }
+            }
+        }
+
+        this.element = tab.panelElement;
         this.element.addEventListener("click", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.isEqualNode(this.element)) {
