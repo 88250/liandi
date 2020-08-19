@@ -32,7 +32,7 @@ export class Backlinks extends Model {
             if (data) {
                 switch (data.cmd) {
                     case "backlinks":
-                        this.onBacklinks(data.data.backlinks);
+                        this.onBacklinks(data.data);
                         break;
                 }
             }
@@ -53,12 +53,12 @@ export class Backlinks extends Model {
         });
     }
 
-    public onBacklinks(backlinks: IBacklinks[]) {
+    public onBacklinks(data: { backlinks: IBacklinks[], url: string, path: string }) {
         let backlinksHTML = `<div class="backlinks__title">
 <div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].backlinks}</div>
-<div class="fn__ellipsis">${escapeHtml(path.posix.join(path.posix.basename(window.liandi.current.dir.url), window.liandi.current.path))}</div>
+<div class="fn__ellipsis">${escapeHtml(path.posix.join(path.posix.basename(data.url), data.path))}</div>
 </div>`;
-        backlinks.forEach((files) => {
+        data.backlinks.forEach((files) => {
             backlinksHTML += '<div class="item">';
             files.blocks.forEach((item, index) => {
                 if (index === 0) {
@@ -71,7 +71,7 @@ export class Backlinks extends Model {
             });
             backlinksHTML += "</div>";
         });
-        if (backlinks.length === 0) {
+        if (data.backlinks.length === 0) {
             backlinksHTML += `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
         }
         this.element.innerHTML = backlinksHTML;

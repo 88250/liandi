@@ -2,7 +2,7 @@ import * as path from "path";
 import {hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
 import {escapeHtml} from "../util/escape";
 import {destroyDialog} from "../util/dialog";
-import {openFile} from "../editors/util";
+import {openFile} from "../editor/util";
 import {Tab} from "../layout/Tab";
 import {Model} from "../layout/Model";
 import {processMessage} from "../util/processMessage";
