@@ -23,7 +23,7 @@ func (cmd *backlinks) Exec() {
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
-	backlinks, err := model.Backlinks(url, p)
+	backlinks, err := model.TreeBacklinks(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()

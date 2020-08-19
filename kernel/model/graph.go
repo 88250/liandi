@@ -41,15 +41,9 @@ func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []inte
 }
 
 func Graph(keyword string) (nodes []interface{}, links []interface{}) {
-	graphLock.Lock()
-	defer graphLock.Unlock()
+	rebuildBacklinks()
 
 	for _, tree := range trees {
-		delete(treeBacklinks, tree)
-	}
-
-	for _, tree := range trees {
-		indexLink(tree)
 		genGraph(keyword, tree, &nodes, &links)
 	}
 
