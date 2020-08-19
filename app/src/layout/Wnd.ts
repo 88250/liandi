@@ -23,12 +23,6 @@ export class Wnd {
     <div class="tab__panels fn__flex-1"></div>
 </div>`;
         this.headersElement = this.element.querySelector(".tab__headers");
-        // this.element.querySelector("button[data-type='lr']").addEventListener("click", () => {
-        //     this.spilt("lr");
-        // });
-        // this.element.querySelector("button[data-type='tb']").addEventListener("click", () => {
-        //     this.spilt("tb");
-        // });
         this.headersElement.addEventListener("click", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.isEqualNode(this.headersElement)) {

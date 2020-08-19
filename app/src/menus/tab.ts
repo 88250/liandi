@@ -1,7 +1,7 @@
 import {i18n} from "../i18n";
 import {mountFile, mountWebDAV} from "../util/mount";
 import {remote} from "electron";
-import {getTabById} from "../layout/util";
+import {copyTab, getTabById} from "../layout/util";
 import {Tab} from "../layout/Tab";
 import {Wnd} from "../layout/wnd";
 import {Graph} from "../graph";
@@ -81,7 +81,10 @@ export const initEditorMenu = () => {
     menu.append(new remote.MenuItem({
         label: i18n[window.liandi.config.lang].splitLR,
         click: async () => {
-            mountFile();
+            const itemData = window.liandi.menus.itemData;
+            const id = itemData.target.getAttribute("data-id")
+            const currentTab = getTabById(id) as Tab;
+            currentTab.parent.spilt("lr").addTab(copyTab(currentTab));
         }
     }));
     menu.append(new remote.MenuItem({

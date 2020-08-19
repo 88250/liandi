@@ -3,6 +3,45 @@ import {Wnd} from "./wnd";
 import {i18n} from "../i18n";
 import {mountFile, mountWebDAV} from "../util/mount";
 import {Tab} from "./Tab";
+import {Model} from "./Model";
+import {Graph} from "../graph";
+import {Editor} from "../editor";
+import {Backlinks} from "../backlinks";
+import {Files} from "../files";
+
+export const copyTab = (tab:Tab) => {
+    let model:Model
+    let panel = ''
+    if (tab.model instanceof Editor) {
+        model = new Editor({
+            tab,
+            url: tab.model.url,
+            path: tab.model.path
+        })
+    } else if (tab.model instanceof Backlinks) {
+        model = new Backlinks({
+            tab,
+            url: tab.model.url,
+            path: tab.model.path
+        })
+    } else if (tab.model instanceof Graph) {
+        panel = '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
+        model = new Graph({
+            tab,
+            url: tab.model.url,
+            path: tab.model.path
+        })
+    } else if (tab.model instanceof File) {
+        model = new Files(tab);
+    }
+    return new Tab({
+        title: tab.headElement.innerHTML,
+        panel,
+        callback(tab: Tab) {
+            tab.addModel(model);
+        }
+    });
+}
 
 export const getTabById = (id: string) => {
     const _getTabById = (item: Layout, id: string) => {

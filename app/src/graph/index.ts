@@ -10,6 +10,8 @@ export class Graph extends Model {
     private inputElement: HTMLInputElement;
     private graphElement: HTMLDivElement;
     private chart: echarts.ECharts
+    public url: string
+    public path: string
 
     constructor(options: {
         tab: Tab
@@ -32,7 +34,8 @@ export class Graph extends Model {
                 }
             }
         });
-
+        this.url = options.url;
+        this.path = options.path;
         this.ws.onmessage = (event) => {
             const data = processMessage(event.data, this.reqId);
             if (data) {

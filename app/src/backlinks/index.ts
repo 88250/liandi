@@ -7,6 +7,8 @@ import {processMessage} from "../util/processMessage";
 
 export class Backlinks extends Model {
     private element: HTMLElement
+    public url: string
+    public path: string
 
     constructor(options: {
         tab: Tab
@@ -26,7 +28,8 @@ export class Backlinks extends Model {
                 }
             }
         });
-
+        this.url = options.url;
+        this.path = options.path;
         this.ws.onmessage = (event) => {
             const data = processMessage(event.data, this.reqId);
             if (data) {
