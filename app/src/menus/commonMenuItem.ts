@@ -5,6 +5,8 @@ import {bindDialogInput, destroyDialog, dialog} from "../util/dialog";
 import {rename, validateName} from "../util/rename";
 import {escapeHtml} from "../util/escape";
 import {newFile} from "../util/newFile";
+import {copyTab, getTabById} from "../layout/util";
+import {Tab} from "../layout/Tab";
 
 export const showInFolder = () => {
     return new remote.MenuItem({
@@ -137,3 +139,27 @@ export const renameMenu = () => {
         }
     });
 };
+
+export const splitLRMenu = () => {
+    return new remote.MenuItem({
+        label: i18n[window.liandi.config.lang].splitLR,
+        click: async () => {
+            const itemData = window.liandi.menus.itemData;
+            const id = itemData.target.getAttribute("data-id")
+            const currentTab = getTabById(id) as Tab;
+            currentTab.parent.spilt("lr").addTab(copyTab(currentTab));
+        }
+    });
+}
+
+export const splitTBMenu = () => {
+    return new remote.MenuItem({
+        label: i18n[window.liandi.config.lang].splitTB,
+        click: async () => {
+            const itemData = window.liandi.menus.itemData;
+            const id = itemData.target.getAttribute("data-id")
+            const currentTab = getTabById(id) as Tab;
+            currentTab.parent.spilt("tb").addTab(copyTab(currentTab));
+        }
+    });
+}
