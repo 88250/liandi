@@ -3,16 +3,36 @@ import {hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
 import {escapeHtml} from "../util/escape";
 import {destroyDialog} from "../util/dialog";
 import {openFile} from "../editors/util";
-import {WebSocketUtil} from "../websocket";
 import {Tab} from "../layout/Tab";
+import {Model} from "../layout/Model";
+import {processMessage} from "../util/processMessage";
 
-export class Files {
+export class Files extends Model {
     private element: HTMLElement
     public parent: Tab
-    public ws:WebSocketUtil
 
-    constructor(element:HTMLElement) {
-        this.element = element;
+    constructor(tab:Tab) {
+        super({
+            id: tab.id,
+            callback() {
+                window.liandi.config.boxes.map((item: IBox) => {
+                    this.onMount({dir: item});
+                });
+            }
+        });
+
+        this.ws.onmessage = (event) => {
+            const data = processMessage(event.data, this.reqId)
+            if (data) {
+                switch (data.cmd) {
+                    case "ls":
+                        this.onLs(data.data);
+                        break;
+                }
+            }
+        }
+
+        this.element = tab.panelElement;
         this.element.classList.add("file");
         this.element.addEventListener("dblclick", (event) => {
             let target = event.target as HTMLElement;
@@ -91,7 +111,7 @@ export class Files {
   <span class="fn__ellipsis">${escapeHtml(item.name)}</span>
 </span>
 </li>`;
-                this.ws.send("ls", {
+                this.send("ls", {
                     url: dir.url,
                     path: item.path,
                 }, true);
@@ -134,7 +154,7 @@ export class Files {
         destroyDialog();
     }
 
-    public onLs(liandi: ILiandi, data: { files: IFile[], url: string, path: string }) {
+    public onLs(data: { files: IFile[], url: string, path: string }) {
         const liElement = this.element.querySelector(`ul[data-url="${encodeURIComponent(data.url)}"] li[data-path="${encodeURIComponent(data.path)}"]`);
         if (liElement) {
             liElement.setAttribute("data-files", JSON.stringify(data.files));
@@ -159,7 +179,7 @@ export class Files {
         this.element.insertAdjacentHTML("beforeend", html);
 
         // 首次挂载多个目录并发时，需要永远都执行回调
-        this.ws.send("ls", {
+        this.send("ls", {
             url: data.dir.url,
             path: "/",
         }, true);

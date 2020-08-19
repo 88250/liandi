@@ -68,13 +68,7 @@ const initBar = () => {
                     leftLayout.parent.children[1].element.style.width = (leftLayout.parent.children[1].element.clientWidth - 200) + "px";
                     leftLayout.element.style.width = "206px";
                 }
-                const files = new Files(tab.panelElement);
-                tab.addModel(files);
-                files.ws = new WebSocketUtil(files, () => {
-                    window.liandi.config.boxes.map((item: IBox) => {
-                        tab.model.onMount({dir: item});
-                    });
-                });
+                tab.addModel(new Files(tab));
             }
         });
         wnd.addTab(tab);
@@ -93,13 +87,7 @@ const initBar = () => {
                     topLayout.parent.children[1].element.style.height = (topLayout.parent.children[1].element.clientHeight - 200) + "px";
                     topLayout.element.style.height = "206px";
                 }
-                const graph = new Graph(tab.panelElement);
-                tab.addModel(graph);
-                graph.ws = new WebSocketUtil(graph, () => {
-                    tab.model.ws.send("graph", {
-                        k: tab.model.inputElement.value
-                    });
-                });
+                tab.addModel(new Graph(tab));
             }
         });
         wnd.addTab(tab);
@@ -117,18 +105,7 @@ const initBar = () => {
                     rightLayout.parent.children[1].element.style.width = (rightLayout.parent.children[1].element.clientWidth - 200) + "px";
                     rightLayout.element.style.width = "206px";
                 }
-                const backlinks = new Backlinks(tab.panelElement);
-                tab.addModel(backlinks);
-                backlinks.ws = new WebSocketUtil(backlinks, () => {
-                    if (window.liandi.current) {
-                        tab.model.ws.send("backlinks", {
-                            url: window.liandi.current.dir.url,
-                            path: window.liandi.current.path
-                        });
-                    } else {
-                        tab.panelElement.innerHTML = `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
-                    }
-                });
+                tab.addModel(new Backlinks(tab));
             }
         });
         wnd.addTab(tab);

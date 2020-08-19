@@ -60,9 +60,6 @@ export class WebSocketUtil {
                 return;
             }
             switch (response.cmd) {
-                case "graph":
-                    this.model.onGraph(response.data);
-                    break;
                 case "search":
                     onSearch(liandi, response.data);
                     break;
@@ -93,17 +90,11 @@ export class WebSocketUtil {
                     // liandi.backlinks.getBacklinks(liandi);
                     // liandi.graph.render(liandi);
                     break;
-                case "backlinks":
-                    // liandi.backlinks.onBacklinks(liandi, response.data.backlinks);
-                    break;
                 case "mount":
                 case "mountremote":
                     destroyDialog();
                     // liandi.navigation.onMount(liandi, response.data);
                     // liandi.graph.render(liandi);
-                    break;
-                case "ls":
-                    this.model.onLs(liandi, response.data);
                     break;
                 case "get":
                     this.model.initVditor(response.data.content);
