@@ -14,19 +14,28 @@ import (
 	"github.com/88250/liandi/kernel/model"
 )
 
-type backlinks struct {
+type treebacklinks struct {
 	*BaseCmd
 }
 
-func (cmd *backlinks) Exec() {
+func (cmd *treebacklinks) Exec() {
 	ret := model.NewCmdResult(cmd.Name(), cmd.id)
-	backlinks := model.Backlinks()
+	url := cmd.param["url"].(string)
+	url = model.NormalizeURL(url)
+	p := cmd.param["path"].(string)
+	backlinks, err := model.TreeBacklinks(url, p)
+	if nil != err {
+		ret.Code = -1
+		ret.Msg = err.Error()
+	}
 	ret.Data = map[string]interface{}{
+		"url":       url,
+		"path":      p,
 		"backlinks": backlinks,
 	}
 	cmd.Push(ret.Bytes())
 }
 
-func (cmd *backlinks) Name() string {
-	return "backlinks"
+func (cmd *treebacklinks) Name() string {
+	return "treebacklinks"
 }
