@@ -28,20 +28,20 @@ export class Tabs {
 
     public addTab(tab: { title?: string, panel?: string, callback?: (element: HTMLElement) => void }) {
         this.children.forEach((item) => {
-            item.headElement?.classList.remove('item--current')
-            item.panelElement.classList.add('fn__none')
-        })
+            item.headElement?.classList.remove("item--current");
+            item.panelElement.classList.add("fn__none");
+        });
 
-        let headElement
+        let headElement;
         if (tab.title) {
             headElement = document.createElement("li");
-            headElement.classList.add("item", "item--current")
+            headElement.classList.add("item", "item--current");
             headElement.innerHTML = tab.title;
             this.parent.element.querySelector(".tab__headers").append(headElement);
         }
 
         const panelElement = document.createElement("div");
-        panelElement.classList.add("fn__flex-1")
+        panelElement.classList.add("fn__flex-1");
         panelElement.innerHTML = tab.panel || "";
         this.parent.element.querySelector(".tab__panels").append(panelElement);
 
@@ -52,7 +52,7 @@ export class Tabs {
         });
 
         if (tab.callback) {
-            tab.callback(panelElement)
+            tab.callback(panelElement);
         }
     }
 }

@@ -14,8 +14,8 @@ class App {
 
     constructor() {
         const layout = new Layout({element: document.getElementById("layouts")});
-        layout.addLayout(new Layout({direction: "lr", size: "6px", type: "top"}))
-        layout.addLayout(new Layout({direction: "lr", size: (window.innerHeight - 32) + "px", resize: "tb"}))
+        layout.addLayout(new Layout({direction: "lr", size: "6px", type: "top"}));
+        layout.addLayout(new Layout({direction: "lr", size: (window.innerHeight - 32) + "px", resize: "tb"}));
         layout.addLayout(new Layout({direction: "lr", resize: "tb", type: "bottom"}));
 
         (layout.children[1] as Layout).addLayout(new Layout({size: "6px", type: "left"}));

@@ -18,7 +18,7 @@ export class Editor {
     private path:string
 
     constructor(element: HTMLElement) {
-        this.element = element
+        this.element = element;
     }
 
     public initVditor(html?: string) {

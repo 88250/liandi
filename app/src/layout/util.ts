@@ -31,7 +31,7 @@ export const addCenterWnd = () => {
             });
         }
     }));
-}
+};
 
 const setSize = (item: HTMLElement, direction: string) => {
     if (item.classList.contains("fn__flex-1")) {

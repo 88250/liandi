@@ -13,8 +13,8 @@ export class Wnd {
 
     constructor(options: IWndOptions) {
         this.id = genUUID();
-        this.resize = options.resize
-        this.callback = options.callback
+        this.resize = options.resize;
+        this.callback = options.callback;
         this.element = document.createElement("div");
         this.element.classList.add("fn__flex-1", "fn__flex");
         this.children = new Tabs(this);
@@ -37,7 +37,7 @@ export class Wnd {
                         direction,
                     });
                     this.parent.addLayout(layout, item.id);
-                    layout.addWnd.apply(layout, this.parent.children.splice(index, 1));
+                    layout.addWnd.call(layout, this.parent.children.splice(index, 1)[0]);
                     layout.addWnd.call(layout, new Wnd({resize: direction}));
                     return true;
                 }
@@ -84,21 +84,21 @@ export class Wnd {
             addCenterWnd();
         }
         if (layout.type !== "center" && layout.type !== "normal" && layout.children.length === 0) {
-            if (layout.type === 'left' || layout.type === 'right') {
-                layout.parent.children[1].element.style.width = (layout.parent.children[1].element.clientWidth + layout.element.clientWidth - 6) + 'px'
-                if (layout.type === 'left') {
-                    layout.element.style.width = '6px'
+            if (layout.type === "left" || layout.type === "right") {
+                layout.parent.children[1].element.style.width = (layout.parent.children[1].element.clientWidth + layout.element.clientWidth - 6) + "px";
+                if (layout.type === "left") {
+                    layout.element.style.width = "6px";
                 } else {
-                    layout.element.style.width = 'auto'
-                    layout.element.classList.add("fn__flex-1")
+                    layout.element.style.width = "auto";
+                    layout.element.classList.add("fn__flex-1");
                 }
             } else {
-                layout.parent.children[1].element.style.height = (layout.parent.children[1].element.clientHeight + layout.element.clientHeight - 6) + 'px'
-                if (layout.type === 'top') {
-                    layout.element.style.height = '6px'
+                layout.parent.children[1].element.style.height = (layout.parent.children[1].element.clientHeight + layout.element.clientHeight - 6) + "px";
+                if (layout.type === "top") {
+                    layout.element.style.height = "6px";
                 } else {
-                    layout.element.style.height = 'auto'
-                    layout.element.classList.add("fn__flex-1")
+                    layout.element.style.height = "auto";
+                    layout.element.classList.add("fn__flex-1");
                 }
             }
         }

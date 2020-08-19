@@ -57,16 +57,16 @@ const initBar = () => {
         </div>`;
     document.getElementById("barNavigation").addEventListener("click", function () {
 
-        const leftLayout = (window.liandi.layout.children[1] as Layout).children[0] as Layout
+        const leftLayout = (window.liandi.layout.children[1] as Layout).children[0] as Layout;
         leftLayout.addWnd(new Wnd({
             title: `<svg><use xlink:href="#iconFolder"></use></svg> ${i18n[window.liandi.config.lang].fileTree}`,
-            resize: leftLayout.children.length === 0 ? undefined : 'tb',
+            resize: leftLayout.children.length === 0 ? undefined : "tb",
             callback: function (wnd: Wnd) {
                 if (leftLayout.element.clientWidth < 7) {
-                    leftLayout.parent.children[1].element.style.width = (leftLayout.parent.children[1].element.clientWidth - 200) + 'px'
+                    leftLayout.parent.children[1].element.style.width = (leftLayout.parent.children[1].element.clientWidth - 200) + "px";
                     leftLayout.element.style.width = "206px";
                 }
-                const currentTab = wnd.children.children[0]
+                const currentTab = wnd.children.children[0];
                 currentTab.model = new File(currentTab);
                 currentTab.ws = new WebSocketUtil(currentTab,  ()=> {
                     window.liandi.config.boxes.map((item: IDir) => {
@@ -94,10 +94,10 @@ const initBar = () => {
     //     }
     //     window.dispatchEvent(new CustomEvent('resize'));
     // });
-    document.getElementById('barHelp').addEventListener('click', function () {
-        window.liandi.ws.send('mount', {
+    document.getElementById("barHelp").addEventListener("click", function () {
+        window.liandi.ws.send("mount", {
             url: `${Constants.WEBDAV_ADDRESS}/`,
-            path: path.posix.join(Constants.APP_DIR, 'public/zh_CN/链滴笔记用户指南')
+            path: path.posix.join(Constants.APP_DIR, "public/zh_CN/链滴笔记用户指南")
         });
         // TODO open file
     });

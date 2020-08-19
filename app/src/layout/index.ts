@@ -55,7 +55,7 @@ export class Layout {
             child.element.style[(this && this.direction === "lr") ? "width" : "height"] = child.size;
         }
         addResize(child);
-        child.parent = this
+        child.parent = this;
     }
 
     addWnd(child: Wnd, id?: string) {
@@ -75,7 +75,7 @@ export class Layout {
             });
         }
         addResize(child);
-        child.parent = this
+        child.parent = this;
         if (child.callback) {
             child.callback(child);
         }

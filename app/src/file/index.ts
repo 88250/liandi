@@ -11,7 +11,7 @@ export class File {
     constructor(tab: ITab) {
         this.tab = tab;
         this.element = tab.panelElement;
-        this.element.classList.add('file')
+        this.element.classList.add("file");
         this.element.addEventListener("dblclick", (event) => {
             let target = event.target as HTMLElement;
             const ulElement = hasTopClosestByTag(target, "UL");
