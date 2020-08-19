@@ -1,6 +1,6 @@
 import {i18n} from "../i18n";
 import {remote} from "electron";
-import {getTabById} from "../layout/util";
+import {getInstanceById} from "../layout/util";
 import {Tab} from "../layout/Tab";
 import {Wnd} from "../layout/wnd";
 import {Graph} from "../graph";
@@ -30,7 +30,7 @@ export const initEditorMenu = () => {
         click: async () => {
             const itemData = window.liandi.menus.itemData;
             const id = itemData.target.getAttribute("data-id")
-            const currentTab = getTabById(id) as Tab;
+            const currentTab = getInstanceById(id) as Tab;
             const filePath = (currentTab.model as Editor).path
             const newWnd = (currentTab.parent as Wnd).spilt("lr")
             const tab = new Tab({
@@ -51,7 +51,7 @@ export const initEditorMenu = () => {
         click: async () => {
             const itemData = window.liandi.menus.itemData;
             const id = itemData.target.getAttribute("data-id")
-            const currentTab = getTabById(id) as Tab;
+            const currentTab = getInstanceById(id) as Tab;
             const filePath = (currentTab.model as Editor).path
             const wnd = (currentTab.parent as Wnd).spilt("lr")
             const tab = new Tab({

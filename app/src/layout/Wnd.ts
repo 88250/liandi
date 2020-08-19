@@ -16,7 +16,7 @@ export class Wnd {
         this.resize = resize;
         this.element = document.createElement("div");
         this.element.classList.add("fn__flex-1", "fn__flex");
-        this.element.innerHTML = `<div class="layout__tab fn__flex-column fn__flex fn__flex-1">
+        this.element.innerHTML = `<div data-type="wnd" data-id="${this.id}" class="fn__flex-column fn__flex fn__flex-1">
     <div class="fn__flex">
         <ul class="fn__flex fn__flex-1 tab__headers"></ul>
     </div>

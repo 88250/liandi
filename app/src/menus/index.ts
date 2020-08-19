@@ -45,7 +45,7 @@ export class Menus {
                     this.itemData = {
                         target,
                         path: "/",
-                        url: this.getDir(target),
+                        url: this.getUrl(target),
                     };
                     initNavigationMenu().popup();
                     event.preventDefault();
@@ -56,7 +56,7 @@ export class Menus {
                     // navigation 文件夹上：新建文档/文件夹/删除/重命名/打开文件位置
                     this.itemData = {
                         target,
-                        url: this.getDir(target),
+                        url: this.getUrl(target),
                         path: decodeURIComponent(target.getAttribute("data-path")),
                         name: decodeURIComponent(target.getAttribute("data-name")),
                     };
@@ -69,7 +69,7 @@ export class Menus {
                     // navigation 文件上：删除/重命名/打开文件位置
                     this.itemData = {
                         target,
-                        url: this.getDir(target),
+                        url: this.getUrl(target),
                         path: decodeURIComponent(target.getAttribute("data-path")),
                         name: decodeURIComponent(target.getAttribute("data-name")),
                     };
@@ -105,7 +105,7 @@ export class Menus {
         }, false);
     }
 
-    private getDir(target: HTMLElement) {
+    private getUrl(target: HTMLElement) {
         const rootElement = hasTopClosestByTag(target, "UL");
         if (rootElement) {
             return decodeURIComponent(rootElement.getAttribute("data-url"));

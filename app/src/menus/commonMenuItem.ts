@@ -5,7 +5,7 @@ import {bindDialogInput, destroyDialog, dialog} from "../util/dialog";
 import {rename, validateName} from "../util/rename";
 import {escapeHtml} from "../util/escape";
 import {newFile} from "../util/newFile";
-import {copyTab, getTabById} from "../layout/util";
+import {copyTab, getInstanceById} from "../layout/util";
 import {Tab} from "../layout/Tab";
 
 export const showInFolder = () => {
@@ -146,7 +146,7 @@ export const splitLRMenu = () => {
         click: async () => {
             const itemData = window.liandi.menus.itemData;
             const id = itemData.target.getAttribute("data-id")
-            const currentTab = getTabById(id) as Tab;
+            const currentTab = getInstanceById(id) as Tab;
             currentTab.parent.spilt("lr").addTab(copyTab(currentTab));
         }
     });
@@ -158,7 +158,7 @@ export const splitTBMenu = () => {
         click: async () => {
             const itemData = window.liandi.menus.itemData;
             const id = itemData.target.getAttribute("data-id")
-            const currentTab = getTabById(id) as Tab;
+            const currentTab = getInstanceById(id) as Tab;
             currentTab.parent.spilt("tb").addTab(copyTab(currentTab));
         }
     });

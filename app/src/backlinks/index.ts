@@ -24,6 +24,7 @@ export class Backlinks extends Model {
                         path: options.path
                     });
                 } else {
+                    this.send("treebacklinks", {});
                     this.element.innerHTML = `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
                 }
             }

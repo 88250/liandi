@@ -8,6 +8,15 @@ import {Graph} from "../graph";
 import {Editor} from "../editor";
 import {Backlinks} from "../backlinks";
 import {Files} from "../files";
+import {hasClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
+
+export const getCurrentWnd = () => {
+    if (getSelection().rangeCount === 0) {
+        return null
+    }
+    const range = getSelection().getRangeAt(0)
+    return hasClosestByAttribute(range.startContainer, "data-type", "wnd")
+}
 
 export const copyTab = (tab: Tab) => {
     let panel = ''
@@ -45,23 +54,23 @@ export const copyTab = (tab: Tab) => {
     });
 }
 
-export const getTabById = (id: string) => {
-    const _getTabById = (item: Layout, id: string) => {
+export const getInstanceById = (id: string) => {
+    const _getInstanceById = (item: Layout|Wnd, id: string) => {
         if (item.id === id) {
             return item
         }
         if (!item.children) {
             return
         }
-        let ret: Tab
+        let ret: Tab | Layout | Wnd
         for (let i = 0; i < item.children.length; i++) {
-            ret = _getTabById(item.children[i] as Layout, id) as Tab
+            ret = _getInstanceById(item.children[i] as Layout, id) as Tab
             if (ret) {
                 return ret
             }
         }
     }
-    return _getTabById(window.liandi.layout, id)
+    return _getInstanceById(window.liandi.layout, id)
 }
 
 export const addResize = (obj: Layout | Wnd) => {
