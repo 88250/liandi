@@ -7,6 +7,7 @@ import {hasTopClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {getEditorRange} from "../../vditore/src/ts/util/selection";
 import {escapeHtml} from "../util/escape";
 import {i18n} from "../i18n";
+import {WebSocketUtil} from "../websocket";
 
 export class Editor {
     private element: HTMLElement;
@@ -14,9 +15,16 @@ export class Editor {
     private vditore: Vditor
     private url: string
     private path: string
+    public ws: WebSocketUtil
 
-    constructor(element: HTMLElement) {
-        this.element = element;
+    constructor(options: {
+        element: HTMLElement,
+        url: string,
+        path: string
+    }) {
+        this.element = options.element;
+        this.url = options.url;
+        this.path = options.path;
     }
 
     public initVditor(html?: string) {
@@ -128,7 +136,7 @@ export class Editor {
                 url: Constants.UPLOAD_ADDRESS,
             },
             after: () => {
-                const lnkBase = path.posix.join(window.liandi.current.dir.url, path.posix.dirname(window.liandi.current.path));
+                const lnkBase = path.posix.join(this.url, path.posix.dirname(this.path));
                 this.vditore.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + "/");
                 this.vditore.setHTML(html);
                 this.vditore.focus();

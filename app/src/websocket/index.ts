@@ -106,6 +106,7 @@ export class WebSocketUtil {
                     this.model.onLs(liandi, response.data);
                     break;
                 case "get":
+                    this.model.initVditor(response.data.content);
                     // liandi.editors.onGet(liandi, response.data);
                     // liandi.backlinks.getBacklinks(liandi);
                     break;

@@ -62,7 +62,7 @@ const initBar = () => {
         const leftLayout = (window.liandi.layout.children[1] as Layout).children[0] as Layout;
         const wnd = new Wnd( leftLayout.children.length === 0 ? undefined : "tb");
         const tab = new Tab({
-            title: `<svg><use xlink:href="#iconFolder"></use></svg> ${i18n[window.liandi.config.lang].fileTree}`,
+            title: `<svg class="item__svg"><use xlink:href="#iconFolder"></use></svg> ${i18n[window.liandi.config.lang].fileTree}`,
             callback(tab: Tab) {
                 if (leftLayout.element.clientWidth < 7) {
                     leftLayout.parent.children[1].element.style.width = (leftLayout.parent.children[1].element.clientWidth - 200) + "px";
@@ -86,7 +86,7 @@ const initBar = () => {
         const topLayout = window.liandi.layout.children[0] as Layout;
         const wnd = new Wnd(topLayout.children.length === 0 ? undefined : "lr");
         const tab = new Tab({
-            title: `<svg><use xlink:href="#iconGraph"></use></svg> ${i18n[window.liandi.config.lang].graphView}`,
+            title: `<svg class="item__svg"><use xlink:href="#iconGraph"></use></svg> ${i18n[window.liandi.config.lang].graphView}`,
             panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
             callback(tab: Tab) {
                 if (topLayout.element.clientHeight < 7) {
@@ -111,7 +111,7 @@ const initBar = () => {
         const rightLayout =(window.liandi.layout.children[1] as Layout).children[2] as Layout;
         const wnd = new Wnd(rightLayout.children.length === 0 ? undefined : "tb");
         const tab = new Tab({
-            title: `<svg><use xlink:href="#iconLink"></use></svg> ${i18n[window.liandi.config.lang].backlinks}`,
+            title: `<svg class="item__svg"><use xlink:href="#iconLink"></use></svg> ${i18n[window.liandi.config.lang].backlinks}`,
             callback(tab: Tab) {
                 if (rightLayout.element.clientWidth < 7) {
                     rightLayout.parent.children[1].element.style.width = (rightLayout.parent.children[1].element.clientWidth - 200) + "px";

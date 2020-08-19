@@ -8,6 +8,7 @@ import {WebSocketUtil} from "./websocket";
 import {Find} from "./search/Find";
 import {doubleShift} from "./util/doubleShift";
 import {genUUID} from "./util/genUUID";
+import {Menus} from "./menus";
 
 class App {
     public liandi: ILiandi;
@@ -33,7 +34,8 @@ class App {
                 this.liandi.find = new Find();
                 doubleShift();
                 this.onIpc();
-            })
+            }),
+            menus: new Menus()
         };
         //     window.onresize = () => {
         //         this.liandi.graph.resize();

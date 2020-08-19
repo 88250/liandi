@@ -6,11 +6,11 @@ import {rename, validateName} from "../util/rename";
 import {escapeHtml} from "../util/escape";
 import {newFile} from "../util/newFile";
 
-export const showInFolder = (liandi: ILiandi) => {
+export const showInFolder = () => {
     return new remote.MenuItem({
-        label: i18n[liandi.config.lang].showInFolder,
+        label: i18n[window.liandi.config.lang].showInFolder,
         click: () => {
-            const itemData = liandi.menus.itemData;
+            const itemData = window.liandi.menus.itemData;
             if (itemData.path.endsWith("/")) {
                 shell.openItem(path.posix.join(itemData.path, itemData.path));
             } else {
@@ -20,27 +20,27 @@ export const showInFolder = (liandi: ILiandi) => {
     });
 };
 
-export const newFileMenu = (liandi: ILiandi) => {
+export const newFileMenu = () => {
     return new remote.MenuItem({
-        label: i18n[liandi.config.lang].newFile,
+        label: i18n[window.liandi.config.lang].newFile,
         click: () => {
-            newFile(liandi);
+            newFile(window.liandi);
         }
     });
 };
 
-export const newFolderMenu = (liandi: ILiandi) => {
+export const newFolderMenu = () => {
     return new remote.MenuItem({
-        label: i18n[liandi.config.lang].newFolder,
+        label: i18n[window.liandi.config.lang].newFolder,
         click: () => {
-            const itemData = liandi.menus.itemData;
+            const itemData = window.liandi.menus.itemData;
             dialog({
-                title: i18n[liandi.config.lang].newFolder,
+                title: i18n[window.liandi.config.lang].newFolder,
                 content: `<input class="input" value="">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
-<button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
+<button class="button">${i18n[window.liandi.config.lang].confirm}</button><div class="fn__space"></div>
+<button class="button button--cancel">${i18n[window.liandi.config.lang].cancel}</button></div>`,
                 width: 400
             });
 
@@ -51,12 +51,12 @@ export const newFolderMenu = (liandi: ILiandi) => {
             });
             dialogElement.querySelector(".button").addEventListener("click", () => {
                 const name = inputElement.value;
-                if (!validateName(liandi, name)) {
+                if (!validateName(window.liandi, name)) {
                     return false;
                 }
 
                 const currentNewPath = path.posix.join(itemData.path, name);
-                liandi.ws.send("mkdir", {
+                window.liandi.ws.send("mkdir", {
                     url: itemData.url,
                     path: currentNewPath
                 });
@@ -68,18 +68,18 @@ export const newFolderMenu = (liandi: ILiandi) => {
     });
 };
 
-export const deleteMenu = (liandi: ILiandi) => {
+export const deleteMenu = () => {
     return new remote.MenuItem({
-        label: i18n[liandi.config.lang].delete,
+        label: i18n[window.liandi.config.lang].delete,
         click: () => {
-            const itemData = liandi.menus.itemData;
+            const itemData = window.liandi.menus.itemData;
             dialog({
-                title: i18n[liandi.config.lang].delete,
-                content: `${i18n[liandi.config.lang].confirmDelete} <b>${escapeHtml(itemData.name)}</b>?
+                title: i18n[window.liandi.config.lang].delete,
+                content: `${i18n[window.liandi.config.lang].confirmDelete} <b>${escapeHtml(itemData.name)}</b>?
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
-<button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
+<button class="button">${i18n[window.liandi.config.lang].confirm}</button><div class="fn__space"></div>
+<button class="button button--cancel">${i18n[window.liandi.config.lang].cancel}</button></div>`,
                 width: 400
             });
 
@@ -88,13 +88,13 @@ export const deleteMenu = (liandi: ILiandi) => {
                 destroyDialog();
             });
             dialogElement.querySelector(".button").addEventListener("click", () => {
-                if (liandi.current.dir && liandi.current.dir.url === itemData.url && itemData.path === liandi.current.path) {
+                if (window.liandi.current.dir && window.liandi.current.dir.url === itemData.url && itemData.path === window.liandi.current.path) {
                     // liandi.editors.close(liandi);
-                    liandi.current = {
+                    window.liandi.current = {
                         path: "",
                     };
                 }
-                liandi.ws.send("remove", {
+                window.liandi.ws.send("remove", {
                     url: itemData.url,
                     path: itemData.path
                 });
@@ -108,18 +108,18 @@ export const deleteMenu = (liandi: ILiandi) => {
     });
 };
 
-export const renameMenu = (liandi: ILiandi) => {
+export const renameMenu = () => {
     return new remote.MenuItem({
-        label: i18n[liandi.config.lang].rename,
+        label: i18n[window.liandi.config.lang].rename,
         click: () => {
-            const itemData = liandi.menus.itemData;
+            const itemData = window.liandi.menus.itemData;
             dialog({
-                title: i18n[liandi.config.lang].rename,
+                title: i18n[window.liandi.config.lang].rename,
                 content: `<input class="input" value="">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button">${i18n[liandi.config.lang].save}</button><div class="fn__space"></div>
-<button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
+<button class="button">${i18n[window.liandi.config.lang].save}</button><div class="fn__space"></div>
+<button class="button button--cancel">${i18n[window.liandi.config.lang].cancel}</button></div>`,
                 width: 400
             });
             const dialogElement = document.querySelector("#dialog");
@@ -129,7 +129,7 @@ export const renameMenu = (liandi: ILiandi) => {
                 destroyDialog();
             });
             dialogElement.querySelector(".button").addEventListener("click", () => {
-                rename(liandi, inputElement.value, itemData.url, itemData.path);
+                rename(window.liandi, inputElement.value, itemData.url, itemData.path);
             });
             bindDialogInput(inputElement, () => {
                 (dialogElement.querySelector(".button") as HTMLButtonElement).click();

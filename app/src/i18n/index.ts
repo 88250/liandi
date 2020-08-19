@@ -1,5 +1,7 @@
 export const i18n: II18n = {
     en_US: {
+        splitLR:'Split Vertically',
+        splitTB:'Split Horizontally',
         debug: "Developer Tools",
         fileTree: "File Explorer",
         graphView: "Graph View",
@@ -277,6 +279,8 @@ export const i18n: II18n = {
         "wysiwyg": "위지위그",
     },
     zh_CN: {
+        splitLR:'左右分屏',
+        splitTB:'上下分屏',
         debug: "开发者工具",
         fileTree: "文件树",
         graphView: "关系图",

@@ -69,12 +69,27 @@
           background-color: var(--panel-background-color);
         }
 
-        svg {
+        &__svg {
           height: 12px;
           width: 12px;
           margin: 3px 3px 3px 0;
           float: left;
           color: var(--toolbar-icon-color);
+
+          &--close {
+            color: var(--focus-background-color);
+            float: right;
+            height: 8px;
+            width: 8px;
+            padding: 2px;
+            border-radius: 8px;
+            margin: 3px 0 3px 3px;
+
+            &:hover {
+              color: var(--toolbar-icon-color);
+              background-color: var(--focus-background-color);
+            }
+          }
         }
 
         &--current {

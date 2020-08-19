@@ -14,8 +14,9 @@ export class Tab {
         this.callback = options.callback;
         if (options.title) {
             this.headElement = document.createElement("li");
+            this.headElement.setAttribute("data-type", "tab-header")
             this.headElement.classList.add("item", "item--current");
-            this.headElement.innerHTML = options.title;
+            this.headElement.innerHTML = options.title + "<svg class='item__svg item__svg--close'><use xlink:href='#iconClose'></use></svg>";
         }
 
         this.panelElement = document.createElement("div");

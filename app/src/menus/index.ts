@@ -5,19 +5,25 @@ import {hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
 import {initVditorMenu} from "./vditor";
 import {clipboard} from "electron";
 import {initBacklinksMenu} from "./backlinks";
+import {initTabMenu} from "./tab";
 
 export class Menus {
     public itemData: IMenuData;
 
-    constructor(liandi: ILiandi) {
-
+    constructor() {
         window.addEventListener("contextmenu", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector("body"))) {
                 const dataType = target.getAttribute("data-type");
+                if (dataType === "tab-header") {
+                    initTabMenu().popup();
+                    event.preventDefault();
+                    break;
+                }
+
                 if (target.classList.contains("navigation")) {
                     // navigation 空白：挂载目录/挂载 DAV
-                    initMountMenu(liandi).popup();
+                    initMountMenu().popup();
                     event.preventDefault();
                     break;
                 }
@@ -29,7 +35,7 @@ export class Menus {
                         path: "/",
                         url: this.getDir(target),
                     };
-                    initNavigationMenu(liandi).popup();
+                    initNavigationMenu().popup();
                     event.preventDefault();
                     break;
                 }
@@ -42,7 +48,7 @@ export class Menus {
                         path: decodeURIComponent(target.getAttribute("data-path")),
                         name: decodeURIComponent(target.getAttribute("data-name")),
                     };
-                    initFolderMenu(liandi).popup();
+                    initFolderMenu().popup();
                     event.preventDefault();
                     break;
                 }
@@ -55,14 +61,14 @@ export class Menus {
                         path: decodeURIComponent(target.getAttribute("data-path")),
                         name: decodeURIComponent(target.getAttribute("data-name")),
                     };
-                    initFileMenu(liandi).popup();
+                    initFileMenu().popup();
                     event.preventDefault();
                     break;
                 }
 
                 if (target.classList.contains("vditor-ir")) {
                     // 编辑器上：粘贴为纯文本
-                    const vditorMenu = initVditorMenu(liandi);
+                    const vditorMenu = initVditorMenu();
                     vditorMenu.getMenuItemById("pasteAsPlainText").enabled = clipboard.readText() !== "";
                     vditorMenu.popup();
                     event.preventDefault();
@@ -77,7 +83,7 @@ export class Menus {
                         path: target.getAttribute("data-path"),
                         url: target.getAttribute("data-url"),
                     };
-                    initBacklinksMenu(liandi).popup();
+                    initBacklinksMenu().popup();
                     event.preventDefault();
                     break;
                 }

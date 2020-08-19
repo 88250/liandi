@@ -108,11 +108,9 @@ declare interface ILiandi {
     layout: import("../layout").Layout,
     find?: import("../search/Find").Find,
     config?: IConfig;
-    ws?: import("../websocket").WebSocketUtil,
+    ws: import("../websocket").WebSocketUtil,
     resizeList?: any[]
-    menus?: {
-        itemData: IMenuData
-    };
+    menus: import("../menus").Menus
     current?: {
         dir?: IBox
         path?: string
