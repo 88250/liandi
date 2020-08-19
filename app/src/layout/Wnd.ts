@@ -19,20 +19,16 @@ export class Wnd {
         this.element.innerHTML = `<div class="layout__tab fn__flex-column fn__flex fn__flex-1">
     <div class="fn__flex">
         <ul class="fn__flex fn__flex-1 tab__headers"></ul>
-        <button data-type="lr">lr</button><button data-type="tb">tb</button><button data-type="close">x</button>
     </div>
     <div class="tab__panels fn__flex-1"></div>
 </div>`;
         this.headersElement = this.element.querySelector(".tab__headers")
-        this.element.querySelector("button[data-type='lr']").addEventListener("click", () => {
-            this.spilt("lr");
-        });
-        this.element.querySelector("button[data-type='tb']").addEventListener("click", () => {
-            this.spilt("tb");
-        });
-        this.element.querySelector("button[data-type='close']").addEventListener("click", () => {
-            this.remove();
-        });
+        // this.element.querySelector("button[data-type='lr']").addEventListener("click", () => {
+        //     this.spilt("lr");
+        // });
+        // this.element.querySelector("button[data-type='tb']").addEventListener("click", () => {
+        //     this.spilt("tb");
+        // });
         this.headersElement.addEventListener("click", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.isEqualNode(this.headersElement)) {
@@ -93,7 +89,7 @@ export class Wnd {
                 item.headElement.remove()
                 item.panelElement.remove()
                 // TODO distory
-                // TODO if length === 0 call wnd.remove()
+                // TODO if length === 0 call  this.remove();
                 this.children.splice(index, 1)
                 return true
             }
