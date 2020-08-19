@@ -3,7 +3,6 @@ import {Wnd} from "../layout/wnd";
 import {i18n} from "../i18n";
 import {initSearch} from "../search";
 import {remote} from "electron";
-import {WebSocketUtil} from "./index";
 import {addCenterWnd} from "../layout/util";
 import {Constants} from "../constants";
 import * as path from "path";

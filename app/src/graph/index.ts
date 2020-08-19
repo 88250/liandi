@@ -2,7 +2,6 @@ import * as echarts from "echarts";
 import * as path from "path";
 import {i18n} from "../i18n";
 import {escapeHtml} from "../util/escape";
-import {WebSocketUtil} from "../websocket";
 import {Model} from "../layout/Model";
 import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";

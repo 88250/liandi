@@ -108,7 +108,7 @@ declare interface ILiandi {
     layout: import("../layout").Layout,
     find?: import("../search/Find").Find,
     config?: IConfig;
-    ws: import("../websocket").WebSocketUtil,
+    ws: import("../layout/Model").Model,
     resizeList?: any[]
     menus: import("../menus").Menus
     current?: {

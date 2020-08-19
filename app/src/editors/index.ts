@@ -7,22 +7,45 @@ import {hasTopClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {getEditorRange} from "../../vditore/src/ts/util/selection";
 import {escapeHtml} from "../util/escape";
 import {i18n} from "../i18n";
-import {WebSocketUtil} from "../websocket";
+import {Model} from "../layout/Model";
+import {Tab} from "../layout/Tab";
+import {processMessage} from "../util/processMessage";
 
-export class Editor {
+export class Editor extends Model {
     private element: HTMLElement;
     private saved = false
     private vditore: Vditor
     private url: string
     private path: string
-    public ws: WebSocketUtil
 
     constructor(options: {
-        element: HTMLElement,
+        tab: Tab,
         url: string,
         path: string
     }) {
-        this.element = options.element;
+        super({
+            id: options.tab.id,
+            callback() {
+                this.send("get", {
+                    url: options.url,
+                    path: options.path
+                });
+
+            }
+        })
+
+        this.ws.onmessage = (event) => {
+            const data = processMessage(event.data, this.reqId)
+            if (data) {
+                switch (data.cmd) {
+                    case "get":
+                        this.initVditor(data.data.content);
+                        break;
+                }
+            }
+        }
+
+        this.element = options.tab.panelElement;
         this.url = options.url;
         this.path = options.path;
     }

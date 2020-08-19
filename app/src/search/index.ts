@@ -149,7 +149,7 @@ export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
     destroyDialog();
 };
 
-export const onSearch = (liandi: ILiandi, data: {
+export const onSearch = (data: {
     dir: IBox
     path: string
     content: string
