@@ -83,7 +83,7 @@ const initBar = () => {
                     window.liandi.topLayout.parent.children[1].element.style.height = (window.liandi.topLayout.parent.children[1].element.clientHeight - 200) + "px";
                     window.liandi.topLayout.element.style.height = "206px";
                 }
-                tab.addModel(new Graph(tab));
+                tab.addModel(new Graph({tab}));
             }
         });
         wnd.addTab(tab);

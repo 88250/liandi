@@ -58,13 +58,17 @@ export const initEditorMenu = () => {
         click: async () => {
             const itemData = window.liandi.menus.itemData;
             const id = itemData.target.getAttribute("data-id")
-            const currentTab = getTabById(id);
+            const currentTab = getTabById(id) as Tab;
             const wnd = (currentTab.parent as Wnd).spilt("lr")
             const tab = new Tab({
                 title: `<svg class="item__svg"><use xlink:href="#iconGraph"></use></svg> ${i18n[window.liandi.config.lang].graphView}`,
                 panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
                 callback(tab: Tab) {
-                    tab.addModel(new Graph(tab));
+                    tab.addModel(new Graph({
+                        tab,
+                        url: (currentTab.model as Editor).url,
+                        path: (currentTab.model as Editor).path
+                    }));
                 }
             });
             wnd.addTab(tab);
