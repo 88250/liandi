@@ -40,6 +40,25 @@ func (cmd *remove) Exec() {
 		"path": p,
 	}
 	cmd.Push(ret.Bytes())
+
+	// 反向链接
+	backlinks, err := model.Backlinks(url, p)
+	if nil != err {
+		backlinksEvent := model.NewCmdResult("backlinks", 0)
+		backlinksEvent.Data = map[string]interface{}{
+			"backlinks": backlinks,
+		}
+		model.BroadcastEvent(backlinksEvent)
+	}
+
+	// 关系图
+	nodes, links := model.Graph("")
+	graph := model.NewCmdResult("graph", 0)
+	graph.Data = map[string]interface{}{
+		"nodes": nodes,
+		"links": links,
+	}
+	model.BroadcastEvent(graph)
 }
 
 func (cmd *remove) Name() string {

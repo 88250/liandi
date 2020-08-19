@@ -22,9 +22,9 @@ func (cmd *put) Exec() {
 	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
-	path := cmd.param["path"].(string)
+	p := cmd.param["path"].(string)
 	content := cmd.param["content"].(string)
-	err := model.Put(url, path, content)
+	err := model.Put(url, p, content)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
@@ -32,7 +32,7 @@ func (cmd *put) Exec() {
 	cmd.Push(ret.Bytes())
 
 	// 反向链接
-	backlinks, err := model.Backlinks(url, path)
+	backlinks, err := model.Backlinks(url, p)
 	if nil != err {
 		backlinksEvent := model.NewCmdResult("backlinks", 0)
 		backlinksEvent.Data = map[string]interface{}{
