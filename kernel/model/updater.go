@@ -50,7 +50,7 @@ func CheckUpdate() {
 }
 
 func pushMsg(msg string, closeTimeout int) {
-	ret := NewCmdResult("msg", 0)
+	ret := NewCmdResult("msg", 0, 0)
 	ret.Msg = msg
 	ret.Data = map[string]interface{}{
 		"closeTimeout": closeTimeout,

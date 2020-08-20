@@ -72,18 +72,16 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 	}
 }
 
-func connectBacklinks(nodeBacklinks map[BacklinkDef][]*BacklinkRef, links *[]interface{}) {
-	for target, refs := range nodeBacklinks {
-		for _, sources := range refs {
-			for _, source := range sources.RefNodes {
-				*links = append(*links, map[string]interface{}{
-					"source": source.ID,
-					"target": target.ID,
-					"lineStyle": map[string]interface{}{
-						"type": "dotted",
-					},
-				})
-			}
+func connectBacklinks(nodeBacklinks map[*Block][]*Block, links *[]interface{}) {
+	for target, defs := range nodeBacklinks {
+		for _, ref := range defs {
+			*links = append(*links, map[string]interface{}{
+				"source": ref.ID,
+				"target": target.ID,
+				"lineStyle": map[string]interface{}{
+					"type": "dotted",
+				},
+			})
 		}
 	}
 }

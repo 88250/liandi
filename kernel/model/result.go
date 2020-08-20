@@ -12,24 +12,33 @@ package model
 
 import (
 	"encoding/json"
-
-	"github.com/88250/gulu"
 )
 
 type Result struct {
-	Cmd   string  `json:"cmd"`
-	ReqId float64 `json:"reqId"`
-	*gulu.Result
+	Cmd      string      `json:"cmd"`
+	ReqId    float64     `json:"reqId"`
+	PushMode int         `json:"pushMode"` // 0：自我单播，1：广播
+	Callback interface{} `json:"callback"`
+	Code     int         `json:"code"`
+	Msg      string      `json:"msg"`
+	Data     interface{} `json:"data"`
 }
 
 func NewResult() *Result {
-	return &Result{"", 0, &gulu.Result{Code: 0, Msg: "", Data: nil}}
+	return &Result{Cmd: "",
+		ReqId:    0,
+		PushMode: 0,
+		Callback: "",
+		Code:     0,
+		Msg:      "",
+		Data:     nil}
 }
 
-func NewCmdResult(cmdName string, cmdId float64) *Result {
+func NewCmdResult(cmdName string, cmdId float64, pushMode int) *Result {
 	ret := NewResult()
 	ret.Cmd = cmdName
 	ret.ReqId = cmdId
+	ret.PushMode = pushMode
 	return ret
 }
 
