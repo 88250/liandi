@@ -33,7 +33,6 @@ func (cmd *put) Exec() {
 	}
 	cmd.Push()
 
-	// 触发刷新
 	pushReloadEvent(cmd.PushPayload, map[string]interface{}{
 		"url":  url,
 		"path": p,

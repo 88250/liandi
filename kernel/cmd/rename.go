@@ -41,6 +41,12 @@ func (cmd *rename) Exec() {
 		"newName": path.Base(newPath),
 	}
 	cmd.Push()
+
+	pushReloadEvent(cmd.PushPayload, map[string]interface{}{
+		"url":     url,
+		"oldPath": oldPath,
+		"newPath": newPath,
+	})
 }
 
 func (cmd *rename) Name() string {
