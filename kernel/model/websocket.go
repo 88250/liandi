@@ -42,10 +42,10 @@ func BroadcastEvent(event *Result) {
 	}
 }
 
-func Single(msg []byte, self string) {
+func Single(msg []byte, sid string) {
 	for _, session := range sessions {
 		id, _ := session.Get("id")
-		if id == self {
+		if id == sid {
 			session.Write(msg)
 			return
 		}
@@ -58,10 +58,10 @@ func Broadcast(msg []byte) {
 	}
 }
 
-func BroadcastOthers(msg []byte, self string) {
+func BroadcastOthers(msg []byte, excludeSID string) {
 	for _, session := range sessions {
 		id, _ := session.Get("id")
-		if id == self {
+		if id == excludeSID {
 			continue
 		}
 		session.Write(msg)

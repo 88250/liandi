@@ -25,7 +25,7 @@ const (
 type Result struct {
 	Cmd       string      `json:"cmd"`
 	ReqId     float64     `json:"reqId"`
-	SessionId string      `json:"sid"` // 会话 ID
+	SessionId string      `json:"sid"`
 	PushMode  PushMode    `json:"pushMode"`
 	Callback  interface{} `json:"callback"`
 	Code      int         `json:"code"`
