@@ -19,6 +19,7 @@ export class Menus {
                 if (dataType === "tab-header-editor") {
                     this.itemData = {
                         target,
+                        name:target.textContent.trim()
                     };
                     initEditorMenu().popup();
                     event.preventDefault();
@@ -33,7 +34,7 @@ export class Menus {
                     break;
                 }
 
-                if (target.classList.contains("navigation")) {
+                if (target.classList.contains("file")) {
                     // navigation 空白：挂载目录/挂载 DAV
                     initMountMenu().popup();
                     event.preventDefault();
@@ -85,18 +86,6 @@ export class Menus {
                     vditorMenu.popup();
                     event.preventDefault();
                     getSelection().getRangeAt(0).collapse(true);
-                    break;
-                }
-
-                if (dataType === "backlinks-file") {
-                    // backlinks：打开新窗口
-                    this.itemData = {
-                        target,
-                        path: target.getAttribute("data-path"),
-                        url: target.getAttribute("data-url"),
-                    };
-                    initBacklinksMenu().popup();
-                    event.preventDefault();
                     break;
                 }
 

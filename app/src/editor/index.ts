@@ -12,6 +12,7 @@ import {processMessage} from "../util/processMessage";
 import {openFile} from "./util";
 import {scrollCenter} from "../../vditore/src/ts/util/editorCommonEvent";
 import {processRemoveDataRender1} from "../../vditore/src/ts/ir/process";
+import {destroyDialog} from "../util/dialog";
 
 export class Editor extends Model {
     private element: HTMLElement;
@@ -66,8 +67,17 @@ export class Editor extends Model {
                         }
                         break;
                     case "create":
-                        setSelectionFocus(this.range);
-                        this.vditore.insertValue(`((${data.data.id} "${data.data.name}"))`);
+                        if (data.data.callback === Constants.CB_CREATE_INSERT) {
+                            setSelectionFocus(this.range);
+                            this.vditore.insertValue(`((${data.data.id} "${data.data.name}"))`);
+                        }
+                        break;
+                    case "rename":
+                        if (data.data.url === this.url && data.data.oldPath === this.path && !data.data.newPath.endsWith("/")) {
+                            this.path = data.data.newPath
+                            this.parent.headElement.querySelector("span").textContent = data.data.newName
+                            destroyDialog();
+                        }
                         break;
                 }
             }

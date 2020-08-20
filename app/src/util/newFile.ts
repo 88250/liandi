@@ -5,7 +5,7 @@ import * as path from "path";
 import {Editor} from "../editor";
 import {getAllModels} from "../layout/util";
 
-export const newFile = (editor?: Editor) => {
+export const newFile = (editor?: Editor, callback?:string) => {
     dialog({
         title: i18n[window.liandi.config.lang].newFile,
         content: `<input class="input" value="">
@@ -30,16 +30,18 @@ export const newFile = (editor?: Editor) => {
             editor.send("create", {
                 url: editor.url,
                 path: path.posix.join(path.posix.dirname(editor.path), name),
+                callback,
+                pushMode:0
             });
-        }
-        const itemData = window.liandi.menus.itemData;
-        const currentNewPath = path.posix.join(itemData.path, name);
-        getAllModels().files.forEach((item) => {
-            item.send("create", {
+        } else {
+            const itemData = window.liandi.menus.itemData;
+            const currentNewPath = path.posix.join(itemData.path, name);
+            window.liandi.ws.send("create", {
                 url: itemData.url,
                 path: currentNewPath,
+                pushMode:0
             })
-        })
+        }
     });
     bindDialogInput(inputElement, () => {
         (dialogElement.querySelector(".button") as HTMLButtonElement).click();

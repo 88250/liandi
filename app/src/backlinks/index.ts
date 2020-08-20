@@ -79,7 +79,7 @@ export class Backlinks extends Model {
             backlinksHTML += '<div class="item">';
             files.blocks.forEach((item, index) => {
                 if (index === 0) {
-                    backlinksHTML += `<h2 data-type="backlinks-file" data-path="${encodeURIComponent(item.path)}" data-url="${encodeURIComponent(item.url)}" class="fn__flex"">
+                    backlinksHTML += `<h2 data-path="${encodeURIComponent(item.path)}" data-url="${encodeURIComponent(item.url)}" class="fn__flex"">
 <span class="fn__flex-1">${escapeHtml(path.posix.basename(files.path))}</span>
 <span class="ft__smaller fn__flex-center">${escapeHtml(path.posix.dirname(item.path).substr(1))}</span>
 </h2>`;

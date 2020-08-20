@@ -2,21 +2,30 @@ import {remote, shell} from "electron";
 import {i18n} from "../i18n";
 import * as path from "path";
 import {bindDialogInput, destroyDialog, dialog} from "../util/dialog";
-import {rename, validateName} from "../util/rename";
+import {validateName} from "../util/rename";
 import {escapeHtml} from "../util/escape";
 import {newFile} from "../util/newFile";
 import {copyTab, getInstanceById} from "../layout/util";
 import {Tab} from "../layout/Tab";
+import {Editor} from "../editor";
 
 export const showInFolder = () => {
     return new remote.MenuItem({
         label: i18n[window.liandi.config.lang].showInFolder,
         click: () => {
             const itemData = window.liandi.menus.itemData;
+            let rootPath = ''
+            window.liandi.config.boxes.find((item) => {
+                if (item.url === itemData.url) {
+                    rootPath = item.path
+                    return true
+                }
+            })
+
             if (itemData.path.endsWith("/")) {
-                shell.openItem(path.posix.join(itemData.path, itemData.path));
+                shell.openItem(path.posix.join(rootPath, itemData.path));
             } else {
-                shell.showItemInFolder(path.posix.join(itemData.path, itemData.path + ".md.json"));
+                shell.showItemInFolder(path.posix.join(rootPath, itemData.path + ".md.json"));
             }
         }
     });
@@ -122,7 +131,28 @@ export const renameMenu = () => {
                 destroyDialog();
             });
             dialogElement.querySelector(".button").addEventListener("click", () => {
-                rename(window.liandi, inputElement.value, itemData.url, itemData.path);
+                if (!validateName(inputElement.value)) {
+                    return false;
+                }
+                if (!itemData.url) {
+                    const tab = getInstanceById(itemData.target.getAttribute("data-id")) as Tab
+                    itemData.url = (tab.model as Editor).url
+                    itemData.path = (tab.model as Editor).path
+                }
+                const oldName = path.posix.basename(itemData.path);
+                if (inputElement.value === oldName) {
+                    destroyDialog();
+                    return false;
+                }
+
+                const newPath = path.posix.join(path.posix.dirname(itemData.path), inputElement.value) + (itemData.path.endsWith("/") ? "/" : "");
+                window.liandi.ws.send("rename", {
+                    url: itemData.url,
+                    oldPath: itemData.path,
+                    newPath,
+                    pathMode: 0
+                });
+                return newPath;
             });
             bindDialogInput(inputElement, () => {
                 (dialogElement.querySelector(".button") as HTMLButtonElement).click();
