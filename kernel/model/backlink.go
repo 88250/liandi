@@ -22,36 +22,23 @@ import (
 )
 
 var (
-	treeBacklinks     = map[*parse.Tree]map[BacklinkDef][]*BacklinkRef{} // 反向链接关系：块被哪些块用了
-	treeBacklinksLock = &sync.Mutex{}                                    // 全局反链锁，构建反链和图的时候需要加锁
+	treeBacklinks     = map[*parse.Tree]map[*Block][]*Block{} // 反向链接关系：块被哪些块用了
+	treeBacklinksLock = &sync.Mutex{}                         // 全局反链锁，构建反链和图的时候需要加锁
 )
 
-type BacklinkDef *ast.Node
+type Defs []*BacklinkBlock
 
-type BacklinkRef struct {
-	URL, Path string
-	RefNodes  []*ast.Node
-}
+func (r Defs) Len() int           { return len(r) }
+func (r Defs) Less(i, j int) bool { return len(r[i].Blocks) < len(r[j].Blocks) }
+func (r Defs) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
 
-type Refs []*BacklinkRef
-
-func (r Refs) Len() int           { return len(r) }
-func (r Refs) Less(i, j int) bool { return len(r[i].RefNodes) < len(r[j].RefNodes) }
-func (r Refs) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
-
-type BacklinkRefBlock struct {
+type BacklinkBlock struct {
 	URL    string   `json:"url"`
 	Path   string   `json:"path"`
 	Blocks []*Block `json:"blocks"`
 }
 
-//type BacklinkDefBlock struct {
-//	URL       string              `json:"url"`
-//	Path      string              `json:"path"`
-//	RefBlocks []*BacklinkRefBlock `json:"refBlocks"`
-//}
-
-func TreeBacklinks(url, path string) (ret []*BacklinkRefBlock, err error) {
+func TreeBacklinks(url, path string) (ret []*BacklinkBlock, err error) {
 	box := Conf.Box(url)
 	if nil == box {
 		return nil, errors.New(Conf.lang(0))
@@ -62,11 +49,11 @@ func TreeBacklinks(url, path string) (ret []*BacklinkRefBlock, err error) {
 	return
 }
 
-func Backlinks() (ret []*BacklinkRefBlock) {
-	ret = []*BacklinkRefBlock{}
+func Backlinks() (ret Defs) {
+	ret = []*BacklinkBlock{}
 
 	rebuildBacklinks()
-	defRefs := map[BacklinkDef][]*BacklinkRef{}
+	defRefs := map[*Block][]*Block{}
 	for _, backlinkDefs := range treeBacklinks {
 		for def, backlinkRefs := range backlinkDefs {
 			if refs, ok := defRefs[def]; ok {
@@ -76,21 +63,7 @@ func Backlinks() (ret []*BacklinkRefBlock) {
 			}
 		}
 	}
-
-	var allRefs Refs
-	for _, refs := range defRefs {
-		for _, ref := range refs {
-			allRefs = append(allRefs, ref)
-		}
-	}
-	sort.Sort(allRefs)
-
-	for _, ref := range allRefs {
-		blocks := buildRefBlockBlocks(ref)
-		if nil != blocks {
-			ret = append(ret, &BacklinkRefBlock{URL: ref.URL, Path: ref.Path, Blocks: blocks})
-		}
-	}
+	sort.Sort(ret)
 	return
 }
 
@@ -107,13 +80,13 @@ func rebuildBacklinks() {
 	}
 }
 
-func indexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
+func indexLink(tree *parse.Tree) (ret []*BacklinkBlock) {
 	treeBacklinksLock.Lock()
 	defer treeBacklinksLock.Unlock()
 
-	ret = []*BacklinkRefBlock{}
+	ret = []*BacklinkBlock{}
 	// 找到当前块列表
-	var currentBlocks []BacklinkDef
+	var currentBlocks []*Block
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		if !entering {
 			return ast.WalkStop
@@ -123,7 +96,7 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 			return ast.WalkStop
 		}
 
-		currentBlocks = append(currentBlocks, n)
+		currentBlocks = append(currentBlocks, buildBlock(tree.URL, tree.Path, n))
 		return ast.WalkContinue
 	})
 
@@ -131,7 +104,7 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 	delete(treeBacklinks, tree)
 
 	// 构建链接关系
-	backlinks := map[BacklinkDef][]*BacklinkRef{}
+	backlinks := map[*Block][]*Block{}
 	for _, currentBlock := range currentBlocks {
 		for _, tree := range trees {
 			var refNodes []*ast.Node
@@ -150,31 +123,22 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkRefBlock) {
 				}
 				return ast.WalkContinue
 			})
-			backlinks[currentBlock] = append(backlinks[currentBlock], &BacklinkRef{URL: tree.URL, Path: tree.Path, RefNodes: refNodes})
+
+			var blocks []*Block
+			for _, n := range refNodes {
+				blocks = append(blocks, buildBlock(tree.URL, tree.Path, n))
+			}
+			backlinks[currentBlock] = append(backlinks[currentBlock], blocks...)
 		}
 	}
 
 	treeBacklinks[tree] = backlinks
-
-	// 组装当前块的反链列表
-	for _, currentBlock := range currentBlocks {
-		for _, backlinkRef := range backlinks[currentBlock] {
-			blocks := buildRefBlockBlocks(backlinkRef)
-			if nil != blocks {
-				ret = append(ret, &BacklinkRefBlock{URL: backlinkRef.URL, Path: backlinkRef.Path, Blocks: blocks})
-			}
-		}
-	}
 	return
 }
 
-func buildRefBlockBlocks(ref *BacklinkRef) (ret []*Block) {
-	for _, refNode := range ref.RefNodes {
-		content := renderBlockText(refNode)
-		block := &Block{URL: ref.URL, Path: ref.Path, ID: refNode.ID, Type: refNode.Type.String(), Content: content}
-		ret = append(ret, block)
-	}
-	return
+func buildBlock(url, path string, node *ast.Node) (ret *Block) {
+	content := renderBlockText(node)
+	return &Block{URL: url, Path: path, ID: node.ID, Type: node.Type.String(), Content: content}
 }
 
 func refParentBlock(ref *ast.Node) *ast.Node {
