@@ -15,7 +15,7 @@ export class Files extends Model {
     private element: HTMLElement
     public parent: Tab
 
-    constructor(tab:Tab) {
+    constructor(tab: Tab) {
         super({
             id: tab.id,
             callback() {
@@ -34,14 +34,19 @@ export class Files extends Model {
                         break;
                     case "create":
                     case "mkdir":
-                        const targetElement= window.liandi.menus.itemData.target
-                        targetElement.firstElementChild.classList.remove("fn__hidden");
-                        if (targetElement.firstElementChild.classList.contains("item__arrow--open")) {
-                            targetElement.firstElementChild.classList.remove("item__arrow--open");
-                            targetElement.nextElementSibling.remove();
+                        let targetElement = window.liandi.menus.itemData.target
+                        if (!this.element.contains(targetElement)) {
+                            targetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(data.data.dir.url)}'] li[data-path=${targetElement.getAttribute('data-path')}]`)
                         }
-                        targetElement.setAttribute("data-files", JSON.stringify(data.data.files));
-                        this.getLeaf(targetElement, data.data.dir);
+                        if (targetElement) {
+                            targetElement.firstElementChild.classList.remove("fn__hidden");
+                            if (targetElement.firstElementChild.classList.contains("item__arrow--open")) {
+                                targetElement.firstElementChild.classList.remove("item__arrow--open");
+                                targetElement.nextElementSibling.remove();
+                            }
+                            targetElement.setAttribute("data-files", JSON.stringify(data.data.files));
+                            this.getLeaf(targetElement, data.data.dir);
+                        }
                         destroyDialog();
                         break;
                 }

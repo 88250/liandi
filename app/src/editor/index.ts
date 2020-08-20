@@ -238,7 +238,7 @@ export class Editor extends Model {
                     url: this.url,
                     path: this.path,
                     content,
-                    pushState: 2
+                    pushMode: 2
                 });
                 this.saved = true;
                 this.parent.headElement.classList.remove("item--unsave");
