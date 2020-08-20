@@ -16,7 +16,6 @@ export abstract class Constants {
 
     public static readonly APP_DIR: string = remote.getGlobal("liandiEditor").appDir
 
-    public static readonly CB_CREATE_INSERT = "cb-create-insert"
     public static readonly CB_GETBLOCK_OPEN = "cb-getblock-open"
     public static readonly CB_GETBLOCK_EMBED = "cb-getblock-embed"
     public static readonly CB_PUT_RELOAD = "cb-put-reload"

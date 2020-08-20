@@ -2,9 +2,10 @@ import {bindDialogInput, destroyDialog, dialog} from "./dialog";
 import {i18n} from "../i18n";
 import {validateName} from "./rename";
 import * as path from "path";
-import {Constants} from "../constants";
+import {Editor} from "../editor";
+import {getAllModels} from "../layout/util";
 
-export const newFile = (callback = "") => {
+export const newFile = (editor?: Editor) => {
     dialog({
         title: i18n[window.liandi.config.lang].newFile,
         content: `<input class="input" value="">
@@ -25,21 +26,20 @@ export const newFile = (callback = "") => {
         if (!validateName(name)) {
             return false;
         }
-        const itemData = window.liandi.menus.itemData;
-        const currentNewPath = path.posix.join(itemData.path, name);
-        if (callback === Constants.CB_CREATE_INSERT) {
-            // model.send("create", {
-            //     url: itemData.url,
-            //     path: currentNewPath,
-            //     callback
-            // });
-        } else {
-            window.liandi.ws.send("create", {
-                url: itemData.url,
-                path: currentNewPath,
-                callback
+        if (editor) {
+            editor.send("create", {
+                url: editor.url,
+                path: path.posix.join(path.posix.dirname(editor.path), name),
             });
         }
+        const itemData = window.liandi.menus.itemData;
+        const currentNewPath = path.posix.join(itemData.path, name);
+        getAllModels().files.forEach((item) => {
+            item.send("create", {
+                url: itemData.url,
+                path: currentNewPath,
+            })
+        })
     });
     bindDialogInput(inputElement, () => {
         (dialogElement.querySelector(".button") as HTMLButtonElement).click();
