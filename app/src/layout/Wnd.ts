@@ -72,7 +72,7 @@ export class Wnd {
 
     public removeTab(id: string) {
         if (this.children.length === 1) {
-            this.children = []
+            this.children = [];
             this.remove();
         }
         this.children.find((item, index) => {
@@ -95,7 +95,7 @@ export class Wnd {
 
     public spilt(direction: TDirection) {
         // TODO new panel & ws
-        const wnd = new Wnd(direction)
+        const wnd = new Wnd(direction);
         if (direction === this.parent.direction) {
             this.parent.addWnd(wnd, this.id);
         } else {
@@ -111,7 +111,7 @@ export class Wnd {
                 }
             });
         }
-        return wnd
+        return wnd;
     }
 
     private remove() {
@@ -155,7 +155,7 @@ export class Wnd {
         if (layout.type !== "center" && layout.type !== "normal" && layout.children.length === 0) {
             if (layout.type === "left" || layout.type === "right") {
                 layout.parent.children[1].element.style.width = (layout.parent.children[1].element.clientWidth + layout.element.clientWidth - 6) + "px";
-                layout.parent.children[1].element.classList.remove("fn__flex-1")
+                layout.parent.children[1].element.classList.remove("fn__flex-1");
                 if (layout.type === "left") {
                     layout.element.style.width = "6px";
                 } else {
@@ -165,7 +165,7 @@ export class Wnd {
                 }
             } else {
                 layout.parent.children[1].element.style.height = (layout.parent.children[1].element.clientHeight + layout.element.clientHeight - 6) + "px";
-                layout.parent.children[1].element.classList.remove("fn__flex-1")
+                layout.parent.children[1].element.classList.remove("fn__flex-1");
                 if (layout.type === "top") {
                     layout.element.style.height = "6px";
                 } else {

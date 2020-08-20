@@ -1,9 +1,7 @@
 import {i18n} from "../i18n";
 import {Tab} from "../layout/Tab";
 import {Editor} from "../editor";
-import {Wnd} from "../layout/Wnd";
 import {Layout} from "../layout";
-import {removeEditorTab} from "../layout/util";
 
 export const markdown = {
     genHTML: () => {
@@ -79,17 +77,17 @@ export const markdown = {
 
         const reloadAllVditor = (layout: Layout) => {
             for (let i = 0; i < layout.children.length; i++) {
-                const item = layout.children[i]
+                const item = layout.children[i];
                 if (item instanceof Tab) {
-                    const model = (item as Tab).model
+                    const model = (item as Tab).model;
                     if (model instanceof Editor) {
-                        model.reloadVditor()
+                        model.reloadVditor();
                     }
                 } else {
                     reloadAllVditor(item as Layout);
                 }
             }
-        }
-        reloadAllVditor(window.liandi.layout)
+        };
+        reloadAllVditor(window.liandi.layout);
     }
 };

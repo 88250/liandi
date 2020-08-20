@@ -13,95 +13,113 @@ import {hasClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 const getFirstWnd = (layout: Layout) => {
     for (let i = 0; i < layout.children.length; i++) {
         if (layout.children[i] instanceof Wnd) {
-            return layout.children[i]
+            return layout.children[i];
         } else if (layout.children[i] instanceof Layout) {
             getFirstWnd(layout.children[i] as Layout);
         }
     }
     return null;
-}
+};
 
-export const removeEditorTab = (layout: Layout, url: string, path: string) => {
-    for (let i = 0; i < layout.children.length; i++) {
-        const item = layout.children[i]
-        if (item instanceof Tab) {
-            const model = (item as Tab).model
-            if (model instanceof Editor && model.url === url && model.path.indexOf(path) === 0) {
-                (item.parent as Wnd).removeTab(item.id)
+export const getAllModels = () => {
+    const models: IModels = {
+        editor: [],
+        backlinks: [],
+        graph: [],
+        files: []
+    }
+    const getTabs = (layout: Layout) => {
+        for (let i = 0; i < layout.children.length; i++) {
+            const item = layout.children[i];
+            if (item instanceof Tab) {
+                const model = item.model;
+                if (model instanceof Editor) {
+                    models.editor.push(model)
+                } else if (model instanceof Backlinks) {
+                    models.backlinks.push(model)
+                } else if (model instanceof Graph) {
+                    models.graph.push(model)
+                } else if (model instanceof Files) {
+                    models.files.push(model)
+                }
+            } else {
+                getTabs(item as Layout);
             }
-        } else {
-            removeEditorTab(item as Layout, url, path);
         }
     }
+
+    getTabs(window.liandi.layout)
+    return models;
 }
+
 
 export const getCenterActiveWnd = () => {
     if (getSelection().rangeCount === 0) {
-        return getFirstWnd(window.liandi.centerLayout)
+        return getFirstWnd(window.liandi.centerLayout);
     }
-    const range = getSelection().getRangeAt(0)
-    const element = hasClosestByAttribute(range.startContainer, "data-type", "wnd", true)
+    const range = getSelection().getRangeAt(0);
+    const element = hasClosestByAttribute(range.startContainer, "data-type", "wnd", true);
     if (element && window.liandi.centerLayout.element.contains(element)) {
-        return getInstanceById(element.getAttribute("data-id"))
+        return getInstanceById(element.getAttribute("data-id"));
     } else {
-        return getFirstWnd(window.liandi.centerLayout)
+        return getFirstWnd(window.liandi.centerLayout);
     }
-}
+};
 
 export const copyTab = (tab: Tab) => {
-    let panel = ''
+    let panel = "";
     if (tab.model instanceof Graph) {
-        panel = '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>'
+        panel = '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>';
     }
     return new Tab({
         title: tab.headElement.innerHTML.replace('<svg class="item__svg item__svg--close"><use xlink:href="#iconClose"></use></svg>', ""),
         panel,
         callback(newTab: Tab) {
-            let model: Model
+            let model: Model;
             if (tab.model instanceof Editor) {
                 model = new Editor({
                     tab: newTab,
                     url: tab.model.url,
                     path: tab.model.path
-                })
+                });
             } else if (tab.model instanceof Backlinks) {
                 model = new Backlinks({
                     tab: newTab,
                     url: tab.model.url,
                     path: tab.model.path
-                })
+                });
             } else if (tab.model instanceof Graph) {
                 model = new Graph({
                     tab: newTab,
                     url: tab.model.url,
                     path: tab.model.path
-                })
+                });
             } else if (tab.model instanceof Files) {
                 model = new Files(newTab);
             }
             newTab.addModel(model);
         }
     });
-}
+};
 
 export const getInstanceById = (id: string) => {
     const _getInstanceById = (item: Layout | Wnd, id: string) => {
         if (item.id === id) {
-            return item
+            return item;
         }
         if (!item.children) {
-            return
+            return;
         }
-        let ret: Tab | Layout | Wnd
+        let ret: Tab | Layout | Wnd;
         for (let i = 0; i < item.children.length; i++) {
-            ret = _getInstanceById(item.children[i] as Layout, id) as Tab
+            ret = _getInstanceById(item.children[i] as Layout, id) as Tab;
             if (ret) {
-                return ret
+                return ret;
             }
         }
-    }
-    return _getInstanceById(window.liandi.layout, id)
-}
+    };
+    return _getInstanceById(window.liandi.layout, id);
+};
 
 export const addResize = (obj: Layout | Wnd) => {
     if (obj.resize) {

@@ -3,9 +3,8 @@ import {i18n} from "../i18n";
 import {validateName} from "./rename";
 import * as path from "path";
 import {Constants} from "../constants";
-import {Model} from "../layout/Model";
 
-export const newFile = (callback = "", model?:Model) => {
+export const newFile = (callback = "") => {
     dialog({
         title: i18n[window.liandi.config.lang].newFile,
         content: `<input class="input" value="">

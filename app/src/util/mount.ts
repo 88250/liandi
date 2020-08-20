@@ -15,7 +15,8 @@ export const mountFile = async () => {
     }
     window.liandi.ws.send("mount", {
         url: `${Constants.WEBDAV_ADDRESS}/`,
-        path: filePath.filePaths[0]
+        path: filePath.filePaths[0],
+        pushMode: 0
     });
 };
 
@@ -51,6 +52,7 @@ export const mountWebDAV = () => {
             url: inputs[0].value,
             user: inputs[1].value,
             password: inputs[2].value,
+            pushMode: 0
         });
     });
 };

@@ -60,7 +60,7 @@ class App {
         };
 
         liandi.ws.ws.onmessage = (event) => {
-            const data = processMessage(event.data, liandi.ws.reqId);
+            const data = processMessage(event.data);
             if (data) {
                 switch (data.cmd) {
                     case "search":
@@ -84,12 +84,6 @@ class App {
                     case "getconf":
                         onGetConfig(data.data);
                         onSetTheme(data.data.theme);
-                        break;
-                    case "mount":
-                    case "mountremote":
-                        destroyDialog();
-                        // liandi.navigation.onMount(liandi, response.data);
-                        // liandi.graph.render(liandi);
                         break;
                     case "rename":
                         // TODO liandi.navigation.onRename(liandi, response.data);

@@ -29,10 +29,10 @@ export const initEditorMenu = () => {
         label: i18n[window.liandi.config.lang].backlinks,
         click: async () => {
             const itemData = window.liandi.menus.itemData;
-            const id = itemData.target.getAttribute("data-id")
+            const id = itemData.target.getAttribute("data-id");
             const currentTab = getInstanceById(id) as Tab;
-            const filePath = (currentTab.model as Editor).path
-            const newWnd = (currentTab.parent as Wnd).spilt("lr")
+            const filePath = (currentTab.model as Editor).path;
+            const newWnd = (currentTab.parent as Wnd).spilt("lr");
             const tab = new Tab({
                 title: `<svg class="item__svg"><use xlink:href="#iconLink"></use></svg> ${escapeHtml(path.posix.basename(filePath))}`,
                 callback(tab: Tab) {
@@ -50,10 +50,10 @@ export const initEditorMenu = () => {
         label: i18n[window.liandi.config.lang].graphView,
         click: async () => {
             const itemData = window.liandi.menus.itemData;
-            const id = itemData.target.getAttribute("data-id")
+            const id = itemData.target.getAttribute("data-id");
             const currentTab = getInstanceById(id) as Tab;
-            const filePath = (currentTab.model as Editor).path
-            const wnd = (currentTab.parent as Wnd).spilt("lr")
+            const filePath = (currentTab.model as Editor).path;
+            const wnd = (currentTab.parent as Wnd).spilt("lr");
             const tab = new Tab({
                 title: `<svg class="item__svg"><use xlink:href="#iconGraph"></use></svg> ${escapeHtml(path.posix.basename(filePath))}`,
                 panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',

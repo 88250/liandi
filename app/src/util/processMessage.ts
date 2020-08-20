@@ -1,6 +1,6 @@
 import {showMessage} from "./message";
 
-export const processMessage =(data:string, reqId:number)=> {
+export const processMessage =(data:string)=> {
     const response = JSON.parse(data);
     if ("msg" === response.cmd) {
         showMessage(response.msg, response.data.closeTimeout);
