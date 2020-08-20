@@ -9,7 +9,7 @@ const getLang = (keys: string[]) => {
     });
     return langArray;
 };
-export const initConfigSearch = (liandi: ILiandi, element: HTMLElement) => {
+export const initConfigSearch = (element: HTMLElement) => {
     const configIndex = [
         ["markdown", "katex", "mathjax"].concat(getLang(["config", "outline",
             "autoSpace", "fixTermTypo", "chinesePunctuation", "inlineMathDigit", "mathEngine", "hideToolbar", "toc",

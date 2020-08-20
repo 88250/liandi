@@ -2,16 +2,16 @@ import {i18n} from "../i18n";
 import {VDITOR_VERSION} from "../../vditore/src/ts/constants";
 
 export const about = {
-    genHTML: (liandi: ILiandi) => {
+    genHTML: () => {
         return `<div class="about">
 <div class="about__item fn__flex">
     <img src="../public/icon.png" class="about__logo">
-    <strong class="fn__flex-center">${i18n[liandi.config.lang].slogan}</strong>
+    <strong class="fn__flex-center">${i18n[window.liandi.config.lang].slogan}</strong>
 </div>
 <div class="about__item">
-    <div>${i18n[liandi.config.lang].currentVer} v${VDITOR_VERSION}</div>
+    <div>${i18n[window.liandi.config.lang].currentVer} v${VDITOR_VERSION}</div>
     <div class="fn__hr--s"></div>
-    <button class="button">${i18n[liandi.config.lang].checkUpdate}</button>
+    <button class="button">${i18n[window.liandi.config.lang].checkUpdate}</button>
 </div>
 <div class="about__item ft__secondary ft__smaller">
     Copyright (c) 2020-present, <a href="https://b3log.org">b3log.org</a><br><br>
@@ -24,9 +24,9 @@ export const about = {
 </div>
 </div>`;
     },
-    bindEvent: (liandi: ILiandi, element: HTMLElement) => {
+    bindEvent: (element: HTMLElement) => {
         element.querySelector("button").addEventListener("click", () => {
-            liandi.ws.send("checkupdate", {});
+            window.liandi.ws.send("checkupdate", {});
         });
     },
 };

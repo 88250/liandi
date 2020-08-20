@@ -22,9 +22,9 @@ export class Backlinks extends Model {
                     this.send("treebacklinks", {
                         url: options.url,
                         path: options.path
-                    });
+                    }, true);
                 } else {
-                    this.send("backlinks", {});
+                    this.send("backlinks", {}, true);
                     this.element.innerHTML = `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
                 }
             }
@@ -38,6 +38,18 @@ export class Backlinks extends Model {
                     case "backlinks":
                     case "treebacklinks":
                         this.onBacklinks(data.data);
+                        break;
+                    case "reload":
+                        if (this.path) {
+                            if (data.data.url === this.url && data.data.path === this.path) {
+                                this.send("treebacklinks", {
+                                    url: options.url,
+                                    path: options.path
+                                })
+                            }
+                        } else {
+                            this.send("backlinks", {})
+                        }
                         break;
                 }
             }
