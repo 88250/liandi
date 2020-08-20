@@ -80,8 +80,6 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, sess
 		ret = &setmd{baseCmd}
 	case "checkupdate":
 		ret = &checkupdate{baseCmd}
-	case "searchget":
-		ret = &searchget{baseCmd}
 	case "setimage":
 		ret = &setimage{baseCmd}
 	case "exec":
