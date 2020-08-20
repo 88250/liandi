@@ -24,7 +24,7 @@ func (cmd *mount) Exec() {
 	url, existed := model.Mount(url, p)
 	model.RestartServeWebDAV()
 	ret.Data = map[string]interface{}{
-		"dir":     model.Conf.Box(url),
+		"box":     model.Conf.Box(url),
 		"existed": existed,
 	}
 	cmd.Push()
