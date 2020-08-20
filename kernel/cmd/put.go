@@ -28,11 +28,13 @@ func (cmd *put) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
+		cmd.Push()
+		return
 	}
 	cmd.Push()
 
 	// 触发刷新
-	broadcastRefreshEvent(cmd.Name(), 0, map[string]interface{}{
+	broadcastReloadEvent(cmd.PushPayload, map[string]interface{}{
 		"url":  url,
 		"path": p,
 	})

@@ -31,7 +31,25 @@ func RemovePushChan(session *melody.Session) {
 }
 
 func BroadcastEvent(event *Result) {
-	Broadcast(event.Bytes())
+	msg := event.Bytes()
+	switch event.PushMode {
+	case PushModeBroadcast:
+		Broadcast(msg)
+	case PushModeSingleSelf:
+		Single(msg, event.SessionId)
+	case PushModeBroadcastExcludeSelf:
+		BroadcastOthers(msg, event.SessionId)
+	}
+}
+
+func Single(msg []byte, self string) {
+	for _, session := range sessions {
+		id, _ := session.Get("id")
+		if id == self {
+			session.Write(msg)
+			return
+		}
+	}
 }
 
 func Broadcast(msg []byte) {
