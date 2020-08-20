@@ -24,7 +24,7 @@ export class Backlinks extends Model {
                         path: options.path
                     });
                 } else {
-                    this.send("treebacklinks", {});
+                    this.send("backlinks", {});
                     this.element.innerHTML = `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
                 }
             }
@@ -35,6 +35,7 @@ export class Backlinks extends Model {
             const data = processMessage(event.data, this.reqId);
             if (data) {
                 switch (data.cmd) {
+                    case "backlinks":
                     case "treebacklinks":
                         this.onBacklinks(data.data);
                         break;

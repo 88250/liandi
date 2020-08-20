@@ -36,7 +36,7 @@ class App {
             liandi.find.open();
         });
         ipcRenderer.on(Constants.LIANDI_FILE_NEW, () => {
-            // TODO newFile(this.liandi)
+            // TODO newFile()
         });
 
         const liandi: ILiandi = {
