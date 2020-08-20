@@ -43,7 +43,7 @@ func Unmount(url string) {
 	}
 
 	if nil == found {
-		Logger.Debugf("未找到待关闭的盒子 [%s]", url)
+		Logger.Debugf("未找到待关闭的笔记本 [%s]", url)
 		return
 	}
 
@@ -52,7 +52,7 @@ func Unmount(url string) {
 	found.CloseClient()
 	routeWebDAV()
 	Conf.Save()
-	Logger.Debugf("关闭盒子 [%s] 完毕", url)
+	Logger.Debugf("关闭笔记本 [%s] 完毕", url)
 }
 
 func MountRemote(url, user, password string) (ret string, alreadyMount bool) {
@@ -74,7 +74,7 @@ func MountRemote(url, user, password string) (ret string, alreadyMount bool) {
 	Conf.Save()
 	box.InitClient()
 	go box.Index()
-	Logger.Debugf("打开远程盒子 [%s] 完毕", url)
+	Logger.Debugf("打开远程笔记本 [%s] 完毕", url)
 	return url, false
 }
 
@@ -94,7 +94,7 @@ func Mount(url, localPath string) (ret string, alreadyMount bool) {
 	Conf.Save()
 	box.InitClient()
 	go box.Index()
-	Logger.Debugf("打开本地盒子 [%s] 完毕", url)
+	Logger.Debugf("打开本地笔记本 [%s] 完毕", url)
 	return url, false
 }
 

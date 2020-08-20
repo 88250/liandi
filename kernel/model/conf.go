@@ -73,7 +73,7 @@ func InitConf() {
 		box := Conf.Boxes[i]
 		if !box.IsRemote() && !gulu.File.IsExist(box.LocalPath) {
 			Conf.Boxes = append(Conf.Boxes[:i], Conf.Boxes[i+1:]...)
-			Logger.Debugf("盒子 [%s] 不存在，已从配置中移除", box.LocalPath)
+			Logger.Debugf("笔记本 [%s] 不存在，已从配置中移除", box.LocalPath)
 			continue
 		}
 	}
@@ -288,14 +288,14 @@ func (box *Box) Remove(path string) error {
 }
 
 func (box *Box) Index() {
-	Logger.Debugf("开始导入盒子 [%s] 下新的 Markdown 文件", box.URL)
+	Logger.Debugf("开始导入笔记本 [%s] 下新的 Markdown 文件", box.URL)
 	markdowns := box.ListNewMarkdowns("/")
 	var importTrees []*parse.Tree
 	for _, file := range markdowns {
 		p := file.(*gowebdav.File).Path()
 		markdown, err := box.Get(p)
 		if nil != err {
-			Logger.Fatalf("读取盒子 [%s] 下的文件 [%s] 失败：%s", box.URL, p, err)
+			Logger.Fatalf("读取笔记本 [%s] 下的文件 [%s] 失败：%s", box.URL, p, err)
 		}
 		tree := box.ParseIndexTree(p, markdown)
 		importTrees = append(importTrees, tree)
@@ -303,33 +303,33 @@ func (box *Box) Index() {
 	convertWikiLinks(importTrees) // 支持 [[link]] 语法的导入 https://github.com/88250/liandi/issues/131
 	for _, tree := range importTrees {
 		if err := WriteASTJSON(tree); nil != err {
-			Logger.Fatalf("生成盒子 [%s] 下的文件 [%s] 的元数据失败：%s", box.URL, tree.Path, err)
+			Logger.Fatalf("生成笔记本 [%s] 下的文件 [%s] 的元数据失败：%s", box.URL, tree.Path, err)
 		}
 	}
-	Logger.Debugf("导入盒子 [%s] 下新的 Markdown 文件 [%d] 完毕", box.URL, len(markdowns))
+	Logger.Debugf("导入笔记本 [%s] 下新的 Markdown 文件 [%d] 完毕", box.URL, len(markdowns))
 
-	Logger.Debugf("开始索引 [%s] 盒子", box.URL)
+	Logger.Debugf("开始索引 [%s] 笔记本", box.URL)
 	files := box.ListJSONs("/")
 	for _, file := range files {
 		p := file.(*gowebdav.File).Path()
 		astJSONStr, err := ReadASTJSON(box.URL, p)
 		if nil != err {
-			Logger.Fatalf("读取盒子 [%s] 下的文件 [%s] 的元数据失败：%s", box.URL, p, err)
+			Logger.Fatalf("读取笔记本 [%s] 下的文件 [%s] 的元数据失败：%s", box.URL, p, err)
 		}
 		tree, err := ParseJSON(astJSONStr)
 		if nil != err {
-			Logger.Fatalf("解析盒子 [%s] 下的文件 [%s] 的元数据失败：%s", box.URL, p, err)
+			Logger.Fatalf("解析笔记本 [%s] 下的文件 [%s] 的元数据失败：%s", box.URL, p, err)
 		}
 		tree.URL = box.URL
 		tree.Path = p[:len(p)-len(".md.json")]
 		tree.Name = path.Base(tree.Path)
 		box.IndexTree(tree)
 	}
-	Logger.Debugf("索引盒子 [%s] 完毕", box.URL)
+	Logger.Debugf("索引笔记本 [%s] 完毕", box.URL)
 }
 
 func (box *Box) Unindex() {
-	Logger.Debugf("开始删除索引 [%s] 盒子", box.URL)
+	Logger.Debugf("开始删除索引 [%s] 笔记本", box.URL)
 	var paths []string
 	for _, tree := range trees {
 		paths = append(paths, tree.Path)
@@ -417,14 +417,14 @@ func (box *Box) isSkipDir(filename string) bool {
 }
 
 var zhCN = map[int]string{
-	0:  "查询盒子失败",
+	0:  "查询笔记本失败",
 	1:  "文件名重复",
-	2:  "列出盒子 [%s] 下路径为 [%s] 的文件列表失败：%s",
-	3:  "读取盒子 [%s] 下的文件 [%s] 失败：%s",
-	4:  "查看盒子 [%s] 下 [%s] 的元信息失败：%s",
-	5:  "重命名盒子 [%s] 下的文件 [%s] 失败：%s",
-	6:  "在盒子 [%s] 下创建新文件夹 [%s] 失败：%s",
-	7:  "在盒子 [%s] 下删除 [%s] 失败：%s",
+	2:  "列出笔记本 [%s] 下路径为 [%s] 的文件列表失败：%s",
+	3:  "读取笔记本 [%s] 下的文件 [%s] 失败：%s",
+	4:  "查看笔记本 [%s] 下 [%s] 的元信息失败：%s",
+	5:  "重命名笔记本 [%s] 下的文件 [%s] 失败：%s",
+	6:  "在笔记本 [%s] 下创建新文件夹 [%s] 失败：%s",
+	7:  "在笔记本 [%s] 下删除 [%s] 失败：%s",
 	8:  "检查更新失败",
 	9:  "新版本可用 %s",
 	10: "已是最新版",
@@ -434,14 +434,14 @@ var zhCN = map[int]string{
 }
 
 var enUS = map[int]string{
-	0:  "Query box failed",
+	0:  "Query notebook failed",
 	1:  "Duplicated filename",
 	2:  "List files of box [%s] and path [%s] failed: %s",
-	3:  "Read box [%s] file [%s] failed: %s",
-	4:  "Get box [%s] file [%s] meta info failed: %s",
-	5:  "Rename box [%s] file [%s] failed: %s",
-	6:  "Create box [%s] folder [%s] failed: %s",
-	7:  "Remove box [%s] path [%s] failed: %s",
+	3:  "Read notebook [%s] file [%s] failed: %s",
+	4:  "Get notebook [%s] file [%s] meta info failed: %s",
+	5:  "Rename notebook [%s] file [%s] failed: %s",
+	6:  "Create notebook [%s] folder [%s] failed: %s",
+	7:  "Remove notebook [%s] path [%s] failed: %s",
 	8:  "Check update failed",
 	9:  "New version is available %s",
 	10: "Is the latest version",

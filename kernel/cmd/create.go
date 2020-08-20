@@ -39,6 +39,8 @@ func (cmd *create) Exec() {
 	files, _ := model.Ls(url, path.Dir(p))
 	ret.Data = map[string]interface{}{
 		"box":      box,
+		"url":      url,
+		"path":     p,
 		"files":    files,
 		"name":     name,
 		"id":       tree.Root.ID,
