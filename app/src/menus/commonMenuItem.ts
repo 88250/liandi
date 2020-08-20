@@ -91,16 +91,11 @@ export const deleteMenu = () => {
                 destroyDialog();
             });
             dialogElement.querySelector(".button").addEventListener("click", () => {
-                removeEditorTab(window.liandi.layout, itemData.url, itemData.path)
                 window.liandi.ws.send("remove", {
                     url: itemData.url,
-                    path: itemData.path
+                    path: itemData.path,
+                    pushMode: 0
                 });
-                if (itemData.target.nextElementSibling?.tagName === "UL") {
-                    itemData.target.nextElementSibling.remove();
-                }
-                itemData.target.remove();
-                destroyDialog();
             });
         }
     });

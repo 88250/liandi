@@ -6,10 +6,8 @@ import {openFile} from "../editor/util";
 import {Tab} from "../layout/Tab";
 import {Model} from "../layout/Model";
 import {processMessage} from "../util/processMessage";
-import {getCenterActiveWnd} from "../layout/util";
+import {getCenterActiveWnd, removeEditorTab} from "../layout/util";
 import {Wnd} from "../layout/Wnd";
-import {Constants} from "../constants";
-import {setSelectionFocus} from "../../vditore/src/ts/util/selection";
 
 export class Files extends Model {
     private element: HTMLElement
@@ -32,20 +30,52 @@ export class Files extends Model {
                     case "ls":
                         this.onLs(data.data);
                         break;
+                    case "unmount":
+                        // const umountItemData =  window.liandi.menus.itemData
+                        // itemData.target.parentElement.remove();
+                        // // liandi.graph.render(liandi);
+                        // if (!this.element.contains(removeTargetElement)) {
+                        //     removeTargetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(data.data.url)}'] li[data-path='${removeTargetElement.getAttribute('data-path')}']`)
+                        // }
+                        // removeEditorTab(window.liandi.layout, umountItemData.url, umountItemData.path)
+                        // if (removeTargetElement) {
+                        //     if (removeTargetElement.nextElementSibling?.tagName === "UL") {
+                        //         removeTargetElement.nextElementSibling.remove();
+                        //     }
+                        //     removeTargetElement.remove();
+                        // }
+                        destroyDialog();
+                        break;
+                    case "remove":
+                       const itemData =  window.liandi.menus.itemData
+                        let removeTargetElement = window.liandi.menus.itemData.target
+                        if (!this.element.contains(removeTargetElement)) {
+                            removeTargetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(data.data.url)}'] li[data-path='${removeTargetElement.getAttribute('data-path')}']`)
+                        }
+                        removeEditorTab(window.liandi.layout, itemData.url, itemData.path)
+                        if (removeTargetElement) {
+                            if (removeTargetElement.nextElementSibling?.tagName === "UL") {
+                                removeTargetElement.nextElementSibling.remove();
+                            }
+                            removeTargetElement.remove();
+                        }
+                        // TODO reload all graph & backlinks
+                        destroyDialog();
+                        break;
                     case "create":
                     case "mkdir":
                         let targetElement = window.liandi.menus.itemData.target
                         if (!this.element.contains(targetElement)) {
-                            targetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(data.data.dir.url)}'] li[data-path=${targetElement.getAttribute('data-path')}]`)
+                            targetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(data.data.box.url)}'] li[data-path='${targetElement.getAttribute('data-path')}']`)
                         }
                         if (targetElement) {
                             targetElement.firstElementChild.classList.remove("fn__hidden");
                             if (targetElement.firstElementChild.classList.contains("item__arrow--open")) {
                                 targetElement.firstElementChild.classList.remove("item__arrow--open");
-                                targetElement.nextElementSibling.remove();
+                                targetElement.nextElementSibling?.remove();
                             }
                             targetElement.setAttribute("data-files", JSON.stringify(data.data.files));
-                            this.getLeaf(targetElement, data.data.dir);
+                            this.getLeaf(targetElement, data.data.box);
                         }
                         destroyDialog();
                         break;

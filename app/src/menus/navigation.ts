@@ -10,17 +10,9 @@ export const initNavigationMenu = () => {
         label: i18n[window.liandi.config.lang].unMount,
         click: () => {
             const itemData = window.liandi.menus.itemData;
-            if (window.liandi.current.dir && window.liandi.current.dir.url === itemData.url) {
-                // window.liandi.editors.close(window.liandi);
-                window.liandi.current = {
-                    path: "",
-                };
-            }
             window.liandi.ws.send("unmount", {
                 url: itemData.url
             });
-            itemData.target.parentElement.remove();
-            // liandi.graph.render(liandi);
         }
     }));
     menu.append(showInFolder());

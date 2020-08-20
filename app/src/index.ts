@@ -16,6 +16,7 @@ import {onGetConfig} from "./websocket/onGetConfig";
 import {destroyDialog} from "./util/dialog";
 import {image} from "./config/image";
 import {markdown} from "./config/markdown";
+import {showMessage} from "./util/message";
 
 class App {
     constructor() {
@@ -65,9 +66,8 @@ class App {
                     case "search":
                         onSearch(data.data);
                         break;
-                    case "searchget":
-                        // liandi.editors.onGet(liandi, response.data);
-                        // liandi.backlinks.getBacklinks(liandi);
+                    case "checkupdate":
+                        showMessage(data.msg);
                         break;
                     case "setimage":
                         image.onSetImage(data.data);
