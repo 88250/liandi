@@ -14,6 +14,8 @@ import {onSearch} from "./search";
 import {onSetTheme} from "./websocket/onSetTheme";
 import {onGetConfig} from "./websocket/onGetConfig";
 import {destroyDialog} from "./util/dialog";
+import {image} from "./config/image";
+import {markdown} from "./config/markdown";
 
 class App {
     constructor() {
@@ -50,7 +52,7 @@ class App {
             ws: new Model({
                 id: genUUID(),
                 callback() {
-                    this.send("getconf", {}, this.reqId);
+                    this.send("getconf", {});
                 }
             }),
             menus: new Menus()
@@ -68,13 +70,13 @@ class App {
                         // liandi.backlinks.getBacklinks(liandi);
                         break;
                     case "setimage":
-                        // image.onSetImage(response.data);
+                        image.onSetImage(data.data);
                         break;
                     case "setlang":
                         window.location.reload();
                         break;
                     case "setmd":
-                        // markdown.onSetMD(response.data);
+                        markdown.onSetMD(data.data);
                         break;
                     case "settheme":
                         onSetTheme(data.data);

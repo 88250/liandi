@@ -8,6 +8,9 @@ import {markdown} from "../config/markdown";
 import {image} from "../config/image";
 import {help} from "../config/help";
 import {escapeHtml} from "../util/escape";
+import {openFile} from "../editor/util";
+import {getCenterActiveWnd} from "../layout/util";
+import {Wnd} from "../layout/Wnd";
 
 export const initSearch = (type = "search") => {
     const liandi = window.liandi;
@@ -37,12 +40,12 @@ export const initSearch = (type = "search") => {
         <li data-name="about" class="fn__pointer">${i18n[liandi.config.lang].about}</li>
         <li data-name="help" class="fn__pointer">${i18n[liandi.config.lang].help}</li>
       </ul>
-      <div class="tab__panel" data-name="markdown" slot="panel">${markdown.genHTML(liandi)}</div>
-      <div class="tab__panel" data-name="image">${image.genHTML(liandi)}</div>
-      <div class="tab__panel" data-name="theme">${theme.genHTML(liandi)}</div>
-      <div class="tab__panel" data-name="language">${lauguage.genHTML(liandi)}</div>
-      <div class="tab__panel" data-name="about">${about.genHTML(liandi)}</div>
-      <div class="tab__panel" data-name="help">${help.genHTML(liandi)}</div>
+      <div class="tab__panel" data-name="markdown" slot="panel">${markdown.genHTML()}</div>
+      <div class="tab__panel" data-name="image">${image.genHTML()}</div>
+      <div class="tab__panel" data-name="theme">${theme.genHTML()}</div>
+      <div class="tab__panel" data-name="language">${lauguage.genHTML()}</div>
+      <div class="tab__panel" data-name="about">${about.genHTML()}</div>
+      <div class="tab__panel" data-name="help">${help.genHTML()}</div>
     </tab-panel>
   </div>
 </tab-panel>`,
@@ -104,7 +107,7 @@ export const initSearch = (type = "search") => {
             }
             event.preventDefault();
         } else if (event.code === "Enter") {
-            quickOpenFile(liandi, dialogElement);
+            quickOpenFile(dialogElement);
             event.preventDefault();
         }
     });
@@ -116,7 +119,7 @@ export const initSearch = (type = "search") => {
             if (target.classList.contains("list__item")) {
                 dialogElement.querySelector(".list__item--current").classList.remove("list__item--current");
                 target.classList.add("list__item--current");
-                quickOpenFile(liandi, dialogElement);
+                quickOpenFile(dialogElement);
                 event.preventDefault();
                 event.stopPropagation();
                 break;
@@ -125,27 +128,18 @@ export const initSearch = (type = "search") => {
         }
     }, false);
 
-    initConfigSearch(liandi, dialogElement.querySelector('div[data-name="config"]'));
-    about.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="about"]'));
-    lauguage.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'));
-    theme.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="theme"]'));
-    markdown.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="markdown"]'));
-    image.bindEvent(liandi, dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="image"]'));
+    initConfigSearch(dialogElement.querySelector('div[data-name="config"]'));
+    about.bindEvent(dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="about"]'));
+    lauguage.bindEvent(dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="language"]'));
+    theme.bindEvent(dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="theme"]'));
+    markdown.bindEvent(dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="markdown"]'));
+    image.bindEvent(dialogElement.querySelector('div[data-name="config"] .tab__panel[data-name="image"]'));
 };
 
-export const quickOpenFile = (liandi: ILiandi, dialogElement: Element) => {
-    // liandi.editors.save(liandi);
-
+export const quickOpenFile = (dialogElement: Element) => {
     const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
-    liandi.current.dir = JSON.parse(decodeURIComponent(currentList.getAttribute("data-dir")));
-    liandi.current.path = decodeURIComponent(currentList.getAttribute("data-path"));
-
-    liandi.ws.send("searchget", {
-        url: liandi.current.dir.url,
-        path: liandi.current.path,
-        index: currentList.getAttribute("data-index"),
-        key: (dialogElement.querySelector(".input") as HTMLInputElement).value
-    });
+    openFile(getCenterActiveWnd() as Wnd, JSON.parse(decodeURIComponent(currentList.getAttribute("data-url"))),
+        decodeURIComponent(currentList.getAttribute("data-path")));
     destroyDialog();
 };
 
@@ -160,7 +154,7 @@ export const onSearch = (data: {
 }[]) => {
     let resultHTML = "";
     data.forEach((item, index) => {
-        resultHTML += `<div class="list__item fn__flex${index === 0 ? " list__item--current" : ""}" data-dir="${encodeURIComponent(JSON.stringify(item.dir))}" data-path="${encodeURIComponent(item.path)}" data-index="${item.index}">
+        resultHTML += `<div class="list__item fn__flex${index === 0 ? " list__item--current" : ""}" data-url="${encodeURIComponent(JSON.stringify(item.dir.url))}" data-path="${encodeURIComponent(item.path)}" data-index="${item.index}">
 <svg color="fn__flex-shrink0"><use xlink:href="#${item.type === "title" ? "iconMD" : "iconParagraph"}"></use></svg><span class="fn__flex-1 fn__ellipsis">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span>
 <span class="fn__space"></span>
 <span class="ft__smaller ft__secondary">${escapeHtml(item.path)} ${item.ln}:${item.col}</span>

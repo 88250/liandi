@@ -12,6 +12,7 @@ import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
 import {openFile} from "./util";
 import {scrollCenter} from "../../vditore/src/ts/util/editorCommonEvent";
+import {processRemoveDataRender1} from "../../vditore/src/ts/ir/process";
 
 export class Editor extends Model {
     private element: HTMLElement;
@@ -34,7 +35,7 @@ export class Editor extends Model {
                 this.send("get", {
                     url: options.url,
                     path: options.path
-                });
+                }, true);
 
             }
         });
@@ -44,13 +45,26 @@ export class Editor extends Model {
             if (data) {
                 switch (data.cmd) {
                     case "get":
-                        this.initVditor(data.data.content);
+                        if (data.callback === Constants.CB_PUT_RELOAD) {
+                            this.reloadHTML(data.data.content)
+                            this.saved = true;
+                            this.parent.headElement.classList.remove("item--unsave");
+                        } else {
+                            this.initVditor(data.data.content);
+                        }
                         break;
                     case "searchblock":
                         this.showSearchBlock(data.data);
                         break;
                     case "getblock":
                         this.onGetBlock(data.data);
+                        break;
+                    case "reload":
+                        if (data.data.url === this.url && data.data.path === this.path) {
+                            this.send("get", {
+                                callback: Constants.CB_PUT_RELOAD
+                            })
+                        }
                         break;
                     case "create":
                         if (data.data.callback === Constants.CB_CREATE_INSERT) {
@@ -98,6 +112,10 @@ export class Editor extends Model {
     }
 
     public initVditor(html?: string) {
+        if (typeof html === "undefined") {
+            html =  processRemoveDataRender1(this.vditore.vditor.ir.element, "innerHTML")
+            this.vditore.destroy()
+        }
         this.vditore = new Vditor(this.element, {
             _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
             debugger: process.env.NODE_ENV === "development",
@@ -220,6 +238,7 @@ export class Editor extends Model {
                     url: this.url,
                     path: this.path,
                     content,
+                    pushState: 2
                 });
                 this.saved = true;
                 this.parent.headElement.classList.remove("item--unsave");
@@ -233,32 +252,12 @@ export class Editor extends Model {
         this.vditore.vditor.model = this
     }
 
-    public resize() {
-        // if (this.currentEditor?.vditor) {
-        //     this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + "px";
-        // }
+    public reloadVditor() {
+        this.initVditor()
     }
 
-    public close() {
-        // if (!this.currentEditor) {
-        //     return;
-        // }
-        // this.save(liandi);
-        // if (this.currentEditor.vditor) {
-        //     this.currentEditor.vditor.destroy();
-        // }
-        // this.currentEditor.inputElement.parentElement.classList.add("fn__none");
-        // document.querySelector<HTMLElement>(".editor__empty").style.display = "flex";
-    }
-
-    public focus() {
-        // this.currentEditor?.vditor?.focus();
-    }
-
-    public reloadEditor() {
-        // if (this.currentEditor) {
-        //     this.initVditor();
-        // }
+    public reloadHTML(html: string) {
+        this.vditore.setHTML(html)
     }
 
     public showSearchBlock(data: { k: string, blocks: IBlock[], url: string, path: string }) {

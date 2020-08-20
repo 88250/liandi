@@ -5,6 +5,7 @@ import {escapeHtml} from "../util/escape";
 import {Model} from "../layout/Model";
 import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
+import {Constants} from "../constants";
 
 export class Graph extends Model {
     private inputElement: HTMLInputElement;
@@ -26,11 +27,11 @@ export class Graph extends Model {
                         k: this.inputElement.value,
                         url: options.url,
                         path: options.path
-                    });
+                    }, true);
                 } else {
                     this.send("graph", {
                         k: this.inputElement.value
-                    });
+                    }, true);
                 }
             }
         });
@@ -43,6 +44,21 @@ export class Graph extends Model {
                     case "graph":
                     case "treegraph":
                         this.onGraph(data.data);
+                        break;
+                    case "reload":
+                        if (this.path) {
+                            if (data.data.url === this.url && data.data.path === this.path) {
+                                this.send("treegraph", {
+                                    k: this.inputElement.value,
+                                    url: options.url,
+                                    path: options.path
+                                })
+                            }
+                        } else {
+                            this.send("graph", {
+                                k: this.inputElement.value,
+                            })
+                        }
                         break;
                 }
             }

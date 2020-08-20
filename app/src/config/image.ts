@@ -1,22 +1,22 @@
 import {i18n} from "../i18n";
 
 export const image = {
-    genHTML: (liandi: ILiandi) => {
+    genHTML: () => {
         return `<div class="form__item"><label>
-    <input id="autoFetch" type="checkbox"${liandi.config.image.autoFetch ? " checked" : ""}/>
-    <span class="fn__space"></span>${i18n[liandi.config.lang].autoFetch}
+    <input id="autoFetch" type="checkbox"${window.liandi.config.image.autoFetch ? " checked" : ""}/>
+    <span class="fn__space"></span>${i18n[window.liandi.config.lang].autoFetch}
 </label></div>`;
     },
-    bindEvent: (liandi: ILiandi, element: HTMLElement) => {
+    bindEvent: (element: HTMLElement) => {
         element.querySelectorAll("input").forEach((item) => {
             item.addEventListener("change", () => {
-                liandi.ws.send("setimage", {
+                window.liandi.ws.send("setimage", {
                     autoFetch: (element.querySelector("#autoFetch") as HTMLInputElement).checked,
                 });
             });
         });
     },
-    onSetImage: (liandi: ILiandi, imageConfig: {autoFetch: boolean}) => {
-        liandi.config.image = imageConfig;
+    onSetImage: (imageConfig: {autoFetch: boolean}) => {
+        window.liandi.config.image = imageConfig;
     }
 };
