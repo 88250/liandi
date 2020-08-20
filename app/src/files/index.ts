@@ -271,14 +271,10 @@ export class Files extends Model {
         }
     }
 
-    public onMount(data: { dir: IBox, existed?: boolean, callback?: string }, allModels: IModels) {
+    public onMount(data: { dir: IBox, existed?: boolean }, allModels: IModels) {
         destroyDialog();
         if (data.existed) {
             return;
-        }
-
-        if (Constants.CB_MOUNT_HELP === data.callback && allModels.files.length === 0) {
-            document.getElementById("barNavigation").dispatchEvent(new CustomEvent("click"));
         }
         const html = `<ul data-url="${encodeURIComponent(data.dir.url)}" data-dir="${encodeURIComponent(JSON.stringify(data.dir))}">
 <li class="fn__flex fn__a" data-type="navigation-root" data-path="%2F">
@@ -290,7 +286,6 @@ export class Files extends Model {
 </li></ul>`;
         this.element.insertAdjacentHTML("beforeend", html);
 
-        // 首次挂载多个目录并发时，需要永远都执行回调
         this.send("ls", {
             url: data.dir.url,
             path: "/",

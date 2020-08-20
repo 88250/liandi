@@ -4,6 +4,7 @@ import {Constants} from "../constants";
 import {destroyDialog, dialog} from "./dialog";
 import {i18n} from "../i18n";
 import {showMessage} from "./message";
+import {getAllModels} from "../layout/util";
 
 export const mountFile = async () => {
     const filePath = await remote.dialog.showOpenDialog({
@@ -12,6 +13,9 @@ export const mountFile = async () => {
     });
     if (filePath.filePaths.length === 0) {
         return;
+    }
+    if (getAllModels().files.length === 0) {
+        document.getElementById("barNavigation").dispatchEvent(new CustomEvent("click"));
     }
     window.liandi.ws.send("mount", {
         url: `${Constants.WEBDAV_ADDRESS}/`,
@@ -47,6 +51,9 @@ export const mountWebDAV = () => {
         if (!inputs[0].value.startsWith("http")) {
             showMessage(i18n[liandi.config.lang].urlError);
             return;
+        }
+        if (getAllModels().files.length === 0) {
+            document.getElementById("barNavigation").dispatchEvent(new CustomEvent("click"));
         }
         liandi.ws.send("mountremote", {
             url: inputs[0].value,

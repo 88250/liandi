@@ -2,7 +2,7 @@ import {Wnd} from "../layout/wnd";
 import {i18n} from "../i18n";
 import {initSearch} from "../search";
 import {remote} from "electron";
-import {addCenterWnd} from "../layout/util";
+import {addCenterWnd, getAllModels} from "../layout/util";
 import {Constants} from "../constants";
 import * as path from "path";
 import {Graph} from "../graph";
@@ -108,10 +108,12 @@ const initBar = () => {
         // window.dispatchEvent(new CustomEvent("resize"));
     });
     document.getElementById("barHelp").addEventListener("click", function () {
+        if (getAllModels().files.length === 0) {
+            document.getElementById("barNavigation").dispatchEvent(new CustomEvent("click"));
+        }
         window.liandi.ws.send("mount", {
             url: `${Constants.WEBDAV_ADDRESS}/`,
             path: path.posix.join(Constants.APP_DIR, "public/zh_CN/链滴笔记用户指南"),
-            callback: Constants.CB_MOUNT_HELP,
             pushMode: 0
         });
     });
