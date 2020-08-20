@@ -1,4 +1,3 @@
-import {rename} from "../util/rename";
 import Vditor from "../../vditore/src";
 import {Constants} from "../constants";
 import * as path from "path";
@@ -41,12 +40,12 @@ export class Editor extends Model {
         });
 
         this.ws.onmessage = (event) => {
-            const data = processMessage(event.data, this.reqId);
+            const data = processMessage(event.data);
             if (data) {
                 switch (data.cmd) {
                     case "get":
                         if (data.callback === Constants.CB_PUT_RELOAD) {
-                            this.reloadHTML(data.data.content)
+                            this.reloadHTML(data.data.content);
                             this.saved = true;
                             this.parent.headElement.classList.remove("item--unsave");
                         } else {
@@ -63,7 +62,7 @@ export class Editor extends Model {
                         if (data.data.url === this.url && data.data.path === this.path) {
                             this.send("get", {
                                 callback: Constants.CB_PUT_RELOAD
-                            })
+                            });
                         }
                         break;
                     case "create":
@@ -80,10 +79,10 @@ export class Editor extends Model {
         this.url = options.url;
         this.path = options.path;
 
-        this.blockTipElement = document.createElement('div')
-        this.blockTipElement.classList.add("editor__blockhint")
+        this.blockTipElement = document.createElement("div");
+        this.blockTipElement.classList.add("editor__blockhint");
 
-        let timeoutId: number
+        let timeoutId: number;
         this.blockTipElement.addEventListener("mouseenter", () => {
             clearTimeout(timeoutId);
         });
@@ -113,11 +112,11 @@ export class Editor extends Model {
 
     public initVditor(html?: string) {
         if (typeof html === "undefined") {
-            html =  processRemoveDataRender1(this.vditore.vditor.ir.element, "innerHTML")
-            this.vditore.destroy()
+            html =  processRemoveDataRender1(this.vditore.vditor.ir.element, "innerHTML");
+            this.vditore.destroy();
         }
         this.vditore = new Vditor(this.element, {
-            _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
+            // _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
             debugger: process.env.NODE_ENV === "development",
             icon: "material",
             lang: window.liandi.config.lang,
@@ -228,7 +227,7 @@ export class Editor extends Model {
                 this.vditore.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + "/");
                 this.vditore.setHTML(html);
                 this.vditore.focus();
-                this.element.insertAdjacentElement("beforeend", this.blockTipElement)
+                this.element.insertAdjacentElement("beforeend", this.blockTipElement);
             },
             save: (content: string) => {
                 if (this.saved) {
@@ -249,15 +248,15 @@ export class Editor extends Model {
                 // TODO auto save
             }
         });
-        this.vditore.vditor.model = this
+        this.vditore.vditor.model = this;
     }
 
     public reloadVditor() {
-        this.initVditor()
+        this.initVditor();
     }
 
     public reloadHTML(html: string) {
-        this.vditore.setHTML(html)
+        this.vditore.setHTML(html);
     }
 
     public showSearchBlock(data: { k: string, blocks: IBlock[], url: string, path: string }) {
@@ -316,7 +315,7 @@ export class Editor extends Model {
             return;
         }
         if (data.callback === Constants.CB_GETBLOCK_OPEN) {
-            openFile(this.parent.parent, data.block.url, data.block.path)
+            openFile(this.parent.parent, data.block.url, data.block.path);
             return;
         }
         if (data.block.content.trim() === "") {

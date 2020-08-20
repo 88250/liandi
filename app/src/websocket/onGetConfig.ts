@@ -110,9 +110,10 @@ const initBar = () => {
     document.getElementById("barHelp").addEventListener("click", function () {
         window.liandi.ws.send("mount", {
             url: `${Constants.WEBDAV_ADDRESS}/`,
-            path: path.posix.join(Constants.APP_DIR, "public/zh_CN/链滴笔记用户指南")
+            path: path.posix.join(Constants.APP_DIR, "public/zh_CN/链滴笔记用户指南"),
+            callback: Constants.CB_MOUNT_HELP,
+            pushMode: 0
         });
-        // TODO open file
     });
     document.getElementById("barBug").addEventListener("click", () => {
         remote.getCurrentWindow().webContents.openDevTools({mode: "bottom"});

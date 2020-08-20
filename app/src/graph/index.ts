@@ -5,10 +5,9 @@ import {escapeHtml} from "../util/escape";
 import {Model} from "../layout/Model";
 import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
-import {Constants} from "../constants";
 
 export class Graph extends Model {
-    private inputElement: HTMLInputElement;
+    public inputElement: HTMLInputElement;
     private graphElement: HTMLDivElement;
     private chart: echarts.ECharts
     public url: string
@@ -27,18 +26,18 @@ export class Graph extends Model {
                         k: this.inputElement.value,
                         url: options.url,
                         path: options.path
-                    }, true);
+                    });
                 } else {
                     this.send("graph", {
                         k: this.inputElement.value
-                    }, true);
+                    });
                 }
             }
         });
         this.url = options.url;
         this.path = options.path;
         this.ws.onmessage = (event) => {
-            const data = processMessage(event.data, this.reqId);
+            const data = processMessage(event.data);
             if (data) {
                 switch (data.cmd) {
                     case "graph":
@@ -52,12 +51,12 @@ export class Graph extends Model {
                                     k: this.inputElement.value,
                                     url: options.url,
                                     path: options.path
-                                })
+                                });
                             }
                         } else {
                             this.send("graph", {
                                 k: this.inputElement.value,
-                            })
+                            });
                         }
                         break;
                 }

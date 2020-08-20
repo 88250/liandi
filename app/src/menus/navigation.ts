@@ -11,7 +11,8 @@ export const initNavigationMenu = () => {
         click: () => {
             const itemData = window.liandi.menus.itemData;
             window.liandi.ws.send("unmount", {
-                url: itemData.url
+                url: itemData.url,
+                pushMode: 0
             });
         }
     }));

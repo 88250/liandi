@@ -29,7 +29,7 @@ export class Tab {
 
     public addModel(model: Model) {
         if (model instanceof Editor) {
-            this.headElement.setAttribute("data-type", "tab-header-editor")
+            this.headElement.setAttribute("data-type", "tab-header-editor");
         }
         this.model = model;
         model.parent = this;

@@ -124,3 +124,10 @@ declare interface IMenuData {
     name?: string
     model?:import("../layout/Model").Model
 }
+
+declare interface IModels {
+    editor: import("../editor").Editor [],
+    backlinks: import("../backlinks").Backlinks [],
+    graph: import("../graph").Graph[],
+    files: import("../files").Files[]
+}
