@@ -73,7 +73,7 @@
       &__svg {
         height: 12px;
         width: 12px;
-        margin: 3px 3px 3px 0;
+        margin: 3px 5px 3px 0;
         float: left;
         color: var(--toolbar-icon-color);
 
@@ -84,7 +84,7 @@
           width: 8px;
           padding: 2px;
           border-radius: 8px;
-          margin: 3px 0 3px 3px;
+          margin: 3px 0 3px 5px;
 
           &:hover {
             color: var(--toolbar-icon-color);

@@ -79,12 +79,12 @@ export class Graph extends Model {
     }
 
     private searchGraph() {
-        if (this.path) {
+        if (!this.path) {
             this.send("graph", {
                 k: this.inputElement.value
             });
         } else {
-            this.send("graph", {
+            this.send("treegraph", {
                 k: this.inputElement.value,
                 url: this.url,
                 path: this.path

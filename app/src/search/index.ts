@@ -144,7 +144,7 @@ export const quickOpenFile = (dialogElement: Element) => {
 };
 
 export const onSearch = (data: {
-    dir: IBox
+    box: IBox
     path: string
     content: string
     ln: number
@@ -154,7 +154,7 @@ export const onSearch = (data: {
 }[]) => {
     let resultHTML = "";
     data.forEach((item, index) => {
-        resultHTML += `<div class="list__item fn__flex${index === 0 ? " list__item--current" : ""}" data-url="${encodeURIComponent(JSON.stringify(item.dir.url))}" data-path="${encodeURIComponent(item.path)}" data-index="${item.index}">
+        resultHTML += `<div class="list__item fn__flex${index === 0 ? " list__item--current" : ""}" data-url="${encodeURIComponent(JSON.stringify(item.box.url))}" data-path="${encodeURIComponent(item.path)}" data-index="${item.index}">
 <svg color="fn__flex-shrink0"><use xlink:href="#${item.type === "title" ? "iconMD" : "iconParagraph"}"></use></svg><span class="fn__flex-1 fn__ellipsis">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span>
 <span class="fn__space"></span>
 <span class="ft__smaller ft__secondary">${escapeHtml(item.path)} ${item.ln}:${item.col}</span>
