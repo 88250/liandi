@@ -22,6 +22,7 @@ func (cmd *checkupdate) Exec() {
 	cmd.PushPayload.Data = map[string]interface{}{
 		"closeTimeout": timeout,
 	}
+	cmd.Push()
 }
 
 func (cmd *checkupdate) Name() string {

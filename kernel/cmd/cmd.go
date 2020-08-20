@@ -103,6 +103,8 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, sess
 		reloadPushMode = model.PushMode(reloadPushModeParam.(float64))
 	}
 	baseCmd.PushPayload = model.NewCmdResult(ret.Name(), cmdId, pushMode, reloadPushMode)
+	sid, _ := baseCmd.session.Get("id")
+	baseCmd.PushPayload.SessionId = sid.(string)
 	return
 }
 
@@ -115,6 +117,7 @@ func Exec(cmd Cmd) {
 
 func pushReloadEvent(payload *model.Result, data map[string]interface{}) {
 	reload := model.NewCmdResult("reload", 0, payload.PushMode, payload.ReloadPushMode)
+	reload.SessionId = payload.SessionId
 	data["eventSource"] = payload.Cmd
 	data["eventSourceReqId"] = payload.ReqId
 	reload.Data = data
