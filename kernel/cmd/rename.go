@@ -21,7 +21,7 @@ type rename struct {
 }
 
 func (cmd *rename) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	oldPath := cmd.param["oldPath"].(string)
@@ -30,7 +30,7 @@ func (cmd *rename) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		cmd.Push(ret.Bytes())
+		cmd.Push()
 		return
 	}
 
@@ -40,7 +40,7 @@ func (cmd *rename) Exec() {
 		"newPath": newPath,
 		"newName": path.Base(newPath),
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *rename) Name() string {

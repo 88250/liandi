@@ -17,12 +17,11 @@ type unmount struct {
 }
 
 func (cmd *unmount) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	model.Unmount(url)
 	model.RestartServeWebDAV()
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *unmount) Name() string {

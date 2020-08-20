@@ -45,6 +45,12 @@ type BacklinkRefBlock struct {
 	Blocks []*Block `json:"blocks"`
 }
 
+//type BacklinkDefBlock struct {
+//	URL       string              `json:"url"`
+//	Path      string              `json:"path"`
+//	RefBlocks []*BacklinkRefBlock `json:"refBlocks"`
+//}
+
 func TreeBacklinks(url, path string) (ret []*BacklinkRefBlock, err error) {
 	box := Conf.Box(url)
 	if nil == box {

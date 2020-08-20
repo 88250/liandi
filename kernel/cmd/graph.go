@@ -17,14 +17,14 @@ type graph struct {
 }
 
 func (cmd *graph) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	keyword := cmd.param["k"].(string)
 	nodes, links := model.Graph(keyword)
 	ret.Data = map[string]interface{}{
 		"nodes": nodes,
 		"links": links,
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *graph) Name() string {

@@ -19,9 +19,9 @@ type getconf struct {
 }
 
 func (cmd *getconf) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	ret.Data = model.Conf
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *getconf) Name() string {

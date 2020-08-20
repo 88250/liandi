@@ -20,7 +20,7 @@ type mkdir struct {
 }
 
 func (cmd *mkdir) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
@@ -28,7 +28,7 @@ func (cmd *mkdir) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		cmd.Push(ret.Bytes())
+		cmd.Push()
 		return
 	}
 
@@ -39,7 +39,7 @@ func (cmd *mkdir) Exec() {
 		"files": files,
 		"name":  path.Base(p),
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *mkdir) Name() string {

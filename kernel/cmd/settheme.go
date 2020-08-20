@@ -19,12 +19,12 @@ type settheme struct {
 }
 
 func (cmd *settheme) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	theme := cmd.param["theme"].(string)
 	model.Conf.Theme = theme
 	model.Conf.Save()
 	ret.Data = theme
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *settheme) Name() string {

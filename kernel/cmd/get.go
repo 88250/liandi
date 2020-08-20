@@ -21,7 +21,7 @@ type get struct {
 }
 
 func (cmd *get) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
@@ -37,7 +37,7 @@ func (cmd *get) Exec() {
 			"path":    p,
 		}
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *get) Name() string {

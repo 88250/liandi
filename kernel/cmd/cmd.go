@@ -22,17 +22,18 @@ type Cmd interface {
 }
 
 type BaseCmd struct {
-	id      float64
-	param   map[string]interface{}
-	session *melody.Session
+	id          float64
+	param       map[string]interface{}
+	session     *melody.Session
+	PushPayload *model.Result
 }
 
 func (cmd *BaseCmd) Id() float64 {
 	return cmd.id
 }
 
-func (cmd *BaseCmd) Push(data []byte) {
-	cmd.session.Write(data)
+func (cmd *BaseCmd) Push() {
+	cmd.session.Write(cmd.PushPayload.Bytes())
 }
 
 func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, session *melody.Session) (ret Cmd) {
@@ -89,6 +90,7 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, sess
 	case "treegraph":
 		ret = &treegraph{baseCmd}
 	}
+	baseCmd.PushPayload = model.NewCmdResult(ret.Name(), cmdId)
 	return
 }
 

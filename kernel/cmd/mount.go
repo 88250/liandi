@@ -17,7 +17,7 @@ type mount struct {
 }
 
 func (cmd *mount) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	p := cmd.param["path"].(string)
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
@@ -27,7 +27,7 @@ func (cmd *mount) Exec() {
 		"dir":     model.Conf.Box(url),
 		"existed": existed,
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *mount) Name() string {

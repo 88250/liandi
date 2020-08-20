@@ -21,7 +21,7 @@ type create struct {
 }
 
 func (cmd *create) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
@@ -29,7 +29,7 @@ func (cmd *create) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		cmd.Push(ret.Bytes())
+		cmd.Push()
 		return
 	}
 
@@ -44,7 +44,7 @@ func (cmd *create) Exec() {
 		"id":       tree.Root.ID,
 		"callback": cmd.param["callback"],
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *create) Name() string {

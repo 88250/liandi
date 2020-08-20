@@ -21,7 +21,7 @@ type searchget struct {
 }
 
 func (cmd *searchget) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
@@ -39,7 +39,7 @@ func (cmd *searchget) Exec() {
 			"key":     cmd.param["key"],
 		}
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *searchget) Name() string {
