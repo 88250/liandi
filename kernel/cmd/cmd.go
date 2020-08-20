@@ -95,12 +95,12 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, sess
 	}
 
 	pushMode := model.PushModeSingleSelf
-	if pushMode := param["pushMode"]; nil != pushMode {
-		pushMode = model.PushMode(pushMode.(float64))
+	if pushModeParam := param["pushMode"]; nil != pushModeParam {
+		pushMode = model.PushMode(pushModeParam.(float64))
 	}
 	reloadPushMode := model.PushModeSingleSelf
-	if reloadPushMode := param["reloadPushMode"]; nil != reloadPushMode {
-		reloadPushMode = model.PushMode(reloadPushMode.(float64))
+	if reloadPushModeParam := param["reloadPushMode"]; nil != reloadPushModeParam {
+		reloadPushMode = model.PushMode(reloadPushModeParam.(float64))
 	}
 	baseCmd.PushPayload = model.NewCmdResult(ret.Name(), cmdId, pushMode, reloadPushMode)
 	return
