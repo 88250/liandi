@@ -8,6 +8,8 @@ import {Model} from "../layout/Model";
 import {processMessage} from "../util/processMessage";
 import {getCenterActiveWnd} from "../layout/util";
 import {Wnd} from "../layout/Wnd";
+import {Constants} from "../constants";
+import {setSelectionFocus} from "../../vditore/src/ts/util/selection";
 
 export class Files extends Model {
     private element: HTMLElement
@@ -29,6 +31,22 @@ export class Files extends Model {
                 switch (data.cmd) {
                     case "ls":
                         this.onLs(data.data);
+                        break;
+                    case "create":
+                    case "mkdir":
+                        const targetElement= window.liandi.menus.itemData.target
+                        targetElement.firstElementChild.classList.remove("fn__hidden");
+                        if (targetElement.firstElementChild.classList.contains("item__arrow--open")) {
+                            targetElement.firstElementChild.classList.remove("item__arrow--open");
+                            targetElement.nextElementSibling.remove();
+                        }
+                        targetElement.setAttribute("data-files", JSON.stringify(data.data.files));
+                        this.getLeaf(targetElement, data.data.dir);
+                        destroyDialog();
+                        if (data.data.callback === Constants.CB_CREATE_INSERT) {
+                            // setSelectionFocus(window.liandi.editors.currentEditor.range);
+                            // window.liandi.editors.currentEditor.vditor.insertValue(`((${data.data.id} "${data.data.name}"))`);
+                        }
                         break;
                 }
             }

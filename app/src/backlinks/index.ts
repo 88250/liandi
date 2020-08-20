@@ -19,7 +19,7 @@ export class Backlinks extends Model {
             id: options.tab.id,
             callback() {
                 if (path) {
-                    this.send("backlinks", {
+                    this.send("treebacklinks", {
                         url: options.url,
                         path: options.path
                     });
@@ -35,7 +35,7 @@ export class Backlinks extends Model {
             const data = processMessage(event.data, this.reqId);
             if (data) {
                 switch (data.cmd) {
-                    case "backlinks":
+                    case "treebacklinks":
                         this.onBacklinks(data.data);
                         break;
                 }

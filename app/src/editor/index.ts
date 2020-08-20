@@ -21,6 +21,7 @@ export class Editor extends Model {
     private vditore: Vditor
     public url: string
     public path: string
+    public range: Range
 
     constructor(options: {
         tab: Tab,
