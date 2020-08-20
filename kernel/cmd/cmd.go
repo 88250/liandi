@@ -110,8 +110,9 @@ func Exec(cmd Cmd) {
 }
 
 func broadcastReloadEvent(payload *model.Result, data map[string]interface{}) {
-	reload := model.NewCmdResult("reload", payload.ReqId, payload.PushMode)
+	reload := model.NewCmdResult("reload", 0, payload.PushMode)
 	data["eventSource"] = payload.Cmd
+	data["eventSourceReqId"] = payload.ReqId
 	reload.Data = data
 	model.BroadcastEvent(reload)
 }
