@@ -26,7 +26,7 @@ export const newFileMenu = () => {
     return new remote.MenuItem({
         label: i18n[window.liandi.config.lang].newFile,
         click: () => {
-            newFile(window.liandi);
+            newFile();
         }
     });
 };
@@ -53,7 +53,7 @@ export const newFolderMenu = () => {
             });
             dialogElement.querySelector(".button").addEventListener("click", () => {
                 const name = inputElement.value;
-                if (!validateName(window.liandi, name)) {
+                if (!validateName(name)) {
                     return false;
                 }
 

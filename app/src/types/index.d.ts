@@ -118,8 +118,9 @@ declare interface IEchartsFormatter {
 }
 
 declare interface IMenuData {
-    target: HTMLElement
+    target?: HTMLElement
     path?: string
     url?: string
     name?: string
+    model?:import("../layout/Model").Model
 }

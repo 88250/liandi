@@ -4,7 +4,7 @@ import {Constants} from "../constants";
 import * as path from "path";
 import * as process from "process";
 import {hasClosestByAttribute, hasTopClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
-import {getEditorRange} from "../../vditore/src/ts/util/selection";
+import {getEditorRange, setSelectionFocus} from "../../vditore/src/ts/util/selection";
 import {escapeHtml} from "../util/escape";
 import {i18n} from "../i18n";
 import {Model} from "../layout/Model";
@@ -52,6 +52,12 @@ export class Editor extends Model {
                     case "getblock":
                         this.onGetBlock(data.data);
                         break;
+                    case "create":
+                        if (data.data.callback === Constants.CB_CREATE_INSERT) {
+                            setSelectionFocus(this.range);
+                            this.vditore.insertValue(`((${data.data.id} "${data.data.name}"))`);
+                        }
+                        break;
                 }
             }
         };
@@ -63,7 +69,7 @@ export class Editor extends Model {
         this.blockTipElement = document.createElement('div')
         this.blockTipElement.classList.add("editor__blockhint")
 
-        let timeoutId:number
+        let timeoutId: number
         this.blockTipElement.addEventListener("mouseenter", () => {
             clearTimeout(timeoutId);
         });

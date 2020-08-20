@@ -3,24 +3,16 @@ import {i18n} from "../i18n";
 import {validateName} from "./rename";
 import * as path from "path";
 import {Constants} from "../constants";
+import {Model} from "../layout/Model";
 
-export const newFile = (liandi: ILiandi, callback = "") => {
-    if (callback === Constants.CB_CREATE_INSERT) {
-        // const itemDataPath = path.posix.dirname(liandi.current.path);
-        // liandi.menus.itemData = {
-        //     target: liandi.navigation.element.querySelector(`ul[data-url="${encodeURIComponent(liandi.current.dir.url)}"] li[data-path="${encodeURIComponent(itemDataPath + (itemDataPath.endsWith("/") ? "" : "/"))}"]`),
-        //     url: liandi.current.dir.url,
-        //     path: itemDataPath,
-        // };
-    }
-    const itemData = liandi.menus.itemData;
+export const newFile = (callback = "", model?:Model) => {
     dialog({
-        title: i18n[liandi.config.lang].newFile,
+        title: i18n[window.liandi.config.lang].newFile,
         content: `<input class="input" value="">
 <div class="fn__hr"></div>
 <div class="fn__flex"><div class="fn__flex-1"></div>
-<button class="button">${i18n[liandi.config.lang].confirm}</button><div class="fn__space"></div>
-<button class="button button--cancel">${i18n[liandi.config.lang].cancel}</button></div>`,
+<button class="button">${i18n[window.liandi.config.lang].confirm}</button><div class="fn__space"></div>
+<button class="button button--cancel">${i18n[window.liandi.config.lang].cancel}</button></div>`,
         width: 400
     });
 
@@ -31,15 +23,24 @@ export const newFile = (liandi: ILiandi, callback = "") => {
     });
     dialogElement.querySelector(".button").addEventListener("click", () => {
         const name = inputElement.value;
-        if (!validateName(liandi, name)) {
+        if (!validateName(name)) {
             return false;
         }
+        const itemData = window.liandi.menus.itemData;
         const currentNewPath = path.posix.join(itemData.path, name);
-        liandi.ws.send("create", {
-            url: itemData.url,
-            path: currentNewPath,
-            callback
-        });
+        if (callback === Constants.CB_CREATE_INSERT) {
+            // model.send("create", {
+            //     url: itemData.url,
+            //     path: currentNewPath,
+            //     callback
+            // });
+        } else {
+            window.liandi.ws.send("create", {
+                url: itemData.url,
+                path: currentNewPath,
+                callback
+            });
+        }
     });
     bindDialogInput(inputElement, () => {
         (dialogElement.querySelector(".button") as HTMLButtonElement).click();

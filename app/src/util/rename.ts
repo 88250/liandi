@@ -3,18 +3,18 @@ import {i18n} from "../i18n";
 import * as path from "path";
 import {destroyDialog} from "./dialog";
 
-export const validateName = (liandi: ILiandi, name: string) => {
+export const validateName = (name: string) => {
     hideMessage();
 
     if (/\\|\/|\:|\*|\?|\"|<|>|\|/.test(name)) {
-        showMessage(i18n[liandi.config.lang].fileNameRule);
+        showMessage(i18n[window.liandi.config.lang].fileNameRule);
         return false;
     }
     return true;
 };
 
 export const rename = (liandi: ILiandi, name: string, url: string, oldPath: string) => {
-    if (!validateName(liandi, name)) {
+    if (!validateName(name)) {
         return false;
     }
 

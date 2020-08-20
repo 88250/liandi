@@ -43,10 +43,6 @@ export class Files extends Model {
                         targetElement.setAttribute("data-files", JSON.stringify(data.data.files));
                         this.getLeaf(targetElement, data.data.dir);
                         destroyDialog();
-                        if (data.data.callback === Constants.CB_CREATE_INSERT) {
-                            // setSelectionFocus(window.liandi.editors.currentEditor.range);
-                            // window.liandi.editors.currentEditor.vditor.insertValue(`((${data.data.id} "${data.data.name}"))`);
-                        }
                         break;
                 }
             }

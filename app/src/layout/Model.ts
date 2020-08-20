@@ -34,11 +34,12 @@ export class Model {
     }
 
     public send(cmd: string, param: Record<string, unknown>, process = false) {
+
         this.reqId = process ? 0 : new Date().getTime();
         this.ws.send(JSON.stringify({
             cmd,
             reqId: this.reqId,
-            param,
+            param, // pushMode  0: 广播，1：单播(默认)
         }));
     }
 }
