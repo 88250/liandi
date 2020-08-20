@@ -42,7 +42,7 @@ func (cmd *rename) Exec() {
 	}
 	cmd.Push()
 
-	// 触发刷新
+
 	pushReloadEvent(cmd.PushPayload, map[string]interface{}{
 		"url":     url,
 		"oldPath": oldPath,
