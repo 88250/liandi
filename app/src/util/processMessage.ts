@@ -7,9 +7,10 @@ export const processMessage =(data:string, reqId:number)=> {
         return false;
     }
 
-    if (response.reqId !== reqId) {
-        return false;
-    }
+    // TODO: 每个实例无法同步，后期出并发问题再弄
+    // if (response.reqId !== reqId) {
+    //     return false;
+    // }
 
     if (response.code !== 0) {
         showMessage(response.msg, 0);

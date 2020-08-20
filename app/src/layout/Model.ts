@@ -38,7 +38,9 @@ export class Model {
         this.ws.send(JSON.stringify({
             cmd,
             reqId: this.reqId,
-            param, // pushMode  0: 广播，1：单播(默认)，2：广播（不包含自己）
+            param,
+            // pushMode  0: 广播，1：单播(默认)，2：广播（不包含自己）
+            // reloadPushMode 是否需要 reload  0: 广播，1：单播(默认)，2：广播（不包含自己）
         }));
     }
 }

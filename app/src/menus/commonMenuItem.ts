@@ -60,7 +60,8 @@ export const newFolderMenu = () => {
                 const currentNewPath = path.posix.join(itemData.path, name);
                 window.liandi.ws.send("mkdir", {
                     url: itemData.url,
-                    path: currentNewPath
+                    path: currentNewPath,
+                    pushMode: 0
                 });
             });
             bindDialogInput(inputElement, () => {
