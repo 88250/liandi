@@ -34,15 +34,9 @@ func (cmd *BaseCmd) Id() float64 {
 
 func (cmd *BaseCmd) Push() {
 	cmd.PushPayload.Callback = cmd.param["callback"]
-	mode := 0
-	if pushMode := cmd.param["pushMode"]; nil != pushMode {
-		mode = pushMode.(int)
-	}
-	if 0 == mode { // 自我单播
-		cmd.session.Write(cmd.PushPayload.Bytes())
-	} else { // 广播
-		model.Broadcast(cmd.PushPayload.Bytes())
-	}
+	sid, _ := cmd.session.Get("id")
+	cmd.PushPayload.SessionId = sid.(string)
+	model.BroadcastEvent(cmd.PushPayload)
 }
 
 func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, session *melody.Session) (ret Cmd) {
@@ -100,9 +94,9 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, sess
 		ret = &treegraph{baseCmd}
 	}
 
-	mode := 0
+	mode := model.PushModeSingleSelf
 	if pushMode := param["pushMode"]; nil != pushMode {
-		mode = pushMode.(int)
+		mode = model.PushMode(pushMode.(float64))
 	}
 	baseCmd.PushPayload = model.NewCmdResult(ret.Name(), cmdId, mode)
 	return
@@ -115,9 +109,9 @@ func Exec(cmd Cmd) {
 	}()
 }
 
-func broadcastRefreshEvent(typ string, reqId float64, data map[string]interface{}) {
-	reload := model.NewCmdResult("reload", reqId, 0)
-	data["eventType"] = typ
+func broadcastReloadEvent(payload *model.Result, data map[string]interface{}) {
+	reload := model.NewCmdResult("reload", payload.ReqId, payload.PushMode)
+	data["eventSource"] = payload.Cmd
 	reload.Data = data
 	model.BroadcastEvent(reload)
 }

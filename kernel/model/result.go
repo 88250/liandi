@@ -14,14 +14,23 @@ import (
 	"encoding/json"
 )
 
+type PushMode int
+
+const (
+	PushModeBroadcast            PushMode = 0 // 广播
+	PushModeSingleSelf           PushMode = 1 // 自我单播
+	PushModeBroadcastExcludeSelf PushMode = 2 // 非自我广播
+)
+
 type Result struct {
-	Cmd      string      `json:"cmd"`
-	ReqId    float64     `json:"reqId"`
-	PushMode int         `json:"pushMode"` // 0：自我单播，1：广播
-	Callback interface{} `json:"callback"`
-	Code     int         `json:"code"`
-	Msg      string      `json:"msg"`
-	Data     interface{} `json:"data"`
+	Cmd       string      `json:"cmd"`
+	ReqId     float64     `json:"reqId"`
+	SessionId string      `json:"sid"` // 会话 ID
+	PushMode  PushMode    `json:"pushMode"`
+	Callback  interface{} `json:"callback"`
+	Code      int         `json:"code"`
+	Msg       string      `json:"msg"`
+	Data      interface{} `json:"data"`
 }
 
 func NewResult() *Result {
@@ -34,7 +43,7 @@ func NewResult() *Result {
 		Data:     nil}
 }
 
-func NewCmdResult(cmdName string, cmdId float64, pushMode int) *Result {
+func NewCmdResult(cmdName string, cmdId float64, pushMode PushMode) *Result {
 	ret := NewResult()
 	ret.Cmd = cmdName
 	ret.ReqId = cmdId

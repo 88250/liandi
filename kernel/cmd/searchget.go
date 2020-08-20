@@ -16,6 +16,8 @@ import (
 	"github.com/88250/liandi/kernel/model"
 )
 
+// TODO: 待确认删除
+
 type searchget struct {
 	*BaseCmd
 }
@@ -29,15 +31,17 @@ func (cmd *searchget) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-	} else {
-		ret.Data = map[string]interface{}{
-			"name":    path.Base(p),
-			"content": content,
-			"url":     url,
-			"path":    p,
-			"index":   cmd.param["index"],
-			"key":     cmd.param["key"],
-		}
+		cmd.Push()
+		return
+	}
+
+	ret.Data = map[string]interface{}{
+		"name":    path.Base(p),
+		"content": content,
+		"url":     url,
+		"path":    p,
+		"index":   cmd.param["index"],
+		"key":     cmd.param["key"],
 	}
 	cmd.Push()
 }
