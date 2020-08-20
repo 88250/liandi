@@ -17,7 +17,7 @@ type treegraph struct {
 }
 
 func (cmd *treegraph) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	keyword := cmd.param["k"].(string)
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
@@ -29,7 +29,7 @@ func (cmd *treegraph) Exec() {
 		"nodes": nodes,
 		"links": links,
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *treegraph) Name() string {

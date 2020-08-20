@@ -17,11 +17,11 @@ type search struct {
 }
 
 func (cmd *search) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	keyword := cmd.param["k"].(string)
 	result := model.Search(keyword)
 	ret.Data = result
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *search) Name() string {

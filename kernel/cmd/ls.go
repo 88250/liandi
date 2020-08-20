@@ -19,7 +19,7 @@ type ls struct {
 }
 
 func (cmd *ls) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	path := cmd.param["path"].(string)
@@ -34,7 +34,7 @@ func (cmd *ls) Exec() {
 			"files": files,
 		}
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *ls) Name() string {

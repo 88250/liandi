@@ -21,7 +21,7 @@ type remove struct {
 }
 
 func (cmd *remove) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
@@ -39,7 +39,7 @@ func (cmd *remove) Exec() {
 		"url":  url,
 		"path": p,
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 
 	// 反向链接
 	backlinks, err := model.TreeBacklinks(url, p)

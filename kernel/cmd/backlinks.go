@@ -19,12 +19,11 @@ type backlinks struct {
 }
 
 func (cmd *backlinks) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	backlinks := model.Backlinks()
-	ret.Data = map[string]interface{}{
+	cmd.PushPayload.Data = map[string]interface{}{
 		"backlinks": backlinks,
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *backlinks) Name() string {

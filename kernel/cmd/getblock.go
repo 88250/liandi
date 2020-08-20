@@ -17,16 +17,14 @@ type getblock struct {
 }
 
 func (cmd *getblock) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	id := cmd.param["id"].(string)
 	block := model.GetBlock(id)
-	result := map[string]interface{}{
-		"block": block,
-		"id":    id,
+	cmd.PushPayload.Data = map[string]interface{}{
+		"block":    block,
+		"id":       id,
 		"callback": cmd.param["callback"],
 	}
-	ret.Data = result
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *getblock) Name() string {

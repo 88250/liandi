@@ -38,6 +38,5 @@ func (r *Result) Bytes() []byte {
 	if nil != err {
 		Logger.Errorf("marshal result [%+v] failed [%s]", r, err)
 	}
-
 	return ret
 }

@@ -19,7 +19,7 @@ type treebacklinks struct {
 }
 
 func (cmd *treebacklinks) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
@@ -33,7 +33,7 @@ func (cmd *treebacklinks) Exec() {
 		"path":      p,
 		"backlinks": backlinks,
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *treebacklinks) Name() string {

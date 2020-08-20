@@ -21,13 +21,13 @@ type setmd struct {
 }
 
 func (cmd *setmd) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 
 	param, err := json.Marshal(cmd.param)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		cmd.Push(ret.Bytes())
+		cmd.Push()
 		return
 	}
 
@@ -35,7 +35,7 @@ func (cmd *setmd) Exec() {
 	if err = json.Unmarshal(param, md); nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		cmd.Push(ret.Bytes())
+		cmd.Push()
 		return
 	}
 
@@ -44,7 +44,7 @@ func (cmd *setmd) Exec() {
 	model.Conf.Save()
 
 	ret.Data = model.Conf.Markdown
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *setmd) Name() string {

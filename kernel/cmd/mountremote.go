@@ -17,7 +17,7 @@ type mountremote struct {
 }
 
 func (cmd *mountremote) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	user := cmd.param["user"].(string)
@@ -27,7 +27,7 @@ func (cmd *mountremote) Exec() {
 	ret.Data = map[string]interface{}{
 		"dir": model.Conf.Box(url),
 	}
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *mountremote) Name() string {

@@ -23,7 +23,7 @@ type exec struct {
 func (cmd *exec) Exec() {
 	// 这里有远程执行漏洞风险
 
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 	execPath := cmd.param["bin"].(string)
 	args := cmd.param["args"].([]interface{})
 	var argsStrs []string
@@ -36,7 +36,7 @@ func (cmd *exec) Exec() {
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		cmd.Push(ret.Bytes())
+		cmd.Push()
 		return
 	}
 
@@ -45,7 +45,7 @@ func (cmd *exec) Exec() {
 		execCmd.Wait()
 		model.RemoveChildProcess(execCmd.Process)
 	}()
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *exec) Name() string {

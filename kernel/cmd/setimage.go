@@ -21,13 +21,13 @@ type setimage struct {
 }
 
 func (cmd *setimage) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
+	ret := cmd.PushPayload
 
 	param, err := json.Marshal(cmd.param)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		cmd.Push(ret.Bytes())
+		cmd.Push()
 		return
 	}
 
@@ -35,7 +35,7 @@ func (cmd *setimage) Exec() {
 	if err = json.Unmarshal(param, image); nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
-		cmd.Push(ret.Bytes())
+		cmd.Push()
 		return
 	}
 
@@ -43,7 +43,7 @@ func (cmd *setimage) Exec() {
 	model.Conf.Save()
 
 	ret.Data = model.Conf.Image
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *setimage) Name() string {

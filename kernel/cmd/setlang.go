@@ -19,11 +19,10 @@ type setlang struct {
 }
 
 func (cmd *setlang) Exec() {
-	ret := model.NewCmdResult(cmd.Name(), cmd.id)
 	lang := cmd.param["lang"].(string)
 	model.Conf.Lang = lang
 	model.Conf.Save()
-	cmd.Push(ret.Bytes())
+	cmd.Push()
 }
 
 func (cmd *setlang) Name() string {
