@@ -26,11 +26,16 @@ var (
 	treeBacklinksLock = &sync.Mutex{}                         // 全局反链锁，构建反链和图的时候需要加锁
 )
 
-type Defs []*BacklinkBlock
+type DefRef struct {
+	def  *Block
+	refs []*Block
+}
 
-func (r Defs) Len() int           { return len(r) }
-func (r Defs) Less(i, j int) bool { return len(r[i].Blocks) < len(r[j].Blocks) }
-func (r Defs) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
+type defRefs []*DefRef
+
+func (r defRefs) Len() int           { return len(r) }
+func (r defRefs) Less(i, j int) bool { return len(r[i].refs) < len(r[j].refs) }
+func (r defRefs) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
 
 type BacklinkBlock struct {
 	URL    string   `json:"url"`
@@ -49,21 +54,17 @@ func TreeBacklinks(url, path string) (ret []*BacklinkBlock, err error) {
 	return
 }
 
-func Backlinks() (ret Defs) {
-	ret = []*BacklinkBlock{}
+func Backlinks() (ret defRefs) {
+	ret = defRefs{}
 
 	rebuildBacklinks()
-	defRefs := map[*Block][]*Block{}
+	var defRefs defRefs
 	for _, backlinkDefs := range treeBacklinks {
-		for def, backlinkRefs := range backlinkDefs {
-			if refs, ok := defRefs[def]; ok {
-				defRefs[def] = append(defRefs[def], refs...)
-			} else {
-				defRefs[def] = backlinkRefs
-			}
+		for def, refs := range backlinkDefs {
+			defRefs = append(defRefs, &DefRef{def, refs})
 		}
 	}
-	sort.Sort(ret)
+	sort.Sort(defRefs)
 	return
 }
 
@@ -84,7 +85,6 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkBlock) {
 	treeBacklinksLock.Lock()
 	defer treeBacklinksLock.Unlock()
 
-	ret = []*BacklinkBlock{}
 	// 找到当前块列表
 	var currentBlocks []*Block
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
@@ -128,11 +128,36 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkBlock) {
 			for _, n := range refNodes {
 				blocks = append(blocks, buildBlock(tree.URL, tree.Path, n))
 			}
-			backlinks[currentBlock] = append(backlinks[currentBlock], blocks...)
+			if nil != blocks {
+				backlinks[currentBlock] = append(backlinks[currentBlock], blocks...)
+			}
 		}
 	}
 
 	treeBacklinks[tree] = backlinks
+
+	// 按树路径合并引用
+	ret = []*BacklinkBlock{}
+	for _, refs := range backlinks {
+		for _, ref := range refs {
+			var appended bool
+			for _, existRef := range ret {
+				if existRef.URL == ref.URL && existRef.Path == ref.Path {
+					existRef.Blocks = append(existRef.Blocks, ref)
+					appended = true
+					break
+				}
+			}
+			if !appended {
+				newRef := &BacklinkBlock{
+					URL:    ref.URL,
+					Path:   ref.Path,
+					Blocks: []*Block{ref},
+				}
+				ret = append(ret, newRef)
+			}
+		}
+	}
 	return
 }
 
