@@ -33,7 +33,16 @@ func (cmd *BaseCmd) Id() float64 {
 }
 
 func (cmd *BaseCmd) Push() {
-	cmd.session.Write(cmd.PushPayload.Bytes())
+	cmd.PushPayload.Callback = cmd.param["callback"]
+	mode := 0
+	if pushMode := cmd.param["pushMode"]; nil != pushMode {
+		mode = pushMode.(int)
+	}
+	if 0 == mode { // 自我单播
+		cmd.session.Write(cmd.PushPayload.Bytes())
+	} else { // 广播
+		model.Broadcast(cmd.PushPayload.Bytes())
+	}
 }
 
 func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, session *melody.Session) (ret Cmd) {
@@ -90,7 +99,12 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, sess
 	case "treegraph":
 		ret = &treegraph{baseCmd}
 	}
-	baseCmd.PushPayload = model.NewCmdResult(ret.Name(), cmdId)
+
+	mode := 0
+	if pushMode := param["pushMode"]; nil != pushMode {
+		mode = pushMode.(int)
+	}
+	baseCmd.PushPayload = model.NewCmdResult(ret.Name(), cmdId, mode)
 	return
 }
 

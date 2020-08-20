@@ -34,7 +34,7 @@ func (cmd *put) Exec() {
 	// 反向链接
 	backlinks, err := model.TreeBacklinks(url, p)
 	if nil == err {
-		backlinksEvent := model.NewCmdResult("backlinks", 0)
+		backlinksEvent := model.NewCmdResult("backlinks", 0, 0)
 		backlinksEvent.Data = map[string]interface{}{
 			"url":       url,
 			"path":      p,
@@ -45,7 +45,7 @@ func (cmd *put) Exec() {
 
 	// 关系图
 	nodes, links := model.Graph("")
-	graph := model.NewCmdResult("graph", 0)
+	graph := model.NewCmdResult("graph", 0, 0)
 	graph.Data = map[string]interface{}{
 		"nodes": nodes,
 		"links": links,
