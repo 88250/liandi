@@ -150,7 +150,7 @@ export const renameMenu = () => {
                     url: itemData.url,
                     oldPath: itemData.path,
                     newPath,
-                    pathMode: 0
+                    pushMode: 0
                 });
                 return newPath;
             });
