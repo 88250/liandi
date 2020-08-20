@@ -8,7 +8,7 @@ import {Backlinks} from "../backlinks";
 import {Editor} from "../editor";
 import {escapeHtml} from "../util/escape";
 import * as path from "path";
-import {splitLRMenu, splitTBMenu} from "./commonMenuItem";
+import {renameMenu, splitLRMenu, splitTBMenu} from "./commonMenuItem";
 
 export const initTabMenu = () => {
     const menu = new remote.Menu();
@@ -19,12 +19,7 @@ export const initTabMenu = () => {
 
 export const initEditorMenu = () => {
     const menu = new remote.Menu();
-    menu.append(new remote.MenuItem({
-        label: i18n[window.liandi.config.lang].rename,
-        click: async () => {
-            // TODO
-        }
-    }));
+    menu.append(renameMenu());
     menu.append(new remote.MenuItem({
         label: i18n[window.liandi.config.lang].backlinks,
         click: async () => {

@@ -85,9 +85,6 @@ class App {
                         onGetConfig(data.data);
                         onSetTheme(data.data.theme);
                         break;
-                    case "rename":
-                        // TODO liandi.navigation.onRename(liandi, response.data);
-                        break;
                 }
             }
         };

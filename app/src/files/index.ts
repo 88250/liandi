@@ -45,6 +45,9 @@ export class Files extends Model {
                     case "mkdir":
                         this.onMkdir(data);
                         break;
+                    case "rename":
+                        this.onRename(data.data);
+                        break;
                 }
             }
         };
@@ -137,7 +140,7 @@ export class Files extends Model {
             targetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(data.data.box.url)}'] li[data-path='${targetElement.getAttribute("data-path")}']`);
         }
         if (data.callback === Constants.CB_CREATE_INSERT) {
-            targetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(data.data.box.url)}'] li[data-path='${path.posix.dirname(data.data.path)}']`);
+            targetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(data.data.box.url)}'] li[data-path='${encodeURIComponent(path.posix.dirname(data.data.path))}']`);
         }
         if (targetElement) {
             targetElement.firstElementChild.classList.remove("fn__hidden");
@@ -245,17 +248,11 @@ export class Files extends Model {
         target.classList.add("item--current");
     }
 
-    public onRename(liandi: ILiandi, data: { newPath: string, oldPath: string, newName: string, url: string }) {
+    public onRename(data: { newPath: string, oldPath: string, newName: string, url: string }) {
         const fileItemElement = this.element.querySelector(`ul[data-url="${encodeURIComponent(data.url)}"] li[data-path="${encodeURIComponent(data.oldPath)}"]`);
         fileItemElement.setAttribute("data-path", encodeURIComponent(data.newPath));
         fileItemElement.setAttribute("data-name", encodeURIComponent(data.newName));
         fileItemElement.querySelector(".fn__ellipsis").innerHTML = escapeHtml(data.newName);
-        if (liandi.current.dir && liandi.current.dir.url === data.url && liandi.current.path === data.oldPath) {
-            if (!data.newPath.endsWith("/")) {
-                // liandi.editors.currentEditor.inputElement.value = data.newName;
-                liandi.current.path = data.newPath;
-            }
-        }
         if (data.newPath.endsWith("/")) {
             const files = JSON.parse(fileItemElement.getAttribute("data-files"));
             files.forEach((item: IFile) => {

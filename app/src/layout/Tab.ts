@@ -19,7 +19,7 @@ export class Tab {
             this.headElement.setAttribute("data-type", "tab-header");
             this.headElement.setAttribute("data-id", this.id);
             this.headElement.classList.add("item", "item--current");
-            this.headElement.innerHTML = options.title + "<svg class='item__svg item__svg--close'><use xlink:href='#iconClose'></use></svg>";
+            this.headElement.innerHTML = `<span>${options.title}</span><svg class='item__svg item__svg--close'><use xlink:href='#iconClose'></use></svg>`;
         }
 
         this.panelElement = document.createElement("div");

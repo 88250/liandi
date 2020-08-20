@@ -12,6 +12,7 @@ import {processMessage} from "../util/processMessage";
 import {openFile} from "./util";
 import {scrollCenter} from "../../vditore/src/ts/util/editorCommonEvent";
 import {processRemoveDataRender1} from "../../vditore/src/ts/ir/process";
+import {destroyDialog} from "../util/dialog";
 
 export class Editor extends Model {
     private element: HTMLElement;
@@ -71,6 +72,13 @@ export class Editor extends Model {
                             this.vditore.insertValue(`((${data.data.id} "${data.data.name}"))`);
                         }
                         break;
+                    case "rename":
+                        if (data.data.url === this.url && data.data.oldPath === this.path && !data.data.newPath.endsWith("/")) {
+                            this.path = data.data.newPath
+                            this.parent.headElement.querySelector("span").textContent = data.data.newName
+                            destroyDialog();
+                        }
+                        break;
                 }
             }
         };
@@ -112,7 +120,7 @@ export class Editor extends Model {
 
     public initVditor(html?: string) {
         if (typeof html === "undefined") {
-            html =  processRemoveDataRender1(this.vditore.vditor.ir.element, "innerHTML");
+            html = processRemoveDataRender1(this.vditore.vditor.ir.element, "innerHTML");
             this.vditore.destroy();
         }
         this.vditore = new Vditor(this.element, {
