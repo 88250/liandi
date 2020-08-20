@@ -72,9 +72,7 @@ func rebuildBacklinks() {
 	graphLock.Lock()
 	defer graphLock.Unlock()
 
-	for _, tree := range trees {
-		delete(treeBacklinks, tree)
-	}
+	treeBacklinks = map[*parse.Tree]map[*Block][]*Block{}
 
 	for _, tree := range trees {
 		indexLink(tree)
