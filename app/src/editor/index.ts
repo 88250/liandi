@@ -222,8 +222,8 @@ export class Editor extends Model {
             upload: {
                 setHeaders: () => {
                     return {
-                        "X-URL": encodeURIComponent(window.liandi.current.dir.url),
-                        "X-PATH": encodeURIComponent(window.liandi.current.path),
+                        "X-URL": encodeURIComponent(this.url),
+                        "X-PATH": encodeURIComponent(this.path),
                         "X-Mode": this.vditore.getCurrentMode()
                     };
                 },
