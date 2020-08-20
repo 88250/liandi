@@ -99,7 +99,7 @@ func InitConf() {
 // AppConf 维护应用元数据，保存在 ~/.liandi/conf.json ，记录已经打开的文件夹、各种配置项等。
 type AppConf struct {
 	LogLevel string    `json:"logLevel"` // 日志级别：Off, Trace, Debug, Info, Warn, Error, Fatal
-	Boxes    []*Box    `json:"boxes"`    // 已经打开的盒子
+	Boxes    []*Box    `json:"boxes"`    // 已经打开的笔记本
 	Theme    string    `json:"theme"`    // 界面主题：light, dark
 	Lang     string    `json:"lang"`     // 界面语言
 	Markdown *Markdown `json:"markdown"` // Markdown 引擎配置

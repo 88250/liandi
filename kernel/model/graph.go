@@ -66,7 +66,7 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 			l := link.(map[string]interface{})
 			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
 			if (l["source"] == n["name"] || l["target"] == n["name"]) && "dotted" == lineStyle {
-				n["category"] = 2
+				n["category"] = NodeCategoryLinked
 			}
 		}
 	}
@@ -85,6 +85,13 @@ func connectBacklinks(nodeBacklinks map[*Block][]*Block, links *[]interface{}) {
 		}
 	}
 }
+
+const (
+	NodeCategoryRoot   = 0 // 根块
+	NodeCategoryChild  = 1 // 子块
+	NodeCategoryLinked = 2 // 关联块
+	NodeCategoryBug    = 3 // 问题块
+)
 
 func genGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
@@ -111,10 +118,10 @@ func genGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]i
 		}
 
 		isRoot := ast.NodeDocument == n.Type
-		value := 0
+		value := NodeCategoryRoot
 		show := true
 		if !isRoot {
-			value = 1
+			value = NodeCategoryChild
 			show = false
 		}
 
@@ -180,7 +187,7 @@ func checkBadNodes(nodes []interface{}, node interface{}, links *[]interface{}) 
 		existNode := n.(map[string]interface{})
 		if currentNode["name"] == existNode["name"] {
 			currentNode["name"] = currentNode["name"].(string) + "-" + gulu.Rand.String(7)
-			currentNode["category"] = 3
+			currentNode["category"] = NodeCategoryBug
 			*links = append(*links, map[string]interface{}{
 				"source": existNode["name"],
 				"target": currentNode["name"],
