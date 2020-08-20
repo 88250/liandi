@@ -21,4 +21,5 @@ export abstract class Constants {
     public static readonly CB_GETBLOCK_EMBED = "cb-getblock-embed"
     public static readonly CB_PUT_RELOAD = "cb-put-reload"
     public static readonly CB_GETCONF_BOX = "cb-getconf-box"
+    public static readonly CB_MOUNT_HELP = "cb-mount-help"
 }

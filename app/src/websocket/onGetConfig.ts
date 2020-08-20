@@ -114,7 +114,8 @@ const initBar = () => {
         window.liandi.ws.send("mount", {
             url: `${Constants.WEBDAV_ADDRESS}/`,
             path: path.posix.join(Constants.APP_DIR, "public/zh_CN/链滴笔记用户指南"),
-            pushMode: 0
+            pushMode: 0,
+            callback: Constants.CB_MOUNT_HELP
         });
     });
     document.getElementById("barBug").addEventListener("click", () => {
