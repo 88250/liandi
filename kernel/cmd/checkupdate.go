@@ -17,7 +17,11 @@ type checkupdate struct {
 }
 
 func (cmd *checkupdate) Exec() {
-	model.CheckUpdate()
+	msg, timeout := model.CheckUpdate()
+	cmd.PushPayload.Msg = msg
+	cmd.PushPayload.Data = map[string]interface{}{
+		"closeTimeout": timeout,
+	}
 }
 
 func (cmd *checkupdate) Name() string {

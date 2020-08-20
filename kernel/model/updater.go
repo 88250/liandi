@@ -21,7 +21,7 @@ import (
 
 var checkUpdateLock = &sync.Mutex{}
 
-func CheckUpdate() {
+func CheckUpdate() (msg string, closeTimeout int) {
 	checkUpdateLock.Lock()
 	defer checkUpdateLock.Unlock()
 
@@ -33,28 +33,16 @@ func CheckUpdate() {
 		Set("User-Agent", UserAgent).Timeout(3 * time.Second).EndStruct(&result)
 	if nil != errs {
 		Logger.Errorf("检查版本更新失败：%s", errs)
-		pushMsg(Conf.lang(8), 0)
-		return
+		return Conf.lang(8), 0
 	}
 
 	ver := result["ver"].(string)
 	if ver <= Ver {
 		Logger.Infof(Conf.lang(10)+" v%s", Ver)
-		pushMsg(Conf.lang(10), 3000)
-		return
+		return Conf.lang(10), 3000
 	}
 
 	dl := result["dl"].(string)
 	Logger.Infof("需要重新下载进行升级 [dl=%s]", dl)
-	pushMsg(fmt.Sprintf(Conf.lang(9), "<a href=\""+dl+"\">"+dl+"</a>"), 0)
-}
-
-// TODO: session id
-func pushMsg(msg string, closeTimeout int) {
-	ret := NewCmdResult("msg", 0, 0)
-	ret.Msg = msg
-	ret.Data = map[string]interface{}{
-		"closeTimeout": closeTimeout,
-	}
-	Broadcast(ret.Bytes())
+	return fmt.Sprintf(Conf.lang(9), "<a href=\""+dl+"\">"+dl+"</a>"), 0
 }
