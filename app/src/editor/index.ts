@@ -66,8 +66,10 @@ export class Editor extends Model {
                         }
                         break;
                     case "create":
-                        setSelectionFocus(this.range);
-                        this.vditore.insertValue(`((${data.data.id} "${data.data.name}"))`);
+                        if (data.data.callback === Constants.CB_CREATE_INSERT) {
+                            setSelectionFocus(this.range);
+                            this.vditore.insertValue(`((${data.data.id} "${data.data.name}"))`);
+                        }
                         break;
                 }
             }
@@ -110,7 +112,7 @@ export class Editor extends Model {
 
     public initVditor(html?: string) {
         if (typeof html === "undefined") {
-            html = processRemoveDataRender1(this.vditore.vditor.ir.element, "innerHTML");
+            html =  processRemoveDataRender1(this.vditore.vditor.ir.element, "innerHTML");
             this.vditore.destroy();
         }
         this.vditore = new Vditor(this.element, {

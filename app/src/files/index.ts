@@ -122,17 +122,22 @@ export class Files extends Model {
 
     private onMkdir(data: {
         cmd: string,
+        callback?: string,
         data: {
             box: {
                 url: string
             },
+            path: string,
             files: []
         }
     }) {
         const itemData = window.liandi.menus?.itemData;
         let targetElement = itemData?.target;
-        if (!this.element.contains(targetElement)) {
+        if (!this.element.contains(targetElement) && targetElement) {
             targetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(data.data.box.url)}'] li[data-path='${targetElement.getAttribute("data-path")}']`);
+        }
+        if (data.callback === Constants.CB_CREATE_INSERT) {
+            targetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(data.data.box.url)}'] li[data-path='${path.posix.dirname(data.data.path)}']`);
         }
         if (targetElement) {
             targetElement.firstElementChild.classList.remove("fn__hidden");
