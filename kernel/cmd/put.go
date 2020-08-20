@@ -31,26 +31,11 @@ func (cmd *put) Exec() {
 	}
 	cmd.Push()
 
-	// 反向链接
-	backlinks, err := model.TreeBacklinks(url, p)
-	if nil == err {
-		backlinksEvent := model.NewCmdResult("backlinks", 0, 0)
-		backlinksEvent.Data = map[string]interface{}{
-			"url":       url,
-			"path":      p,
-			"backlinks": backlinks,
-		}
-		model.BroadcastEvent(backlinksEvent)
-	}
-
-	// 关系图
-	nodes, links := model.Graph("")
-	graph := model.NewCmdResult("graph", 0, 0)
-	graph.Data = map[string]interface{}{
-		"nodes": nodes,
-		"links": links,
-	}
-	model.BroadcastEvent(graph)
+	// 触发刷新
+	broadcastRefreshEvent(cmd.Name(), ret.ReqId, map[string]interface{}{
+		"url":  url,
+		"path": p,
+	})
 }
 
 func (cmd *put) Name() string {

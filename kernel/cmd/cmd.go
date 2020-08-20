@@ -114,3 +114,10 @@ func Exec(cmd Cmd) {
 		cmd.Exec()
 	}()
 }
+
+func broadcastRefreshEvent(typ string, reqId float64, data map[string]interface{}) {
+	reload := model.NewCmdResult("reload", reqId, 0)
+	data["eventType"] = typ
+	reload.Data = data
+	model.BroadcastEvent(reload)
+}
