@@ -30,7 +30,7 @@ func RemovePushChan(session *melody.Session) {
 	delete(sessions, id.(string))
 }
 
-func BroadcastEvent(event *Result) {
+func PushEvent(event *Result) {
 	msg := event.Bytes()
 	switch event.PushMode {
 	case PushModeBroadcast:

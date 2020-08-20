@@ -36,7 +36,7 @@ func (cmd *BaseCmd) Push() {
 	cmd.PushPayload.Callback = cmd.param["callback"]
 	sid, _ := cmd.session.Get("id")
 	cmd.PushPayload.SessionId = sid.(string)
-	model.BroadcastEvent(cmd.PushPayload)
+	model.PushEvent(cmd.PushPayload)
 }
 
 func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, session *melody.Session) (ret Cmd) {
@@ -109,10 +109,10 @@ func Exec(cmd Cmd) {
 	}()
 }
 
-func broadcastReloadEvent(payload *model.Result, data map[string]interface{}) {
+func pushReloadEvent(payload *model.Result, data map[string]interface{}) {
 	reload := model.NewCmdResult("reload", 0, payload.PushMode)
 	data["eventSource"] = payload.Cmd
 	data["eventSourceReqId"] = payload.ReqId
 	reload.Data = data
-	model.BroadcastEvent(reload)
+	model.PushEvent(reload)
 }

@@ -42,7 +42,7 @@ func (cmd *remove) Exec() {
 	cmd.Push()
 
 	// 触发刷新
-	broadcastReloadEvent(ret, map[string]interface{}{
+	pushReloadEvent(ret, map[string]interface{}{
 		"url":  url,
 		"path": p,
 	})
