@@ -7,7 +7,7 @@ const appDir = path.dirname(app.getAppPath())
 const isDevEnv = process.env.NODE_ENV === 'development'
 
 const createWindow = () => {
-  // 创建浏览器窗口
+  // 创建主窗体
   const mainWindow = new BrowserWindow({
     show: false,
     width: screen.getPrimaryDisplay().size.width * 2 / 3,
