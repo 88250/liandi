@@ -94,7 +94,6 @@ export class Wnd {
     }
 
     public spilt(direction: TDirection) {
-        // TODO new panel & ws
         const wnd = new Wnd(direction);
         if (direction === this.parent.direction) {
             this.parent.addWnd(wnd, this.id);

@@ -62,6 +62,8 @@ export class Editor extends Model {
                     case "reload":
                         if (data.data.url === this.url && data.data.path === this.path) {
                             this.send("get", {
+                                url: this.url,
+                                path: this.path,
                                 callback: Constants.CB_PUT_RELOAD
                             });
                         }
@@ -88,7 +90,7 @@ export class Editor extends Model {
         this.path = options.path;
 
         this.blockTipElement = document.createElement("div");
-        this.blockTipElement.classList.add("editor__blockhint");
+        this.blockTipElement.classList.add("editor__blockhint", "vditor-reset");
 
         let timeoutId: number;
         this.blockTipElement.addEventListener("mouseenter", () => {
