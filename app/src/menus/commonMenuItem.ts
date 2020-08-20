@@ -5,7 +5,7 @@ import {bindDialogInput, destroyDialog, dialog} from "../util/dialog";
 import {rename, validateName} from "../util/rename";
 import {escapeHtml} from "../util/escape";
 import {newFile} from "../util/newFile";
-import {copyTab, getInstanceById} from "../layout/util";
+import {copyTab, getInstanceById, removeEditorTab} from "../layout/util";
 import {Tab} from "../layout/Tab";
 
 export const showInFolder = () => {
@@ -90,12 +90,7 @@ export const deleteMenu = () => {
                 destroyDialog();
             });
             dialogElement.querySelector(".button").addEventListener("click", () => {
-                if (window.liandi.current.dir && window.liandi.current.dir.url === itemData.url && itemData.path === window.liandi.current.path) {
-                    // liandi.editors.close(liandi);
-                    window.liandi.current = {
-                        path: "",
-                    };
-                }
+                removeEditorTab(window.liandi.layout, itemData.url, itemData.path)
                 window.liandi.ws.send("remove", {
                     url: itemData.url,
                     path: itemData.path

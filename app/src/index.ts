@@ -63,9 +63,6 @@ class App {
                     case "search":
                         onSearch(data.data);
                         break;
-                    case "searchblock":
-                        // liandi.editors.showSearchBlock(liandi, response.data);
-                        break;
                     case "searchget":
                         // liandi.editors.onGet(liandi, response.data);
                         // liandi.backlinks.getBacklinks(liandi);
@@ -92,14 +89,8 @@ class App {
                         // liandi.navigation.onMount(liandi, response.data);
                         // liandi.graph.render(liandi);
                         break;
-                    case "getblock":
-                        // liandi.editors.onGetBlock(liandi, response.data);
-                        break;
                     case "rename":
                         // liandi.navigation.onRename(liandi, response.data);
-                        break;
-                    case"remove":
-                        // liandi.graph.render(liandi);
                         break;
                     case "create":
                     case "mkdir":

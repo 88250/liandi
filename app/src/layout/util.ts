@@ -21,6 +21,20 @@ const getFirstWnd = (layout: Layout) => {
     return null;
 }
 
+export const removeEditorTab = (layout: Layout, url: string, path: string) => {
+    for (let i = 0; i < layout.children.length; i++) {
+        const item = layout.children[i]
+        if (item instanceof Tab) {
+            const model = (item as Tab).model
+            if (model instanceof Editor && model.url === url && model.path.indexOf(path) === 0) {
+                (item.parent as Wnd).removeTab(item.id)
+            }
+        } else {
+            removeEditorTab(item as Layout, url, path);
+        }
+    }
+}
+
 export const getCenterActiveWnd = () => {
     if (getSelection().rangeCount === 0) {
         return getFirstWnd(window.liandi.centerLayout)

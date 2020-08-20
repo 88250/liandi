@@ -70,7 +70,7 @@ export class Wnd {
         }
     }
 
-    private removeTab(id: string) {
+    public removeTab(id: string) {
         if (this.children.length === 1) {
             this.children = []
             this.remove();

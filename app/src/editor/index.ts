@@ -3,16 +3,20 @@ import Vditor from "../../vditore/src";
 import {Constants} from "../constants";
 import * as path from "path";
 import * as process from "process";
-import {hasTopClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
+import {hasClosestByAttribute, hasTopClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {getEditorRange} from "../../vditore/src/ts/util/selection";
 import {escapeHtml} from "../util/escape";
 import {i18n} from "../i18n";
 import {Model} from "../layout/Model";
 import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
+import {openFile} from "./util";
+import {scrollCenter} from "../../vditore/src/ts/util/editorCommonEvent";
 
 export class Editor extends Model {
     private element: HTMLElement;
+    public blockVditorElement: HTMLElement;
+    private blockTipElement: HTMLElement;
     private saved = false
     private vditore: Vditor
     public url: string
@@ -41,6 +45,12 @@ export class Editor extends Model {
                     case "get":
                         this.initVditor(data.data.content);
                         break;
+                    case "searchblock":
+                        this.showSearchBlock(data.data);
+                        break;
+                    case "getblock":
+                        this.onGetBlock(data.data);
+                        break;
                 }
             }
         };
@@ -48,11 +58,41 @@ export class Editor extends Model {
         this.element = options.tab.panelElement;
         this.url = options.url;
         this.path = options.path;
+
+        this.blockTipElement = document.createElement('div')
+        this.blockTipElement.classList.add("editor__blockhint")
+
+        let timeoutId:number
+        this.blockTipElement.addEventListener("mouseenter", () => {
+            clearTimeout(timeoutId);
+        });
+        this.blockTipElement.addEventListener("mouseleave", () => {
+            timeoutId = window.setTimeout(() => {
+                this.blockTipElement.style.display = "none";
+            }, 300);
+        });
+        this.element.addEventListener("mouseover", (event: MouseEvent & { target: HTMLElement }) => {
+            const blockVditorElement = hasClosestByAttribute(event.target, "data-type", "block-ref");
+            if (blockVditorElement) {
+
+                this.blockVditorElement = blockVditorElement;
+                this.send("getblock", {
+                    id: blockVditorElement.querySelector(".vditor-ir__marker--link").textContent
+                });
+
+                clearTimeout(timeoutId);
+                blockVditorElement.onmouseleave = () => {
+                    timeoutId = window.setTimeout(() => {
+                        this.blockTipElement.style.display = "none";
+                    }, 300);
+                };
+            }
+        });
     }
 
     public initVditor(html?: string) {
         this.vditore = new Vditor(this.element, {
-            // _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
+            _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
             debugger: process.env.NODE_ENV === "development",
             icon: "material",
             lang: window.liandi.config.lang,
@@ -67,10 +107,10 @@ export class Editor extends Model {
                     {
                         key: "((",
                         hint: (key) => {
-                            window.liandi.ws.send("searchblock", {
+                            this.send("searchblock", {
                                 k: key,
-                                url: window.liandi.current.dir.url,
-                                path: window.liandi.current.path
+                                url: this.url,
+                                path: this.path
                             });
                             return [];
                         },
@@ -163,9 +203,9 @@ export class Editor extends Model {
                 this.vditore.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + "/");
                 this.vditore.setHTML(html);
                 this.vditore.focus();
-                // this.blockHint.initEvent(window.liandi, this.vditore.vditor.ir.element);
+                this.element.insertAdjacentElement("beforeend", this.blockTipElement)
             },
-            save: (content:string) => {
+            save: (content: string) => {
                 if (this.saved) {
                     return;
                 }
@@ -183,50 +223,13 @@ export class Editor extends Model {
                 // TODO auto save
             }
         });
+        this.vditore.vditor.model = this
     }
 
     public resize() {
         // if (this.currentEditor?.vditor) {
         //     this.currentEditor.editorElement.style.height = (window.innerHeight - this.currentEditor.inputElement.clientHeight) + "px";
         // }
-    }
-
-    private newEditor(liandi: ILiandi, html: string) {
-        const inputElement = document.createElement("input");
-        inputElement.className = "editor__input";
-        inputElement.addEventListener("blur", () => {
-            rename(liandi, inputElement.value, liandi.current.dir.url, liandi.current.path);
-        });
-
-        const editorElement = document.createElement("div");
-        editorElement.className = "editor__vditor fn__flex-1";
-
-        const divElement = document.createElement("div");
-        divElement.append(inputElement);
-        divElement.append(editorElement);
-        this.element.insertAdjacentElement("beforeend", divElement);
-
-        // const editor = {
-        //     inputElement,
-        //     editorElement,
-        //     saved: true,
-        //     active: true
-        // };
-        this.initVditor(html);
-        // this.currentEditor = editor;
-        // this.editors.push(editor);
-    }
-
-    public open(liandi: ILiandi, url: string, path: string) {
-        // liandi.editors.save(liandi);
-        liandi.current = {
-            dir: {url},
-            path
-        };
-        liandi.ws.send("get", {
-            url,
-            path
-        });
     }
 
     public close() {
@@ -251,21 +254,7 @@ export class Editor extends Model {
         // }
     }
 
-    public onGet() {
-        // if (this.currentEditor) {
-        //     this.initVditor(editorData.content);
-        //     this.editorsElement.lastElementChild.classList.remove("fn__none");
-        // } else {
-        //     this.newEditor(liandi, editorData.content);
-        // }
-        // this.currentEditor.inputElement.value = editorData.name;
-        // document.querySelector<HTMLElement>(".editor__empty").style.display = "none";
-    }
-
     public showSearchBlock(data: { k: string, blocks: IBlock[], url: string, path: string }) {
-        if (window.liandi.current.dir.url !== data.url || window.liandi.current.path !== data.path) {
-            return;
-        }
         const currentBlockElement = hasTopClosestByAttribute(getEditorRange(this.vditore.vditor.ir.element).startContainer, "data-block", "0");
         let nodeId = "";
         if (currentBlockElement) {
@@ -313,10 +302,39 @@ export class Editor extends Model {
             value: "((newFile))",
             html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#iconMD"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${i18n[window.liandi.config.lang].newFile}</span></span>`,
         });
-        // this.currentEditor.vditor.vditor.hint.genHTML(dataList, data.k, this.currentEditor.vditor.vditor);
+        this.vditore.vditor.hint.genHTML(dataList, data.k, this.vditore.vditor);
     }
 
-    public onGetBlock() {
-        // this.blockHint.getBlock(liandi, data);
+    public onGetBlock(data: { id: string, block: IBlock, callback: string }) {
+        if (!data.block) {
+            return;
+        }
+        if (data.callback === Constants.CB_GETBLOCK_OPEN) {
+            openFile(this.parent.parent, data.block.url, data.block.path)
+            return;
+        }
+        if (data.block.content.trim() === "") {
+            return;
+        }
+        if (data.callback === Constants.CB_GETBLOCK_EMBED) {
+            this.blockVditorElement.setAttribute("data-render", "1");
+            this.blockVditorElement.innerHTML = data.block.content;
+            scrollCenter(this.vditore.vditor);
+            return;
+        }
+
+        const elementRect = this.blockVditorElement.getBoundingClientRect();
+        this.blockTipElement.innerHTML = data.block.content;
+        const top = elementRect.top + elementRect.height + 5;
+        const left = elementRect.left;
+        this.blockTipElement.setAttribute("style", `display:block;top:${top}px;left:${left}px`);
+        // 展现在上部
+        if (this.blockTipElement.getBoundingClientRect().bottom > window.innerHeight) {
+            this.blockTipElement.style.top = `${top - this.blockTipElement.clientHeight - 10 - elementRect.height}px`;
+        }
+        if (this.blockTipElement.getBoundingClientRect().right > window.innerWidth) {
+            this.blockTipElement.style.left = "auto";
+            this.blockTipElement.style.right = "0";
+        }
     }
 }

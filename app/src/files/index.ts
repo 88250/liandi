@@ -6,6 +6,8 @@ import {openFile} from "../editor/util";
 import {Tab} from "../layout/Tab";
 import {Model} from "../layout/Model";
 import {processMessage} from "../util/processMessage";
+import {getCenterActiveWnd} from "../layout/util";
+import {Wnd} from "../layout/Wnd";
 
 export class Files extends Model {
     private element: HTMLElement
@@ -45,6 +47,13 @@ export class Files extends Model {
                         event.stopPropagation();
                         break;
                     }
+                    if (target.getAttribute("data-type") === "navigation-file") {
+                        this.setCurrent(target);
+                        openFile(getCenterActiveWnd() as Wnd, dir.url, decodeURIComponent(target.getAttribute("data-path")));
+                        event.preventDefault();
+                        event.stopPropagation();
+                        break;
+                    }
                     if (target.tagName === "LI" && target.getAttribute("data-type") !== "navigation-file") {
                         this.getLeaf(target, dir);
                         this.setCurrent(target);
@@ -69,15 +78,6 @@ export class Files extends Model {
                         event.stopPropagation();
                         break;
                     }
-
-                    if (target.getAttribute("data-type") === "navigation-file") {
-                        this.setCurrent(target);
-                        openFile(dir.url, decodeURIComponent(target.getAttribute("data-path")));
-                        event.preventDefault();
-                        event.stopPropagation();
-                        break;
-                    }
-
                     if (target.tagName === "LI") {
                         this.setCurrent(target);
                         event.preventDefault();
