@@ -21,7 +21,7 @@ export const onGetConfig = (data: IConfig) => {
 const initBar = () => {
     document.querySelector(".toolbar").innerHTML = `<div id="barNavigation" aria-label="${i18n[window.liandi.config.lang].fileTree}" class="item fn__a">
             <svg>
-                <use xlink:href="#iconFolder"></use>
+                <use xlink:href="#iconFiles"></use>
             </svg>
         </div>
         <div id="barBacklinks" class="item fn__a" aria-label="${i18n[window.liandi.config.lang].backlinks}">
@@ -58,7 +58,7 @@ const initBar = () => {
     document.getElementById("barNavigation").addEventListener("click", () => {
         const wnd = new Wnd( window.liandi.leftLayout.children.length === 0 ? undefined : "tb");
         const tab = new Tab({
-            title: `<svg class="item__svg"><use xlink:href="#iconFolder"></use></svg> ${i18n[window.liandi.config.lang].fileTree}`,
+            title: `<svg class="item__svg"><use xlink:href="#iconFiles"></use></svg> ${i18n[window.liandi.config.lang].fileTree}`,
             callback(tab: Tab) {
                 if (window.liandi.leftLayout.element.clientWidth < 7) {
                     window.liandi.leftLayout.parent.children[1].element.style.width = (window.liandi.leftLayout.parent.children[1].element.clientWidth - 200) + "px";

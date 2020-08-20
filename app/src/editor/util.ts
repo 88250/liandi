@@ -7,7 +7,7 @@ import {Wnd} from "../layout/Wnd";
 export const openFile = (wnd: Wnd, url: string, filePath: string) => {
     if (wnd) {
         wnd.addTab(new Tab({
-            title: `<svg class="item__svg"><use xlink:href="#iconMD"></use></svg>${escapeHtml(path.posix.basename(filePath))}`,
+            title: `<svg class="item__svg"><use xlink:href="#iconMD"></use></svg><span>${escapeHtml(path.posix.basename(filePath))}</span>`,
             callback(tab) {
                 const editor = new Editor({
                     tab,
