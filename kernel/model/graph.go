@@ -35,7 +35,7 @@ func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []inte
 	delete(treeBacklinks, tree)
 	indexLink(tree)
 	genGraph(keyword, tree, &nodes, &links)
-	connectBacklinks(treeBacklinks[tree], &links)
+	connectBacklinks(treeBacklinks[tree], &nodes, &links)
 	markBugBlock(&nodes, &links)
 	return
 }
@@ -48,7 +48,7 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 	}
 
 	for _, nodeBacklinks := range treeBacklinks {
-		connectBacklinks(nodeBacklinks, &links)
+		connectBacklinks(nodeBacklinks, &nodes, &links)
 	}
 
 	markBugBlock(&nodes, &links)
@@ -72,7 +72,8 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 	}
 }
 
-func connectBacklinks(nodeBacklinks map[*Block][]*Block, links *[]interface{}) {
+func connectBacklinks(nodeBacklinks map[*Block][]*Block, nodes *[]interface{}, links *[]interface{}) {
+	refs := map[string]*Block{}
 	for target, defs := range nodeBacklinks {
 		for _, ref := range defs {
 			*links = append(*links, map[string]interface{}{
@@ -82,6 +83,48 @@ func connectBacklinks(nodeBacklinks map[*Block][]*Block, links *[]interface{}) {
 					"type": "dotted",
 				},
 			})
+
+			refs[ref.ID] = ref
+		}
+	}
+
+	for refID, ref := range refs {
+		var existed bool
+		for _, n := range *nodes {
+			node := n.(map[string]interface{})
+			id := node["name"].(string)
+
+			if refID == id {
+				existed = true
+				break
+			}
+		}
+
+		if !existed {
+			category := NodeCategoryRoot
+			show := true
+			if ast.NodeDocument.String() != ref.Type {
+				category = NodeCategoryChild
+				show = false
+			}
+
+			node := map[string]interface{}{
+				"name":     refID,
+				"category": category, // TODO 其他文档引用类型
+				"url":      ref.URL,
+				"path":     ref.Path,
+				"content":  ref.Content,
+				"label": map[string]interface{}{
+					"show": show,
+				},
+				"emphasis": map[string]interface{}{
+					"label": map[string]interface{}{
+						"show": true,
+					},
+				},
+			}
+
+			*nodes = append(*nodes, node)
 		}
 	}
 }
