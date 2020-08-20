@@ -18,7 +18,7 @@ type Result struct {
 	Cmd       string      `json:"cmd"`
 	ReqId     float64     `json:"reqId"`
 	SessionId string      `json:"sid"`      // 会话 ID
-	PushMode  int         `json:"pushMode"` // 0：自我单播，1：广播
+	PushMode  int         `json:"pushMode"` // 0：自我单播，1：广播，2：非自我广播
 	Callback  interface{} `json:"callback"`
 	Code      int         `json:"code"`
 	Msg       string      `json:"msg"`

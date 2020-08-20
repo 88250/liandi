@@ -39,3 +39,13 @@ func Broadcast(msg []byte) {
 		session.Write(msg)
 	}
 }
+
+func BroadcastOthers(msg []byte, self string) {
+	for _, session := range sessions {
+		id, _ := session.Get("id")
+		if id == self {
+			continue
+		}
+		session.Write(msg)
+	}
+}

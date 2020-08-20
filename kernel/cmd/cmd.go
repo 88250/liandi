@@ -40,10 +40,15 @@ func (cmd *BaseCmd) Push() {
 	}
 	sid, _ := cmd.session.Get("id")
 	cmd.PushPayload.SessionId = sid.(string)
-	if 0 == mode { // 自我单播
-		cmd.session.Write(cmd.PushPayload.Bytes())
-	} else { // 广播
-		model.Broadcast(cmd.PushPayload.Bytes())
+
+	msg := cmd.PushPayload.Bytes()
+	switch mode {
+	case 0: // 自我单播
+		cmd.session.Write(msg)
+	case 1: // 广播
+		model.Broadcast(msg)
+	case 2: // 非自我广播
+		model.BroadcastOthers(msg, cmd.PushPayload.SessionId)
 	}
 }
 
