@@ -104,7 +104,9 @@ export class Wnd {
                         direction,
                     });
                     this.parent.addLayout(layout, item.id);
-                    layout.addWnd.call(layout, this.parent.children.splice(index, 1)[0]);
+                    const movedWnd = this.parent.children.splice(index, 1)[0]
+                    movedWnd.resize = undefined
+                    layout.addWnd.call(layout, movedWnd);
                     layout.addWnd.call(layout, wnd);
                     return true;
                 }
