@@ -90,25 +90,7 @@ class App {
                         // liandi.graph.render(liandi);
                         break;
                     case "rename":
-                        // liandi.navigation.onRename(liandi, response.data);
-                        break;
-                    case "create":
-                    case "mkdir":
-                        // if (response.cmd === "create") {
-                        //     liandi.graph.render(liandi);
-                        // }
-                        // liandi.menus.itemData.target.firstElementChild.classList.remove("fn__hidden");
-                        // if (liandi.menus.itemData.target.firstElementChild.classList.contains("item__arrow--open")) {
-                        //     liandi.menus.itemData.target.firstElementChild.classList.remove("item__arrow--open");
-                        //     liandi.menus.itemData.target.nextElementSibling.remove();
-                        // }
-                        // liandi.menus.itemData.target.setAttribute("data-files", JSON.stringify(response.data.files));
-                        // liandi.navigation.getLeaf(liandi.menus.itemData.target, response.data.dir);
-                        // destroyDialog();
-                        // if (response.data.callback === Constants.CB_CREATE_INSERT) {
-                        //     setSelectionFocus(liandi.editors.currentEditor.range);
-                        //     liandi.editors.currentEditor.vditor.insertValue(`((${response.data.id} "${response.data.name}"))`);
-                        // }
+                        // TODO liandi.navigation.onRename(liandi, response.data);
                         break;
                 }
             }
