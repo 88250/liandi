@@ -94,11 +94,15 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, sess
 		ret = &treegraph{baseCmd}
 	}
 
-	mode := model.PushModeSingleSelf
+	pushMode := model.PushModeSingleSelf
 	if pushMode := param["pushMode"]; nil != pushMode {
-		mode = model.PushMode(pushMode.(float64))
+		pushMode = model.PushMode(pushMode.(float64))
 	}
-	baseCmd.PushPayload = model.NewCmdResult(ret.Name(), cmdId, mode)
+	reloadPushMode := model.PushModeSingleSelf
+	if reloadPushMode := param["reloadPushMode"]; nil != reloadPushMode {
+		reloadPushMode = model.PushMode(reloadPushMode.(float64))
+	}
+	baseCmd.PushPayload = model.NewCmdResult(ret.Name(), cmdId, pushMode, reloadPushMode)
 	return
 }
 
@@ -110,7 +114,7 @@ func Exec(cmd Cmd) {
 }
 
 func pushReloadEvent(payload *model.Result, data map[string]interface{}) {
-	reload := model.NewCmdResult("reload", 0, payload.PushMode)
+	reload := model.NewCmdResult("reload", 0, payload.PushMode, payload.ReloadPushMode)
 	data["eventSource"] = payload.Cmd
 	data["eventSourceReqId"] = payload.ReqId
 	reload.Data = data

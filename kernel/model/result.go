@@ -23,31 +23,34 @@ const (
 )
 
 type Result struct {
-	Cmd       string      `json:"cmd"`
-	ReqId     float64     `json:"reqId"`
-	SessionId string      `json:"sid"`
-	PushMode  PushMode    `json:"pushMode"`
-	Callback  interface{} `json:"callback"`
-	Code      int         `json:"code"`
-	Msg       string      `json:"msg"`
-	Data      interface{} `json:"data"`
+	Cmd            string      `json:"cmd"`
+	ReqId          float64     `json:"reqId"`
+	SessionId      string      `json:"sid"`
+	PushMode       PushMode    `json:"pushMode"`
+	ReloadPushMode PushMode    `json:"reloadPushMode"`
+	Callback       interface{} `json:"callback"`
+	Code           int         `json:"code"`
+	Msg            string      `json:"msg"`
+	Data           interface{} `json:"data"`
 }
 
 func NewResult() *Result {
 	return &Result{Cmd: "",
 		ReqId:    0,
 		PushMode: 0,
+		ReloadPushMode: 0,
 		Callback: "",
 		Code:     0,
 		Msg:      "",
 		Data:     nil}
 }
 
-func NewCmdResult(cmdName string, cmdId float64, pushMode PushMode) *Result {
+func NewCmdResult(cmdName string, cmdId float64, pushMode, reloadPushMode PushMode) *Result {
 	ret := NewResult()
 	ret.Cmd = cmdName
 	ret.ReqId = cmdId
 	ret.PushMode = pushMode
+	ret.ReloadPushMode = reloadPushMode
 	return ret
 }
 

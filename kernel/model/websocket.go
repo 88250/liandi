@@ -32,7 +32,11 @@ func RemovePushChan(session *melody.Session) {
 
 func PushEvent(event *Result) {
 	msg := event.Bytes()
-	switch event.PushMode {
+	mode := event.PushMode
+	if "reload" == event.Cmd {
+		mode = event.ReloadPushMode
+	}
+	switch mode {
 	case PushModeBroadcast:
 		Broadcast(msg)
 	case PushModeSingleSelf:
