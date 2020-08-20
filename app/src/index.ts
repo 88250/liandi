@@ -82,8 +82,12 @@ class App {
                         onSetTheme(data.data);
                         break;
                     case "getconf":
-                        onGetConfig(data.data);
-                        onSetTheme(data.data.theme);
+                        if (data.callback === Constants.CB_GETCONF_BOX) {
+                            window.liandi.config = data.data;
+                        } else {
+                            onGetConfig(data.data);
+                            onSetTheme(data.data.theme);
+                        }
                         break;
                 }
             }

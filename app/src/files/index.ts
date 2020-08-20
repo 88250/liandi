@@ -203,6 +203,7 @@ export class Files extends Model {
             }
         })
         this.reloadGraphBacklinks(allModels)
+        window.liandi.ws.send("getconf", {callback:Constants.CB_GETCONF_BOX});
     }
 
     public getLeaf(liElement: HTMLElement, dir: IBox) {
@@ -293,6 +294,7 @@ export class Files extends Model {
             path: "/",
         }, true);
         this.reloadGraphBacklinks(allModels)
+        window.liandi.ws.send("getconf", {callback:Constants.CB_GETCONF_BOX});
     }
 
     public show() {

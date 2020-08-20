@@ -68,18 +68,28 @@ export class Graph extends Model {
         this.inputElement = options.tab.panelElement.firstElementChild.firstElementChild as HTMLInputElement;
         this.inputElement.placeholder = i18n[window.liandi.config.lang].search;
         this.inputElement.addEventListener("compositionend", () => {
-            this.send("graph", {
-                k: this.inputElement.value
-            });
+            this.searchGraph()
         });
         this.inputElement.addEventListener("input", (event: InputEvent) => {
             if (event.isComposing) {
                 return;
             }
+            this.searchGraph()
+        });
+    }
+
+    private searchGraph() {
+        if (this.path) {
             this.send("graph", {
                 k: this.inputElement.value
             });
-        });
+        } else {
+            this.send("graph", {
+                k: this.inputElement.value,
+                url: this.url,
+                path: this.path
+            });
+        }
     }
 
     resize() {
