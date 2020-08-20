@@ -49,6 +49,7 @@ func CheckUpdate() {
 	pushMsg(fmt.Sprintf(Conf.lang(9), "<a href=\""+dl+"\">"+dl+"</a>"), 0)
 }
 
+// TODO: session id
 func pushMsg(msg string, closeTimeout int) {
 	ret := NewCmdResult("msg", 0, 0)
 	ret.Msg = msg

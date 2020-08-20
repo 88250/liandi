@@ -38,6 +38,8 @@ func (cmd *BaseCmd) Push() {
 	if pushMode := cmd.param["pushMode"]; nil != pushMode {
 		mode = pushMode.(int)
 	}
+	sid, _ := cmd.session.Get("id")
+	cmd.PushPayload.SessionId = sid.(string)
 	if 0 == mode { // 自我单播
 		cmd.session.Write(cmd.PushPayload.Bytes())
 	} else { // 广播

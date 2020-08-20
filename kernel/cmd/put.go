@@ -32,7 +32,7 @@ func (cmd *put) Exec() {
 	cmd.Push()
 
 	// 触发刷新
-	broadcastRefreshEvent(cmd.Name(), ret.ReqId, map[string]interface{}{
+	broadcastRefreshEvent(cmd.Name(), 0, map[string]interface{}{
 		"url":  url,
 		"path": p,
 	})
