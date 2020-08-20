@@ -21,6 +21,9 @@ func (cmd *unmount) Exec() {
 	url = model.NormalizeURL(url)
 	model.Unmount(url)
 	model.RestartServeWebDAV()
+	cmd.PushPayload.Data = map[string]interface{}{
+		"url": url,
+	}
 	cmd.Push()
 }
 
