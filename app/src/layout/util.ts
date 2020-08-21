@@ -13,12 +13,16 @@ import {setPadding, setTypewriterPosition} from "../../vditore/src/ts/ui/initUI"
 export const resizeTabs = () => {
     const models = getAllModels()
     models.editor.forEach((item) => {
-        setPadding(item.vditore.vditor);
-        setTypewriterPosition(item.vditore.vditor);
-        item.element.style.height = item.element.parentElement.clientHeight + "px"
+        if (item.vditore.vditor) {
+            setPadding(item.vditore.vditor);
+            setTypewriterPosition(item.vditore.vditor);
+            item.element.style.height = item.element.parentElement.clientHeight + "px"
+        }
     })
     models.graph.forEach((item) => {
-        item.chart.resize()
+        if (item && item.chart && item.chart.resize) {
+            item.chart.resize()
+        }
     })
 }
 

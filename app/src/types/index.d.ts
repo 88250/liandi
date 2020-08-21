@@ -86,6 +86,11 @@ declare interface IBlock {
     content: string;
 }
 
+declare interface IAllBacklinks {
+    Def:IBlock[]
+    Refs:IBlock[]
+}
+
 declare interface IBacklinks {
     url: string;
     path: string;

@@ -72,27 +72,33 @@ export class Backlinks extends Model {
         });
     }
 
-    public onBacklinks(data: { backlinks: IBacklinks[], url: string, path: string }) {
-        let backlinksHTML = `<div class="backlinks__title">
-<div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].backlinks}</div>
-<div class="fn__ellipsis">${escapeHtml(path.posix.join(path.posix.basename(data.url), data.path))}</div>
-</div>`;
-        data.backlinks.forEach((files) => {
-            backlinksHTML += '<div class="item">';
-            files.blocks.forEach((item, index) => {
-                if (index === 0) {
-                    backlinksHTML += `<h2 data-path="${encodeURIComponent(item.path)}" data-url="${encodeURIComponent(item.url)}" class="fn__flex"">
+    public onBacklinks(data: { backlinks: IBacklinks[] | IAllBacklinks[], url: string, path: string }) {
+        let backlinksHTML = "";
+        if (data.url) {
+            backlinksHTML = '';
+            (data.backlinks as IBacklinks[]).forEach((files) => {
+                backlinksHTML += '<div class="item">';
+                files.blocks.forEach((item, index) => {
+                    if (index === 0) {
+                        backlinksHTML += `<h2 data-path="${encodeURIComponent(item.path)}" data-url="${encodeURIComponent(item.url)}" class="fn__flex"">
 <span class="fn__flex-1">${escapeHtml(path.posix.basename(files.path))}</span>
 <span class="ft__smaller fn__flex-center">${escapeHtml(path.posix.dirname(item.path).substr(1))}</span>
 </h2>`;
-                }
-                backlinksHTML += `<div class="item__content fn__two-line">${escapeHtml(item.content)}</div>`;
+                    }
+                    backlinksHTML += `<div class="item__content fn__two-line">${escapeHtml(item.content)}</div>`;
+                });
+                backlinksHTML += "</div>";
             });
-            backlinksHTML += "</div>";
-        });
+        } else {
+            (data.backlinks as IAllBacklinks[]).forEach((item) => {
+
+            });
+        }
+
         if (data.backlinks.length === 0) {
             backlinksHTML += `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
         }
+
         this.element.innerHTML = backlinksHTML;
     }
 }
