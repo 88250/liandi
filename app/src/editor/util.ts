@@ -5,8 +5,9 @@ import {Editor} from "./index";
 import {Wnd} from "../layout/Wnd";
 import {hasClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {getAllModels, getInstanceById} from "../layout/util";
+import {Layout} from "../layout";
 
-export const getIconByType = (type:string) => {
+export const getIconByType = (type: string) => {
     let iconName = "";
     switch (type) {
         case "NodeDocument":
@@ -58,7 +59,18 @@ export const openFile = (url: string, filePath: string) => {
         }
     }
     if (!wnd) {
-        wnd = window.liandi.centerLayout.children[0] as Wnd;
+        const getWnd = (layout: Layout) => {
+            for (let i = 0; i < layout.children.length; i++) {
+                const item = layout.children[i];
+                if (item instanceof Tab) {
+                    wnd = item.parent;
+                    break;
+                } else {
+                    getWnd(item as Layout);
+                }
+            }
+        };
+        getWnd(window.liandi.centerLayout)
     }
 
     if (wnd) {
