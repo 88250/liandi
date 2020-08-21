@@ -35,7 +35,7 @@ func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []inte
 	delete(treeBacklinks, tree)
 	indexLink(tree)
 	genGraph(keyword, tree, &nodes, &links)
-	connectBacklinks(treeBacklinks[tree], &nodes, &links)
+	connectBacklinks(treeBacklinks[tree], &nodes, &links, true)
 	markBugBlock(&nodes, &links)
 	return
 }
@@ -48,7 +48,7 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 	}
 
 	for _, nodeBacklinks := range treeBacklinks {
-		connectBacklinks(nodeBacklinks, &nodes, &links)
+		connectBacklinks(nodeBacklinks, &nodes, &links, false)
 	}
 
 	markBugBlock(&nodes, &links)
@@ -72,7 +72,7 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 	}
 }
 
-func connectBacklinks(nodeBacklinks map[*Block][]*Block, nodes *[]interface{}, links *[]interface{}) {
+func connectBacklinks(nodeBacklinks map[*Block][]*Block, nodes *[]interface{}, links *[]interface{}, fromTree bool) {
 	refs := map[string]*Block{}
 	for target, defs := range nodeBacklinks {
 		for _, ref := range defs {
@@ -87,6 +87,12 @@ func connectBacklinks(nodeBacklinks map[*Block][]*Block, nodes *[]interface{}, l
 			refs[ref.ID] = ref
 		}
 	}
+
+	if !fromTree {
+		return
+	}
+
+	// Tree Graph 需要从其他树的节点进行延伸补全
 
 	for refID, ref := range refs {
 		var existed bool
