@@ -27,14 +27,14 @@ var (
 )
 
 type DefRef struct {
-	def  *Block
-	refs []*Block
+	Def  *Block
+	Refs []*Block
 }
 
 type defRefs []*DefRef
 
 func (r defRefs) Len() int           { return len(r) }
-func (r defRefs) Less(i, j int) bool { return len(r[i].refs) < len(r[j].refs) }
+func (r defRefs) Less(i, j int) bool { return len(r[i].Refs) < len(r[j].Refs) }
 func (r defRefs) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
 
 type BacklinkBlock struct {
@@ -55,16 +55,14 @@ func TreeBacklinks(url, path string) (ret []*BacklinkBlock, err error) {
 }
 
 func Backlinks() (ret defRefs) {
-	ret = defRefs{}
-
 	rebuildBacklinks()
-	var defRefs defRefs
+
 	for _, backlinkDefs := range treeBacklinks {
 		for def, refs := range backlinkDefs {
-			defRefs = append(defRefs, &DefRef{def, refs})
+			ret = append(ret, &DefRef{def, refs})
 		}
 	}
-	sort.Sort(defRefs)
+	sort.Sort(ret)
 	return
 }
 
