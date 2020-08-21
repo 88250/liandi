@@ -28,7 +28,7 @@
 
 ## 💡 简介
 
-链滴笔记是一款开源的桌面端笔记应用，支持 Windows、Mac 和 Linux。
+链滴笔记是一款桌面端的 Markdown 块级引用和双向链接笔记应用，支持 Windows、Mac 和 Linux。
 
 欢迎到[链滴笔记官方讨论区](https://hacpai.com/tag/liandi-biji)了解更多。同时也欢迎关注 B3log 开源社区微信公众号 `B3log开源`：
 
