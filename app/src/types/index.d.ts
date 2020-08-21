@@ -21,7 +21,7 @@ interface ILiandi {
     // resizeList?: any[]
     menus: import("../menus").Menus
     current?: {
-        dir?: IBox
+        box?: IBox
         path?: string
     };
 }

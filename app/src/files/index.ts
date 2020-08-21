@@ -212,7 +212,7 @@ export class Files extends Model {
         window.liandi.ws.send("getconf", {callback: Constants.CB_GETCONF_BOX});
     }
 
-    public getLeaf(liElement: HTMLElement, dir: IBox) {
+    public getLeaf(liElement: HTMLElement, box: IBox) {
         const files = JSON.parse(liElement.getAttribute("data-files"));
         if (liElement.firstElementChild.classList.contains("item__arrow--open")) {
             liElement.firstElementChild.classList.remove("item__arrow--open");
@@ -229,12 +229,12 @@ export class Files extends Model {
                 fileHTML += `<li data-name="${encodeURIComponent(item.name)}" data-path="${encodeURIComponent(item.path)}" data-type="navigation-folder" class="fn__a fn__flex"${style}>
 <svg class="item__arrow fn__hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconRight"></use></svg>
 <span class="item__name">
-  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${dir.path === "" ? "iconCloud" : "iconFolder"}"></use></svg>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${box.path === "" ? "iconCloud" : "iconFolder"}"></use></svg>
   <span class="fn__ellipsis">${escapeHtml(item.name)}</span>
 </span>
 </li>`;
                 this.send("ls", {
-                    url: dir.url,
+                    url: box.url,
                     path: item.path,
                 }, true);
             } else {
