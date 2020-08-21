@@ -42,6 +42,8 @@ func (cmd *BaseCmd) Push() {
 func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, session *melody.Session) (ret Cmd) {
 	baseCmd := &BaseCmd{id: cmdId, param: param, session: session}
 	switch cmdStr {
+	case "closews":
+		ret = &closews{baseCmd}
 	case "mount":
 		ret = &mount{baseCmd}
 	case "mountremote":

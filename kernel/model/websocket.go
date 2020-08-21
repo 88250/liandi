@@ -30,6 +30,17 @@ func RemovePushChan(session *melody.Session) {
 	delete(sessions, id.(string))
 }
 
+func ClosePushChan(id string) {
+	for _, session := range sessions {
+		sid, _ := session.Get("id")
+		if sid == id {
+			session.CloseWithMsg([]byte("  close websocket"))
+			RemovePushChan(session)
+			return
+		}
+	}
+}
+
 func PushEvent(event *Result) {
 	msg := event.Bytes()
 	mode := event.PushMode
