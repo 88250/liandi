@@ -79,7 +79,7 @@ export class Wnd {
         } else if (model instanceof Graph) {
             model.chart.dispose();
         }
-        model.ws.close(1000, "close tab");
+        model.send("closews", {});
     }
 
     public removeTab(id: string) {
