@@ -66,6 +66,7 @@ func convertWikiLinks(trees []*parse.Tree) {
 				end += 2
 				text = text[:start] + repl + text[end:]
 				start, end = start+len(repl), len(text)
+				length = end
 			}
 			n.Tokens = util.StrToBytes(text)
 			return ast.WalkContinue
