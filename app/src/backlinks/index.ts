@@ -106,15 +106,15 @@ export class Backlinks extends Model {
         });
     }
 
-    public onBacklinks(data: { backlinks: IBacklinks[] | IAllBacklinks[], url: string, path: string }) {
+    public onBacklinks(data: { backlinks: IBlock[] | IAllBacklinks[], url: string, path: string }) {
         let backlinksHTML = "";
         if (data.url) {
             backlinksHTML = '';
-            (data.backlinks as IBacklinks[]).forEach((files) => {
+            (data.backlinks as IBlock[]).forEach((files) => {
                 backlinksHTML += `<div class="item"><div data-open="true" class="item__name" data-path="${encodeURIComponent(files.path)}" data-url="${encodeURIComponent(files.url)}" class="fn__flex">
 ${escapeHtml(path.posix.join(path.posix.basename(files.url), files.path))}
 </div>`;
-                files.blocks.forEach((item) => {
+                files.refs.forEach((item) => {
                     backlinksHTML += `<div class="item__content fn__a fn__two-line" data-url="${encodeURIComponent(item.def.url)}" data-path="${encodeURIComponent(item.def.path)}" data-id="${item.def.id}" data-type="${item.def.type}">
 <svg><use xlink:href="#${getIconByType(item.type)}"></use></svg>
 ${escapeHtml(item.content)}</div>`;

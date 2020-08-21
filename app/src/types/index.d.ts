@@ -85,17 +85,12 @@ declare interface IBlock {
     type?: string;
     content: string;
     def?: IBlock;
+    refs?: IBlock[];
 }
 
 declare interface IAllBacklinks {
     def: IBlock
     refs: IBlock[]
-}
-
-declare interface IBacklinks {
-    url: string;
-    path: string;
-    blocks: IBlock[];
 }
 
 declare interface IBox {
