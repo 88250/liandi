@@ -17,6 +17,7 @@ import {image} from "./config/image";
 import {markdown} from "./config/markdown";
 import {showMessage} from "./util/message";
 import {newFile} from "./util/newFile";
+import {resizeTabs} from "./layout/util";
 
 class App {
     constructor() {
@@ -115,13 +116,15 @@ class App {
         window.addEventListener("optimizedResize", () => {
             window.liandi.bottomLayout.element.style.height = window.liandi.bottomLayoutHeight + "px";
             window.liandi.bottomLayout.element.classList.remove("fn__flex-1");
-            layout.children[1].element.style.height = "auto";
-            layout.children[1].element.classList.add("fn__flex-1");
+            window.liandi.layout.children[1].element.style.height = "auto";
+            window.liandi.layout.children[1].element.classList.add("fn__flex-1");
 
             window.liandi.rightLayout.element.style.width = window.liandi.rightLayoutWidth + "px";
             window.liandi.rightLayout.element.classList.remove("fn__flex-1");
             window.liandi.centerLayout.element.style.width = "auto";
             window.liandi.centerLayout.element.classList.add("fn__flex-1");
+
+            resizeTabs()
         });
     }
 }

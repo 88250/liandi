@@ -69,7 +69,6 @@ const initBar = () => {
         });
         wnd.addTab(tab);
         window.liandi.leftLayout.addWnd(wnd);
-        // window.dispatchEvent(new CustomEvent("resize"));
     });
 
     document.getElementById("barGraph").addEventListener("click", function () {
@@ -88,7 +87,6 @@ const initBar = () => {
         });
         wnd.addTab(tab);
         window.liandi.topLayout.addWnd(wnd);
-        // window.dispatchEvent(new CustomEvent("resize"));
     });
 
     document.getElementById("barBacklinks").addEventListener("click", function () {
@@ -106,7 +104,6 @@ const initBar = () => {
         });
         wnd.addTab(tab);
         window.liandi.rightLayout.addWnd(wnd);
-        // window.dispatchEvent(new CustomEvent("resize"));
     });
     document.getElementById("barHelp").addEventListener("click", function () {
         if (getAllModels().files.length === 0) {

@@ -92,17 +92,11 @@ export class Graph extends Model {
         }
     }
 
-    resize() {
-        if (this.chart && this.graphElement.parentElement.style.display === "flex") {
-            this.chart.resize();
-        }
-    }
-
-    onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
+    private onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
         if (!this.chart) {
             this.chart = echarts.init(this.graphElement);
         } else {
-            this.resize();
+            this.chart.resize();
         }
         this.chart.setOption({
                 legend: {

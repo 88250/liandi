@@ -1,6 +1,6 @@
 import {Wnd} from "./wnd";
 import {genUUID} from "../util/genUUID";
-import {addResize} from "./util";
+import {addResize, resizeTabs} from "./util";
 
 export class Layout {
     public element: HTMLElement
@@ -75,6 +75,7 @@ export class Layout {
             });
         }
         addResize(child);
+        resizeTabs()
         child.parent = this;
     }
 }

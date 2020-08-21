@@ -1,6 +1,6 @@
 import {Layout} from "./index";
 import {genUUID} from "../util/genUUID";
-import {addCenterWnd} from "./util";
+import {addCenterWnd, resizeTabs} from "./util";
 import {Tab} from "./Tab";
 import {Model} from "./Model";
 import {Editor} from "../editor";
@@ -188,5 +188,6 @@ export class Wnd {
                 }
             }
         }
+        resizeTabs()
     }
 }

@@ -15,7 +15,7 @@ import {processRemoveDataRender1} from "../../vditore/src/ts/ir/process";
 import {destroyDialog} from "../util/dialog";
 
 export class Editor extends Model {
-    private element: HTMLElement;
+    public element: HTMLElement;
     public blockVditorElement: HTMLElement;
     private blockTipElement: HTMLElement;
     private saved = false
@@ -129,6 +129,7 @@ export class Editor extends Model {
             _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
             debugger: process.env.NODE_ENV === "development",
             icon: "material",
+            height: this.element.clientHeight,
             lang: window.liandi.config.lang,
             outline: window.liandi.config.markdown.outline,
             toolbarConfig: {

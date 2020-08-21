@@ -8,6 +8,19 @@ import {Graph} from "../graph";
 import {Editor} from "../editor";
 import {Backlinks} from "../backlinks";
 import {Files} from "../files";
+import {setPadding, setTypewriterPosition} from "../../vditore/src/ts/ui/initUI";
+
+export const resizeTabs = () => {
+    const models = getAllModels()
+    models.editor.forEach((item) => {
+        setPadding(item.vditore.vditor);
+        setTypewriterPosition(item.vditore.vditor);
+        item.element.style.height = item.element.parentElement.clientHeight + "px"
+    })
+    models.graph.forEach((item) => {
+        item.chart.resize()
+    })
+}
 
 export const getAllModels = () => {
     const models: IModels = {
@@ -146,7 +159,7 @@ export const addResize = (obj: Layout | Wnd) => {
                     }
                     window.liandi.rightLayoutWidth = window.liandi.rightLayout.element.clientWidth;
                     window.liandi.bottomLayoutHeight = window.liandi.bottomLayout.element.clientHeight;
-                    // window.dispatchEvent(new CustomEvent("resize"));
+                    resizeTabs();
                 };
             });
         };
