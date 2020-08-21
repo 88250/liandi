@@ -67,6 +67,10 @@ func main() {
 	r.POST("/upload", model.Upload)
 	r.POST("/upload/fetch", model.UploadFetch)
 
+	m.HandlePong(func(session *melody.Session) {
+		//model.Logger.Debugf("pong")
+	})
+
 	m.HandleConnect(func(s *melody.Session) {
 		id := s.Request.URL.Query().Get("id")
 		s.Set("id", id)
@@ -77,8 +81,8 @@ func main() {
 
 	m.HandleDisconnect(func(s *melody.Session) {
 		model.RemovePushChan(s)
-		//sessionId, _ := s.Get("id")
-		//model.Logger.Debugf("会话 [%s] 已断开", sessionId)
+		sessionId, _ := s.Get("id")
+		model.Logger.Debugf("会话 [%s] 已断开", sessionId)
 	})
 
 	m.HandleError(func(s *melody.Session, err error) {

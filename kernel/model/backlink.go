@@ -33,9 +33,15 @@ type DefRef struct {
 
 type DefRefs []*DefRef
 
-func (r DefRefs) Len() int           { return len(r) }
-func (r DefRefs) Less(i, j int) bool { return len(r[i].Refs) < len(r[j].Refs) }
-func (r DefRefs) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
+func (r DefRefs) Len() int { return len(r) }
+func (r DefRefs) Less(i, j int) bool {
+	if len(r[i].Refs) == len(r[j].Refs) {
+		return r[i].Def.ID > r[j].Def.ID
+	} else {
+		return len(r[i].Refs) < len(r[j].Refs)
+	}
+}
+func (r DefRefs) Swap(i, j int) { r[i], r[j] = r[j], r[i] }
 
 func TreeBacklinks(url, path string) (ret []*Block, err error) {
 	box := Conf.Box(url)
