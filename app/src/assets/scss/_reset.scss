@@ -5,6 +5,7 @@ html {
 }
 
 body {
+  text-rendering: optimizeLegibility;
   margin: 0;
   font-family: $font-family-base;
   font-size: 14px;

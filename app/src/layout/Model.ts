@@ -20,8 +20,8 @@ export class Model {
                 callback.call(this);
             }
         };
-        ws.onclose = (e) => {
-            console.warn("WebSocket is closed. Reconnect will be attempted in 1 second.", e);
+        ws.onclose = (ev: CloseEvent) => {
+            console.warn("WebSocket is closed. Reconnect will be attempted in 1 second.", ev);
             setTimeout(() => {
                 this.connect(id);
             }, 1000);

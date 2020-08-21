@@ -2,6 +2,9 @@ import {Layout} from "./index";
 import {genUUID} from "../util/genUUID";
 import {addCenterWnd} from "./util";
 import {Tab} from "./Tab";
+import {Model} from "./Model";
+import {Editor} from "../editor";
+import {Graph} from "../graph";
 
 export class Wnd {
     public id: string
@@ -70,10 +73,21 @@ export class Wnd {
         }
     }
 
+    private destroyModel(model: Model) {
+        if (model instanceof Editor) {
+            model.vditore.destroy()
+        } else if (model instanceof Graph) {
+            model.chart.dispose()
+        }
+        model.ws.close(1000, 'close tab');
+    }
+
     public removeTab(id: string) {
         if (this.children.length === 1) {
+            this.destroyModel(this.children[0].model)
             this.children = [];
             this.remove();
+            return;
         }
         this.children.find((item, index) => {
             if (item.id === id) {
@@ -86,7 +100,7 @@ export class Wnd {
                 }
                 item.headElement.remove();
                 item.panelElement.remove();
-                // TODO distory
+                this.destroyModel(item.model)
                 this.children.splice(index, 1);
                 return true;
             }
@@ -123,7 +137,6 @@ export class Wnd {
             id = layout.id;
             element = layout.element;
             layout = layout.parent;
-            // TODO destroy panel & ws
         }
 
         layout.children.find((item, index) => {
@@ -148,7 +161,6 @@ export class Wnd {
         } else if (element.nextElementSibling && element.nextElementSibling.classList.contains("layout__resize")) {
             element.nextElementSibling.remove();
         }
-        // TODO destroy panel & ws
         element.remove();
         if (layout.type === "center" && layout.children.length === 0) {
             addCenterWnd();

@@ -9,7 +9,7 @@ import {processMessage} from "../util/processMessage";
 export class Graph extends Model {
     public inputElement: HTMLInputElement;
     private graphElement: HTMLDivElement;
-    private chart: echarts.ECharts
+    public chart: echarts.ECharts
     public url: string
     public path: string
 

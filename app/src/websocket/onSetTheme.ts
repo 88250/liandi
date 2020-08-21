@@ -1,5 +1,6 @@
 import {Constants} from "../constants";
 import { ipcRenderer } from "electron";
+import {getAllModels} from "../layout/util";
 
 export const onSetTheme = (theme:TTheme) => {
     window.liandi.config.theme = theme;
@@ -9,10 +10,7 @@ export const onSetTheme = (theme:TTheme) => {
     } else {
         document.body.classList.remove("theme--dark");
     }
-    // TODO
-    // this.editors.forEach((item) => {
-    //     if (item.vditor) {
-    //         item.vditor.setTheme(liandi.config.theme === 'dark' ? 'dark' : 'classic', liandi.config.theme)
-    //     }
-    // })
+    getAllModels().editor.forEach((item) => {
+        item.vditore.setTheme(theme === 'dark' ? 'dark' : 'classic', theme)
+    })
 };
