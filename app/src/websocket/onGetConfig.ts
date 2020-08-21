@@ -56,7 +56,7 @@ const initBar = () => {
             </svg>
         </div>`;
     document.getElementById("barNavigation").addEventListener("click", () => {
-        const wnd = new Wnd( window.liandi.leftLayout.children.length === 0 ? undefined : "tb");
+        const wnd = new Wnd(window.liandi.leftLayout.children.length === 0 ? undefined : "tb");
         const tab = new Tab({
             title: `<svg class="item__svg"><use xlink:href="#iconFiles"></use></svg> ${i18n[window.liandi.config.lang].fileTree}`,
             callback(tab: Tab) {
@@ -79,8 +79,9 @@ const initBar = () => {
             panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
             callback(tab: Tab) {
                 if (window.liandi.topLayout.element.clientHeight < 7) {
-                    window.liandi.topLayout.parent.children[1].element.style.height = (window.liandi.topLayout.parent.children[1].element.clientHeight - 200) + "px";
-                    window.liandi.topLayout.element.style.height = "206px";
+                    const height = window.innerHeight / 3
+                    window.liandi.topLayout.parent.children[1].element.style.height = (window.liandi.topLayout.parent.children[1].element.clientHeight - height) + "px";
+                    window.liandi.topLayout.element.style.height = (height + 6) + "px";
                 }
                 tab.addModel(new Graph({tab}));
             }

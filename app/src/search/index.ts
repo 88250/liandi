@@ -9,8 +9,6 @@ import {image} from "../config/image";
 import {help} from "../config/help";
 import {escapeHtml} from "../util/escape";
 import {openFile} from "../editor/util";
-import {getCenterActiveWnd} from "../layout/util";
-import {Wnd} from "../layout/Wnd";
 
 export const initSearch = (type = "search") => {
     const liandi = window.liandi;
@@ -138,7 +136,7 @@ export const initSearch = (type = "search") => {
 
 export const quickOpenFile = (dialogElement: Element) => {
     const currentList: HTMLElement = dialogElement.querySelector('div[data-name="search"] .list__item--current');
-    openFile(getCenterActiveWnd() as Wnd, JSON.parse(decodeURIComponent(currentList.getAttribute("data-url"))),
+    openFile(JSON.parse(decodeURIComponent(currentList.getAttribute("data-url"))),
         decodeURIComponent(currentList.getAttribute("data-path")));
     destroyDialog();
 };
