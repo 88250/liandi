@@ -26,11 +26,12 @@ var (
 )
 
 type Block struct {
-	URL     string `json:"url"`
-	Path    string `json:"path"`
-	ID      string `json:"id"`
-	Content string `json:"content"`
-	Type    string `json:"type"`
+	URL      string `json:"url"`
+	Path     string `json:"path"`
+	ID       string `json:"id"`
+	Content  string `json:"content"`
+	Type     string `json:"type"`
+	DefBlock *Block `json:"def"`
 }
 
 type Snippet struct {
