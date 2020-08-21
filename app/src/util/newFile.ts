@@ -46,7 +46,8 @@ export const newFile = (editor?: Editor, callback?: string) => {
             return;
         }
         const itemData = window.liandi.menus.itemData;
-        if (itemData && itemData.target.getAttribute("data-type") === "navigation-folder") {
+        if (itemData && (itemData.target.getAttribute("data-type") === "navigation-folder" ||
+            itemData.target.getAttribute("data-type") === "navigation-root")) {
             const currentNewPath = path.posix.join(itemData.path, name);
             window.liandi.ws.send("create", {
                 url: itemData.url,
