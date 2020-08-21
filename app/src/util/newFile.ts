@@ -4,8 +4,9 @@ import {validateName} from "./rename";
 import * as path from "path";
 import {Editor} from "../editor";
 import {getAllModels} from "../layout/util";
+import {Constants} from "../constants";
 
-export const newFile = (editor?: Editor, callback?:string) => {
+export const newFile = (editor?: Editor, callback?: string) => {
     dialog({
         title: i18n[window.liandi.config.lang].newFile,
         content: `<input class="input" value="">
@@ -31,16 +32,29 @@ export const newFile = (editor?: Editor, callback?:string) => {
                 url: editor.url,
                 path: path.posix.join(path.posix.dirname(editor.path), name),
                 callback,
-                pushMode:0
+                pushMode: 0
             });
-        } else {
-            const itemData = window.liandi.menus.itemData;
+            return
+        }
+        if (callback === Constants.CB_CREATE_HOTKEY) {
+            const currentNewPath = path.posix.join("/", name);
+            window.liandi.ws.send("create", {
+                url: window.liandi.config.boxes[0].url,
+                path: currentNewPath,
+                callback,
+                pushMode: 0
+            })
+            return;
+        }
+        const itemData = window.liandi.menus.itemData;
+        if (itemData && itemData.target.getAttribute("data-type") === "navigation-folder") {
             const currentNewPath = path.posix.join(itemData.path, name);
             window.liandi.ws.send("create", {
                 url: itemData.url,
                 path: currentNewPath,
-                pushMode:0
+                pushMode: 0
             })
+            return
         }
     });
     bindDialogInput(inputElement, () => {

@@ -17,6 +17,7 @@ import {destroyDialog} from "./util/dialog";
 import {image} from "./config/image";
 import {markdown} from "./config/markdown";
 import {showMessage} from "./util/message";
+import {newFile} from "./util/newFile";
 
 class App {
     constructor() {
@@ -39,7 +40,7 @@ class App {
             liandi.find.open();
         });
         ipcRenderer.on(Constants.LIANDI_FILE_NEW, () => {
-            // TODO newFile()
+            newFile(undefined, Constants.CB_CREATE_HOTKEY);
         });
 
         const liandi: ILiandi = {

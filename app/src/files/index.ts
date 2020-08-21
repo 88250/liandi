@@ -144,7 +144,7 @@ export class Files extends Model {
         if (!this.element.contains(targetElement) && targetElement) {
             targetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(data.data.box.url)}'] li[data-path='${targetElement.getAttribute("data-path")}']`);
         }
-        if (data.callback === Constants.CB_CREATE_INSERT) {
+        if (data.callback === Constants.CB_CREATE_INSERT || data.callback === Constants.CB_CREATE_HOTKEY) {
             targetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(data.data.box.url)}'] li[data-path='${encodeURIComponent(path.posix.dirname(data.data.path))}']`);
         }
         if (targetElement) {
@@ -165,6 +165,9 @@ export class Files extends Model {
                     });
                 }
             })
+            if (data.callback === Constants.CB_CREATE_HOTKEY) {
+                openFile(data.data.box.url, data.data.path);
+            }
         }
         destroyDialog();
     }
