@@ -91,7 +91,14 @@ export class Backlinks extends Model {
             });
         } else {
             (data.backlinks as IAllBacklinks[]).forEach((item) => {
-
+                backlinksHTML += `<div class="item"><h2 data-path="${encodeURIComponent(item.Def.path)}" data-url="${encodeURIComponent(item.Def.url)}" class="fn__flex"">
+<span class="fn__flex-1">${escapeHtml(path.posix.basename(item.Def.path))}</span>
+<span class="ft__smaller fn__flex-center">${escapeHtml(path.posix.dirname(item.Def.path).substr(1))}</span>
+</h2>`
+                item.Refs.forEach((ref) => {
+                    backlinksHTML += `<div class="item__content fn__two-line">${escapeHtml(ref.content)}</div>`;
+                })
+                backlinksHTML += "</div>";
             });
         }
 
