@@ -55,7 +55,7 @@ func Close() {
 }
 
 func InitConf() {
-	Conf = &AppConf{LogLevel: "debug", Theme: "light", Lang: "zh_CN", Boxes: []*Box{}}
+	Conf = &AppConf{LogLevel: "debug", Theme: "dark", Lang: "zh_CN", Boxes: []*Box{}}
 	Lute = lute.New()
 	if gulu.File.IsExist(ConfPath) {
 		data, err := ioutil.ReadFile(ConfPath)
