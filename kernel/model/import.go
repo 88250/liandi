@@ -19,7 +19,7 @@ import (
 	"github.com/88250/lute/util"
 )
 
-func convertWikiLinks(trees []*parse.Tree) {
+func convertWikiLinks(trees []*parse.Tree) (ret []*parse.Tree) {
 	for _, tree := range trees {
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			if !entering || ast.NodeText != n.Type {
@@ -72,6 +72,31 @@ func convertWikiLinks(trees []*parse.Tree) {
 			return ast.WalkContinue
 		})
 	}
+
+	// 将文本节点进行结构化处理
+	for _, tree := range trees {
+		var unlinkTextNodes []*ast.Node
+		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+			if !entering || ast.NodeText != n.Type {
+				return ast.WalkContinue
+			}
+
+			t := parse.Parse("", n.Tokens, Lute.Options)
+			var children []*ast.Node
+			for c := t.Root.FirstChild.FirstChild; nil != c; c = c.Next {
+				children = append(children, c)
+			}
+			for _, c := range children {
+				n.InsertBefore(c)
+			}
+			unlinkTextNodes = append(unlinkTextNodes, n)
+			return ast.WalkContinue
+		})
+		for _, node := range unlinkTextNodes {
+			node.Unlink()
+		}
+	}
+	return
 }
 
 func searchLinkID(trees []*parse.Tree, link string) (id string) {
