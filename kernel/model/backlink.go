@@ -37,13 +37,7 @@ func (r DefRefs) Len() int           { return len(r) }
 func (r DefRefs) Less(i, j int) bool { return len(r[i].Refs) < len(r[j].Refs) }
 func (r DefRefs) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
 
-type BacklinkBlock struct {
-	URL    string   `json:"url"`
-	Path   string   `json:"path"`
-	Blocks []*Block `json:"blocks"`
-}
-
-func TreeBacklinks(url, path string) (ret []*BacklinkBlock, err error) {
+func TreeBacklinks(url, path string) (ret []*Block, err error) {
 	box := Conf.Box(url)
 	if nil == box {
 		return nil, errors.New(Conf.lang(0))
@@ -77,7 +71,7 @@ func rebuildBacklinks() {
 	}
 }
 
-func indexLink(tree *parse.Tree) (ret []*BacklinkBlock) {
+func indexLink(tree *parse.Tree) (ret []*Block) {
 	treeBacklinksLock.Lock()
 	defer treeBacklinksLock.Unlock()
 
@@ -126,7 +120,7 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkBlock) {
 			}
 			if nil != blocks {
 				for _, ref := range blocks {
-					ref.DefBlock = currentBlock
+					ref.Def = currentBlock
 				}
 				backlinks[currentBlock] = append(backlinks[currentBlock], blocks...)
 			}
@@ -136,22 +130,22 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkBlock) {
 	treeBacklinks[tree] = backlinks
 
 	// 按树路径合并引用
-	ret = []*BacklinkBlock{}
+	ret = []*Block{}
 	for _, refs := range backlinks {
 		for _, ref := range refs {
 			var appended bool
 			for _, existRef := range ret {
 				if existRef.URL == ref.URL && existRef.Path == ref.Path {
-					existRef.Blocks = append(existRef.Blocks, ref)
+					existRef.Refs = append(existRef.Refs, ref)
 					appended = true
 					break
 				}
 			}
 			if !appended {
-				newRef := &BacklinkBlock{
-					URL:    ref.URL,
-					Path:   ref.Path,
-					Blocks: []*Block{ref},
+				newRef := &Block{
+					URL:  ref.URL,
+					Path: ref.Path,
+					Refs: []*Block{ref},
 				}
 				ret = append(ret, newRef)
 			}
