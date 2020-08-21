@@ -31,11 +31,11 @@ type DefRef struct {
 	Refs []*Block
 }
 
-type defRefs []*DefRef
+type DefRefs []*DefRef
 
-func (r defRefs) Len() int           { return len(r) }
-func (r defRefs) Less(i, j int) bool { return len(r[i].Refs) < len(r[j].Refs) }
-func (r defRefs) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
+func (r DefRefs) Len() int           { return len(r) }
+func (r DefRefs) Less(i, j int) bool { return len(r[i].Refs) < len(r[j].Refs) }
+func (r DefRefs) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
 
 type BacklinkBlock struct {
 	URL    string   `json:"url"`
@@ -54,7 +54,7 @@ func TreeBacklinks(url, path string) (ret []*BacklinkBlock, err error) {
 	return
 }
 
-func Backlinks() (ret defRefs) {
+func Backlinks() (ret DefRefs) {
 	rebuildBacklinks()
 
 	for _, backlinkDefs := range treeBacklinks {

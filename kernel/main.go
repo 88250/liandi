@@ -71,24 +71,24 @@ func main() {
 		id := s.Request.URL.Query().Get("id")
 		s.Set("id", id)
 		model.AddPushChan(s)
-		//sessionId, _ := s.Get("id")
-		//model.Logger.Debugf("会话 [%s] 已连接", sessionId)
+		sessionId, _ := s.Get("id")
+		model.Logger.Debugf("会话 [%s] 已连接", sessionId)
 	})
 
 	m.HandleDisconnect(func(s *melody.Session) {
 		model.RemovePushChan(s)
-		//sessionId, _ := s.Get("id")
-		//model.Logger.Debugf("会话 [%s] 已断开", sessionId)
+		sessionId, _ := s.Get("id")
+		model.Logger.Debugf("会话 [%s] 已断开", sessionId)
 	})
 
 	m.HandleError(func(s *melody.Session, err error) {
-		//sessionId, _ := s.Get("id")
-		//model.Logger.Debugf("会话 [%s] 报错：%s", sessionId, err)
+		sessionId, _ := s.Get("id")
+		model.Logger.Debugf("会话 [%s] 报错：%s", sessionId, err)
 	})
 
 	m.HandleClose(func(s *melody.Session, i int, str string) error {
-		//sessionId, _ := s.Get("id")
-		//model.Logger.Debugf("会话 [%s] 关闭：%v, %v", sessionId, i, str)
+		sessionId, _ := s.Get("id")
+		model.Logger.Debugf("会话 [%s] 关闭：%v, %v", sessionId, i, str)
 		return nil
 	})
 
