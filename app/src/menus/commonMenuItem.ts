@@ -14,13 +14,13 @@ export const showInFolder = () => {
         label: i18n[window.liandi.config.lang].showInFolder,
         click: () => {
             const itemData = window.liandi.menus.itemData;
-            let rootPath = ''
+            let rootPath = "";
             window.liandi.config.boxes.find((item) => {
                 if (item.url === itemData.url) {
-                    rootPath = item.path
-                    return true
+                    rootPath = item.path;
+                    return true;
                 }
-            })
+            });
 
             if (itemData.path.endsWith("/")) {
                 shell.openItem(path.posix.join(rootPath, itemData.path));
@@ -135,9 +135,9 @@ export const renameMenu = () => {
                     return false;
                 }
                 if (!itemData.url) {
-                    const tab = getInstanceById(itemData.target.getAttribute("data-id")) as Tab
-                    itemData.url = (tab.model as Editor).url
-                    itemData.path = (tab.model as Editor).path
+                    const tab = getInstanceById(itemData.target.getAttribute("data-id")) as Tab;
+                    itemData.url = (tab.model as Editor).url;
+                    itemData.path = (tab.model as Editor).path;
                 }
                 const oldName = path.posix.basename(itemData.path);
                 if (inputElement.value === oldName) {

@@ -57,12 +57,12 @@ export class Backlinks extends Model {
         };
 
         this.element = options.tab.panelElement;
-        this.element.classList.add("backlinks")
+        this.element.classList.add("backlinks");
         this.element.addEventListener("click", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.isEqualNode(this.element)) {
                 if (target.tagName === "H2") {
-                    openFile(decodeURIComponent(target.getAttribute("data-url")), decodeURIComponent(target.getAttribute("data-path")))
+                    openFile(decodeURIComponent(target.getAttribute("data-url")), decodeURIComponent(target.getAttribute("data-path")));
                     event.preventDefault();
                     event.stopPropagation();
                     break;

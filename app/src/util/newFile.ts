@@ -3,7 +3,6 @@ import {i18n} from "../i18n";
 import {validateName} from "./rename";
 import * as path from "path";
 import {Editor} from "../editor";
-import {getAllModels} from "../layout/util";
 import {Constants} from "../constants";
 
 export const newFile = (editor?: Editor, callback?: string) => {
@@ -34,7 +33,7 @@ export const newFile = (editor?: Editor, callback?: string) => {
                 callback,
                 pushMode: 0
             });
-            return
+            return;
         }
         if (callback === Constants.CB_CREATE_HOTKEY) {
             const currentNewPath = path.posix.join("/", name);
@@ -43,7 +42,7 @@ export const newFile = (editor?: Editor, callback?: string) => {
                 path: currentNewPath,
                 callback,
                 pushMode: 0
-            })
+            });
             return;
         }
         const itemData = window.liandi.menus.itemData;
@@ -53,8 +52,8 @@ export const newFile = (editor?: Editor, callback?: string) => {
                 url: itemData.url,
                 path: currentNewPath,
                 pushMode: 0
-            })
-            return
+            });
+            return;
         }
     });
     bindDialogInput(inputElement, () => {

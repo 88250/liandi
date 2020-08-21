@@ -79,7 +79,7 @@ const initBar = () => {
             panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
             callback(tab: Tab) {
                 if (window.liandi.topLayout.element.clientHeight < 7) {
-                    const height = window.innerHeight / 3
+                    const height = window.innerHeight / 3;
                     window.liandi.topLayout.parent.children[1].element.style.height = (window.liandi.topLayout.parent.children[1].element.clientHeight - height) + "px";
                     window.liandi.topLayout.element.style.height = (height + 6) + "px";
                 }

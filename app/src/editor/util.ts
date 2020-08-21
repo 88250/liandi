@@ -8,7 +8,7 @@ import {getAllModels, getInstanceById} from "../layout/util";
 
 
 export const openFile = (url: string, filePath: string) => {
-    let wnd: Wnd = undefined
+    let wnd: Wnd = undefined;
     if (getSelection().rangeCount > 0) {
         const range = getSelection().getRangeAt(0);
         const element = hasClosestByAttribute(range.startContainer, "data-type", "wnd", true);
@@ -16,22 +16,22 @@ export const openFile = (url: string, filePath: string) => {
             wnd = getInstanceById(element.getAttribute("data-id")) as Wnd;
             const tab = wnd.children.find((item) => {
                 if (item.model instanceof Editor) {
-                    return true
+                    return true;
                 }
-            })
+            });
             if (!tab) {
-                wnd = undefined
+                wnd = undefined;
             }
         }
     }
     if (!wnd) {
-        const editorModels = getAllModels().editor
+        const editorModels = getAllModels().editor;
         if (editorModels.length > 0) {
-            wnd = editorModels[editorModels.length - 1].parent.parent
+            wnd = editorModels[editorModels.length - 1].parent.parent;
         }
     }
     if (!wnd) {
-        wnd = window.liandi.centerLayout.children[0] as Wnd
+        wnd = window.liandi.centerLayout.children[0] as Wnd;
     }
 
     if (wnd) {

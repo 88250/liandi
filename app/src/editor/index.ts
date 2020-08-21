@@ -76,8 +76,8 @@ export class Editor extends Model {
                         break;
                     case "rename":
                         if (data.data.url === this.url && data.data.oldPath === this.path && !data.data.newPath.endsWith("/")) {
-                            this.path = data.data.newPath
-                            this.parent.headElement.querySelector("span").textContent = data.data.newName
+                            this.path = data.data.newPath;
+                            this.parent.headElement.querySelector("span").textContent = data.data.newName;
                             destroyDialog();
                         }
                         break;

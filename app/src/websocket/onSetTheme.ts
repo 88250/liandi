@@ -11,6 +11,6 @@ export const onSetTheme = (theme:TTheme) => {
         document.body.classList.remove("theme--dark");
     }
     getAllModels().editor.forEach((item) => {
-        item.vditore.setTheme(theme === 'dark' ? 'dark' : 'classic', theme)
-    })
+        item.vditore.setTheme(theme === "dark" ? "dark" : "classic", theme);
+    });
 };

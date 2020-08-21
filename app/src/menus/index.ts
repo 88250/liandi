@@ -4,7 +4,6 @@ import {initMountMenu} from "./mount";
 import {hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
 import {initVditorMenu} from "./vditor";
 import {clipboard} from "electron";
-import {initBacklinksMenu} from "./backlinks";
 import {initEditorMenu, initTabMenu} from "./tab";
 
 export class Menus {

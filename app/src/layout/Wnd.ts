@@ -75,16 +75,16 @@ export class Wnd {
 
     private destroyModel(model: Model) {
         if (model instanceof Editor) {
-            model.vditore.destroy()
+            model.vditore.destroy();
         } else if (model instanceof Graph) {
-            model.chart.dispose()
+            model.chart.dispose();
         }
-        model.ws.close(1000, 'close tab');
+        model.ws.close(1000, "close tab");
     }
 
     public removeTab(id: string) {
         if (this.children.length === 1) {
-            this.destroyModel(this.children[0].model)
+            this.destroyModel(this.children[0].model);
             this.children = [];
             this.remove();
             return;
@@ -100,7 +100,7 @@ export class Wnd {
                 }
                 item.headElement.remove();
                 item.panelElement.remove();
-                this.destroyModel(item.model)
+                this.destroyModel(item.model);
                 this.children.splice(index, 1);
                 return true;
             }
@@ -118,8 +118,8 @@ export class Wnd {
                         direction,
                     });
                     this.parent.addLayout(layout, item.id);
-                    const movedWnd = this.parent.children.splice(index, 1)[0]
-                    movedWnd.resize = undefined
+                    const movedWnd = this.parent.children.splice(index, 1)[0];
+                    movedWnd.resize = undefined;
                     layout.addWnd.call(layout, movedWnd);
                     layout.addWnd.call(layout, wnd);
                     return true;

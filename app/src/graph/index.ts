@@ -68,13 +68,13 @@ export class Graph extends Model {
         this.inputElement = options.tab.panelElement.firstElementChild.firstElementChild as HTMLInputElement;
         this.inputElement.placeholder = i18n[window.liandi.config.lang].search;
         this.inputElement.addEventListener("compositionend", () => {
-            this.searchGraph()
+            this.searchGraph();
         });
         this.inputElement.addEventListener("input", (event: InputEvent) => {
             if (event.isComposing) {
                 return;
             }
-            this.searchGraph()
+            this.searchGraph();
         });
     }
 

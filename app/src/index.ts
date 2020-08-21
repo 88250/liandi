@@ -13,7 +13,6 @@ import {processMessage} from "./util/processMessage";
 import {onSearch} from "./search";
 import {onSetTheme} from "./websocket/onSetTheme";
 import {onGetConfig} from "./websocket/onGetConfig";
-import {destroyDialog} from "./util/dialog";
 import {image} from "./config/image";
 import {markdown} from "./config/markdown";
 import {showMessage} from "./util/message";

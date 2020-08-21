@@ -31,7 +31,7 @@ export class Files extends Model {
                         this.onLs(data.data);
                         break;
                     case "unmount":
-                        this.onUnmount(data.data.url)
+                        this.onUnmount(data.data.url);
                         break;
                     case "mount":
                     case "mountremote":
@@ -40,11 +40,11 @@ export class Files extends Model {
                             setTimeout(() => {
                                 this.getLeaf(this.element.lastElementChild.firstElementChild as HTMLElement, data.box);
                                 this.setCurrent(this.element.lastElementChild.firstElementChild as HTMLElement);
-                            }, 1000)
+                            }, 1000);
                         }
                         break;
                     case "remove":
-                        this.onRemove(data.data.url)
+                        this.onRemove(data.data.url);
                         break;
                     case "create":
                     case "mkdir":
@@ -118,14 +118,14 @@ export class Files extends Model {
             if (!item.path) {
                 item.send("backlinks", {});
             }
-        })
+        });
         allModels.graph.forEach((item) => {
             if (!item.path) {
                 item.send("graph", {
                     k: item.inputElement.value
                 });
             }
-        })
+        });
     }
 
     private onMkdir(data: {
@@ -156,7 +156,7 @@ export class Files extends Model {
             targetElement.setAttribute("data-files", JSON.stringify(data.data.files));
             this.getLeaf(targetElement, data.data.box);
         }
-        if (data.cmd === 'create') {
+        if (data.cmd === "create") {
             const allModels = getAllModels();
             allModels.graph.forEach((item) => {
                 if (!item.path) {
@@ -164,7 +164,7 @@ export class Files extends Model {
                         k: item.inputElement.value
                     });
                 }
-            })
+            });
             if (data.callback === Constants.CB_CREATE_HOTKEY) {
                 openFile(data.data.box.url, data.data.path);
             }
@@ -190,8 +190,8 @@ export class Files extends Model {
             if (item.url === itemData.url && item.path.indexOf(itemData.path) === 0) {
                 item.parent.parent.removeTab(item.parent.id);
             }
-        })
-        this.reloadGraphBacklinks(allModels)
+        });
+        this.reloadGraphBacklinks(allModels);
     }
 
     private onUnmount(url: string) {
@@ -209,8 +209,8 @@ export class Files extends Model {
             if (item.url === itemData.url && item.path.indexOf(itemData.path) === 0) {
                 item.parent.parent.removeTab(item.parent.id);
             }
-        })
-        this.reloadGraphBacklinks(allModels)
+        });
+        this.reloadGraphBacklinks(allModels);
         window.liandi.ws.send("getconf", {callback: Constants.CB_GETCONF_BOX});
     }
 
@@ -301,7 +301,7 @@ export class Files extends Model {
             url: data.box.url,
             path: "/",
         }, true);
-        this.reloadGraphBacklinks(allModels)
+        this.reloadGraphBacklinks(allModels);
         window.liandi.ws.send("getconf", {callback: Constants.CB_GETCONF_BOX});
     }
 

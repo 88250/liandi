@@ -15,30 +15,30 @@ export const getAllModels = () => {
         backlinks: [],
         graph: [],
         files: []
-    }
+    };
     const getTabs = (layout: Layout) => {
         for (let i = 0; i < layout.children.length; i++) {
             const item = layout.children[i];
             if (item instanceof Tab) {
                 const model = item.model;
                 if (model instanceof Editor) {
-                    models.editor.push(model)
+                    models.editor.push(model);
                 } else if (model instanceof Backlinks) {
-                    models.backlinks.push(model)
+                    models.backlinks.push(model);
                 } else if (model instanceof Graph) {
-                    models.graph.push(model)
+                    models.graph.push(model);
                 } else if (model instanceof Files) {
-                    models.files.push(model)
+                    models.files.push(model);
                 }
             } else {
                 getTabs(item as Layout);
             }
         }
-    }
+    };
 
-    getTabs(window.liandi.layout)
+    getTabs(window.liandi.layout);
     return models;
-}
+};
 
 export const copyTab = (tab: Tab) => {
     let panel = "";
