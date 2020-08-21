@@ -111,7 +111,7 @@
 
 ## 🏗️ 技术架构
 
-![arch.png](https://img.hacpai.com/file/2020/01/链滴笔记架构图-9ec13cd6.png)
+![arch.png](https://b3logfile.com/file/2020/01/链滴笔记架构图-9ec13cd6.png)
 
 * 通过 Electron 实现主进程，启动后拉起 golang 实现的内核进程
 * 内核实现 WebSocket 服务端和主进程交互
