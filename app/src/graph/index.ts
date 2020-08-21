@@ -5,6 +5,7 @@ import {escapeHtml} from "../util/escape";
 import {Model} from "../layout/Model";
 import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
+import {openFile} from "../editor/util";
 
 export class Graph extends Model {
     public inputElement: HTMLInputElement;
@@ -227,7 +228,7 @@ export class Graph extends Model {
 
         this.chart.on("click", (params: IEchartsFormatter) => {
             if (params.dataType === "node" && params.data.label.show) {
-                // window.liandi.editors.open(window.liandi, params.data.url, params.data.path);
+                openFile(params.data.url, params.data.path)
             }
         });
     }
