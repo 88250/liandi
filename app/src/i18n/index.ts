@@ -5,7 +5,7 @@ export const i18n: II18n = {
         debug: "Developer Tools",
         fileTree: "File Explorer",
         graphView: "Graph View",
-        sponsor: "Sponsor",
+        sponsor: "Power generation by <3",
         rootBlock: "Root Block",
         normalBlock: "Leaf Block",
         relativeBlock: "Linked Block",

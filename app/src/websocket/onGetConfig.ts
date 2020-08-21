@@ -39,6 +39,7 @@ const initBar = () => {
             <svg>
                 <use xlink:href="#iconFavorite"></use>
             </svg>
+            ${i18n[window.liandi.config.lang].sponsor}
         </a>
         <div id="barHelp" class="item fn__a" aria-label="${i18n[window.liandi.config.lang].help}">
             <svg>
