@@ -10,17 +10,6 @@ import {Backlinks} from "../backlinks";
 import {Files} from "../files";
 import {hasClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 
-const getFirstWnd = (layout: Layout) => {
-    for (let i = 0; i < layout.children.length; i++) {
-        if (layout.children[i] instanceof Wnd) {
-            return layout.children[i];
-        } else if (layout.children[i] instanceof Layout) {
-            getFirstWnd(layout.children[i] as Layout);
-        }
-    }
-    return null;
-};
-
 export const getAllModels = () => {
     const models: IModels = {
         editor: [],
@@ -54,16 +43,18 @@ export const getAllModels = () => {
 
 
 export const getCenterActiveWnd = () => {
-    if (getSelection().rangeCount === 0) {
-        return getFirstWnd(window.liandi.centerLayout);
+    if (getSelection().rangeCount > 0) {
+        const range = getSelection().getRangeAt(0);
+        const element = hasClosestByAttribute(range.startContainer, "data-type", "wnd", true);
+        if (element && window.liandi.centerLayout.element.contains(element)) {
+            return getInstanceById(element.getAttribute("data-id"));
+        }
     }
-    const range = getSelection().getRangeAt(0);
-    const element = hasClosestByAttribute(range.startContainer, "data-type", "wnd", true);
-    if (element && window.liandi.centerLayout.element.contains(element)) {
-        return getInstanceById(element.getAttribute("data-id"));
-    } else {
-        return getFirstWnd(window.liandi.centerLayout);
+    const editorModels =  getAllModels().editor
+    if (editorModels.length > 0) {
+        return editorModels[editorModels.length - 1].parent.parent
     }
+    return window.liandi.centerLayout.children[0]
 };
 
 export const copyTab = (tab: Tab) => {
@@ -123,6 +114,60 @@ export const getInstanceById = (id: string) => {
 
 export const addResize = (obj: Layout | Wnd) => {
     if (obj.resize) {
+        const resizeWnd = (resizeElement: HTMLElement, direction: string) => {
+            const setSize = (item: HTMLElement, direction: string) => {
+                if (item.classList.contains("fn__flex-1")) {
+                    if (direction === "lr") {
+                        item.style.width = item.clientWidth + "px";
+                    } else {
+                        item.style.height = item.clientHeight + "px";
+                    }
+                    item.classList.remove("fn__flex-1");
+                }
+            };
+
+            resizeElement.addEventListener("mousedown", (event: MouseEvent) => {
+                const documentSelf = document;
+                const nextElement = resizeElement.nextElementSibling as HTMLElement;
+                const previousElement = resizeElement.previousElementSibling as HTMLElement;
+                setSize(nextElement, direction);
+                setSize(previousElement, direction);
+                const x = event[direction === "lr" ? "clientX" : "clientY"];
+                const previousSize = direction === "lr" ? previousElement.clientWidth : previousElement.clientHeight;
+                const nextSize = direction === "lr" ? nextElement.clientWidth : nextElement.clientHeight;
+                document.body.style.userSelect = "none";
+
+                documentSelf.ondragstart = () => false;
+
+                documentSelf.onmousemove = (moveEvent: MouseEvent) => {
+                    const previousNowSize = (previousSize + (moveEvent[direction === "lr" ? "clientX" : "clientY"] - x));
+                    const nextNowSize = (nextSize - (moveEvent[direction === "lr" ? "clientX" : "clientY"] - x));
+                    if (previousNowSize < 6 || nextNowSize < 6) {
+                        return;
+                    }
+                    previousElement.style[direction === "lr" ? "width" : "height"] = previousNowSize + "px";
+                    nextElement.style[direction === "lr" ? "width" : "height"] = nextNowSize + "px";
+                };
+
+                documentSelf.onmouseup = () => {
+                    document.body.style.userSelect = "auto";
+                    documentSelf.onmousemove = null;
+                    documentSelf.onmouseup = null;
+                    documentSelf.ondragstart = null;
+                    documentSelf.onselectstart = null;
+                    documentSelf.onselect = null;
+
+                    if (!nextElement.nextElementSibling) {
+                        nextElement.style[direction === "lr" ? "width" : "height"] = "auto";
+                        nextElement.classList.add("fn__flex-1");
+                    }
+                    window.liandi.rightLayoutWidth = window.liandi.rightLayout.element.clientWidth;
+                    window.liandi.bottomLayoutHeight = window.liandi.bottomLayout.element.clientHeight;
+                    // window.dispatchEvent(new CustomEvent("resize"));
+                };
+            });
+        };
+
         const resizeElement = document.createElement("div");
         if (obj.resize === "lr") {
             resizeElement.classList.add("layout__resize--lr");
@@ -151,58 +196,4 @@ export const addCenterWnd = () => {
         }
     }));
     window.liandi.centerLayout.addWnd(wnd);
-};
-
-const setSize = (item: HTMLElement, direction: string) => {
-    if (item.classList.contains("fn__flex-1")) {
-        if (direction === "lr") {
-            item.style.width = item.clientWidth + "px";
-        } else {
-            item.style.height = item.clientHeight + "px";
-        }
-        item.classList.remove("fn__flex-1");
-    }
-};
-
-const resizeWnd = (resizeElement: HTMLElement, direction: string) => {
-    resizeElement.addEventListener("mousedown", (event: MouseEvent) => {
-        const documentSelf = document;
-        const nextElement = resizeElement.nextElementSibling as HTMLElement;
-        const previousElement = resizeElement.previousElementSibling as HTMLElement;
-        setSize(nextElement, direction);
-        setSize(previousElement, direction);
-        const x = event[direction === "lr" ? "clientX" : "clientY"];
-        const previousSize = direction === "lr" ? previousElement.clientWidth : previousElement.clientHeight;
-        const nextSize = direction === "lr" ? nextElement.clientWidth : nextElement.clientHeight;
-        document.body.style.userSelect = "none";
-
-        documentSelf.ondragstart = () => false;
-
-        documentSelf.onmousemove = (moveEvent: MouseEvent) => {
-            const previousNowSize = (previousSize + (moveEvent[direction === "lr" ? "clientX" : "clientY"] - x));
-            const nextNowSize = (nextSize - (moveEvent[direction === "lr" ? "clientX" : "clientY"] - x));
-            if (previousNowSize < 6 || nextNowSize < 6) {
-                return;
-            }
-            previousElement.style[direction === "lr" ? "width" : "height"] = previousNowSize + "px";
-            nextElement.style[direction === "lr" ? "width" : "height"] = nextNowSize + "px";
-        };
-
-        documentSelf.onmouseup = () => {
-            document.body.style.userSelect = "auto";
-            documentSelf.onmousemove = null;
-            documentSelf.onmouseup = null;
-            documentSelf.ondragstart = null;
-            documentSelf.onselectstart = null;
-            documentSelf.onselect = null;
-
-            if (!nextElement.nextElementSibling) {
-                nextElement.style[direction === "lr" ? "width" : "height"] = "auto";
-                nextElement.classList.add("fn__flex-1");
-            }
-            window.liandi.rightLayoutWidth = window.liandi.rightLayout.element.clientWidth;
-            window.liandi.bottomLayoutHeight = window.liandi.bottomLayout.element.clientHeight;
-            // window.dispatchEvent(new CustomEvent("resize"));
-        };
-    });
 };
