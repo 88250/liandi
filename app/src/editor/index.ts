@@ -255,7 +255,6 @@ export class Editor extends Model {
             input: () => {
                 this.saved = false;
                 this.parent.headElement.classList.add("item--unsave");
-                // TODO auto save
             }
         });
         this.vditore.vditor.model = this;
