@@ -96,9 +96,9 @@ const initBar = () => {
             title: `<svg class="item__svg"><use xlink:href="#iconLink"></use></svg> ${i18n[window.liandi.config.lang].backlinks}`,
             callback(tab: Tab) {
                 if (window.liandi.rightLayout.element.clientWidth < 7) {
-                    window.liandi.rightLayout.parent.children[1].element.style.width = (window.liandi.rightLayout.parent.children[1].element.clientWidth - 200) + "px";
-                    window.liandi.rightLayout.element.style.width = "206px";
-                    window.liandi.rightLayoutWidth = 206;
+                    window.liandi.rightLayout.parent.children[1].element.style.width = (window.liandi.rightLayout.parent.children[1].element.clientWidth - 260) + "px";
+                    window.liandi.rightLayout.element.style.width = "266px";
+                    window.liandi.rightLayoutWidth = 266;
                 }
                 tab.addModel(new Backlinks({tab}));
             }
