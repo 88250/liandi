@@ -84,11 +84,12 @@ declare interface IBlock {
     id: string;
     type?: string;
     content: string;
+    def?: IBlock;
 }
 
 declare interface IAllBacklinks {
-    def:IBlock
-    refs:IBlock[]
+    def: IBlock
+    refs: IBlock[]
 }
 
 declare interface IBacklinks {
@@ -127,7 +128,7 @@ declare interface IMenuData {
     path?: string
     url?: string
     name?: string
-    model?:import("../layout/Model").Model
+    model?: import("../layout/Model").Model
 }
 
 declare interface IModels {

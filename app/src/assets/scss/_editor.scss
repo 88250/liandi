@@ -13,4 +13,14 @@
     max-height: 50%;
     word-break: break-word;
   }
+
+  &__blockref {
+    background-color: var(--border-color);
+    border-radius: 3px;
+    box-shadow: var(--panel-shadow);
+  }
+
+  &__mdref {
+    background-color: var(--focus-background-color) !important;
+  }
 }

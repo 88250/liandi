@@ -9,7 +9,7 @@ import {i18n} from "../i18n";
 import {Model} from "../layout/Model";
 import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
-import {openFile} from "./util";
+import {getIconByType, openFile} from "./util";
 import {scrollCenter} from "../../vditore/src/ts/util/editorCommonEvent";
 import {processRemoveDataRender1} from "../../vditore/src/ts/ir/process";
 import {destroyDialog} from "../util/dialog";
@@ -104,7 +104,6 @@ export class Editor extends Model {
         this.element.addEventListener("mouseover", (event: MouseEvent & { target: HTMLElement }) => {
             const blockVditorElement = hasClosestByAttribute(event.target, "data-type", "block-ref");
             if (blockVditorElement) {
-
                 this.blockVditorElement = blockVditorElement;
                 this.send("getblock", {
                     id: blockVditorElement.querySelector(".vditor-ir__marker--link").textContent
@@ -280,30 +279,7 @@ export class Editor extends Model {
             if (index > 6) {
                 return;
             }
-            let iconName = "";
-            switch (item.type) {
-                case "NodeDocument":
-                    iconName = "iconMD";
-                    break;
-                case "NodeParagraph":
-                    iconName = "iconParagraph";
-                    break;
-                case "NodeHeading":
-                    iconName = "vditor-icon-headings";
-                    break;
-                case "NodeBlockquote":
-                    iconName = "vditor-icon-quote";
-                    break;
-                case "NodeList":
-                    iconName = "vditor-icon-list";
-                    break;
-                case "NodeCodeBlock":
-                    iconName = "vditor-icon-code";
-                    break;
-                case "NodeTable":
-                    iconName = "vditor-icon-table";
-                    break;
-            }
+            const iconName = getIconByType(item.type)
             if (nodeId !== item.id) {
                 const title = escapeHtml(item.path.substr(1));
                 dataList.push({

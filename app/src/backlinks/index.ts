@@ -4,7 +4,9 @@ import {escapeHtml} from "../util/escape";
 import {Model} from "../layout/Model";
 import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
-import {openFile} from "../editor/util";
+import {getIconByType, openFile} from "../editor/util";
+import {hasClosestByAttribute, hasClosestByClassName} from "../../vditore/src/ts/util/hasClosest";
+import {getAllModels} from "../layout/util";
 
 export class Backlinks extends Model {
     private element: HTMLElement
@@ -61,13 +63,45 @@ export class Backlinks extends Model {
         this.element.addEventListener("click", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.isEqualNode(this.element)) {
-                if (target.tagName === "H2") {
+                if (target.getAttribute("data-open") === "true") {
                     openFile(decodeURIComponent(target.getAttribute("data-url")), decodeURIComponent(target.getAttribute("data-path")));
                     event.preventDefault();
                     event.stopPropagation();
                     break;
                 }
                 target = target.parentElement;
+            }
+        });
+        this.element.addEventListener("mouseover", (event: MouseEvent & { target: HTMLElement }) => {
+            const itemElement = hasClosestByClassName(event.target, "item__content");
+            if (itemElement) {
+                const nodeId = itemElement.getAttribute("data-id")
+                const type = itemElement.getAttribute("data-type")
+                const url = decodeURIComponent(itemElement.getAttribute("data-url"))
+                const filePath = decodeURIComponent(itemElement.getAttribute("data-path"))
+                getAllModels().editor.find((item) => {
+                    if (item.url === url && item.path === filePath) {
+                        const vditorElement = item.vditore.vditor.ir.element
+                        if (type === "NodeDocument") {
+                            vditorElement.classList.add("editor__mdref")
+                            itemElement.onmouseleave = () => {
+                                vditorElement.classList.remove("editor__mdref")
+                            };
+                            return true
+                        }
+                        Array.from(vditorElement.children).find((item: HTMLElement) => {
+                            if (item.getAttribute("data-node-id") === nodeId) {
+                                item.classList.add("editor__blockref")
+                                vditorElement.scrollTop = item.getClientRects()[0].top + vditorElement.scrollTop - vditorElement.clientHeight / 2 + 10;
+                                itemElement.onmouseleave = () => {
+                                    item.classList.remove("editor__blockref")
+                                };
+                                return true
+                            }
+                        })
+                        return true
+                    }
+                })
             }
         });
     }
@@ -77,33 +111,32 @@ export class Backlinks extends Model {
         if (data.url) {
             backlinksHTML = '';
             (data.backlinks as IBacklinks[]).forEach((files) => {
-                backlinksHTML += '<div class="item">';
-                files.blocks.forEach((item, index) => {
-                    if (index === 0) {
-                        backlinksHTML += `<h2 data-path="${encodeURIComponent(item.path)}" data-url="${encodeURIComponent(item.url)}" class="fn__flex"">
-<span class="fn__flex-1">${escapeHtml(path.posix.basename(files.path))}</span>
-<span class="ft__smaller fn__flex-center">${escapeHtml(path.posix.dirname(item.path).substr(1))}</span>
-</h2>`;
-                    }
-                    backlinksHTML += `<div class="item__content fn__two-line">${escapeHtml(item.content)}</div>`;
+                backlinksHTML += `<div class="item"><div data-open="true" class="item__name" data-path="${encodeURIComponent(files.path)}" data-url="${encodeURIComponent(files.url)}" class="fn__flex">
+${escapeHtml(path.posix.join(path.posix.basename(files.url), files.path))}
+</div>`;
+                files.blocks.forEach((item) => {
+                    backlinksHTML += `<div class="item__content fn__a fn__two-line" data-url="${encodeURIComponent(item.def.url)}" data-path="${encodeURIComponent(item.def.path)}" data-id="${item.def.id}" data-type="${item.def.type}">
+<svg><use xlink:href="#${getIconByType(item.type)}"></use></svg>
+${escapeHtml(item.content)}</div>`;
                 });
                 backlinksHTML += "</div>";
             });
         } else {
             (data.backlinks as IAllBacklinks[]).forEach((item) => {
-                backlinksHTML += `<div class="item"><h2 data-path="${encodeURIComponent(item.def.path)}" data-url="${encodeURIComponent(item.def.url)}" class="fn__flex"">
-<span class="fn__flex-1">${escapeHtml(item.def.content)}</span>
-<span class="ft__smaller fn__flex-center">${escapeHtml(path.posix.basename(item.def.path))}</span>
-</h2>`
+                backlinksHTML += `<div class="item"><div class="item__path fn__ellipsis">${escapeHtml(path.posix.join(path.posix.basename(item.def.url), item.def.path))}</div><div data-open="true" class="item__content fn__a fn__two-line" data-url="${encodeURIComponent(item.def.url)}" data-path="${encodeURIComponent(item.def.path)}" data-id="${item.def.id}" data-type="${item.def.type}">
+<svg><use xlink:href="#${getIconByType(item.def.type)}"></use></svg>
+${escapeHtml(item.def.content)}</div>`
                 item.refs.forEach((ref) => {
-                    backlinksHTML += `<div class="item__content fn__two-line">${escapeHtml(ref.content)}</div>`;
+                    backlinksHTML += `<div  data-open="true" style="font-size: 12px" class="item__content item__content--ref fn__a fn__ellipsis" data-url="${encodeURIComponent(ref.url)}" data-path="${encodeURIComponent(ref.path)}" data-id="${ref.id}" data-type="${ref.type}">
+<svg><use xlink:href="#${getIconByType(ref.type)}"></use></svg>
+${escapeHtml(ref.content)}</div>`;
                 })
                 backlinksHTML += "</div>";
             });
         }
 
         if (data.backlinks.length === 0) {
-            backlinksHTML += `<div class="backlinks__title"><div class="ft__secondary ft__smaller">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
+            backlinksHTML += `<div class="item"><div class="item__content">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
         }
 
         this.element.innerHTML = backlinksHTML;

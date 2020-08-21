@@ -6,6 +6,33 @@ import {Wnd} from "../layout/Wnd";
 import {hasClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {getAllModels, getInstanceById} from "../layout/util";
 
+export const getIconByType = (type:string) => {
+    let iconName = "";
+    switch (type) {
+        case "NodeDocument":
+            iconName = "iconMD";
+            break;
+        case "NodeParagraph":
+            iconName = "iconParagraph";
+            break;
+        case "NodeHeading":
+            iconName = "vditor-icon-headings";
+            break;
+        case "NodeBlockquote":
+            iconName = "vditor-icon-quote";
+            break;
+        case "NodeList":
+            iconName = "vditor-icon-list";
+            break;
+        case "NodeCodeBlock":
+            iconName = "vditor-icon-code";
+            break;
+        case "NodeTable":
+            iconName = "vditor-icon-table";
+            break;
+    }
+    return iconName
+}
 
 export const openFile = (url: string, filePath: string) => {
     let wnd: Wnd = undefined;
