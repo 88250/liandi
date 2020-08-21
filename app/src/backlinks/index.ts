@@ -18,7 +18,7 @@ export class Backlinks extends Model {
         super({
             id: options.tab.id,
             callback() {
-                if (path) {
+                if (options.path) {
                     this.send("treebacklinks", {
                         url: options.url,
                         path: options.path
