@@ -19,7 +19,7 @@ export class Files extends Model {
             id: tab.id,
             callback() {
                 window.liandi.config.boxes.map((item: IBox) => {
-                    this.onMount({dir: item}, getAllModels());
+                    this.onMount({box: item}, getAllModels());
                 });
             }
         });
@@ -39,7 +39,7 @@ export class Files extends Model {
                         this.onMount(data.data, getAllModels());
                         if (data.cmd === "mount" && data.callback === Constants.CB_MOUNT_HELP) {
                             setTimeout(() => {
-                                this.getLeaf(this.element.lastElementChild.firstElementChild as HTMLElement, data.dir);
+                                this.getLeaf(this.element.lastElementChild.firstElementChild as HTMLElement, data.box);
                                 this.setCurrent(this.element.lastElementChild.firstElementChild as HTMLElement);
                             }, 1000)
                         }
@@ -280,23 +280,23 @@ export class Files extends Model {
         }
     }
 
-    public onMount(data: { dir: IBox, existed?: boolean }, allModels: IModels) {
+    public onMount(data: { box: IBox, existed?: boolean }, allModels: IModels) {
         destroyDialog();
         if (data.existed) {
             return;
         }
-        const html = `<ul data-url="${encodeURIComponent(data.dir.url)}" data-dir="${encodeURIComponent(JSON.stringify(data.dir))}">
+        const html = `<ul data-url="${encodeURIComponent(data.box.url)}" data-dir="${encodeURIComponent(JSON.stringify(data.box))}">
 <li class="fn__flex fn__a" data-type="navigation-root" data-path="%2F">
 <svg class="item__arrow fn__hidden" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#iconRight"></use></svg>
 <span class="item__name">
-  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${data.dir.path === "" ? "iconCloud" : "iconBook"}"></use></svg>
-  <span class="fn__ellipsis">${path.posix.basename(escapeHtml(data.dir.url))}</span>
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><use xlink:href="#${data.box.path === "" ? "iconCloud" : "iconBook"}"></use></svg>
+  <span class="fn__ellipsis">${path.posix.basename(escapeHtml(data.box.url))}</span>
 </span>
 </li></ul>`;
         this.element.insertAdjacentHTML("beforeend", html);
 
         this.send("ls", {
-            url: data.dir.url,
+            url: data.box.url,
             path: "/",
         }, true);
         this.reloadGraphBacklinks(allModels)
