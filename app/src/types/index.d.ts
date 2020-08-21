@@ -87,7 +87,7 @@ declare interface IBlock {
 }
 
 declare interface IAllBacklinks {
-    Def:IBlock[]
+    Def:IBlock
     Refs:IBlock[]
 }
 
