@@ -28,7 +28,7 @@
 
 ## 💡 简介
 
-链滴笔记是一款开源的桌面端笔记应用，支持 Windows、Mac 和 Linux。
+链滴笔记是一款桌面端的 Markdown 块级引用和双向链接笔记应用，支持 Windows、Mac 和 Linux。
 
 欢迎到[链滴笔记官方讨论区](https://hacpai.com/tag/liandi-biji)了解更多。同时也欢迎关注 B3log 开源社区微信公众号 `B3log开源`：
 
@@ -111,7 +111,7 @@
 
 ## 🏗️ 技术架构
 
-![arch.png](https://img.hacpai.com/file/2020/01/链滴笔记架构图-9ec13cd6.png)
+![arch.png](https://b3logfile.com/file/2020/01/链滴笔记架构图-9ec13cd6.png)
 
 * 通过 Electron 实现主进程，启动后拉起 golang 实现的内核进程
 * 内核实现 WebSocket 服务端和主进程交互

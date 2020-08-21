@@ -28,7 +28,7 @@
 
 ## 💡 Introduction
 
-LianDi Note is an open source desktop note application that supports Windows, Mac and Linux.
+LianDi Note is a desktop Markdown Block-Reference and Bidirectional-Link note-taking application, supports Windows, Mac and Linux.
 
 Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi-biji) to learn more.
 
@@ -109,7 +109,7 @@ If you want to modify the source code, please set up the development environment
 
 ## 🏗️ Technology Architecture
 
-![arch.png](https://img.hacpai.com/file/2020/01/链滴笔记架构图-9ec13cd6.png)
+![arch.png](https://b3logfile.com/file/2020/01/链滴笔记架构图-9ec13cd6.png)
 
 * Realize the main process through Electron, and pull up the kernel process implemented by golang after startup
 * The kernel realizes the interaction between the WebSocket server and the main process
