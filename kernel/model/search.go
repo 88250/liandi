@@ -31,7 +31,7 @@ type Block struct {
 	ID       string `json:"id"`
 	Content  string `json:"content"`
 	Type     string `json:"type"`
-	DefBlock *Block `json:"def"`
+	DefBlock *Block `json:"def,omitempty"`
 }
 
 type Snippet struct {
