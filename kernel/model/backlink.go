@@ -27,8 +27,8 @@ var (
 )
 
 type DefRef struct {
-	Def  *Block
-	Refs []*Block
+	Def  *Block   `json:"def"`
+	Refs []*Block `json:"refs"`
 }
 
 type DefRefs []*DefRef
@@ -125,6 +125,9 @@ func indexLink(tree *parse.Tree) (ret []*BacklinkBlock) {
 				blocks = append(blocks, buildBlock(tree.URL, tree.Path, n))
 			}
 			if nil != blocks {
+				for _, ref := range blocks {
+					ref.DefBlock = currentBlock
+				}
 				backlinks[currentBlock] = append(backlinks[currentBlock], blocks...)
 			}
 		}
