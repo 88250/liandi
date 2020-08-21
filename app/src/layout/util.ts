@@ -8,7 +8,6 @@ import {Graph} from "../graph";
 import {Editor} from "../editor";
 import {Backlinks} from "../backlinks";
 import {Files} from "../files";
-import {hasClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 
 export const getAllModels = () => {
     const models: IModels = {
@@ -40,22 +39,6 @@ export const getAllModels = () => {
     getTabs(window.liandi.layout)
     return models;
 }
-
-
-export const getCenterActiveWnd = () => {
-    if (getSelection().rangeCount > 0) {
-        const range = getSelection().getRangeAt(0);
-        const element = hasClosestByAttribute(range.startContainer, "data-type", "wnd", true);
-        if (element && window.liandi.centerLayout.element.contains(element)) {
-            return getInstanceById(element.getAttribute("data-id"));
-        }
-    }
-    const editorModels =  getAllModels().editor
-    if (editorModels.length > 0) {
-        return editorModels[editorModels.length - 1].parent.parent
-    }
-    return window.liandi.centerLayout.children[0]
-};
 
 export const copyTab = (tab: Tab) => {
     let panel = "";

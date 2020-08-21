@@ -4,6 +4,7 @@ import {escapeHtml} from "../util/escape";
 import {Model} from "../layout/Model";
 import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
+import {openFile} from "../editor/util";
 
 export class Backlinks extends Model {
     private element: HTMLElement
@@ -56,11 +57,12 @@ export class Backlinks extends Model {
         };
 
         this.element = options.tab.panelElement;
+        this.element.classList.add("backlinks")
         this.element.addEventListener("click", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.isEqualNode(this.element)) {
                 if (target.tagName === "H2") {
-                    // window.liandi.editors.open(window.liandi, decodeURIComponent(target.getAttribute("data-url")), decodeURIComponent(target.getAttribute("data-path")));
+                    openFile(decodeURIComponent(target.getAttribute("data-url")), decodeURIComponent(target.getAttribute("data-path")))
                     event.preventDefault();
                     event.stopPropagation();
                     break;

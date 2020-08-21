@@ -325,7 +325,7 @@ export class Editor extends Model {
             return;
         }
         if (data.callback === Constants.CB_GETBLOCK_OPEN) {
-            openFile(this.parent.parent, data.block.url, data.block.path);
+            openFile(data.block.url, data.block.path);
             return;
         }
         if (data.block.content.trim() === "") {

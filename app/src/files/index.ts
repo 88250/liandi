@@ -6,8 +6,7 @@ import {openFile} from "../editor/util";
 import {Tab} from "../layout/Tab";
 import {Model} from "../layout/Model";
 import {processMessage} from "../util/processMessage";
-import {getAllModels, getCenterActiveWnd} from "../layout/util";
-import {Wnd} from "../layout/Wnd";
+import {getAllModels} from "../layout/util";
 import {Constants} from "../constants";
 
 export class Files extends Model {
@@ -73,7 +72,7 @@ export class Files extends Model {
                     }
                     if (target.getAttribute("data-type") === "navigation-file") {
                         this.setCurrent(target);
-                        openFile(getCenterActiveWnd() as Wnd, dir.url, decodeURIComponent(target.getAttribute("data-path")));
+                        openFile(dir.url, decodeURIComponent(target.getAttribute("data-path")));
                         event.preventDefault();
                         event.stopPropagation();
                         break;
