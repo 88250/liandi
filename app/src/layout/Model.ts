@@ -21,10 +21,12 @@ export class Model {
             }
         };
         ws.onclose = (ev: CloseEvent) => {
-            console.warn("WebSocket is closed. Reconnect will be attempted in 1 second.", ev);
-            setTimeout(() => {
-                this.connect(id);
-            }, 1000);
+            if (0 > ev.reason.indexOf("close websocket")) {
+                console.warn("WebSocket is closed. Reconnect will be attempted in 1 second.", ev);
+                setTimeout(() => {
+                    this.connect(id);
+                }, 1000);
+            }
         };
         ws.onerror = (err) => {
             console.error("WebSocket Error:", err);
