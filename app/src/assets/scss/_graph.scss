@@ -1,6 +1,7 @@
 .graph {
   display: flex;
   flex-direction: column;
+  background-color: var(--focus-background-color);
   .graph__input {
     padding: 10px;
   }
