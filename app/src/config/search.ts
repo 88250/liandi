@@ -13,7 +13,7 @@ export const initConfigSearch = (element: HTMLElement) => {
     const configIndex = [
         ["markdown", "katex", "mathjax"].concat(getLang(["config", "outline",
             "autoSpace", "fixTermTypo", "chinesePunctuation", "inlineMathDigit", "mathEngine", "hideToolbar", "toc",
-            "footnotes", "paragraphBeginningSpace"
+            "footnotes", "paragraphBeginningSpace", "mark"
         ])),
         getLang(["autoFetch", "image"]),
         getLang(["theme", "themeLight", "themeDark"]),

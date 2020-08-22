@@ -205,7 +205,8 @@ export class Editor extends Model {
                     fixTermTypo: window.liandi.config.markdown.fixTermTypo,
                     toc: window.liandi.config.markdown.toc,
                     footnotes: window.liandi.config.markdown.footnotes,
-                    paragraphBeginningSpace: window.liandi.config.markdown.paragraphBeginningSpace
+                    paragraphBeginningSpace: window.liandi.config.markdown.paragraphBeginningSpace,
+                    mark: window.liandi.config.markdown.mark
                 },
                 math: {
                     inlineDigit: window.liandi.config.markdown.inlineMathAllowDigitAfterOpenMarker,
