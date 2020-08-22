@@ -232,11 +232,11 @@ export class Editor extends Model {
                 filename: (name: string) => name.replace(/[^(a-zA-Z0-9\u4e00-\u9fa5\.)]/g, "").replace(/[\?\\/:|<>\*\[\]\(\)\$%\{\}@~]/g, "").replace("/\\s/g", ""),
                 url: Constants.UPLOAD_ADDRESS,
             },
-            after: () => {
+            after: (vditore) => {
                 const lnkBase = path.posix.join(this.url, path.posix.dirname(this.path));
-                this.vditore.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + "/");
-                this.vditore.setHTML(html);
-                this.vditore.focus();
+                vditore.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + "/");
+                vditore.setHTML(html);
+                vditore.focus();
                 this.element.insertAdjacentElement("beforeend", this.blockTipElement);
             },
             save: (content: string) => {
