@@ -1,4 +1,6 @@
 .layout {
+  overflow: hidden;
+
   &__resize {
     cursor: row-resize;
     margin: -3px 0;
