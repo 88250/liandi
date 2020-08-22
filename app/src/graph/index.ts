@@ -97,12 +97,17 @@ export class Graph extends Model {
         if (!this.chart) {
             this.chart = echarts.init(this.graphElement);
             this.chart.on("click", (params: IEchartsFormatter) => {
-                if (params.dataType === "node" && params.data.label.show) {
+                if (params.dataType === "node") {
                     openFile(params.data.url, params.data.path)
                 }
             });
         } else {
             this.chart.resize();
+            this.chart.on("click", (params: IEchartsFormatter) => {
+                if (params.dataType === "node") {
+                    openFile(params.data.url, params.data.path)
+                }
+            });
         }
         this.chart.setOption({
                 legend: {
