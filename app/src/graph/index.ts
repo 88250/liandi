@@ -103,11 +103,6 @@ export class Graph extends Model {
             });
         } else {
             this.chart.resize();
-            this.chart.on("click", (params: IEchartsFormatter) => {
-                if (params.dataType === "node") {
-                    openFile(params.data.url, params.data.path)
-                }
-            });
         }
         this.chart.setOption({
                 legend: {
