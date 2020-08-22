@@ -35,14 +35,6 @@ type Block struct {
 	Refs    []*Block `json:"refs,omitempty"`
 }
 
-type Snippet struct {
-	Box     *Box   `json:"box"`
-	Path    string `json:"path"`
-	Index   int    `json:"index"`
-	Content string `json:"content"`
-	Type    string `json:"type"`
-}
-
 func InitIndex() {
 	for _, box := range Conf.Boxes {
 		go box.Index()
@@ -209,30 +201,26 @@ func isSearchBlockSkipNode(node *ast.Node) bool {
 		ast.NodeHTMLEntity == node.Type || ast.NodeYamlFrontMatter == node.Type
 }
 
-func Search(keyword string) (ret []*Snippet) {
-	ret = []*Snippet{}
+func Search(keyword string) (ret []*Block) {
+	ret = []*Block{}
 	if "" == keyword {
 		return
 	}
 
-	idx := 0
 	for _, tree := range trees {
-		box := Conf.Box(tree.URL)
 		pos, marked := markSearch(tree.Name, keyword)
 		if -1 < pos {
-			ret = append(ret, &Snippet{
-				Box:     box,
+			ret = append(ret, &Block{
+				URL:     tree.URL,
 				Path:    tree.Path,
-				Index:   idx,
+				ID:      tree.Root.ID,
 				Content: marked,
 				Type:    "title",
 			})
-			idx++
 		}
 	}
 
 	for _, tree := range trees {
-		box := Conf.Box(tree.URL)
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			if !entering {
 				return ast.WalkContinue
@@ -250,14 +238,13 @@ func Search(keyword string) (ret []*Snippet) {
 			text := renderBlockText(n)
 			pos, marked := markSearch(text, keyword)
 			if -1 < pos {
-				ret = append(ret, &Snippet{
-					Box:     box,
+				ret = append(ret, &Block{
+					URL:     tree.URL,
 					Path:    tree.Path,
-					Index:   idx,
+					ID:      n.ID,
 					Content: marked,
 					Type:    "content",
 				})
-				idx++
 			}
 
 			if 16 <= len(ret) {
@@ -269,7 +256,6 @@ func Search(keyword string) (ret []*Snippet) {
 			}
 			return ast.WalkContinue
 		})
-		idx++
 	}
 	return
 }
