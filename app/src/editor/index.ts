@@ -234,6 +234,7 @@ export class Editor extends Model {
                 url: Constants.UPLOAD_ADDRESS,
             },
             after: (vditore) => {
+                vditore.vditor.model = this;
                 const lnkBase = path.posix.join(this.url, path.posix.dirname(this.path));
                 vditore.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + "/");
                 vditore.setHTML(html);
@@ -258,7 +259,6 @@ export class Editor extends Model {
                 this.parent.headElement.classList.add("item--unsave");
             }
         });
-        this.vditore.vditor.model = this;
     }
 
     public reloadVditor() {
