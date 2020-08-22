@@ -40,7 +40,7 @@ export class Files extends Model {
                             setTimeout(() => {
                                 this.getLeaf(this.element.lastElementChild.firstElementChild as HTMLElement, data.box);
                                 this.setCurrent(this.element.lastElementChild.firstElementChild as HTMLElement);
-                            }, 1000);
+                            }, 200);
                         }
                         break;
                     case "remove":
