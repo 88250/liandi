@@ -23,9 +23,9 @@ export const showInFolder = () => {
             });
 
             if (itemData.path.endsWith("/")) {
-                shell.openItem(path.posix.join(rootPath, itemData.path));
+                shell.openItem(path.join(rootPath, itemData.path));
             } else {
-                shell.showItemInFolder(path.posix.join(rootPath, itemData.path + ".md.json"));
+                shell.showItemInFolder(path.join(rootPath, itemData.path + ".md.json"));
             }
         }
     });
