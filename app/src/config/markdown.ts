@@ -1,7 +1,5 @@
 import {i18n} from "../i18n";
-import {Tab} from "../layout/Tab";
-import {Editor} from "../editor";
-import {Layout} from "../layout";
+import {getAllModels} from "../layout/util";
 
 export const markdown = {
     genHTML: () => {
@@ -52,10 +50,10 @@ export const markdown = {
 <div class="form__item"><label>
     <input id="footnotes" type="checkbox"${window.liandi.config.markdown.footnotes ? " checked" : ""}/>
     <span class="fn__space"></span>${i18n[window.liandi.config.lang].footnotes}
-</label></div></div>
+</label></div>
 <div class="form__item"><label>
     <input id="mark" type="checkbox"${window.liandi.config.markdown.mark ? " checked" : ""}/>
-    <span class="fn__space"></span>==${i18n[window.liandi.config.lang].mark}==
+    <span class="fn__space"></span>${i18n[window.liandi.config.lang].mark}
 </label></div>`;
     },
     bindEvent: (element: HTMLElement) => {
@@ -79,20 +77,8 @@ export const markdown = {
     },
     onSetMD: (md: IMD) => {
         window.liandi.config.markdown = md;
-
-        const reloadAllVditor = (layout: Layout) => {
-            for (let i = 0; i < layout.children.length; i++) {
-                const item = layout.children[i];
-                if (item instanceof Tab) {
-                    const model = (item as Tab).model;
-                    if (model instanceof Editor) {
-                        model.reloadVditor();
-                    }
-                } else {
-                    reloadAllVditor(item as Layout);
-                }
-            }
-        };
-        reloadAllVditor(window.liandi.layout);
+        getAllModels().editor.forEach((item) => {
+            item.reloadVditor();
+        })
     }
 };

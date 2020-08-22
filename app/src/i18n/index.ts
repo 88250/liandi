@@ -1,6 +1,6 @@
 export const i18n: II18n = {
     en_US: {
-        mark:"Mark",
+        mark:"Enable ==Mark==",
         splitLR:"Split Vertically",
         splitTB:"Split Horizontally",
         debug: "Developer Tools",
@@ -280,7 +280,7 @@ export const i18n: II18n = {
         "wysiwyg": "위지위그",
     },
     zh_CN: {
-        mark:"标记",
+        mark:"支持脚注 ==标记==",
         splitLR:"左右分屏",
         splitTB:"上下分屏",
         debug: "开发者工具",
