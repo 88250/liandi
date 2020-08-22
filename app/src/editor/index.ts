@@ -128,7 +128,7 @@ export class Editor extends Model {
             _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
             debugger: process.env.NODE_ENV === "development",
             icon: "material",
-            height: this.element.clientHeight,
+            height: this.element.parentElement.clientHeight,
             lang: window.liandi.config.lang,
             outline: window.liandi.config.markdown.outline,
             toolbarConfig: {
