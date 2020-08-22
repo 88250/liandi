@@ -117,6 +117,7 @@ type Markdown struct {
 	HideToolbar                         bool   `json:"hideToolbar"`
 	Outline                             bool   `json:"outline"`
 	ParagraphBeginningSpace             bool   `json:"paragraphBeginningSpace"`
+	Mark                                bool   `json:"mark"`
 }
 
 type Image struct {
@@ -135,6 +136,7 @@ func newMarkdown() *Markdown {
 		HideToolbar:                         false,
 		Outline:                             false,
 		ParagraphBeginningSpace:             false,
+		Mark:                                false,
 	}
 }
 
@@ -147,6 +149,7 @@ func ConfLute() {
 	Lute.InlineMathAllowDigitAfterOpenMarker = Conf.Markdown.InlineMathAllowDigitAfterOpenMarker
 	Lute.InlineMathAllowDigitAfterOpenMarker = Conf.Markdown.InlineMathAllowDigitAfterOpenMarker
 	Lute.ChineseParagraphBeginningSpace = Conf.Markdown.ParagraphBeginningSpace
+	Lute.Mark = Conf.Markdown.Mark
 	Lute.BlockRef = true
 }
 
