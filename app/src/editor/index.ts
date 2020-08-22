@@ -13,6 +13,7 @@ import {getIconByType, openFile} from "./util";
 import {scrollCenter} from "../../vditore/src/ts/util/editorCommonEvent";
 import {processRemoveDataRender1} from "../../vditore/src/ts/ir/process";
 import {destroyDialog} from "../util/dialog";
+import {expandMarker} from "../../vditore/src/ts/ir/expandMarker";
 
 export class Editor extends Model {
     public element: HTMLElement;
@@ -247,8 +248,9 @@ export class Editor extends Model {
                     const nodeElement = vditore.vditor.ir.element.querySelector(`[data-node-id="${this.nodeId}"]`)
                     if (nodeElement) {
                         const range = getEditorRange(vditore.vditor.ir.element)
-                        range.selectNodeContents(nodeElement)
+                        range.selectNodeContents(nodeElement.firstChild)
                         range.collapse(true)
+                        expandMarker(range, vditore.vditor);
                         setSelectionFocus(range);
                         vditore.vditor.ir.element.scrollTop = nodeElement.getClientRects()[0].top + vditore.vditor.ir.element.scrollTop - vditore.vditor.ir.element.clientHeight / 2 + 10;
                     }
