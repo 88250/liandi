@@ -62,6 +62,7 @@ declare interface IMD {
     footnotes: boolean;
     outline: boolean;
     paragraphBeginningSpace: boolean;
+    mark: boolean;
 }
 
 declare interface IConfig {
