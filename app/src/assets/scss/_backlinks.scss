@@ -16,18 +16,6 @@
       color: var(--text-secondary-color);
     }
 
-    &__name {
-      cursor: pointer;
-      padding: 0 10px;
-      font-size: 12px;
-      color: var(--text-secondary-color);
-      line-height: 24px;
-
-      &:hover {
-        background-color: var(--background-color);
-      }
-    }
-
     &__content {
       cursor: pointer;
       padding: 0 10px;

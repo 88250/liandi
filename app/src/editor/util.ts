@@ -35,7 +35,7 @@ export const getIconByType = (type: string) => {
     return iconName
 }
 
-export const openFile = (url: string, filePath: string) => {
+export const openFile = (url: string, filePath: string, id?: string) => {
     let wnd: Wnd = undefined;
     if (getSelection().rangeCount > 0) {
         const range = getSelection().getRangeAt(0);
@@ -80,6 +80,7 @@ export const openFile = (url: string, filePath: string) => {
                 const editor = new Editor({
                     tab,
                     url,
+                    nodeId:id,
                     path: filePath
                 });
                 tab.addModel(editor);

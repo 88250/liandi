@@ -63,8 +63,8 @@ export class Backlinks extends Model {
         this.element.addEventListener("click", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.isEqualNode(this.element)) {
-                if (target.getAttribute("data-open") === "true") {
-                    openFile(decodeURIComponent(target.getAttribute("data-url")), decodeURIComponent(target.getAttribute("data-path")));
+                if (target.classList.contains("item__content")) {
+                    openFile(decodeURIComponent(target.getAttribute("data-url")), decodeURIComponent(target.getAttribute("data-path")), target.getAttribute("data-id"));
                     event.preventDefault();
                     event.stopPropagation();
                     break;
@@ -80,7 +80,7 @@ export class Backlinks extends Model {
                 const url = decodeURIComponent(itemElement.getAttribute("data-url"))
                 const filePath = decodeURIComponent(itemElement.getAttribute("data-path"))
                 getAllModels().editor.find((item) => {
-                    if (item.url === url && item.path === filePath) {
+                    if (item.url === url && item.path === filePath && !item.element.classList.contains('fn__none')) {
                         const vditorElement = item.vditore.vditor.ir.element
                         if (type === "NodeDocument") {
                             vditorElement.classList.add("editor__mdref")
@@ -90,7 +90,7 @@ export class Backlinks extends Model {
                             return true
                         }
                         Array.from(vditorElement.children).find((item: HTMLElement) => {
-                            if (item.getAttribute("data-node-id") === nodeId) {
+                            if (item.getAttribute("data-node-id") === nodeId && item.getClientRects().length > 0) {
                                 item.classList.add("editor__blockref")
                                 vditorElement.scrollTop = item.getClientRects()[0].top + vditorElement.scrollTop - vditorElement.clientHeight / 2 + 10;
                                 itemElement.onmouseleave = () => {
@@ -111,7 +111,8 @@ export class Backlinks extends Model {
         if (data.url) {
             backlinksHTML = '';
             (data.backlinks as IBlock[]).forEach((files) => {
-                backlinksHTML += `<div class="item"><div data-open="true" class="item__name" data-path="${encodeURIComponent(files.path)}" data-url="${encodeURIComponent(files.url)}" class="fn__flex">
+                backlinksHTML += `<div class="item">
+<div data-id="${files.id}" class="item__path fn__ellipsis">
 ${escapeHtml(path.posix.join(path.posix.basename(files.url), files.path))}
 </div>`;
                 files.refs.forEach((item) => {
@@ -123,11 +124,13 @@ ${escapeHtml(item.content)}</div>`;
             });
         } else {
             (data.backlinks as IAllBacklinks[]).forEach((item) => {
-                backlinksHTML += `<div class="item"><div class="item__path fn__ellipsis">${escapeHtml(path.posix.join(path.posix.basename(item.def.url), item.def.path))}</div><div data-open="true" class="item__content fn__a fn__two-line" data-url="${encodeURIComponent(item.def.url)}" data-path="${encodeURIComponent(item.def.path)}" data-id="${item.def.id}" data-type="${item.def.type}">
+                backlinksHTML += `<div class="item">
+<div class="item__path fn__ellipsis">${escapeHtml(path.posix.join(path.posix.basename(item.def.url), item.def.path))}</div>
+<div class="item__content fn__a fn__two-line" data-url="${encodeURIComponent(item.def.url)}" data-path="${encodeURIComponent(item.def.path)}" data-id="${item.def.id}" data-type="${item.def.type}">
 <svg><use xlink:href="#${getIconByType(item.def.type)}"></use></svg>
 ${escapeHtml(item.def.content)}</div>`
                 item.refs.forEach((ref) => {
-                    backlinksHTML += `<div  data-open="true" style="font-size: 12px" class="item__content item__content--ref fn__a fn__ellipsis" data-url="${encodeURIComponent(ref.url)}" data-path="${encodeURIComponent(ref.path)}" data-id="${ref.id}" data-type="${ref.type}">
+                    backlinksHTML += `<div class="item__content item__content--ref fn__a fn__ellipsis" data-url="${encodeURIComponent(ref.url)}" data-path="${encodeURIComponent(ref.path)}" data-id="${ref.id}" data-type="${ref.type}">
 <svg><use xlink:href="#${getIconByType(ref.type)}"></use></svg>
 ${escapeHtml(ref.content)}</div>`;
                 })
@@ -136,7 +139,7 @@ ${escapeHtml(ref.content)}</div>`;
         }
 
         if (data.backlinks.length === 0) {
-            backlinksHTML += `<div class="item"><div class="item__content">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
+            backlinksHTML += `<div class="item"><div class="item__path">${i18n[window.liandi.config.lang].noBacklinks}</div></div>`;
         }
 
         this.element.innerHTML = backlinksHTML;

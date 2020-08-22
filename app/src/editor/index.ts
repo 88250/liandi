@@ -23,18 +23,21 @@ export class Editor extends Model {
     public url: string
     public path: string
     public range: Range
+    private nodeId?: string
 
     constructor(options: {
         tab: Tab,
         url: string,
-        path: string
+        path: string,
+        nodeId?: string,
     }) {
         super({
             id: options.tab.id,
             callback() {
                 this.send("get", {
                     url: options.url,
-                    path: options.path
+                    path: options.path,
+                    id: options.nodeId || ""
                 }, true);
 
             }
@@ -64,6 +67,7 @@ export class Editor extends Model {
                             this.send("get", {
                                 url: this.url,
                                 path: this.path,
+                                id: "",
                                 callback: Constants.CB_PUT_RELOAD
                             });
                         }
@@ -88,6 +92,7 @@ export class Editor extends Model {
         this.element = options.tab.panelElement;
         this.url = options.url;
         this.path = options.path;
+        this.nodeId = options.nodeId;
 
         this.blockTipElement = document.createElement("div");
         this.blockTipElement.classList.add("editor__blockhint", "vditor-reset");
@@ -238,7 +243,18 @@ export class Editor extends Model {
                 const lnkBase = path.posix.join(this.url, path.posix.dirname(this.path));
                 vditore.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + "/");
                 vditore.setHTML(html);
-                vditore.focus();
+                if (this.nodeId) {
+                    const nodeElement = vditore.vditor.ir.element.querySelector(`[data-node-id="${this.nodeId}"]`)
+                    if (nodeElement) {
+                        const range = getEditorRange(vditore.vditor.ir.element)
+                        range.selectNodeContents(nodeElement)
+                        range.collapse(true)
+                        setSelectionFocus(range);
+                        vditore.vditor.ir.element.scrollTop = nodeElement.getClientRects()[0].top + vditore.vditor.ir.element.scrollTop - vditore.vditor.ir.element.clientHeight / 2 + 10;
+                    }
+                } else {
+                    vditore.focus();
+                }
                 this.element.insertAdjacentElement("beforeend", this.blockTipElement);
             },
             save: (content: string) => {
