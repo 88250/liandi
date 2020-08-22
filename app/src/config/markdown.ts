@@ -79,6 +79,6 @@ export const markdown = {
         window.liandi.config.markdown = md;
         getAllModels().editor.forEach((item) => {
             item.reloadVditor();
-        })
+        });
     }
 };

@@ -32,8 +32,8 @@ export const getIconByType = (type: string) => {
             iconName = "vditor-icon-table";
             break;
     }
-    return iconName
-}
+    return iconName;
+};
 
 export const openFile = (url: string, filePath: string, id?: string) => {
     let wnd: Wnd = undefined;
@@ -70,7 +70,7 @@ export const openFile = (url: string, filePath: string, id?: string) => {
                 }
             }
         };
-        getWnd(window.liandi.centerLayout)
+        getWnd(window.liandi.centerLayout);
     }
 
     if (wnd) {

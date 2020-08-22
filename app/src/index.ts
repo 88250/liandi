@@ -116,9 +116,9 @@ class App {
         });
 
         window.addEventListener("optimizedResize", () => {
-            window.liandi.layout.children[1].element.style.height = window.innerHeight - window.liandi.topLayout.element.clientHeight - window.liandi.bottomLayoutHeight - 20 + 'px';
-            window.liandi.centerLayout.element.style.width = window.innerWidth - window.liandi.leftLayout.element.clientWidth - window.liandi.rightLayoutWidth + 'px';
-            resizeTabs()
+            window.liandi.layout.children[1].element.style.height = window.innerHeight - window.liandi.topLayout.element.clientHeight - window.liandi.bottomLayoutHeight - 20 + "px";
+            window.liandi.centerLayout.element.style.width = window.innerWidth - window.liandi.leftLayout.element.clientWidth - window.liandi.rightLayoutWidth + "px";
+            resizeTabs();
         });
 
         addScript(`${path.posix.join(Constants.APP_DIR, "vditore")}/dist/js/icons/material.js`, "vditorIconScript");

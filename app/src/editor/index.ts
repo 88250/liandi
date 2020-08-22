@@ -245,11 +245,11 @@ export class Editor extends Model {
                 vditore.vditor.lute.SetLinkBase(lnkBase.endsWith("/") ? lnkBase : lnkBase + "/");
                 vditore.setHTML(html);
                 if (this.nodeId) {
-                    const nodeElement = vditore.vditor.ir.element.querySelector(`[data-node-id="${this.nodeId}"]`) as HTMLElement
+                    const nodeElement = vditore.vditor.ir.element.querySelector(`[data-node-id="${this.nodeId}"]`) as HTMLElement;
                     if (nodeElement) {
-                        const range = getEditorRange(vditore.vditor.ir.element)
-                        range.selectNodeContents(nodeElement.firstChild)
-                        range.collapse(true)
+                        const range = getEditorRange(vditore.vditor.ir.element);
+                        range.selectNodeContents(nodeElement.firstChild);
+                        range.collapse(true);
                         expandMarker(range, vditore.vditor);
                         setSelectionFocus(range);
                         vditore.vditor.ir.element.scrollTop = nodeElement.offsetTop -vditore.vditor.ir.element.clientHeight / 2;
@@ -298,7 +298,7 @@ export class Editor extends Model {
             if (index > 6) {
                 return;
             }
-            const iconName = getIconByType(item.type)
+            const iconName = getIconByType(item.type);
             if (nodeId !== item.id) {
                 const title = escapeHtml(item.path.substr(1));
                 dataList.push({

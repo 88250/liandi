@@ -5,7 +5,7 @@ import {Model} from "../layout/Model";
 import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
 import {getIconByType, openFile} from "../editor/util";
-import {hasClosestByAttribute, hasClosestByClassName} from "../../vditore/src/ts/util/hasClosest";
+import {hasClosestByClassName} from "../../vditore/src/ts/util/hasClosest";
 import {getAllModels} from "../layout/util";
 
 export class Backlinks extends Model {
@@ -75,33 +75,33 @@ export class Backlinks extends Model {
         this.element.addEventListener("mouseover", (event: MouseEvent & { target: HTMLElement }) => {
             const itemElement = hasClosestByClassName(event.target, "item__content");
             if (itemElement) {
-                const nodeId = itemElement.getAttribute("data-def-id") || itemElement.getAttribute("data-id")
-                const type = itemElement.getAttribute("data-type")
-                const url = decodeURIComponent(itemElement.getAttribute("data-def-url")) || decodeURIComponent(itemElement.getAttribute("data-url"))
-                const filePath = decodeURIComponent(itemElement.getAttribute("data-def-path")) || decodeURIComponent(itemElement.getAttribute("data-path"))
+                const nodeId = itemElement.getAttribute("data-def-id") || itemElement.getAttribute("data-id");
+                const type = itemElement.getAttribute("data-type");
+                const url = decodeURIComponent(itemElement.getAttribute("data-def-url")) || decodeURIComponent(itemElement.getAttribute("data-url"));
+                const filePath = decodeURIComponent(itemElement.getAttribute("data-def-path")) || decodeURIComponent(itemElement.getAttribute("data-path"));
                 getAllModels().editor.find((item) => {
-                    if (item.url === url && item.path === filePath && !item.element.classList.contains('fn__none')) {
-                        const vditorElement = item.vditore.vditor.ir.element
+                    if (item.url === url && item.path === filePath && !item.element.classList.contains("fn__none")) {
+                        const vditorElement = item.vditore.vditor.ir.element;
                         if (type === "NodeDocument") {
-                            vditorElement.classList.add("editor__mdref")
+                            vditorElement.classList.add("editor__mdref");
                             itemElement.onmouseleave = () => {
-                                vditorElement.classList.remove("editor__mdref")
+                                vditorElement.classList.remove("editor__mdref");
                             };
-                            return true
+                            return true;
                         }
                         Array.from(vditorElement.children).find((item: HTMLElement) => {
                             if (item.getAttribute("data-node-id") === nodeId && item.getClientRects().length > 0) {
-                                item.classList.add("editor__blockref")
+                                item.classList.add("editor__blockref");
                                 vditorElement.scrollTop =  item.offsetTop -vditorElement.clientHeight / 2;
                                 itemElement.onmouseleave = () => {
-                                    item.classList.remove("editor__blockref")
+                                    item.classList.remove("editor__blockref");
                                 };
-                                return true
+                                return true;
                             }
-                        })
-                        return true
+                        });
+                        return true;
                     }
-                })
+                });
             }
         });
     }
@@ -109,7 +109,7 @@ export class Backlinks extends Model {
     public onBacklinks(data: { backlinks: IBlock[] | IAllBacklinks[], url: string, path: string }) {
         let backlinksHTML = "";
         if (data.url) {
-            backlinksHTML = '';
+            backlinksHTML = "";
             (data.backlinks as IBlock[]).forEach((files) => {
                 backlinksHTML += `<div class="item">
 <div data-id="${files.id}" class="item__path fn__ellipsis">
@@ -135,12 +135,12 @@ ${escapeHtml(item.content)}</div>`;
 <div class="item__path fn__ellipsis">${escapeHtml(path.posix.join(path.posix.basename(item.def.url), item.def.path))}</div>
 <div class="item__content fn__a fn__two-line" data-url="${encodeURIComponent(item.def.url)}" data-path="${encodeURIComponent(item.def.path)}" data-id="${item.def.id}" data-type="${item.def.type}">
 <svg><use xlink:href="#${getIconByType(item.def.type)}"></use></svg>
-${escapeHtml(item.def.content)}</div>`
+${escapeHtml(item.def.content)}</div>`;
                 item.refs.forEach((ref) => {
                     backlinksHTML += `<div class="item__content item__content--ref fn__a fn__ellipsis" data-url="${encodeURIComponent(ref.url)}" data-path="${encodeURIComponent(ref.path)}" data-id="${ref.id}" data-type="${ref.type}">
 <svg><use xlink:href="#${getIconByType(ref.type)}"></use></svg>
 ${escapeHtml(ref.content)}</div>`;
-                })
+                });
                 backlinksHTML += "</div>";
             });
         }

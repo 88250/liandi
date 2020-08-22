@@ -75,7 +75,7 @@ export class Layout {
             });
         }
         addResize(child);
-        resizeTabs()
+        resizeTabs();
         child.parent = this;
     }
 }

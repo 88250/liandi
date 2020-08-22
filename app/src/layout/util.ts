@@ -11,20 +11,20 @@ import {Files} from "../files";
 import {setPadding, setTypewriterPosition} from "../../vditore/src/ts/ui/initUI";
 
 export const resizeTabs = () => {
-    const models = getAllModels()
+    const models = getAllModels();
     models.editor.forEach((item) => {
         if (item.vditore.vditor) {
             setPadding(item.vditore.vditor);
             setTypewriterPosition(item.vditore.vditor);
-            item.element.style.height = item.element.parentElement.clientHeight + "px"
+            item.element.style.height = item.element.parentElement.clientHeight + "px";
         }
-    })
+    });
     models.graph.forEach((item) => {
         if (item && item.chart && item.chart.resize) {
-            item.chart.resize()
+            item.chart.resize();
         }
-    })
-}
+    });
+};
 
 export const getAllModels = () => {
     const models: IModels = {
