@@ -75,10 +75,10 @@ export class Backlinks extends Model {
         this.element.addEventListener("mouseover", (event: MouseEvent & { target: HTMLElement }) => {
             const itemElement = hasClosestByClassName(event.target, "item__content");
             if (itemElement) {
-                const nodeId = itemElement.getAttribute("data-id")
+                const nodeId = itemElement.getAttribute("data-def-id") || itemElement.getAttribute("data-id")
                 const type = itemElement.getAttribute("data-type")
-                const url = decodeURIComponent(itemElement.getAttribute("data-url"))
-                const filePath = decodeURIComponent(itemElement.getAttribute("data-path"))
+                const url = decodeURIComponent(itemElement.getAttribute("data-def-url")) || decodeURIComponent(itemElement.getAttribute("data-url"))
+                const filePath = decodeURIComponent(itemElement.getAttribute("data-def-path")) || decodeURIComponent(itemElement.getAttribute("data-path"))
                 getAllModels().editor.find((item) => {
                     if (item.url === url && item.path === filePath && !item.element.classList.contains('fn__none')) {
                         const vditorElement = item.vditore.vditor.ir.element
@@ -92,7 +92,7 @@ export class Backlinks extends Model {
                         Array.from(vditorElement.children).find((item: HTMLElement) => {
                             if (item.getAttribute("data-node-id") === nodeId && item.getClientRects().length > 0) {
                                 item.classList.add("editor__blockref")
-                                vditorElement.scrollTop = item.getClientRects()[0].top + vditorElement.scrollTop - vditorElement.clientHeight / 2 + 10;
+                                vditorElement.scrollTop =  item.offsetTop -vditorElement.clientHeight / 2;
                                 itemElement.onmouseleave = () => {
                                     item.classList.remove("editor__blockref")
                                 };
@@ -116,7 +116,14 @@ export class Backlinks extends Model {
 ${escapeHtml(path.posix.join(path.posix.basename(files.url), files.path))}
 </div>`;
                 files.refs.forEach((item) => {
-                    backlinksHTML += `<div class="item__content fn__a fn__two-line" data-url="${encodeURIComponent(item.def.url)}" data-path="${encodeURIComponent(item.def.path)}" data-id="${item.def.id}" data-type="${item.def.type}">
+                    backlinksHTML += `<div class="item__content fn__a fn__two-line"
+data-url="${encodeURIComponent(item.url)}" 
+data-path="${encodeURIComponent(item.path)}" 
+data-id="${item.id}"  
+data-def-url="${encodeURIComponent(item.def.url)}" 
+data-def-path="${encodeURIComponent(item.def.path)}" 
+data-def-id="${item.def.id}" 
+data-type="${item.def.type}">
 <svg><use xlink:href="#${getIconByType(item.type)}"></use></svg>
 ${escapeHtml(item.content)}</div>`;
                 });

@@ -98,7 +98,7 @@ export class Graph extends Model {
             this.chart = echarts.init(this.graphElement);
             this.chart.on("click", (params: IEchartsFormatter) => {
                 if (params.dataType === "node") {
-                    openFile(params.data.url, params.data.path)
+                    openFile(params.data.url, params.data.path, params.data.label.show ? "" : params.name)
                 }
             });
         } else {

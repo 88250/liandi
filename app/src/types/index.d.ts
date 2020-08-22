@@ -104,6 +104,7 @@ declare interface IBox {
 
 declare interface IEchartsFormatter {
     dataType: string
+    name: string
     data: {
         name: string
         category: number
