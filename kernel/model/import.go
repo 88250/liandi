@@ -19,7 +19,7 @@ import (
 	"github.com/88250/lute/util"
 )
 
-func convertWikiLinks(trees []*parse.Tree) (ret []*parse.Tree) {
+func convertWikiLinks(trees []*parse.Tree) {
 	for _, tree := range trees {
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			if !entering || ast.NodeText != n.Type {
@@ -74,6 +74,10 @@ func convertWikiLinks(trees []*parse.Tree) (ret []*parse.Tree) {
 	}
 
 	// 将文本节点进行结构化处理
+	buildBlockRefInText(trees)
+}
+
+func buildBlockRefInText(trees []*parse.Tree) {
 	for _, tree := range trees {
 		var unlinkTextNodes []*ast.Node
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
@@ -92,11 +96,11 @@ func convertWikiLinks(trees []*parse.Tree) (ret []*parse.Tree) {
 			unlinkTextNodes = append(unlinkTextNodes, n)
 			return ast.WalkContinue
 		})
+
 		for _, node := range unlinkTextNodes {
 			node.Unlink()
 		}
 	}
-	return
 }
 
 func searchLinkID(trees []*parse.Tree, link string) (id string) {
