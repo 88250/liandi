@@ -32,10 +32,10 @@ func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []inte
 	defer graphLock.Unlock()
 
 	tree := box.Tree(p)
-	delete(treeBacklinks, tree)
+	delete(treeBacklinks, tree.ID)
 	indexLink(tree)
 	genGraph(keyword, tree, &nodes, &links)
-	connectBacklinks(treeBacklinks[tree], &nodes, &links, true)
+	connectBacklinks(treeBacklinks[tree.ID], &nodes, &links, true)
 	markBugBlock(&nodes, &links)
 	return
 }
@@ -212,6 +212,7 @@ func genGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]i
 		*nodes = append(*nodes, node)
 
 		if tree.ID != n.ID {
+			// 连接根块和子块
 			*links = append(*links, map[string]interface{}{
 				"source": tree.ID,
 				"target": n.ID,

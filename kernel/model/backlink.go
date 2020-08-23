@@ -22,7 +22,7 @@ import (
 )
 
 var (
-	treeBacklinks     = map[*parse.Tree]map[*Block][]*Block{} // 反向链接关系：块被哪些块用了
+	treeBacklinks     = map[string]map[*Block][]*Block{} // 反向链接关系：块被哪些块用了
 	treeBacklinksLock = &sync.Mutex{}                         // 全局反链锁，构建反链和图的时候需要加锁
 )
 
@@ -70,7 +70,7 @@ func rebuildBacklinks() {
 	graphLock.Lock()
 	defer graphLock.Unlock()
 
-	treeBacklinks = map[*parse.Tree]map[*Block][]*Block{}
+	treeBacklinks = map[string]map[*Block][]*Block{}
 
 	for _, tree := range trees {
 		indexLink(tree)
@@ -97,7 +97,7 @@ func indexLink(tree *parse.Tree) (ret []*Block) {
 	})
 
 	// 清理当前树的块链关系
-	delete(treeBacklinks, tree)
+	delete(treeBacklinks, tree.ID)
 
 	// 构建链接关系
 	backlinks := map[*Block][]*Block{}
@@ -133,7 +133,7 @@ func indexLink(tree *parse.Tree) (ret []*Block) {
 		}
 	}
 
-	treeBacklinks[tree] = backlinks
+	treeBacklinks[tree.ID] = backlinks
 
 	// 按树路径合并引用
 	ret = []*Block{}
