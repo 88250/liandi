@@ -340,8 +340,6 @@ func (box *Box) Unindex() {
 	for _, p := range paths {
 		box.RemoveTree(p)
 	}
-
-	// TODO 清理反向链接关系
 }
 
 func (box *Box) ListJSONs(path string) (ret []os.FileInfo) {

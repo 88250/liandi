@@ -106,7 +106,7 @@ func rebuildLinks() {
 				return ast.WalkStop
 			}
 
-			if nil != n.Parent && ast.NodeDocument == n.Parent.Type {
+			if ast.NodeDocument == n.Type || ast.NodeDocument == n.Parent.Type {
 				n.URL, n.Path = tree.URL, tree.Path
 				defs = append(defs, n)
 			} else if ast.NodeBlockRefID == n.Type {
