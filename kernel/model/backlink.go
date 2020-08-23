@@ -22,8 +22,8 @@ import (
 )
 
 var (
-	treeBacklinks     = map[string]map[*Block][]*Block{} // 反向链接关系：块被哪些块用了
-	treeBacklinksLock = &sync.Mutex{}                         // 全局反链锁，构建反链和图的时候需要加锁
+	treeBacklinks     = map[string]map[*Block][]*Block{} // Tree 反向链接关系：块被哪些块用了
+	treeBacklinksLock = &sync.Mutex{}                    // 全局反链锁，构建反链和图的时候需要加锁
 )
 
 type DefRef struct {
