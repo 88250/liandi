@@ -131,13 +131,13 @@ func rebuildLinks() {
 
 	// 构建反向链接
 	for _, ref := range refs {
-		block := buildBlock(ref)
+		block := buildBlock(refParentBlock(ref))
 		for _, def := range defs {
-			if def.ID == ref.ID {
+			if def.ID == util.BytesToStr(ref.Tokens) {
 				block.Def = buildBlock(def)
+				backlinks = append(backlinks, block)
 			}
 		}
-		backlinks = append(backlinks, block)
 	}
 }
 

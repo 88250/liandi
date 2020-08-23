@@ -32,8 +32,8 @@ func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []inte
 
 	tree := box.Tree(p)
 	genTreeGraph(keyword, tree, &nodes, &links)
-	connectBacklinks(&nodes, &links, true)
-	//TODO connectForwardLinks(tree, &nodes, &links, true)
+	connectBacklinks(&nodes, &links)
+	connectForwardLinks(&nodes, &links)
 
 	markBugBlock(&nodes, &links)
 	return
@@ -46,7 +46,7 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 		genTreeGraph(keyword, tree, &nodes, &links)
 	}
 
-	connectBacklinks(&nodes, &links, false)
+	connectBacklinks(&nodes, &links)
 	connectForwardLinks(&nodes, &links)
 
 	markBugBlock(&nodes, &links)
@@ -70,8 +70,7 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 	}
 }
 
-func connectBacklinks(nodes *[]interface{}, links *[]interface{}, fromTree bool) {
-	//allRefs := map[string]*Block{}
+func connectBacklinks(nodes *[]interface{}, links *[]interface{}) {
 	for _, ref := range backlinks {
 		*links = append(*links, map[string]interface{}{
 			"source": ref.ID,
@@ -80,62 +79,15 @@ func connectBacklinks(nodes *[]interface{}, links *[]interface{}, fromTree bool)
 				"type": "dotted",
 			},
 		})
-		//allRefs[ref.ID] = ref
 	}
-
-	if !fromTree {
-		return
-	}
-
-	// TODO Tree Graph 需要从其他树的节点进行延伸补全
-
-	//for refID, ref := range allRefs {
-	//	var existed bool
-	//	for _, n := range *nodes {
-	//		node := n.(map[string]interface{})
-	//		id := node["name"].(string)
-	//
-	//		if refID == id {
-	//			existed = true
-	//			break
-	//		}
-	//	}
-	//
-	//	if !existed {
-	//		category := NodeCategoryRoot
-	//		show := true
-	//		if ast.NodeDocument.String() != ref.Type {
-	//			category = NodeCategoryChild
-	//			show = false
-	//		}
-	//
-	//		node := map[string]interface{}{
-	//			"name":     refID,
-	//			"category": category, // TODO 其他文档引用类型
-	//			"url":      ref.URL,
-	//			"path":     ref.Path,
-	//			"content":  ref.Content,
-	//			"label": map[string]interface{}{
-	//				"show": show,
-	//			},
-	//			"emphasis": map[string]interface{}{
-	//				"label": map[string]interface{}{
-	//					"show": true,
-	//				},
-	//			},
-	//		}
-	//
-	//		*nodes = append(*nodes, node)
-	//	}
-	//}
 }
 
 func connectForwardLinks(nodes *[]interface{}, links *[]interface{}) {
 	for _, def := range forwardlinks {
 		for _, ref := range def.Refs {
 			*links = append(*links, map[string]interface{}{
-				"source": def.ID,
-				"target": ref.ID,
+				"source": ref.ID,
+				"target": def.ID,
 				"lineStyle": map[string]interface{}{
 					"type": "dotted",
 				},
