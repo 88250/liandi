@@ -5,7 +5,8 @@ go 1.12
 require (
 	github.com/88250/gowebdav v1.0.0
 	github.com/88250/gulu v1.1.1
-	github.com/88250/lute v1.6.1
+	github.com/88250/lute v1.6.2-0.20200823093142-f76b0284ef33
+	github.com/dlclark/regexp2 v1.2.1 // indirect
 	github.com/elazarl/goproxy v0.0.0-20200315184450-1f3cb6622dad // indirect
 	github.com/elazarl/goproxy/ext v0.0.0-20200315184450-1f3cb6622dad // indirect
 	github.com/gin-gonic/gin v1.6.3
@@ -27,5 +28,5 @@ require (
 	moul.io/http2curl v1.0.0 // indirect
 )
 
-replace github.com/88250/lute => D:\gogogo\src\github.com\88250\lute
+//replace github.com/88250/lute => D:\gogogo\src\github.com\88250\lute
 //replace github.com/88250/gowebdav => D:\88250\gowebdav

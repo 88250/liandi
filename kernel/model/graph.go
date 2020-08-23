@@ -28,14 +28,9 @@ func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []inte
 		return
 	}
 
-	rebuildLinks()
+	nodes, links = Graph(keyword)
 
-	tree := box.Tree(p)
-	genTreeGraph(keyword, tree, &nodes, &links)
-	connectBacklinks(&nodes, &links)
-	connectForwardLinks(&nodes, &links)
 
-	markBugBlock(&nodes, &links)
 	return
 }
 
