@@ -22,8 +22,9 @@ import (
 )
 
 var (
-	treeBacklinks     = map[string]map[*Block][]*Block{} // Tree 反向链接关系：块被哪些块用了
-	treeBacklinksLock = &sync.Mutex{}                    // 全局反链锁，构建反链和图的时候需要加锁
+	backlinks         []*Block        // 反向链接关系 ref
+	forwardlinks      []*Block        // 正向链接关系 def
+	treeBacklinksLock = &sync.Mutex{} // 全局反链锁，构建反链和图的时候需要加锁
 )
 
 type DefRef struct {
@@ -50,34 +51,66 @@ func TreeBacklinks(url, path string) (ret []*Block, err error) {
 	}
 
 	tree := box.Tree(path)
-	ret = indexLink(tree)
+	indexLink(tree)
+
+	ret = []*Block{}
+	for _, def := range forwardlinks {
+		depth := 0
+		cloned := cloneBlock(def, &depth)
+		ret = append(ret, cloned)
+	}
+	return
+}
+
+func cloneBlock(block *Block, depth *int) (ret *Block) {
+	if nil == block {
+		return
+	}
+
+	*depth++
+	if 2 < *depth {
+		return
+	}
+
+	ret = &Block{
+		URL:     block.URL,
+		Path:    block.Path,
+		ID:      block.ID,
+		Content: block.Content,
+		Type:    block.Type,
+	}
+
+	ret.Def = cloneBlock(block, depth)
+	for _, ref := range block.Refs {
+		ret.Refs = append(ret.Refs, cloneBlock(ref, depth))
+	}
+	*depth--
 	return
 }
 
 func Backlinks() (ret DefRefs) {
-	rebuildBacklinks()
+	rebuildLinks()
 
-	for _, backlinkDefs := range treeBacklinks {
-		for def, refs := range backlinkDefs {
-			ret = append(ret, &DefRef{def, refs})
-		}
+	for _, block := range backlinks {
+		ret = append(ret, &DefRef{block.Def, block.Refs})
 	}
 	sort.Sort(ret)
 	return
 }
 
-func rebuildBacklinks() {
+func rebuildLinks() {
 	graphLock.Lock()
 	defer graphLock.Unlock()
 
-	treeBacklinks = map[string]map[*Block][]*Block{}
+	backlinks = []*Block{}
+	forwardlinks = []*Block{}
 
 	for _, tree := range trees {
 		indexLink(tree)
 	}
 }
 
-func indexLink(tree *parse.Tree) (ret []*Block) {
+func indexLink(tree *parse.Tree) {
 	treeBacklinksLock.Lock()
 	defer treeBacklinksLock.Unlock()
 
@@ -97,10 +130,24 @@ func indexLink(tree *parse.Tree) (ret []*Block) {
 	})
 
 	// 清理当前树的块链关系
-	delete(treeBacklinks, tree.ID)
+	for i, length := 0, len(backlinks); i < length; {
+		if backlinks[i].URL == tree.URL && backlinks[i].Path == tree.Path {
+			i++
+		} else {
+			backlinks = append(backlinks[:i], backlinks[i+1:]...)
+			length--
+		}
+	}
+	for i, length := 0, len(forwardlinks); i < length; {
+		if forwardlinks[i].URL == tree.URL && forwardlinks[i].Path == tree.Path {
+			i++
+		} else {
+			forwardlinks = append(forwardlinks[:i], forwardlinks[i+1:]...)
+			length--
+		}
+	}
 
 	// 构建链接关系
-	backlinks := map[*Block][]*Block{}
 	for _, currentBlock := range currentBlocks {
 		for _, tree := range trees {
 			var refNodes []*ast.Node
@@ -120,43 +167,37 @@ func indexLink(tree *parse.Tree) (ret []*Block) {
 				return ast.WalkContinue
 			})
 
-			var blocks []*Block
 			for _, n := range refNodes {
-				blocks = append(blocks, buildBlock(tree.URL, tree.Path, n))
-			}
-			if nil != blocks {
-				for _, ref := range blocks {
-					ref.Def = currentBlock
-				}
-				backlinks[currentBlock] = append(backlinks[currentBlock], blocks...)
+				ref := buildBlock(tree.URL, tree.Path, n)
+				ref.Def = currentBlock
+				currentBlock.Refs = append(currentBlock.Refs, ref)
+				currentBlock.Def = currentBlock
+				backlinks = append(backlinks, ref)
+				forwardlinks = append(forwardlinks, currentBlock)
 			}
 		}
 	}
 
-	treeBacklinks[tree.ID] = backlinks
-
-	// 按树路径合并引用
-	ret = []*Block{}
-	for _, refs := range backlinks {
-		for _, ref := range refs {
-			var appended bool
-			for _, existRef := range ret {
-				if existRef.URL == ref.URL && existRef.Path == ref.Path {
-					existRef.Refs = append(existRef.Refs, ref)
-					appended = true
-					break
-				}
-			}
-			if !appended {
-				newRef := &Block{
-					URL:  ref.URL,
-					Path: ref.Path,
-					Refs: []*Block{ref},
-				}
-				ret = append(ret, newRef)
-			}
-		}
-	}
+	// TODO 按树路径合并引用
+	//ret = []*Block{}
+	//for _, ref := range backlinks {
+	//	var appended bool
+	//	for _, existRef := range ret {
+	//		if existRef.URL == ref.URL && existRef.Path == ref.Path {
+	//			existRef.Refs = append(existRef.Refs, ref)
+	//			appended = true
+	//			break
+	//		}
+	//	}
+	//	if !appended {
+	//		newRef := &Block{
+	//			URL:  ref.URL,
+	//			Path: ref.Path,
+	//			Refs: []*Block{ref},
+	//		}
+	//		ret = append(ret, newRef)
+	//	}
+	//}
 	return
 }
 

@@ -28,28 +28,25 @@ func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []inte
 		return
 	}
 
-	graphLock.Lock()
-	defer graphLock.Unlock()
+	rebuildLinks()
 
 	tree := box.Tree(p)
-	delete(treeBacklinks, tree.ID)
-	indexLink(tree)
-	genGraph(keyword, tree, &nodes, &links)
-	connectBacklinks(treeBacklinks[tree.ID], &nodes, &links, true)
+	genTreeGraph(keyword, tree, &nodes, &links)
+	connectBacklinks(&nodes, &links, true)
+	//connectForwardLinks(tree, &nodes, &links, true)
+
 	markBugBlock(&nodes, &links)
 	return
 }
 
 func Graph(keyword string) (nodes []interface{}, links []interface{}) {
-	rebuildBacklinks()
+	rebuildLinks()
 
 	for _, tree := range trees {
-		genGraph(keyword, tree, &nodes, &links)
+		genTreeGraph(keyword, tree, &nodes, &links)
 	}
 
-	for _, nodeBacklinks := range treeBacklinks {
-		connectBacklinks(nodeBacklinks, &nodes, &links, false)
-	}
+	connectBacklinks(&nodes, &links, false)
 
 	markBugBlock(&nodes, &links)
 	return
@@ -72,19 +69,17 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 	}
 }
 
-func connectBacklinks(nodeBacklinks map[*Block][]*Block, nodes *[]interface{}, links *[]interface{}, fromTree bool) {
+func connectBacklinks(nodes *[]interface{}, links *[]interface{}, fromTree bool) {
 	allRefs := map[string]*Block{}
-	for def, refs := range nodeBacklinks {
-		for _, ref := range refs {
-			*links = append(*links, map[string]interface{}{
-				"source": ref.ID,
-				"target": def.ID,
-				"lineStyle": map[string]interface{}{
-					"type": "dotted",
-				},
-			})
-			allRefs[ref.ID] = ref
-		}
+	for _, ref := range backlinks {
+		*links = append(*links, map[string]interface{}{
+			"source": ref.ID,
+			"target": ref.Def.ID,
+			"lineStyle": map[string]interface{}{
+				"type": "dotted",
+			},
+		})
+		allRefs[ref.ID] = ref
 	}
 
 	if !fromTree {
@@ -134,6 +129,95 @@ func connectBacklinks(nodeBacklinks map[*Block][]*Block, nodes *[]interface{}, l
 	}
 }
 
+func connectForwardLinks(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
+	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+		if !entering {
+			return ast.WalkContinue
+		}
+
+		if nil != n.Parent && ast.NodeDocument != n.Parent.Type {
+			// 仅支持根节点的直接子节点
+			return ast.WalkContinue
+		}
+
+		if isSearchBlockSkipNode(n) {
+			return ast.WalkContinue
+		}
+
+		text := renderBlockText(n)
+		if ast.NodeDocument == n.Type {
+			text = tree.Name + "  " + text
+		}
+
+		if !strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
+			return ast.WalkContinue
+		}
+
+		isRoot := ast.NodeDocument == n.Type
+		value := NodeCategoryRoot
+		show := true
+		if !isRoot {
+			value = NodeCategoryChild
+			show = false
+		}
+
+		maxTextLen := 16
+		if !isRoot {
+			maxTextLen = 64
+		}
+
+		var runes []rune
+		for i := 0; i < len(text); {
+			r, size := utf8.DecodeRuneInString(text[i:])
+			runes = append(runes, r)
+			i += size
+			if maxTextLen < len(runes) {
+				runes = append(runes, []rune("...")...)
+				break
+			}
+		}
+		text = string(runes)
+		if "" == text {
+			return ast.WalkContinue
+		}
+
+		node := map[string]interface{}{
+			"name":     n.ID,
+			"category": value,
+			"url":      tree.URL,
+			"path":     tree.Path,
+			"content":  text,
+			"label": map[string]interface{}{
+				"show": show,
+			},
+			"emphasis": map[string]interface{}{
+				"label": map[string]interface{}{
+					"show": true,
+				},
+			},
+		}
+		checkBadNodes(*nodes, node, links)
+		*nodes = append(*nodes, node)
+
+		if tree.ID != n.ID {
+			// 连接根块和子块
+			*links = append(*links, map[string]interface{}{
+				"source": tree.ID,
+				"target": n.ID,
+				"symbol": "none",
+				"lineStyle": map[string]interface{}{
+					"type": "solid",
+				},
+			})
+		}
+
+		if ast.NodeList == n.Type {
+			return ast.WalkSkipChildren
+		}
+		return ast.WalkContinue
+	})
+}
+
 const (
 	NodeCategoryRoot   = 0 // 根块
 	NodeCategoryChild  = 1 // 子块
@@ -141,7 +225,7 @@ const (
 	NodeCategoryBug    = 3 // 问题块
 )
 
-func genGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
+func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		if !entering {
 			return ast.WalkContinue
