@@ -11,19 +11,15 @@
 package model
 
 import (
-	"bytes"
+	"github.com/88250/lute/util"
 	"sort"
-	"sync"
 
-	"github.com/88250/gulu"
 	"github.com/88250/lute/ast"
-	"github.com/88250/lute/parse"
 )
 
 var (
-	backlinks         []*Block        // 反向链接关系 ref
-	forwardlinks      []*Block        // 正向链接关系 def
-	treeBacklinksLock = &sync.Mutex{} // 全局反链锁，构建反链和图的时候需要加锁
+	backlinks    []*Block // 反向链接关系 ref
+	forwardlinks []*Block // 正向链接关系 def
 )
 
 type DefRef struct {
@@ -102,105 +98,52 @@ func rebuildLinks() {
 	backlinks = []*Block{}
 	forwardlinks = []*Block{}
 
+	// 捞出所有内容块定义和引用节点
+	var defs, refs []*ast.Node
 	for _, tree := range trees {
-		indexLink(tree)
-	}
-}
+		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+			if !entering {
+				return ast.WalkStop
+			}
 
-func indexLink(tree *parse.Tree) {
-	treeBacklinksLock.Lock()
-	defer treeBacklinksLock.Unlock()
-
-	// 找到当前块列表
-	var currentBlocks []*Block
-	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
-		if !entering {
-			return ast.WalkStop
-		}
-
-		if isSearchBlockSkipNode(n) {
-			return ast.WalkStop
-		}
-
-		currentBlocks = append(currentBlocks, buildBlock(tree.URL, tree.Path, n))
-		return ast.WalkContinue
-	})
-
-	// 清理当前树的块链关系
-	for i, length := 0, len(backlinks); i < length; {
-		if backlinks[i].URL == tree.URL && backlinks[i].Path == tree.Path {
-			i++
-		} else {
-			backlinks = append(backlinks[:i], backlinks[i+1:]...)
-			length--
-		}
-	}
-	for i, length := 0, len(forwardlinks); i < length; {
-		if forwardlinks[i].URL == tree.URL && forwardlinks[i].Path == tree.Path {
-			i++
-		} else {
-			forwardlinks = append(forwardlinks[:i], forwardlinks[i+1:]...)
-			length--
-		}
+			if nil != n.Parent && ast.NodeDocument == n.Parent.Type {
+				n.URL, n.Path = tree.URL, tree.Path
+				defs = append(defs, n)
+			} else if ast.NodeBlockRefID == n.Type {
+				n.URL, n.Path = tree.URL, tree.Path
+				refs = append(refs, n)
+			}
+			return ast.WalkContinue
+		})
 	}
 
-	// 构建链接关系
-	for _, currentBlock := range currentBlocks {
-		for _, tree := range trees {
-			var refNodes []*ast.Node
-			ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
-				if !entering {
-					return ast.WalkStop
-				}
-
-				if ast.NodeBlockRefID != n.Type {
-					return ast.WalkContinue
-				}
-
-				if bytes.Equal(gulu.Str.ToBytes(currentBlock.ID), n.Tokens) {
-					block := refParentBlock(n)
-					refNodes = append(refNodes, block)
-				}
-				return ast.WalkContinue
-			})
-
-			for _, n := range refNodes {
-				ref := buildBlock(tree.URL, tree.Path, n)
-				ref.Def = currentBlock
-				currentBlock.Refs = append(currentBlock.Refs, ref)
-				currentBlock.Def = currentBlock
-				backlinks = append(backlinks, ref)
-				forwardlinks = append(forwardlinks, currentBlock)
+	// 构建正向链接
+	for _, def := range defs {
+		block := buildBlock(def)
+		for _, ref := range refs {
+			if def.ID == util.BytesToStr(ref.Tokens) {
+				refBlock := buildBlock(refParentBlock(ref))
+				block.Refs = append(block.Refs, refBlock)
 			}
 		}
+		forwardlinks = append(forwardlinks, block)
 	}
 
-	// TODO 按树路径合并引用
-	//ret = []*Block{}
-	//for _, ref := range backlinks {
-	//	var appended bool
-	//	for _, existRef := range ret {
-	//		if existRef.URL == ref.URL && existRef.Path == ref.Path {
-	//			existRef.Refs = append(existRef.Refs, ref)
-	//			appended = true
-	//			break
-	//		}
-	//	}
-	//	if !appended {
-	//		newRef := &Block{
-	//			URL:  ref.URL,
-	//			Path: ref.Path,
-	//			Refs: []*Block{ref},
-	//		}
-	//		ret = append(ret, newRef)
-	//	}
-	//}
-	return
+	// 构建反向链接
+	for _, ref := range refs {
+		block := buildBlock(ref)
+		for _, def := range defs {
+			if def.ID == ref.ID {
+				block.Def = buildBlock(def)
+			}
+		}
+		backlinks = append(backlinks, block)
+	}
 }
 
-func buildBlock(url, path string, node *ast.Node) (ret *Block) {
+func buildBlock(node *ast.Node) (ret *Block) {
 	content := renderBlockText(node)
-	return &Block{URL: url, Path: path, ID: node.ID, Type: node.Type.String(), Content: content}
+	return &Block{URL: node.URL, Path: node.Path, ID: node.ID, Type: node.Type.String(), Content: content}
 }
 
 func refParentBlock(ref *ast.Node) *ast.Node {

@@ -27,5 +27,5 @@ require (
 	moul.io/http2curl v1.0.0 // indirect
 )
 
-//replace github.com/88250/lute => D:\gogogo\src\github.com\88250\lute
+replace github.com/88250/lute => D:\gogogo\src\github.com\88250\lute
 //replace github.com/88250/gowebdav => D:\88250\gowebdav

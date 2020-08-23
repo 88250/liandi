@@ -47,6 +47,7 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 	}
 
 	connectBacklinks(&nodes, &links, false)
+	connectForwardLinks(&nodes, &links)
 
 	markBugBlock(&nodes, &links)
 	return
@@ -70,7 +71,7 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 }
 
 func connectBacklinks(nodes *[]interface{}, links *[]interface{}, fromTree bool) {
-	allRefs := map[string]*Block{}
+	//allRefs := map[string]*Block{}
 	for _, ref := range backlinks {
 		*links = append(*links, map[string]interface{}{
 			"source": ref.ID,
@@ -79,143 +80,68 @@ func connectBacklinks(nodes *[]interface{}, links *[]interface{}, fromTree bool)
 				"type": "dotted",
 			},
 		})
-		allRefs[ref.ID] = ref
+		//allRefs[ref.ID] = ref
 	}
 
 	if !fromTree {
 		return
 	}
 
-	// Tree Graph 需要从其他树的节点进行延伸补全
+	// TODO Tree Graph 需要从其他树的节点进行延伸补全
 
-	for refID, ref := range allRefs {
-		var existed bool
-		for _, n := range *nodes {
-			node := n.(map[string]interface{})
-			id := node["name"].(string)
-
-			if refID == id {
-				existed = true
-				break
-			}
-		}
-
-		if !existed {
-			category := NodeCategoryRoot
-			show := true
-			if ast.NodeDocument.String() != ref.Type {
-				category = NodeCategoryChild
-				show = false
-			}
-
-			node := map[string]interface{}{
-				"name":     refID,
-				"category": category, // TODO 其他文档引用类型
-				"url":      ref.URL,
-				"path":     ref.Path,
-				"content":  ref.Content,
-				"label": map[string]interface{}{
-					"show": show,
-				},
-				"emphasis": map[string]interface{}{
-					"label": map[string]interface{}{
-						"show": true,
-					},
-				},
-			}
-
-			*nodes = append(*nodes, node)
-		}
-	}
+	//for refID, ref := range allRefs {
+	//	var existed bool
+	//	for _, n := range *nodes {
+	//		node := n.(map[string]interface{})
+	//		id := node["name"].(string)
+	//
+	//		if refID == id {
+	//			existed = true
+	//			break
+	//		}
+	//	}
+	//
+	//	if !existed {
+	//		category := NodeCategoryRoot
+	//		show := true
+	//		if ast.NodeDocument.String() != ref.Type {
+	//			category = NodeCategoryChild
+	//			show = false
+	//		}
+	//
+	//		node := map[string]interface{}{
+	//			"name":     refID,
+	//			"category": category, // TODO 其他文档引用类型
+	//			"url":      ref.URL,
+	//			"path":     ref.Path,
+	//			"content":  ref.Content,
+	//			"label": map[string]interface{}{
+	//				"show": show,
+	//			},
+	//			"emphasis": map[string]interface{}{
+	//				"label": map[string]interface{}{
+	//					"show": true,
+	//				},
+	//			},
+	//		}
+	//
+	//		*nodes = append(*nodes, node)
+	//	}
+	//}
 }
 
-func connectForwardLinks(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
-	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
-		if !entering {
-			return ast.WalkContinue
-		}
-
-		if nil != n.Parent && ast.NodeDocument != n.Parent.Type {
-			// 仅支持根节点的直接子节点
-			return ast.WalkContinue
-		}
-
-		if isSearchBlockSkipNode(n) {
-			return ast.WalkContinue
-		}
-
-		text := renderBlockText(n)
-		if ast.NodeDocument == n.Type {
-			text = tree.Name + "  " + text
-		}
-
-		if !strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
-			return ast.WalkContinue
-		}
-
-		isRoot := ast.NodeDocument == n.Type
-		value := NodeCategoryRoot
-		show := true
-		if !isRoot {
-			value = NodeCategoryChild
-			show = false
-		}
-
-		maxTextLen := 16
-		if !isRoot {
-			maxTextLen = 64
-		}
-
-		var runes []rune
-		for i := 0; i < len(text); {
-			r, size := utf8.DecodeRuneInString(text[i:])
-			runes = append(runes, r)
-			i += size
-			if maxTextLen < len(runes) {
-				runes = append(runes, []rune("...")...)
-				break
-			}
-		}
-		text = string(runes)
-		if "" == text {
-			return ast.WalkContinue
-		}
-
-		node := map[string]interface{}{
-			"name":     n.ID,
-			"category": value,
-			"url":      tree.URL,
-			"path":     tree.Path,
-			"content":  text,
-			"label": map[string]interface{}{
-				"show": show,
-			},
-			"emphasis": map[string]interface{}{
-				"label": map[string]interface{}{
-					"show": true,
-				},
-			},
-		}
-		checkBadNodes(*nodes, node, links)
-		*nodes = append(*nodes, node)
-
-		if tree.ID != n.ID {
-			// 连接根块和子块
+func connectForwardLinks(nodes *[]interface{}, links *[]interface{}) {
+	for _, def := range forwardlinks {
+		for _, ref := range def.Refs {
 			*links = append(*links, map[string]interface{}{
-				"source": tree.ID,
-				"target": n.ID,
-				"symbol": "none",
+				"source": def.ID,
+				"target": ref.ID,
 				"lineStyle": map[string]interface{}{
-					"type": "solid",
+					"type": "dotted",
 				},
 			})
 		}
-
-		if ast.NodeList == n.Type {
-			return ast.WalkSkipChildren
-		}
-		return ast.WalkContinue
-	})
+	}
 }
 
 const (
