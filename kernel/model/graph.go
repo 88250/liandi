@@ -28,9 +28,13 @@ func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []inte
 		return
 	}
 
-	nodes, links = Graph(keyword)
+	rebuildLinks()
 
-
+	tree := box.Tree(p)
+	genTreeGraph(keyword, tree, &nodes, &links)
+	connectForwardlinks(&nodes, &links)
+	connectBacklinks(&nodes, &links)
+	markBugBlock(&nodes, &links)
 	return
 }
 
@@ -40,10 +44,8 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 	for _, tree := range trees {
 		genTreeGraph(keyword, tree, &nodes, &links)
 	}
-
+	connectForwardlinks(&nodes, &links)
 	connectBacklinks(&nodes, &links)
-	connectForwardLinks(&nodes, &links)
-
 	markBugBlock(&nodes, &links)
 	return
 }
@@ -65,7 +67,7 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 	}
 }
 
-func connectBacklinks(nodes *[]interface{}, links *[]interface{}) {
+func connectForwardlinks(nodes *[]interface{}, links *[]interface{}) {
 	for _, ref := range forwardlinks {
 		*links = append(*links, map[string]interface{}{
 			"source": ref.ID,
@@ -77,7 +79,7 @@ func connectBacklinks(nodes *[]interface{}, links *[]interface{}) {
 	}
 }
 
-func connectForwardLinks(nodes *[]interface{}, links *[]interface{}) {
+func connectBacklinks(nodes *[]interface{}, links *[]interface{}) {
 	for _, def := range backlinks {
 		for _, ref := range def.Refs {
 			*links = append(*links, map[string]interface{}{

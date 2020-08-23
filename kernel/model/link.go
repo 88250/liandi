@@ -11,10 +11,8 @@
 package model
 
 import (
-	"github.com/88250/lute/util"
-	"sort"
-
 	"github.com/88250/lute/ast"
+	"github.com/88250/lute/util"
 )
 
 var (
@@ -38,58 +36,6 @@ func (r DefRefs) Less(i, j int) bool {
 	}
 }
 func (r DefRefs) Swap(i, j int) { r[i], r[j] = r[j], r[i] }
-
-func TreeBacklinks(url, path string) (ret []*Block, err error) {
-	rebuildLinks()
-
-	ret = []*Block{}
-	for _, def := range backlinks {
-		if def.URL != url || def.Path != path {
-			continue
-		}
-
-		depth := 0
-		cloned := cloneBlock(def, &depth)
-		ret = append(ret, cloned)
-	}
-	return
-}
-
-func cloneBlock(block *Block, depth *int) (ret *Block) {
-	if nil == block {
-		return
-	}
-
-	if 2 < *depth {
-		return
-	}
-
-	ret = &Block{
-		URL:     block.URL,
-		Path:    block.Path,
-		ID:      block.ID,
-		Content: block.Content,
-		Type:    block.Type,
-	}
-
-	*depth++
-	ret.Def = cloneBlock(block.Def, depth)
-	for _, ref := range block.Refs {
-		ret.Refs = append(ret.Refs, cloneBlock(ref, depth))
-	}
-	*depth--
-	return
-}
-
-func Backlinks() (ret DefRefs) {
-	rebuildLinks()
-
-	for _, block := range forwardlinks {
-		ret = append(ret, &DefRef{block.Def, block.Refs})
-	}
-	sort.Sort(ret)
-	return
-}
 
 func rebuildLinks() {
 	graphLock.Lock()
@@ -117,7 +63,7 @@ func rebuildLinks() {
 		})
 	}
 
-	// 构建正向链接
+	// 构建反向链接
 	for _, def := range defs {
 		block := buildBlock(def)
 		for _, ref := range refs {
@@ -129,7 +75,7 @@ func rebuildLinks() {
 		backlinks = append(backlinks, block)
 	}
 
-	// 构建反向链接
+	// 构建正向链接
 	for _, ref := range refs {
 		block := buildBlock(refParentBlock(ref))
 		for _, def := range defs {
