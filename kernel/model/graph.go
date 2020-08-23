@@ -13,11 +13,11 @@ package model
 import (
 	"strings"
 	"sync"
-	"unicode/utf8"
 
 	"github.com/88250/gulu"
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
+	"github.com/88250/lute/render"
 )
 
 var graphLock = &sync.Mutex{}
@@ -69,6 +69,38 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 
 func connectForwardlinks(nodes *[]interface{}, links *[]interface{}) {
 	for _, ref := range forwardlinks {
+		var exist bool
+		for _, node := range *nodes {
+			if node.(map[string]interface{})["name"] == ref.ID {
+				exist = true
+				break
+			}
+		}
+		if !exist {
+			category := NodeCategoryChild
+			if ast.NodeDocument.String() == ref.Def.Type {
+				category = NodeCategoryRoot
+
+			}
+
+			node := map[string]interface{}{
+				"name":     ref.ID,
+				"category": category,
+				"url":      ref.URL,
+				"path":     ref.Path,
+				"content":  ref.Content,
+				"label": map[string]interface{}{
+					"show": true,
+				},
+				"emphasis": map[string]interface{}{
+					"label": map[string]interface{}{
+						"show": true,
+					},
+				},
+			}
+			*nodes = append(*nodes, node)
+		}
+
 		*links = append(*links, map[string]interface{}{
 			"source": ref.ID,
 			"target": ref.Def.ID,
@@ -82,6 +114,38 @@ func connectForwardlinks(nodes *[]interface{}, links *[]interface{}) {
 func connectBacklinks(nodes *[]interface{}, links *[]interface{}) {
 	for _, def := range backlinks {
 		for _, ref := range def.Refs {
+			var exist bool
+			for _, node := range *nodes {
+				if node.(map[string]interface{})["name"] == def.ID {
+					exist = true
+					break
+				}
+			}
+			if !exist {
+				category := NodeCategoryChild
+				if ast.NodeDocument.String() == def.Type {
+					category = NodeCategoryRoot
+
+				}
+
+				node := map[string]interface{}{
+					"name":     def.ID,
+					"category": category,
+					"url":      def.URL,
+					"path":     def.Path,
+					"content":  def.Content,
+					"label": map[string]interface{}{
+						"show": true,
+					},
+					"emphasis": map[string]interface{}{
+						"label": map[string]interface{}{
+							"show": true,
+						},
+					},
+				}
+				*nodes = append(*nodes, node)
+			}
+
 			*links = append(*links, map[string]interface{}{
 				"source": ref.ID,
 				"target": def.ID,
@@ -115,9 +179,12 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 			return ast.WalkContinue
 		}
 
-		text := renderBlockText(n)
+		var text string
 		if ast.NodeDocument == n.Type {
-			text = tree.Name + "  " + text
+			text = tree.Name
+		} else {
+			text = renderBlockText(n)
+			text = render.SubStr(text, 16)
 		}
 
 		if !strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
@@ -132,22 +199,6 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 			show = false
 		}
 
-		maxTextLen := 16
-		if !isRoot {
-			maxTextLen = 64
-		}
-
-		var runes []rune
-		for i := 0; i < len(text); {
-			r, size := utf8.DecodeRuneInString(text[i:])
-			runes = append(runes, r)
-			i += size
-			if maxTextLen < len(runes) {
-				runes = append(runes, []rune("...")...)
-				break
-			}
-		}
-		text = string(runes)
 		if "" == text {
 			return ast.WalkContinue
 		}
