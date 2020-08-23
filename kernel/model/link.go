@@ -12,7 +12,6 @@ package model
 
 import (
 	"bytes"
-	"errors"
 	"sort"
 	"sync"
 
@@ -45,16 +44,14 @@ func (r DefRefs) Less(i, j int) bool {
 func (r DefRefs) Swap(i, j int) { r[i], r[j] = r[j], r[i] }
 
 func TreeBacklinks(url, path string) (ret []*Block, err error) {
-	box := Conf.Box(url)
-	if nil == box {
-		return nil, errors.New(Conf.lang(0))
-	}
-
-	tree := box.Tree(path)
-	indexLink(tree)
+	rebuildLinks()
 
 	ret = []*Block{}
 	for _, def := range forwardlinks {
+		if def.URL != url || def.Path != path {
+			continue
+		}
+
 		depth := 0
 		cloned := cloneBlock(def, &depth)
 		ret = append(ret, cloned)
@@ -67,7 +64,6 @@ func cloneBlock(block *Block, depth *int) (ret *Block) {
 		return
 	}
 
-	*depth++
 	if 2 < *depth {
 		return
 	}
@@ -80,7 +76,8 @@ func cloneBlock(block *Block, depth *int) (ret *Block) {
 		Type:    block.Type,
 	}
 
-	ret.Def = cloneBlock(block, depth)
+	*depth++
+	ret.Def = cloneBlock(block.Def, depth)
 	for _, ref := range block.Refs {
 		ret.Refs = append(ret.Refs, cloneBlock(ref, depth))
 	}

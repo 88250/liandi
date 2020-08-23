@@ -33,7 +33,7 @@ func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []inte
 	tree := box.Tree(p)
 	genTreeGraph(keyword, tree, &nodes, &links)
 	connectBacklinks(&nodes, &links, true)
-	//connectForwardLinks(tree, &nodes, &links, true)
+	//TODO connectForwardLinks(tree, &nodes, &links, true)
 
 	markBugBlock(&nodes, &links)
 	return
