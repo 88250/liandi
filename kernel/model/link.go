@@ -18,8 +18,8 @@ import (
 )
 
 var (
-	backlinks    []*Block // 反向链接关系 ref
-	forwardlinks []*Block // 正向链接关系 def
+	forwardlinks []*Block // 正向链接关系 refs
+	backlinks    []*Block // 反向链接关系 defs
 )
 
 type DefRef struct {
@@ -43,7 +43,7 @@ func TreeBacklinks(url, path string) (ret []*Block, err error) {
 	rebuildLinks()
 
 	ret = []*Block{}
-	for _, def := range forwardlinks {
+	for _, def := range backlinks {
 		if def.URL != url || def.Path != path {
 			continue
 		}
@@ -84,7 +84,7 @@ func cloneBlock(block *Block, depth *int) (ret *Block) {
 func Backlinks() (ret DefRefs) {
 	rebuildLinks()
 
-	for _, block := range backlinks {
+	for _, block := range forwardlinks {
 		ret = append(ret, &DefRef{block.Def, block.Refs})
 	}
 	sort.Sort(ret)
@@ -95,8 +95,8 @@ func rebuildLinks() {
 	graphLock.Lock()
 	defer graphLock.Unlock()
 
-	backlinks = []*Block{}
 	forwardlinks = []*Block{}
+	backlinks = []*Block{}
 
 	// 捞出所有内容块定义和引用节点
 	var defs, refs []*ast.Node
@@ -126,7 +126,7 @@ func rebuildLinks() {
 				block.Refs = append(block.Refs, refBlock)
 			}
 		}
-		forwardlinks = append(forwardlinks, block)
+		backlinks = append(backlinks, block)
 	}
 
 	// 构建反向链接
@@ -135,7 +135,7 @@ func rebuildLinks() {
 		for _, def := range defs {
 			if def.ID == util.BytesToStr(ref.Tokens) {
 				block.Def = buildBlock(def)
-				backlinks = append(backlinks, block)
+				forwardlinks = append(forwardlinks, block)
 			}
 		}
 	}

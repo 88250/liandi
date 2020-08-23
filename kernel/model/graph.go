@@ -66,7 +66,7 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 }
 
 func connectBacklinks(nodes *[]interface{}, links *[]interface{}) {
-	for _, ref := range backlinks {
+	for _, ref := range forwardlinks {
 		*links = append(*links, map[string]interface{}{
 			"source": ref.ID,
 			"target": ref.Def.ID,
@@ -78,7 +78,7 @@ func connectBacklinks(nodes *[]interface{}, links *[]interface{}) {
 }
 
 func connectForwardLinks(nodes *[]interface{}, links *[]interface{}) {
-	for _, def := range forwardlinks {
+	for _, def := range backlinks {
 		for _, ref := range def.Refs {
 			*links = append(*links, map[string]interface{}{
 				"source": ref.ID,
