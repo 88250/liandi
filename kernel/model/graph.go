@@ -73,18 +73,17 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 }
 
 func connectBacklinks(nodeBacklinks map[*Block][]*Block, nodes *[]interface{}, links *[]interface{}, fromTree bool) {
-	refs := map[string]*Block{}
-	for target, defs := range nodeBacklinks {
-		for _, ref := range defs {
+	allRefs := map[string]*Block{}
+	for def, refs := range nodeBacklinks {
+		for _, ref := range refs {
 			*links = append(*links, map[string]interface{}{
 				"source": ref.ID,
-				"target": target.ID,
+				"target": def.ID,
 				"lineStyle": map[string]interface{}{
 					"type": "dotted",
 				},
 			})
-
-			refs[ref.ID] = ref
+			allRefs[ref.ID] = ref
 		}
 	}
 
@@ -94,7 +93,7 @@ func connectBacklinks(nodeBacklinks map[*Block][]*Block, nodes *[]interface{}, l
 
 	// Tree Graph 需要从其他树的节点进行延伸补全
 
-	for refID, ref := range refs {
+	for refID, ref := range allRefs {
 		var existed bool
 		for _, n := range *nodes {
 			node := n.(map[string]interface{})
