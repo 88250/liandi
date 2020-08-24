@@ -60,22 +60,37 @@ export class Wnd {
             if (newTabHeaderElement && newTabHeaderElement.style.opacity !== '0.6') {
                 newTabHeaderElement.style.backgroundColor = 'aliceblue'
             }
+            if (!newTabHeaderElement) {
+                it.style.backgroundColor = 'aliceblue'
+            }
             event.preventDefault()
         })
-        tabHeadersElement.addEventListener("drop", function(event: DragEvent & { target: HTMLElement })  {
+        tabHeadersElement.addEventListener("dragleave", function (event: DragEvent & { target: HTMLElement }) {
+            const it = this as HTMLElement
+            it.querySelectorAll("li").forEach((item) => {
+                item.style.backgroundColor = ''
+            })
+            it.style.backgroundColor = ''
+        });
+        tabHeadersElement.addEventListener("drop", function (event: DragEvent & { target: HTMLElement }) {
+            const oldTab = getInstanceById(event.dataTransfer.getData("application/liandi")) as Tab
+            const it = this as HTMLElement
+            it.style.backgroundColor = ''
             const newTabHeaderElement = hasClosestByTag(event.target, "LI")
+            if (!it.contains(oldTab.headElement)) {
+                const newWnd = getInstanceById(it.parentElement.getAttribute("data-id")) as Wnd
+                newWnd.moveTab(oldTab)
+                if (newTabHeaderElement) {
+                    newTabHeaderElement.before(oldTab.headElement)
+                    newTabHeaderElement.style.backgroundColor = ''
+                }
+                return
+            }
             if (!newTabHeaderElement) {
                 return;
             }
-            const tabId = event.dataTransfer.getData("application/liandi")
-            const oldTab = getInstanceById(tabId) as Tab
-            const it = this as HTMLElement
-            if (!it.contains(oldTab.headElement)) {
-
-            }
             newTabHeaderElement.style.backgroundColor = ''
-            if (newTabHeaderElement.getAttribute("data-id") !== tabId) {
-
+            if (newTabHeaderElement !== oldTab.panelElement) {
                 const oldTabNextElement = oldTab.headElement.nextElementSibling
                 const oldTabPreviousElement = oldTab.headElement.previousElementSibling
                 if (!oldTabNextElement && oldTabPreviousElement === newTabHeaderElement) {
@@ -134,8 +149,10 @@ export class Wnd {
 
         if (tab.headElement) {
             this.headersElement.append(tab.headElement);
-            tab.headElement.querySelector(".item__svg--close").addEventListener("click", (event) => {
-                this.removeTab(tab.id);
+            tab.headElement.querySelector(".item__svg--close").addEventListener("click", function (event) {
+                const it = this as HTMLElement
+                const currentTab = getInstanceById(it.parentElement.getAttribute("data-id")) as Tab
+                currentTab.parent.removeTab(tab.id);
                 event.stopPropagation();
                 event.preventDefault();
             });
@@ -181,7 +198,7 @@ export class Wnd {
         });
     }
 
-    public moveTab(tab: Tab) {
+    private moveTab(tab: Tab) {
         if (tab.headElement) {
             this.headersElement.append(tab.headElement);
         }
