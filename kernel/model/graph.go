@@ -33,8 +33,8 @@ func TreeGraph(keyword string, url, p string, depth int) (nodes []interface{}, l
 	tree := box.Tree(p)
 	genTreeGraph(keyword, tree, &nodes, &links)
 	growGraph(&nodes, depth)
-	connectForwardlinks(&nodes, &links)
-	connectBacklinks(&nodes, &links)
+	connectForwardlinks(&links)
+	connectBacklinks(&links)
 	markBugBlock(&nodes, &links)
 	return
 }
@@ -45,8 +45,8 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 	for _, tree := range trees {
 		genTreeGraph(keyword, tree, &nodes, &links)
 	}
-	connectForwardlinks(&nodes, &links)
-	connectBacklinks(&nodes, &links)
+	connectForwardlinks(&links)
+	connectBacklinks(&links)
 	markBugBlock(&nodes, &links)
 	return
 }
@@ -61,12 +61,12 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 		return
 	}
 
-	var forwardGeneration []interface{}
+	forwardGeneration := &[]interface{}{}
 	if maxDepth > *forwardDepth {
 		for _, ref := range forwardlinks {
 			for _, node := range *nodes {
 				if node.(map[string]interface{})["name"] == ref.ID {
-					if existNodes(all, ref.Def.ID) {
+					if existNodes(all, ref.Def.ID) || existNodes(forwardGeneration, ref.Def.ID) || existNodes(nodes, ref.Def.ID) {
 						continue
 					}
 
@@ -80,7 +80,7 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 						"category": category,
 						"url":      ref.Def.URL,
 						"path":     ref.Def.Path,
-						"content":  ref.Def.Content,
+						"content":  render.SubStr(ref.Def.Content, 32),
 						"label": map[string]interface{}{
 							"show": true,
 						},
@@ -91,20 +91,20 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 						},
 					}
 
-					forwardGeneration = append(forwardGeneration, def)
+					*forwardGeneration = append(*forwardGeneration, def)
 				}
 			}
 		}
 
 	}
 
-	var backGeneration []interface{}
+	backGeneration := &[]interface{}{}
 	if maxDepth > *backDepth {
 		for _, def := range backlinks {
 			for _, node := range *nodes {
 				if node.(map[string]interface{})["name"] == def.ID {
 					for _, ref := range def.Refs {
-						if existNodes(all, ref.ID) {
+						if existNodes(all, ref.ID) || existNodes(backGeneration, ref.ID) || existNodes(nodes, ref.ID) {
 							continue
 						}
 
@@ -118,7 +118,7 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 							"category": category,
 							"url":      ref.URL,
 							"path":     ref.Path,
-							"content":  ref.Content,
+							"content":  render.SubStr(ref.Content, 32),
 							"label": map[string]interface{}{
 								"show": true,
 							},
@@ -129,7 +129,7 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 							},
 						}
 
-						backGeneration = append(backGeneration, ref)
+						*backGeneration = append(*backGeneration, ref)
 					}
 				}
 			}
@@ -137,8 +137,8 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 	}
 
 	generation := &[]interface{}{}
-	*generation = append(*generation, forwardGeneration...)
-	*generation = append(*generation, backGeneration...)
+	*generation = append(*generation, *forwardGeneration...)
+	*generation = append(*generation, *backGeneration...)
 	*forwardDepth++
 	*backDepth++
 	growLinkedNodes(generation, nodes, forwardDepth, backDepth, maxDepth)
@@ -154,7 +154,7 @@ func existNodes(nodes *[]interface{}, id string) bool {
 	return false
 }
 
-func connectForwardlinks(nodes *[]interface{}, links *[]interface{}) {
+func connectForwardlinks(links *[]interface{}) {
 	for _, ref := range forwardlinks {
 		*links = append(*links, map[string]interface{}{
 			"source": ref.ID,
@@ -166,7 +166,7 @@ func connectForwardlinks(nodes *[]interface{}, links *[]interface{}) {
 	}
 }
 
-func connectBacklinks(nodes *[]interface{}, links *[]interface{}) {
+func connectBacklinks(links *[]interface{}) {
 	for _, def := range backlinks {
 		for _, ref := range def.Refs {
 			*links = append(*links, map[string]interface{}{
@@ -202,17 +202,12 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 			return ast.WalkContinue
 		}
 
-		var text string
-		if ast.NodeDocument == n.Type {
-			text = tree.Name
-		} else {
-			text = renderBlockText(n)
-			text = render.SubStr(text, 16)
-		}
-
-		if !strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
+		text := renderBlockText(n)
+		if "" == text || !strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
 			return ast.WalkContinue
 		}
+
+		text = render.SubStr(text, 32)
 
 		isRoot := ast.NodeDocument == n.Type
 		value := NodeCategoryRoot
@@ -220,10 +215,6 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 		if !isRoot {
 			value = NodeCategoryChild
 			show = false
-		}
-
-		if "" == text {
-			return ast.WalkContinue
 		}
 
 		node := map[string]interface{}{
@@ -241,7 +232,7 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 				},
 			},
 		}
-		checkBadNodes(*nodes, node, links)
+		checkBadNodes(nodes, node, links)
 		*nodes = append(*nodes, node)
 
 		if tree.ID != n.ID {
@@ -263,9 +254,9 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 	})
 }
 
-func checkBadNodes(nodes []interface{}, node interface{}, links *[]interface{}) {
+func checkBadNodes(nodes *[]interface{}, node interface{}, links *[]interface{}) {
 	currentNode := node.(map[string]interface{})
-	for _, n := range nodes {
+	for _, n := range *nodes {
 		existNode := n.(map[string]interface{})
 		if currentNode["name"] == existNode["name"] {
 			currentNode["name"] = currentNode["name"].(string) + "-" + gulu.Rand.String(7)
