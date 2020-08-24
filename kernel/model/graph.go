@@ -61,12 +61,12 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 		return
 	}
 
-	var forwardGeneration []interface{}
+	forwardGeneration := &[]interface{}{}
 	if maxDepth > *forwardDepth {
 		for _, ref := range forwardlinks {
 			for _, node := range *nodes {
 				if node.(map[string]interface{})["name"] == ref.ID {
-					if existNodes(all, ref.Def.ID) {
+					if existNodes(all, ref.Def.ID) || existNodes(forwardGeneration, ref.Def.ID) || existNodes(nodes, ref.Def.ID) {
 						continue
 					}
 
@@ -91,20 +91,20 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 						},
 					}
 
-					forwardGeneration = append(forwardGeneration, def)
+					*forwardGeneration = append(*forwardGeneration, def)
 				}
 			}
 		}
 
 	}
 
-	var backGeneration []interface{}
+	backGeneration := &[]interface{}{}
 	if maxDepth > *backDepth {
 		for _, def := range backlinks {
 			for _, node := range *nodes {
 				if node.(map[string]interface{})["name"] == def.ID {
 					for _, ref := range def.Refs {
-						if existNodes(all, ref.ID) {
+						if existNodes(all, ref.ID) || existNodes(backGeneration, ref.ID) || existNodes(nodes, ref.ID) {
 							continue
 						}
 
@@ -129,7 +129,7 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 							},
 						}
 
-						backGeneration = append(backGeneration, ref)
+						*backGeneration = append(*backGeneration, ref)
 					}
 				}
 			}
@@ -137,8 +137,8 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 	}
 
 	generation := &[]interface{}{}
-	*generation = append(*generation, forwardGeneration...)
-	*generation = append(*generation, backGeneration...)
+	*generation = append(*generation, *forwardGeneration...)
+	*generation = append(*generation, *backGeneration...)
 	*forwardDepth++
 	*backDepth++
 	growLinkedNodes(generation, nodes, forwardDepth, backDepth, maxDepth)
@@ -241,7 +241,7 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 				},
 			},
 		}
-		checkBadNodes(*nodes, node, links)
+		checkBadNodes(nodes, node, links)
 		*nodes = append(*nodes, node)
 
 		if tree.ID != n.ID {
@@ -263,9 +263,9 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 	})
 }
 
-func checkBadNodes(nodes []interface{}, node interface{}, links *[]interface{}) {
+func checkBadNodes(nodes *[]interface{}, node interface{}, links *[]interface{}) {
 	currentNode := node.(map[string]interface{})
-	for _, n := range nodes {
+	for _, n := range *nodes {
 		existNode := n.(map[string]interface{})
 		if currentNode["name"] == existNode["name"] {
 			currentNode["name"] = currentNode["name"].(string) + "-" + gulu.Rand.String(7)
@@ -285,10 +285,10 @@ func checkBadNodes(nodes []interface{}, node interface{}, links *[]interface{}) 
 func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 	for _, node := range *nodes {
 		n := node.(map[string]interface{})
-		//if 0 == n["category"] {
-		//	// 跳过根块
-		//	continue
-		//}
+		if 0 == n["category"] {
+			// 跳过根块
+			continue
+		}
 		for _, link := range *links {
 			l := link.(map[string]interface{})
 			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
