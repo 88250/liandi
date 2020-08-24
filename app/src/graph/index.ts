@@ -124,9 +124,9 @@ export class Graph extends Model {
                             !item.element.classList.contains("fn__none")) {
                             const vditorElement = item.vditore.vditor.ir.element;
                             vditorElement.querySelectorAll(".editor__blockref").forEach(item=> {
-                                item.classList.remove("editor__blockref")
-                            })
-                            const nodeElement = vditorElement.querySelector(`[data-node-id="${params.name}"]`) as HTMLElement
+                                item.classList.remove("editor__blockref");
+                            });
+                            const nodeElement = vditorElement.querySelector(`[data-node-id="${params.name}"]`) as HTMLElement;
                             if (nodeElement && nodeElement.getClientRects().length > 0) {
                                 nodeElement.classList.add("editor__blockref");
                                 vditorElement.scrollTop = nodeElement.offsetTop - vditorElement.clientHeight / 2;
