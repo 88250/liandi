@@ -46,7 +46,7 @@ export class Wnd {
                 if (tabHeadersElement) {
                     return
                 }
-                const tabPanelsElement = hasClosestByClassName(event.target, "tab__panels")
+                const tabPanelsElement = hasClosestByClassName(event.target, "tab__panels", true)
                 if (tabPanelsElement) {
                     dragElement.classList.remove("fn__none")
                 }
@@ -180,8 +180,8 @@ export class Wnd {
         model.send("closews", {});
     }
 
-    private confirmRemoveEditor(model:Model) {
-        if (!(model instanceof  Editor)) {
+    private confirmRemoveEditor(model: Model) {
+        if (!(model instanceof Editor)) {
             return true
         }
         if (!model.saved) {
