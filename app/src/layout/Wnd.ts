@@ -10,6 +10,7 @@ import {animationThrottle} from "../util/animationThrottle";
 import {hasClosestByClassName, hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
 import {hasClosestByTag} from "../../vditore/src/ts/util/hasClosestByHeadings";
 import {i18n} from "../i18n";
+import {remote} from "electron";
 
 export class Wnd {
     public id: string
@@ -185,7 +186,12 @@ export class Wnd {
             return true
         }
         if (!model.saved) {
-            return confirm(path.posix.basename(model.path) + i18n[window.liandi.config.lang].saveTip)
+            const confirmRst = confirm(path.posix.basename(model.path) + i18n[window.liandi.config.lang].saveTip)
+            // TODO: 光标丢失问题 https://github.com/electron/electron/issues/14474
+            // 该解决方案会导致闪烁
+            remote.getCurrentWindow().blur()
+            remote.getCurrentWindow().focus()
+            return confirmRst
         }
         return true
     }
