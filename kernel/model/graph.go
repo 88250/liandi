@@ -13,11 +13,11 @@ package model
 import (
 	"strings"
 	"sync"
-	"unicode/utf8"
 
 	"github.com/88250/gulu"
 	"github.com/88250/lute/ast"
 	"github.com/88250/lute/parse"
+	"github.com/88250/lute/render"
 )
 
 var graphLock = &sync.Mutex{}
@@ -28,29 +28,24 @@ func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []inte
 		return
 	}
 
-	graphLock.Lock()
-	defer graphLock.Unlock()
+	rebuildLinks()
 
 	tree := box.Tree(p)
-	delete(treeBacklinks, tree)
-	indexLink(tree)
-	genGraph(keyword, tree, &nodes, &links)
-	connectBacklinks(treeBacklinks[tree], &nodes, &links, true)
+	genTreeGraph(keyword, tree, &nodes, &links)
+	connectForwardlinks(&nodes, &links)
+	connectBacklinks(&nodes, &links)
 	markBugBlock(&nodes, &links)
 	return
 }
 
 func Graph(keyword string) (nodes []interface{}, links []interface{}) {
-	rebuildBacklinks()
+	rebuildLinks()
 
 	for _, tree := range trees {
-		genGraph(keyword, tree, &nodes, &links)
+		genTreeGraph(keyword, tree, &nodes, &links)
 	}
-
-	for _, nodeBacklinks := range treeBacklinks {
-		connectBacklinks(nodeBacklinks, &nodes, &links, false)
-	}
-
+	connectForwardlinks(&nodes, &links)
+	connectBacklinks(&nodes, &links)
 	markBugBlock(&nodes, &links)
 	return
 }
@@ -72,56 +67,30 @@ func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 	}
 }
 
-func connectBacklinks(nodeBacklinks map[*Block][]*Block, nodes *[]interface{}, links *[]interface{}, fromTree bool) {
-	refs := map[string]*Block{}
-	for target, defs := range nodeBacklinks {
-		for _, ref := range defs {
-			*links = append(*links, map[string]interface{}{
-				"source": ref.ID,
-				"target": target.ID,
-				"lineStyle": map[string]interface{}{
-					"type": "dotted",
-				},
-			})
-
-			refs[ref.ID] = ref
-		}
-	}
-
-	if !fromTree {
-		return
-	}
-
-	// Tree Graph 需要从其他树的节点进行延伸补全
-
-	for refID, ref := range refs {
-		var existed bool
-		for _, n := range *nodes {
-			node := n.(map[string]interface{})
-			id := node["name"].(string)
-
-			if refID == id {
-				existed = true
+func connectForwardlinks(nodes *[]interface{}, links *[]interface{}) {
+	for _, ref := range forwardlinks {
+		var exist bool
+		for _, node := range *nodes {
+			if node.(map[string]interface{})["name"] == ref.ID {
+				exist = true
 				break
 			}
 		}
+		if !exist {
+			category := NodeCategoryChild
+			if ast.NodeDocument.String() == ref.Def.Type {
+				category = NodeCategoryRoot
 
-		if !existed {
-			category := NodeCategoryRoot
-			show := true
-			if ast.NodeDocument.String() != ref.Type {
-				category = NodeCategoryChild
-				show = false
 			}
 
 			node := map[string]interface{}{
-				"name":     refID,
-				"category": category, // TODO 其他文档引用类型
+				"name":     ref.ID,
+				"category": category,
 				"url":      ref.URL,
 				"path":     ref.Path,
 				"content":  ref.Content,
 				"label": map[string]interface{}{
-					"show": show,
+					"show": true,
 				},
 				"emphasis": map[string]interface{}{
 					"label": map[string]interface{}{
@@ -129,8 +98,61 @@ func connectBacklinks(nodeBacklinks map[*Block][]*Block, nodes *[]interface{}, l
 					},
 				},
 			}
-
 			*nodes = append(*nodes, node)
+		}
+
+		*links = append(*links, map[string]interface{}{
+			"source": ref.ID,
+			"target": ref.Def.ID,
+			"lineStyle": map[string]interface{}{
+				"type": "dotted",
+			},
+		})
+	}
+}
+
+func connectBacklinks(nodes *[]interface{}, links *[]interface{}) {
+	for _, def := range backlinks {
+		for _, ref := range def.Refs {
+			var exist bool
+			for _, node := range *nodes {
+				if node.(map[string]interface{})["name"] == def.ID {
+					exist = true
+					break
+				}
+			}
+			if !exist {
+				category := NodeCategoryChild
+				if ast.NodeDocument.String() == def.Type {
+					category = NodeCategoryRoot
+
+				}
+
+				node := map[string]interface{}{
+					"name":     def.ID,
+					"category": category,
+					"url":      def.URL,
+					"path":     def.Path,
+					"content":  def.Content,
+					"label": map[string]interface{}{
+						"show": true,
+					},
+					"emphasis": map[string]interface{}{
+						"label": map[string]interface{}{
+							"show": true,
+						},
+					},
+				}
+				*nodes = append(*nodes, node)
+			}
+
+			*links = append(*links, map[string]interface{}{
+				"source": ref.ID,
+				"target": def.ID,
+				"lineStyle": map[string]interface{}{
+					"type": "dotted",
+				},
+			})
 		}
 	}
 }
@@ -142,7 +164,7 @@ const (
 	NodeCategoryBug    = 3 // 问题块
 )
 
-func genGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
+func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
 	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 		if !entering {
 			return ast.WalkContinue
@@ -157,9 +179,12 @@ func genGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]i
 			return ast.WalkContinue
 		}
 
-		text := renderBlockText(n)
+		var text string
 		if ast.NodeDocument == n.Type {
-			text = tree.Name + "  " + text
+			text = tree.Name
+		} else {
+			text = renderBlockText(n)
+			text = render.SubStr(text, 16)
 		}
 
 		if !strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
@@ -174,22 +199,6 @@ func genGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]i
 			show = false
 		}
 
-		maxTextLen := 16
-		if !isRoot {
-			maxTextLen = 64
-		}
-
-		var runes []rune
-		for i := 0; i < len(text); {
-			r, size := utf8.DecodeRuneInString(text[i:])
-			runes = append(runes, r)
-			i += size
-			if maxTextLen < len(runes) {
-				runes = append(runes, []rune("...")...)
-				break
-			}
-		}
-		text = string(runes)
 		if "" == text {
 			return ast.WalkContinue
 		}
@@ -213,6 +222,7 @@ func genGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]i
 		*nodes = append(*nodes, node)
 
 		if tree.ID != n.ID {
+			// 连接根块和子块
 			*links = append(*links, map[string]interface{}{
 				"source": tree.ID,
 				"target": n.ID,

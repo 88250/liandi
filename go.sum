@@ -27,6 +27,8 @@ github.com/88250/lute v1.6.1-0.20200821072347-17f2dea84ef3 h1:/4ggLoyY19VtvaBgV5
 github.com/88250/lute v1.6.1-0.20200821072347-17f2dea84ef3/go.mod h1:ZCUa9CmvpTx9GmYpsjuSa6IJgM5hoD8CAWdNQ6/cg6Q=
 github.com/88250/lute v1.6.1 h1:fiOS7x65njbcJi5cQ5Fy7i6D0+bBXjoA9sB/fkSfMFM=
 github.com/88250/lute v1.6.1/go.mod h1:ZCUa9CmvpTx9GmYpsjuSa6IJgM5hoD8CAWdNQ6/cg6Q=
+github.com/88250/lute v1.6.2-0.20200823093142-f76b0284ef33 h1:6F7KKhTnEDBVIoSg35hj6gAvr3y/mJjnkcDVBiYqaHo=
+github.com/88250/lute v1.6.2-0.20200823093142-f76b0284ef33/go.mod h1:ZCUa9CmvpTx9GmYpsjuSa6IJgM5hoD8CAWdNQ6/cg6Q=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38 h1:smF2tmSOzy2Mm+0dGI2AIUHY+w0BUc+4tn40djz7+6U=
 github.com/alecthomas/assert v0.0.0-20170929043011-405dbfeb8e38/go.mod h1:r7bzyVFMNntcxPZXK3/+KdruV1H5KSlyVY0gc+NgInI=
@@ -49,6 +51,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dlclark/regexp2 v1.2.0 h1:8sAhBGEM0dRWogWqWyQeIJnxjWO6oIjl8FKqREDsGfk=
 github.com/dlclark/regexp2 v1.2.0/go.mod h1:2pZnwuY/m+8K6iRw6wQdMtk+rH5tNGR1i55kozfMjCc=
+github.com/dlclark/regexp2 v1.2.1 h1:Ff/S0snjr1oZHUNOkvA/gP6KUaMg5vDDl3Qnhjnwgm8=
+github.com/dlclark/regexp2 v1.2.1/go.mod h1:2pZnwuY/m+8K6iRw6wQdMtk+rH5tNGR1i55kozfMjCc=
 github.com/elazarl/goproxy v0.0.0-20200315184450-1f3cb6622dad h1:zPs0fNF2Io1Qytf92EI2CDJ9oCXZr+NmjEVexrUEdq4=
 github.com/elazarl/goproxy v0.0.0-20200315184450-1f3cb6622dad/go.mod h1:Ro8st/ElPeALwNFlcTpWmkr6IoMFfkjXAvTHpevnDsM=
 github.com/elazarl/goproxy/ext v0.0.0-20190711103511-473e67f1d7d2 h1:dWB6v3RcOy03t/bUadywsbyrQwCqZeNIEX6M1OtSZOM=
