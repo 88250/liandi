@@ -143,53 +143,65 @@ func GetBlock(id string) (ret *Block) {
 	return
 }
 
-func SearchBlock(url, keyword string) (ret []*Block) {
+func SearchBlock(url, p, keyword string) (ret []*Block) {
 	ret = []*Block{}
 	keyword = strings.TrimSpace(keyword)
 	if "" == keyword {
+		var tree *parse.Tree
+		if 0 < len(trees) {
+			tree = trees[0]
+		} else {
+			box := Conf.Box(url)
+			tree = box.Tree(p)
+		}
+		searchBlock0(tree, keyword, &ret)
 		return
 	}
+
 	for _, tree := range trees {
 		if tree.URL != url {
 			continue
 		}
-
-		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
-			if !entering {
-				return ast.WalkContinue
-			}
-
-			if nil != n.Parent && ast.NodeDocument != n.Parent.Type {
-				// 仅支持根节点的直接子节点
-				return ast.WalkContinue
-			}
-
-			if isSearchBlockSkipNode(n) {
-				return ast.WalkStop
-			}
-
-			text := renderBlockText(n)
-			if ast.NodeDocument == n.Type {
-				text = tree.Name + "  " + text
-			}
-
-			pos, marked := markSearch(text, keyword)
-			if -1 < pos {
-				block := &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Type: n.Type.String(), Content: marked}
-				ret = append(ret, block)
-			}
-
-			if 16 <= len(ret) { // TODO: 这里需要按树分组优化
-				return ast.WalkStop
-			}
-
-			if ast.NodeList == n.Type {
-				return ast.WalkSkipChildren
-			}
-			return ast.WalkContinue
-		})
+		searchBlock0(tree, keyword, &ret)
 	}
 	return
+}
+
+func searchBlock0(tree *parse.Tree, keyword string, ret *[]*Block) {
+	ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
+		if !entering {
+			return ast.WalkContinue
+		}
+
+		if nil != n.Parent && ast.NodeDocument != n.Parent.Type {
+			// 仅支持根节点的直接子节点
+			return ast.WalkContinue
+		}
+
+		if isSearchBlockSkipNode(n) {
+			return ast.WalkContinue
+		}
+
+		text := renderBlockText(n)
+		if ast.NodeDocument == n.Type {
+			text = tree.Name + "  " + text
+		}
+
+		pos, marked := markSearch(text, keyword)
+		if -1 < pos {
+			block := &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Type: n.Type.String(), Content: marked}
+			*ret = append(*ret, block)
+		}
+
+		if 16 <= len(*ret) { // TODO: 这里需要按树分组优化
+			return ast.WalkStop
+		}
+
+		if ast.NodeList == n.Type {
+			return ast.WalkSkipChildren
+		}
+		return ast.WalkContinue
+	})
 }
 
 func isSearchBlockSkipNode(node *ast.Node) bool {
