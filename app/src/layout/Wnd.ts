@@ -6,6 +6,8 @@ import {Model} from "./Model";
 import {Editor} from "../editor";
 import {Graph} from "../graph";
 import {animationThrottle} from "../util/animationThrottle";
+import {hasClosestByClassName, hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
+import {hasClosestByTag} from "../../vditore/src/ts/util/hasClosestByHeadings";
 
 export class Wnd {
     public id: string
@@ -36,15 +38,58 @@ export class Wnd {
             }
         });
         const dragElement = this.element.querySelector(".tab__drag") as HTMLElement
-        this.element.addEventListener('dragenter', (event) => {
+        this.element.addEventListener('dragenter', (event: DragEvent & { target: HTMLElement }) => {
             if (event.dataTransfer.types.includes("application/liandi")) {
-                document.querySelectorAll('.tab__drag').forEach((item) => {
-                    item.classList.add("fn__none")
-                })
-                dragElement.classList.remove("fn__none")
-
+                const tabHeadersElement = hasClosestByClassName(event.target, "tab__headers")
+                if (tabHeadersElement) {
+                    return
+                }
+                const tabPanelsElement = hasClosestByClassName(event.target, "tab__panels")
+                if (tabPanelsElement) {
+                    dragElement.classList.remove("fn__none")
+                }
             }
         });
+        const tabHeadersElement = this.element.querySelector(".tab__headers")
+        tabHeadersElement.addEventListener("dragover", function (event: DragEvent & { target: HTMLElement }) {
+            const it = this as HTMLElement
+            it.querySelectorAll("li").forEach((item) => {
+                item.style.backgroundColor = ''
+            })
+            const newTabHeaderElement = hasClosestByTag(event.target, "LI")
+            if (newTabHeaderElement && newTabHeaderElement.style.opacity !== '0.6') {
+                newTabHeaderElement.style.backgroundColor = 'aliceblue'
+            }
+            event.preventDefault()
+        })
+        tabHeadersElement.addEventListener("drop", function(event: DragEvent & { target: HTMLElement })  {
+            const newTabHeaderElement = hasClosestByTag(event.target, "LI")
+            if (!newTabHeaderElement) {
+                return;
+            }
+            const tabId = event.dataTransfer.getData("application/liandi")
+            const oldTab = getInstanceById(tabId) as Tab
+            const it = this as HTMLElement
+            if (!it.contains(oldTab.headElement)) {
+
+            }
+            newTabHeaderElement.style.backgroundColor = ''
+            if (newTabHeaderElement.getAttribute("data-id") !== tabId) {
+
+                const oldTabNextElement = oldTab.headElement.nextElementSibling
+                const oldTabPreviousElement = oldTab.headElement.previousElementSibling
+                if (!oldTabNextElement && oldTabPreviousElement === newTabHeaderElement) {
+                    newTabHeaderElement.before(oldTab.headElement)
+                    return;
+                }
+                newTabHeaderElement.after(oldTab.headElement)
+                if (oldTabNextElement && oldTabNextElement !== newTabHeaderElement) {
+                    oldTabNextElement.before(newTabHeaderElement)
+                } else if (oldTabPreviousElement && oldTabPreviousElement !== newTabHeaderElement) {
+                    oldTabPreviousElement.after(newTabHeaderElement)
+                }
+            }
+        })
         // animationThrottle("dragover", "optimizedDragover", dragElement);
         dragElement.addEventListener("dragover", (event: DragEvent & { layerX: number, layerY: number }) => {
             event.preventDefault()
@@ -136,15 +181,13 @@ export class Wnd {
         });
     }
 
-    public moveTab(tab:Tab) {
-        this.children.forEach((item) => {
-            item.headElement?.classList.remove("item--current");
-            item.panelElement.classList.add("fn__none");
-        });
+    public moveTab(tab: Tab) {
         if (tab.headElement) {
             this.headersElement.append(tab.headElement);
         }
         this.element.querySelector(".tab__panels").append(tab.panelElement);
+        this.children.push(tab);
+        this.switchTab(tab.headElement);
 
         const oldWnd = tab.parent
         if (oldWnd.children.length === 1) {
@@ -153,21 +196,16 @@ export class Wnd {
         } else {
             oldWnd.children.find((item, index) => {
                 if (item.id === tab.id) {
-                    if (item.headElement.classList.contains("item--current")) {
-                        let currentIndex = index + 1;
-                        if (index === this.children.length - 1) {
-                            currentIndex = index - 1;
-                        }
-                        this.switchTab(this.children[currentIndex].headElement);
-                    }
-                    this.children.splice(index, 1);
+                    oldWnd.children.splice(index, 1);
                     return true;
                 }
             });
+            oldWnd.switchTab(oldWnd.children[oldWnd.children.length - 1].headElement);
         }
 
-        this.children.push(tab);
         tab.parent = this;
+
+        resizeTabs();
     }
 
     public spilt(direction: TDirection) {
