@@ -1,5 +1,7 @@
 export const i18n: II18n = {
     en_US: {
+        linkLevelTip: "Link Level must be [1-16]",
+        linkLevel: "Link Level",
         mark:"Enable ==mark==",
         saveTip:" is not save, confirm close it?",
         splitLR:"Split Vertically",
@@ -273,6 +275,8 @@ export const i18n: II18n = {
         "wysiwyg": "위지위그",
     },
     zh_CN: {
+        linkLevelTip: "关联层级为【1-16】",
+        linkLevel: "关联层级",
         saveTip:" 还没有保存，确定关闭？",
         mark:"支持 ==标记==",
         splitLR:"左右分屏",

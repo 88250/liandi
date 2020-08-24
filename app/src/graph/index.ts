@@ -6,10 +6,12 @@ import {Model} from "../layout/Model";
 import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
 import {openFile} from "../editor/util";
+import {showMessage} from "../util/message";
 
 export class Graph extends Model {
     public inputElement: HTMLInputElement;
     private graphElement: HTMLDivElement;
+    private levelInputElement: HTMLInputElement;
     public chart: echarts.ECharts
     public url: string
     public path: string
@@ -77,6 +79,18 @@ export class Graph extends Model {
             }
             this.searchGraph();
         });
+        if (this.url) {
+            this.inputElement.insertAdjacentHTML("afterend", `<span class="graph__label">${i18n[window.liandi.config.lang].linkLevel}</span><input value='3' min='0' max='16' type='number' class='input graph__number'>`)
+            this.levelInputElement = options.tab.panelElement.firstElementChild.lastElementChild as HTMLInputElement
+            this.levelInputElement.addEventListener("input", (event: InputEvent & { target: HTMLInputElement }) => {
+                const value = parseInt(event.target.value, 10)
+                if (value < 0 || value > 16) {
+                    event.target.value = '3'
+                    showMessage(i18n[window.liandi.config.lang].linkLevelTip)
+                }
+                this.searchGraph();
+            });
+        }
     }
 
     private searchGraph() {
@@ -88,7 +102,8 @@ export class Graph extends Model {
             this.send("treegraph", {
                 k: this.inputElement.value,
                 url: this.url,
-                path: this.path
+                path: this.path,
+                depth: parseInt(this.levelInputElement.value, 10)
             });
         }
     }
@@ -96,7 +111,7 @@ export class Graph extends Model {
     private onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
         if (!this.chart) {
             this.chart = echarts.init(this.graphElement);
-            this.chart.on("click", (params: IEchartsFormatter) => {
+            this.chart.on("dblclick", (params: IEchartsFormatter) => {
                 if (params.dataType === "node") {
                     openFile(params.data.url, params.data.path, params.data.label.show ? "" : params.name);
                 }

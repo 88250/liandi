@@ -2,7 +2,20 @@
   display: flex;
   flex-direction: column;
   background-color: var(--focus-background-color);
-  .graph__input {
+
+  &__input {
     padding: 10px;
+    display: flex;
+  }
+
+  &__label {
+    white-space: nowrap;
+    align-self: center;
+    margin: 0 5px 0 10px;
+    color: var(--text-secondary-color);
+  }
+
+  &__number {
+    width: 48px;
   }
 }
