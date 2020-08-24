@@ -1,4 +1,4 @@
-import {Wnd} from "./wnd";
+import {Wnd} from "./Wnd";
 import {genUUID} from "../util/genUUID";
 import {addResize, resizeTabs} from "./util";
 
