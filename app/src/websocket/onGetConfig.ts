@@ -54,7 +54,7 @@ const initBar = () => {
             title: `<svg class="item__svg"><use xlink:href="#iconFiles"></use></svg> ${i18n[window.liandi.config.lang].fileTree}`,
             callback(tab: Tab) {
                 tab.addModel(new Files(tab));
-                (window.liandi.leftLayout.children[0] as Wnd).resetLayout(window.liandi.leftLayout)
+                (window.liandi.leftLayout.children[0] as Wnd).resetLayout(window.liandi.leftLayout);
             }
         });
         (window.liandi.leftLayout.children[0] as Wnd).addTab(tab);
@@ -66,7 +66,7 @@ const initBar = () => {
             panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
             callback(tab: Tab) {
                 tab.addModel(new Graph({tab}));
-                (window.liandi.rightLayout.children[0] as Wnd).resetLayout(window.liandi.rightLayout)
+                (window.liandi.rightLayout.children[0] as Wnd).resetLayout(window.liandi.rightLayout);
             }
         });
         (window.liandi.rightLayout.children[0] as Wnd).addTab(tab);
