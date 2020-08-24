@@ -19,7 +19,7 @@ export class Editor extends Model {
     public element: HTMLElement;
     public blockVditorElement: HTMLElement;
     private blockTipElement: HTMLElement;
-    public saved = false
+    public saved = true
     public vditore: Vditor
     public url: string
     public path: string
@@ -340,16 +340,17 @@ export class Editor extends Model {
             return;
         }
 
+        const parentRect = this.vditore.vditor.element.getBoundingClientRect();
         const elementRect = this.blockVditorElement.getBoundingClientRect();
         this.blockTipElement.innerHTML = data.block.content;
-        const top = elementRect.top + elementRect.height + 5;
-        const left = elementRect.left;
+        const top = elementRect.top - parentRect.top + elementRect.height + 5;
+        const left = elementRect.left - parentRect.left;
         this.blockTipElement.setAttribute("style", `display:block;top:${top}px;left:${left}px`);
         // 展现在上部
         if (this.blockTipElement.getBoundingClientRect().bottom > window.innerHeight) {
-            this.blockTipElement.style.top = `${top - this.blockTipElement.clientHeight - 10 - elementRect.height}px`;
+            this.blockTipElement.style.top = `${top - this.blockTipElement.clientHeight - elementRect.height}px`;
         }
-        if (this.blockTipElement.getBoundingClientRect().right > window.innerWidth) {
+        if (this.blockTipElement.getBoundingClientRect().right > parentRect.right) {
             this.blockTipElement.style.left = "auto";
             this.blockTipElement.style.right = "0";
         }
