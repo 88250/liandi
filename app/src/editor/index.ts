@@ -252,7 +252,7 @@ export class Editor extends Model {
                         range.collapse(true);
                         expandMarker(range, vditore.vditor);
                         setSelectionFocus(range);
-                        vditore.vditor.ir.element.scrollTop = nodeElement.offsetTop -vditore.vditor.ir.element.clientHeight / 2;
+                        vditore.vditor.ir.element.scrollTop = nodeElement.offsetTop - vditore.vditor.ir.element.clientHeight / 2;
                     }
                 } else {
                     vditore.focus();
