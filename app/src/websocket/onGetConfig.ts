@@ -8,7 +8,6 @@ import * as path from "path";
 import {Graph} from "../graph";
 import {Tab} from "../layout/Tab";
 import {Files} from "../files";
-import {Backlinks} from "../backlinks";
 
 export const onGetConfig = (data: IConfig) => {
     window.liandi.config = data;
@@ -22,11 +21,6 @@ const initBar = () => {
     document.querySelector(".toolbar").innerHTML = `<div id="barNavigation" aria-label="${i18n[window.liandi.config.lang].fileTree}" class="item fn__a">
             <svg>
                 <use xlink:href="#iconFiles"></use>
-            </svg>
-        </div>
-        <div id="barBacklinks" class="item fn__a" aria-label="${i18n[window.liandi.config.lang].backlinks}">
-            <svg>
-                <use xlink:href="#iconLink"></use>
             </svg>
         </div>
         <div id="barGraph" class="item fn__a" aria-label="${i18n[window.liandi.config.lang].graphView}">
@@ -87,23 +81,6 @@ const initBar = () => {
         });
         wnd.addTab(tab);
         window.liandi.topLayout.addWnd(wnd);
-    });
-
-    document.getElementById("barBacklinks").addEventListener("click", function () {
-        const wnd = new Wnd(window.liandi.rightLayout.children.length === 0 ? undefined : "tb");
-        const tab = new Tab({
-            title: `<svg class="item__svg"><use xlink:href="#iconLink"></use></svg> ${i18n[window.liandi.config.lang].backlinks}`,
-            callback(tab: Tab) {
-                if (window.liandi.rightLayout.element.clientWidth < 7) {
-                    window.liandi.rightLayout.parent.children[1].element.style.width = (window.liandi.rightLayout.parent.children[1].element.clientWidth - 260) + "px";
-                    window.liandi.rightLayout.element.style.width = "266px";
-                    window.liandi.rightLayoutWidth = 266;
-                }
-                tab.addModel(new Backlinks({tab}));
-            }
-        });
-        wnd.addTab(tab);
-        window.liandi.rightLayout.addWnd(wnd);
     });
     document.getElementById("barHelp").addEventListener("click", function () {
         if (getAllModels().files.length === 0) {

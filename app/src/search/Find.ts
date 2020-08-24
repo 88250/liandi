@@ -59,7 +59,6 @@ export class Find extends EventEmitter {
     private closeEvent() {
         this.webContent.stopFindInPage("keepSelection");
         (document.querySelector(".find") as HTMLElement).style.display = "none";
-        (document.querySelector(".drag") as HTMLElement).style.right = "34px";
     }
 
     private nextEvent(forward = true, findNext = false) {
@@ -80,7 +79,6 @@ export class Find extends EventEmitter {
         findElement.style.display = "flex";
         this.inputElement.value = key;
         this.inputElement.focus();
-        (document.querySelector(".drag") as HTMLElement).style.right = "408px";
 
         if (typeof index === "number") {
             for (let i = 0; i <= index; i++) {

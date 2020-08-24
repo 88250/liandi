@@ -131,7 +131,7 @@ export class Editor extends Model {
             this.vditore.destroy();
         }
         this.vditore = new Vditor(this.element, {
-            _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
+            // _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
             debugger: process.env.NODE_ENV === "development",
             icon: "material",
             height: this.element.parentElement.clientHeight,

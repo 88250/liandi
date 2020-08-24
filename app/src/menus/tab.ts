@@ -4,7 +4,6 @@ import {getInstanceById} from "../layout/util";
 import {Tab} from "../layout/Tab";
 import {Wnd} from "../layout/wnd";
 import {Graph} from "../graph";
-import {Backlinks} from "../backlinks";
 import {Editor} from "../editor";
 import {escapeHtml} from "../util/escape";
 import * as path from "path";
@@ -20,27 +19,6 @@ export const initTabMenu = () => {
 export const initEditorMenu = () => {
     const menu = new remote.Menu();
     menu.append(renameMenu());
-    menu.append(new remote.MenuItem({
-        label: i18n[window.liandi.config.lang].backlinks,
-        click: async () => {
-            const itemData = window.liandi.menus.itemData;
-            const id = itemData.target.getAttribute("data-id");
-            const currentTab = getInstanceById(id) as Tab;
-            const filePath = (currentTab.model as Editor).path;
-            const newWnd = (currentTab.parent as Wnd).spilt("lr");
-            const tab = new Tab({
-                title: `<svg class="item__svg"><use xlink:href="#iconLink"></use></svg> ${escapeHtml(path.posix.basename(filePath))}`,
-                callback(tab: Tab) {
-                    tab.addModel(new Backlinks({
-                        tab,
-                        url: (currentTab.model as Editor).url,
-                        path: filePath
-                    }));
-                }
-            });
-            newWnd.addTab(tab);
-        }
-    }));
     menu.append(new remote.MenuItem({
         label: i18n[window.liandi.config.lang].graphView,
         click: async () => {

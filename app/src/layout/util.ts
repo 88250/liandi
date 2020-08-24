@@ -6,7 +6,6 @@ import {Tab} from "./Tab";
 import {Model} from "./Model";
 import {Graph} from "../graph";
 import {Editor} from "../editor";
-import {Backlinks} from "../backlinks";
 import {Files} from "../files";
 import {setPadding, setTypewriterPosition} from "../../vditore/src/ts/ui/initUI";
 
@@ -29,7 +28,6 @@ export const resizeTabs = () => {
 export const getAllModels = () => {
     const models: IModels = {
         editor: [],
-        backlinks: [],
         graph: [],
         files: []
     };
@@ -40,8 +38,6 @@ export const getAllModels = () => {
                 const model = item.model;
                 if (model instanceof Editor) {
                     models.editor.push(model);
-                } else if (model instanceof Backlinks) {
-                    models.backlinks.push(model);
                 } else if (model instanceof Graph) {
                     models.graph.push(model);
                 } else if (model instanceof Files) {
@@ -69,12 +65,6 @@ export const copyTab = (tab: Tab) => {
             let model: Model;
             if (tab.model instanceof Editor) {
                 model = new Editor({
-                    tab: newTab,
-                    url: tab.model.url,
-                    path: tab.model.path
-                });
-            } else if (tab.model instanceof Backlinks) {
-                model = new Backlinks({
                     tab: newTab,
                     url: tab.model.url,
                     path: tab.model.path

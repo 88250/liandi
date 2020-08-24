@@ -113,12 +113,7 @@ export class Files extends Model {
         });
     }
 
-    private reloadGraphBacklinks(allModels: IModels) {
-        allModels.backlinks.forEach((item) => {
-            if (!item.path) {
-                item.send("backlinks", {});
-            }
-        });
+    private reloadGraph(allModels: IModels) {
         allModels.graph.forEach((item) => {
             if (!item.path) {
                 item.send("graph", {
@@ -191,7 +186,7 @@ export class Files extends Model {
                 item.parent.parent.removeTab(item.parent.id);
             }
         });
-        this.reloadGraphBacklinks(allModels);
+        this.reloadGraph(allModels);
     }
 
     private onUnmount(url: string) {
@@ -210,7 +205,7 @@ export class Files extends Model {
                 item.parent.parent.removeTab(item.parent.id);
             }
         });
-        this.reloadGraphBacklinks(allModels);
+        this.reloadGraph(allModels);
         window.liandi.ws.send("getconf", {callback: Constants.CB_GETCONF_BOX});
     }
 
@@ -301,7 +296,7 @@ export class Files extends Model {
             url: data.box.url,
             path: "/",
         }, true);
-        this.reloadGraphBacklinks(allModels);
+        this.reloadGraph(allModels);
         window.liandi.ws.send("getconf", {callback: Constants.CB_GETCONF_BOX});
     }
 

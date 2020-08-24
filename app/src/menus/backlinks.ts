@@ -2,6 +2,7 @@ import {remote} from "electron";
 import * as path from "path";
 import {i18n} from "../i18n";
 
+// TODO 打开新应用，目前没有使用到
 export const initBacklinksMenu = () => {
     const menu = new remote.Menu();
     menu.append(new remote.MenuItem({

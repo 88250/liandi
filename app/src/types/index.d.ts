@@ -89,11 +89,6 @@ declare interface IBlock {
     refs?: IBlock[];
 }
 
-declare interface IAllBacklinks {
-    def: IBlock
-    refs: IBlock[]
-}
-
 declare interface IBox {
     auth?: string;
     password?: string;
@@ -130,7 +125,6 @@ declare interface IMenuData {
 
 declare interface IModels {
     editor: import("../editor").Editor [],
-    backlinks: import("../backlinks").Backlinks [],
     graph: import("../graph").Graph[],
     files: import("../files").Files[]
 }
