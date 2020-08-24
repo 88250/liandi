@@ -1,4 +1,4 @@
-import {Wnd} from "../layout/wnd";
+import {Wnd} from "../layout/Wnd";
 import {i18n} from "../i18n";
 import {initSearch} from "../search";
 import {remote} from "electron";

@@ -2,7 +2,7 @@ import {i18n} from "../i18n";
 import {remote} from "electron";
 import {getInstanceById} from "../layout/util";
 import {Tab} from "../layout/Tab";
-import {Wnd} from "../layout/wnd";
+import {Wnd} from "../layout/Wnd";
 import {Graph} from "../graph";
 import {Editor} from "../editor";
 import {escapeHtml} from "../util/escape";
