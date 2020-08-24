@@ -1,6 +1,6 @@
 import {Layout} from "./index";
 import {genUUID} from "../util/genUUID";
-import { getInstanceById, resizeTabs} from "./util";
+import {getInstanceById, resizeTabs} from "./util";
 import {Tab} from "./Tab";
 import {Model} from "./Model";
 import {Editor} from "../editor";
@@ -221,6 +221,7 @@ export class Wnd {
                 item.panelElement.remove();
                 this.destroyModel(item.model);
                 this.children.splice(index, 1);
+                this.resetLayout(item.parent.parent)
                 return true;
             }
         });
@@ -232,6 +233,7 @@ export class Wnd {
         }
         this.element.querySelector(".tab__panels").append(tab.panelElement);
         this.children.push(tab);
+        this.resetLayout(this.parent)
         this.switchTab(tab.headElement);
 
         const oldWnd = tab.parent
@@ -242,6 +244,7 @@ export class Wnd {
             oldWnd.children.find((item, index) => {
                 if (item.id === tab.id) {
                     oldWnd.children.splice(index, 1);
+                    this.resetLayout(item.parent.parent)
                     return true;
                 }
             });
@@ -308,7 +311,29 @@ export class Wnd {
             element.nextElementSibling.remove();
         }
         element.remove();
-        if (layout.type !== "center" && layout.type !== "normal" && layout.children.length === 1 && layout.children[0].children.length === 1) {
+        this.resetLayout(layout)
+    }
+
+    private resetLayout(layout: Layout) {
+        if (layout.type === "center" || layout.type === "normal" || layout.children.length !== 1) {
+            return
+        }
+
+        if (layout.children[0].children.length === 2) {
+            if (layout.type === "left" && layout.element.clientWidth < 7) {
+                window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - 200) + "px";
+                layout.element.style.width = "206px";
+            } else if (layout.type === "right" && layout.element.clientWidth < 7) {
+                window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - window.innerWidth / 3) + "px";
+            } else if (layout.type === "top" && layout.element.clientHeight < 7) {
+                window.liandi.centerLayout.parent.element.style.height = (window.liandi.centerLayout.parent.element.clientHeight - 200) + "px";
+                layout.element.style.height = "206px";
+            } else if (layout.type === "bottom" &&
+                (layout.element.clientHeight + window.liandi.centerLayout.parent.element.clientHeight + window.liandi.topLayout.element.clientHeight > window.innerHeight
+                    || layout.element.clientHeight < 7)) {
+                window.liandi.centerLayout.parent.element.style.height = (window.liandi.centerLayout.parent.element.clientHeight - 200) + "px";
+            }
+        } else if (layout.children[0].children.length === 1) {
             if (layout.type === "left" || layout.type === "right") {
                 layout.parent.children[1].element.style.width = (layout.parent.children[1].element.clientWidth + layout.element.clientWidth - 6) + "px";
                 layout.parent.children[1].element.classList.remove("fn__flex-1");
