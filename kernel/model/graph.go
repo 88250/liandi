@@ -80,7 +80,7 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 						"category": category,
 						"url":      ref.Def.URL,
 						"path":     ref.Def.Path,
-						"content":  ref.Def.Content,
+						"content":  render.SubStr(ref.Def.Content, 16),
 						"label": map[string]interface{}{
 							"show": true,
 						},
@@ -118,7 +118,7 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 							"category": category,
 							"url":      ref.URL,
 							"path":     ref.Path,
-							"content":  ref.Content,
+							"content":  render.SubStr(ref.Content, 16),
 							"label": map[string]interface{}{
 								"show": true,
 							},
@@ -210,7 +210,7 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 			text = render.SubStr(text, 16)
 		}
 
-		if !strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
+		if "" == text || !strings.Contains(strings.ToLower(text), strings.ToLower(keyword)) {
 			return ast.WalkContinue
 		}
 
@@ -220,10 +220,6 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 		if !isRoot {
 			value = NodeCategoryChild
 			show = false
-		}
-
-		if "" == text {
-			return ast.WalkContinue
 		}
 
 		node := map[string]interface{}{
