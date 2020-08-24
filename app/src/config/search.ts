@@ -19,7 +19,6 @@ export const initConfigSearch = (element: HTMLElement) => {
         getLang(["theme", "themeLight", "themeDark"]),
         ["English", "简体中文"].concat(getLang(["language"])),
         getLang(["about", "slogan", "currentVer", "checkUpdate"]),
-        getLang(["hotkey", "help", "help1", "help2", "help3", "help4", "help5"]),
     ];
     const inputElement = element.querySelector(".input") as HTMLInputElement;
     const updateTab = () => {
