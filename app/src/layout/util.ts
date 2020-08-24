@@ -1,5 +1,5 @@
 import {Layout} from "./index";
-import {Wnd} from "./wnd";
+import {Wnd} from "./Wnd";
 import {i18n} from "../i18n";
 import {mountFile, mountWebDAV} from "../util/mount";
 import {Tab} from "./Tab";
