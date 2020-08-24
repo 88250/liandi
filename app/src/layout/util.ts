@@ -168,7 +168,7 @@ export const addResize = (obj: Layout | Wnd) => {
     }
 };
 
-export const addCenterWnd = () => {
+export const addInitWnd = () => {
     const wnd = new Wnd();
     wnd.addTab(new Tab({
         panel: `<div class="layout__empty">
@@ -186,4 +186,20 @@ export const addCenterWnd = () => {
         }
     }));
     window.liandi.centerLayout.addWnd(wnd);
+
+    const topWnd = new Wnd()
+    topWnd.addTab(new Tab({}))
+    window.liandi.topLayout.addWnd(topWnd);
+
+    const leftWnd = new Wnd()
+    leftWnd.addTab(new Tab({}))
+    window.liandi.leftLayout.addWnd(leftWnd);
+
+    const rightWnd = new Wnd()
+    rightWnd.addTab(new Tab({}))
+    window.liandi.rightLayout.addWnd(rightWnd);
+
+    const bottomWnd = new Wnd()
+    bottomWnd.addTab(new Tab({}))
+    window.liandi.bottomLayout.addWnd(bottomWnd);
 };
