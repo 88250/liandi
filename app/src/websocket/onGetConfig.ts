@@ -72,7 +72,7 @@ const initBar = () => {
             panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
             callback(tab: Tab) {
                 if (window.liandi.rightLayout.element.clientWidth < 7) {
-                    window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - 300) + "px";
+                    window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - window.innerWidth / 3) + "px";
                 }
                 tab.addModel(new Graph({tab}));
             }
