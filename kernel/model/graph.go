@@ -22,7 +22,7 @@ import (
 
 var graphLock = &sync.Mutex{}
 
-func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []interface{}) {
+func TreeGraph(keyword string, url, p string, depth int) (nodes []interface{}, links []interface{}) {
 	box := Conf.Box(url)
 	if nil == box {
 		return
@@ -32,7 +32,7 @@ func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []inte
 
 	tree := box.Tree(p)
 	genTreeGraph(keyword, tree, &nodes, &links)
-	growGraph(&nodes)
+	growGraph(&nodes, depth)
 	connectForwardlinks(&nodes, &links)
 	connectBacklinks(&nodes, &links)
 	markBugBlock(&nodes, &links)
@@ -51,69 +51,36 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 	return
 }
 
-func growGraph(nodes *[]interface{}) {
-	growLinkedNodes(nodes, nodes)
+func growGraph(nodes *[]interface{}, maxDepth int) {
+	forwardDepth, backDepth := 0, 0
+	growLinkedNodes(nodes, nodes, &forwardDepth, &backDepth, maxDepth)
 }
 
-func growLinkedNodes(nodes, all *[]interface{}) {
+func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, maxDepth int) {
 	if 1 > len(*nodes) {
 		return
 	}
 
 	var forwardGeneration []interface{}
-	for _, ref := range forwardlinks {
-		for _, node := range *nodes {
-			if node.(map[string]interface{})["name"] == ref.ID {
-				if existNodes(all, ref.Def.ID) {
-					continue
-				}
-
-				category := NodeCategoryChild
-				if ast.NodeDocument.String() == ref.Def.Type {
-					category = NodeCategoryRoot
-				}
-
-				def := map[string]interface{}{
-					"name":     ref.Def.ID,
-					"category": category,
-					"url":      ref.Def.URL,
-					"path":     ref.Def.Path,
-					"content":  ref.Def.Content,
-					"label": map[string]interface{}{
-						"show": true,
-					},
-					"emphasis": map[string]interface{}{
-						"label": map[string]interface{}{
-							"show": true,
-						},
-					},
-				}
-
-				forwardGeneration = append(forwardGeneration, def)
-			}
-		}
-	}
-
-	var backGeneration []interface{}
-	for _, def := range backlinks {
-		for _, node := range *nodes {
-			if node.(map[string]interface{})["name"] == def.ID {
-				for _, ref := range def.Refs {
-					if existNodes(all, ref.ID) {
+	if maxDepth > *forwardDepth {
+		for _, ref := range forwardlinks {
+			for _, node := range *nodes {
+				if node.(map[string]interface{})["name"] == ref.ID {
+					if existNodes(all, ref.Def.ID) {
 						continue
 					}
 
 					category := NodeCategoryChild
-					if ast.NodeDocument.String() == ref.Type {
+					if ast.NodeDocument.String() == ref.Def.Type {
 						category = NodeCategoryRoot
 					}
 
-					ref := map[string]interface{}{
-						"name":     ref.ID,
+					def := map[string]interface{}{
+						"name":     ref.Def.ID,
 						"category": category,
-						"url":      ref.URL,
-						"path":     ref.Path,
-						"content":  ref.Content,
+						"url":      ref.Def.URL,
+						"path":     ref.Def.Path,
+						"content":  ref.Def.Content,
 						"label": map[string]interface{}{
 							"show": true,
 						},
@@ -124,7 +91,46 @@ func growLinkedNodes(nodes, all *[]interface{}) {
 						},
 					}
 
-					backGeneration = append(backGeneration, ref)
+					forwardGeneration = append(forwardGeneration, def)
+				}
+			}
+		}
+
+	}
+
+	var backGeneration []interface{}
+	if maxDepth > *backDepth {
+		for _, def := range backlinks {
+			for _, node := range *nodes {
+				if node.(map[string]interface{})["name"] == def.ID {
+					for _, ref := range def.Refs {
+						if existNodes(all, ref.ID) {
+							continue
+						}
+
+						category := NodeCategoryChild
+						if ast.NodeDocument.String() == ref.Type {
+							category = NodeCategoryRoot
+						}
+
+						ref := map[string]interface{}{
+							"name":     ref.ID,
+							"category": category,
+							"url":      ref.URL,
+							"path":     ref.Path,
+							"content":  ref.Content,
+							"label": map[string]interface{}{
+								"show": true,
+							},
+							"emphasis": map[string]interface{}{
+								"label": map[string]interface{}{
+									"show": true,
+								},
+							},
+						}
+
+						backGeneration = append(backGeneration, ref)
+					}
 				}
 			}
 		}
@@ -133,7 +139,9 @@ func growLinkedNodes(nodes, all *[]interface{}) {
 	generation := &[]interface{}{}
 	*generation = append(*generation, forwardGeneration...)
 	*generation = append(*generation, backGeneration...)
-	growLinkedNodes(generation, nodes)
+	*forwardDepth++
+	*backDepth++
+	growLinkedNodes(generation, nodes, forwardDepth, backDepth, maxDepth)
 	*nodes = append(*nodes, *generation...)
 }
 

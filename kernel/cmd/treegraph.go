@@ -22,7 +22,11 @@ func (cmd *treegraph) Exec() {
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
-	nodes, links := model.TreeGraph(keyword, url, p)
+	depth := 8
+	if d := cmd.param["depth"]; nil != d {
+		depth = int(d.(float64))
+	}
+	nodes, links := model.TreeGraph(keyword, url, p, depth)
 	ret.Data = map[string]interface{}{
 		"url":   url,
 		"path":  p,
