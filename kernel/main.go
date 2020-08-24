@@ -30,7 +30,6 @@ func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	model.InitLog()
-	model.InitSessions()
 	model.InitConf()
 	model.InitMount()
 	model.InitIndex()

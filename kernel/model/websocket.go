@@ -11,21 +11,28 @@
 package model
 
 import (
+	"sync"
+
 	"gopkg.in/olahol/melody.v1"
 )
 
-var sessions map[string]*melody.Session
-
-func InitSessions() {
-	sessions = map[string]*melody.Session{}
-}
+var (
+	sessions     = map[string]*melody.Session{}
+	sessionsLock = &sync.Mutex{}
+)
 
 func AddPushChan(session *melody.Session) {
+	sessionsLock.Lock()
+	defer sessionsLock.Unlock()
+
 	id, _ := session.Get("id")
 	sessions[id.(string)] = session
 }
 
 func RemovePushChan(session *melody.Session) {
+	sessionsLock.Lock()
+	defer sessionsLock.Unlock()
+
 	id, _ := session.Get("id")
 	delete(sessions, id.(string))
 }

@@ -32,6 +32,7 @@ func TreeGraph(keyword string, url, p string) (nodes []interface{}, links []inte
 
 	tree := box.Tree(p)
 	genTreeGraph(keyword, tree, &nodes, &links)
+	growGraph(&nodes)
 	connectForwardlinks(&nodes, &links)
 	connectBacklinks(&nodes, &links)
 	markBugBlock(&nodes, &links)
@@ -50,57 +51,103 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 	return
 }
 
-func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
-	for _, node := range *nodes {
-		n := node.(map[string]interface{})
-		if 0 == n["category"] {
-			// 跳过根块
-			continue
-		}
-		for _, link := range *links {
-			l := link.(map[string]interface{})
-			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
-			if (l["source"] == n["name"] || l["target"] == n["name"]) && "dotted" == lineStyle {
-				n["category"] = NodeCategoryLinked
+func growGraph(nodes *[]interface{}) {
+	growLinkedNodes(nodes, nodes)
+}
+
+func growLinkedNodes(nodes, all *[]interface{}) {
+	if 1 > len(*nodes) {
+		return
+	}
+
+	var forwardGeneration []interface{}
+	for _, ref := range forwardlinks {
+		for _, node := range *nodes {
+			if node.(map[string]interface{})["name"] == ref.ID {
+				if existNodes(all, ref.Def.ID) {
+					continue
+				}
+
+				category := NodeCategoryChild
+				if ast.NodeDocument.String() == ref.Def.Type {
+					category = NodeCategoryRoot
+				}
+
+				def := map[string]interface{}{
+					"name":     ref.Def.ID,
+					"category": category,
+					"url":      ref.Def.URL,
+					"path":     ref.Def.Path,
+					"content":  ref.Def.Content,
+					"label": map[string]interface{}{
+						"show": true,
+					},
+					"emphasis": map[string]interface{}{
+						"label": map[string]interface{}{
+							"show": true,
+						},
+					},
+				}
+
+				forwardGeneration = append(forwardGeneration, def)
 			}
 		}
 	}
+
+	var backGeneration []interface{}
+	for _, def := range backlinks {
+		for _, node := range *nodes {
+			if node.(map[string]interface{})["name"] == def.ID {
+				for _, ref := range def.Refs {
+					if existNodes(all, ref.ID) {
+						continue
+					}
+
+					category := NodeCategoryChild
+					if ast.NodeDocument.String() == ref.Type {
+						category = NodeCategoryRoot
+					}
+
+					ref := map[string]interface{}{
+						"name":     ref.ID,
+						"category": category,
+						"url":      ref.URL,
+						"path":     ref.Path,
+						"content":  ref.Content,
+						"label": map[string]interface{}{
+							"show": true,
+						},
+						"emphasis": map[string]interface{}{
+							"label": map[string]interface{}{
+								"show": true,
+							},
+						},
+					}
+
+					backGeneration = append(backGeneration, ref)
+				}
+			}
+		}
+	}
+
+	generation := &[]interface{}{}
+	*generation = append(*generation, forwardGeneration...)
+	*generation = append(*generation, backGeneration...)
+	growLinkedNodes(generation, nodes)
+	*nodes = append(*nodes, *generation...)
+}
+
+func existNodes(nodes *[]interface{}, id string) bool {
+	for _, node := range *nodes {
+		if node.(map[string]interface{})["name"] == id {
+			return true
+		}
+	}
+	return false
 }
 
 func connectForwardlinks(nodes *[]interface{}, links *[]interface{}) {
 	for _, ref := range forwardlinks {
-		var exist bool
-		for _, node := range *nodes {
-			if node.(map[string]interface{})["name"] == ref.ID {
-				exist = true
-				break
-			}
-		}
-		if !exist {
-			category := NodeCategoryChild
-			if ast.NodeDocument.String() == ref.Def.Type {
-				category = NodeCategoryRoot
-
-			}
-
-			node := map[string]interface{}{
-				"name":     ref.ID,
-				"category": category,
-				"url":      ref.URL,
-				"path":     ref.Path,
-				"content":  ref.Content,
-				"label": map[string]interface{}{
-					"show": true,
-				},
-				"emphasis": map[string]interface{}{
-					"label": map[string]interface{}{
-						"show": true,
-					},
-				},
-			}
-			*nodes = append(*nodes, node)
-		}
-
 		*links = append(*links, map[string]interface{}{
 			"source": ref.ID,
 			"target": ref.Def.ID,
@@ -114,38 +161,6 @@ func connectForwardlinks(nodes *[]interface{}, links *[]interface{}) {
 func connectBacklinks(nodes *[]interface{}, links *[]interface{}) {
 	for _, def := range backlinks {
 		for _, ref := range def.Refs {
-			var exist bool
-			for _, node := range *nodes {
-				if node.(map[string]interface{})["name"] == def.ID {
-					exist = true
-					break
-				}
-			}
-			if !exist {
-				category := NodeCategoryChild
-				if ast.NodeDocument.String() == def.Type {
-					category = NodeCategoryRoot
-
-				}
-
-				node := map[string]interface{}{
-					"name":     def.ID,
-					"category": category,
-					"url":      def.URL,
-					"path":     def.Path,
-					"content":  def.Content,
-					"label": map[string]interface{}{
-						"show": true,
-					},
-					"emphasis": map[string]interface{}{
-						"label": map[string]interface{}{
-							"show": true,
-						},
-					},
-				}
-				*nodes = append(*nodes, node)
-			}
-
 			*links = append(*links, map[string]interface{}{
 				"source": ref.ID,
 				"target": def.ID,
@@ -255,6 +270,23 @@ func checkBadNodes(nodes []interface{}, node interface{}, links *[]interface{}) 
 					"type": "dashed",
 				},
 			})
+		}
+	}
+}
+
+func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
+	for _, node := range *nodes {
+		n := node.(map[string]interface{})
+		if 0 == n["category"] {
+			// 跳过根块
+			continue
+		}
+		for _, link := range *links {
+			l := link.(map[string]interface{})
+			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
+			if (l["source"] == n["name"] || l["target"] == n["name"]) && "dotted" == lineStyle {
+				n["category"] = NodeCategoryLinked
+			}
 		}
 	}
 }
