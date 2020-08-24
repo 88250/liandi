@@ -33,8 +33,8 @@ func TreeGraph(keyword string, url, p string, depth int) (nodes []interface{}, l
 	tree := box.Tree(p)
 	genTreeGraph(keyword, tree, &nodes, &links)
 	growGraph(&nodes, depth)
-	connectForwardlinks(&nodes, &links)
-	connectBacklinks(&nodes, &links)
+	connectForwardlinks(&links)
+	connectBacklinks(&links)
 	markBugBlock(&nodes, &links)
 	return
 }
@@ -45,8 +45,8 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 	for _, tree := range trees {
 		genTreeGraph(keyword, tree, &nodes, &links)
 	}
-	connectForwardlinks(&nodes, &links)
-	connectBacklinks(&nodes, &links)
+	connectForwardlinks(&links)
+	connectBacklinks(&links)
 	markBugBlock(&nodes, &links)
 	return
 }
@@ -154,7 +154,7 @@ func existNodes(nodes *[]interface{}, id string) bool {
 	return false
 }
 
-func connectForwardlinks(nodes *[]interface{}, links *[]interface{}) {
+func connectForwardlinks(links *[]interface{}) {
 	for _, ref := range forwardlinks {
 		*links = append(*links, map[string]interface{}{
 			"source": ref.ID,
@@ -166,7 +166,7 @@ func connectForwardlinks(nodes *[]interface{}, links *[]interface{}) {
 	}
 }
 
-func connectBacklinks(nodes *[]interface{}, links *[]interface{}) {
+func connectBacklinks(links *[]interface{}) {
 	for _, def := range backlinks {
 		for _, ref := range def.Refs {
 			*links = append(*links, map[string]interface{}{
@@ -285,10 +285,10 @@ func checkBadNodes(nodes []interface{}, node interface{}, links *[]interface{}) 
 func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
 	for _, node := range *nodes {
 		n := node.(map[string]interface{})
-		if 0 == n["category"] {
-			// 跳过根块
-			continue
-		}
+		//if 0 == n["category"] {
+		//	// 跳过根块
+		//	continue
+		//}
 		for _, link := range *links {
 			l := link.(map[string]interface{})
 			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
