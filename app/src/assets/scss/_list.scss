@@ -7,11 +7,8 @@
     padding: 5px 10px;
     cursor: pointer;
 
-    &:hover {
-      color: var(--text-secondary-color);
-    }
-
-    &--current {
+    &--current, &:hover {
+      color: $blue;
       background-color: var(--background-color);
     }
 

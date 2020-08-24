@@ -6,7 +6,6 @@ import {theme} from "../config/theme";
 import {initConfigSearch} from "../config/search";
 import {markdown} from "../config/markdown";
 import {image} from "../config/image";
-import {help} from "../config/help";
 import {escapeHtml} from "../util/escape";
 import {openFile} from "../editor/util";
 
@@ -36,14 +35,12 @@ export const initSearch = (type = "search") => {
         <li data-name="theme" class="fn__pointer">${i18n[liandi.config.lang].theme}</li>
         <li data-name="language" class="fn__pointer">${i18n[liandi.config.lang].language}</li>
         <li data-name="about" class="fn__pointer">${i18n[liandi.config.lang].about}</li>
-        <li data-name="help" class="fn__pointer">${i18n[liandi.config.lang].help}</li>
       </ul>
       <div class="tab__panel" data-name="markdown" slot="panel">${markdown.genHTML()}</div>
       <div class="tab__panel" data-name="image">${image.genHTML()}</div>
       <div class="tab__panel" data-name="theme">${theme.genHTML()}</div>
       <div class="tab__panel" data-name="language">${lauguage.genHTML()}</div>
       <div class="tab__panel" data-name="about">${about.genHTML()}</div>
-      <div class="tab__panel" data-name="help">${help.genHTML()}</div>
     </tab-panel>
   </div>
 </tab-panel>`,
@@ -145,7 +142,7 @@ export const onSearch = (data: IBlock[]) => {
     let resultHTML = "";
     data.forEach((item, index) => {
         resultHTML += `<div class="list__item fn__flex${index === 0 ? " list__item--current" : ""}" data-url="${encodeURIComponent(JSON.stringify(item.url))}" data-path="${encodeURIComponent(item.path)}" data-id="${item.id}">
-<svg color="fn__flex-shrink0"><use xlink:href="#${item.type === "title" ? "iconMD" : "iconParagraph"}"></use></svg><span class="fn__flex-1 fn__ellipsis">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span>
+<svg class="fn__flex-shrink0"><use xlink:href="#${item.type === "title" ? "iconMD" : "iconParagraph"}"></use></svg><span class="fn__flex-1 fn__ellipsis">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span>
 <span class="fn__space"></span>
 <span class="ft__smaller ft__secondary">${escapeHtml(item.path)}</span>
 </div>`;

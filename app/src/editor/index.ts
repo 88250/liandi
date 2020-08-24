@@ -303,14 +303,21 @@ export class Editor extends Model {
                 const title = escapeHtml(item.path.substr(1));
                 dataList.push({
                     value: `((${item.id} "${iconName === "iconMD" ? title : ""}"))`,
-                    html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#${iconName}"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span><span class="fn__flex-1 fn__flex-shrink0" style="min-width: 10px"></span>
-<span class="ft__smaller ft__secondary">${title}</span></span>`,
+                    html: `<span class="fn__flex">
+<svg class="fn__flex-shrink0"><use xlink:href="#${iconName}"></use></svg>
+<span class="fn__flex-1 fn__ellipsis fn__flex-shrink0">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span>
+<span class="fn__space fn__flex-shrink0"></span>
+<span class="ft__smaller ft__secondary fn__flex-shrink0">${title}</span>
+</span>`,
                 });
             }
         });
         dataList.push({
             value: "((newFile))",
-            html: `<span class="fn__flex"><svg color="fn__flex-shrink0"><use xlink:href="#iconMD"></use></svg><span style="max-width: 520px;min-width: 120px" class="fn__ellipsis fn__flex-shrink0">${i18n[window.liandi.config.lang].newFile}</span></span>`,
+            html: `<span class="fn__flex">
+<svg><use xlink:href="#iconMD"></use></svg>
+<span>${i18n[window.liandi.config.lang].newFile}</span>
+</span>`,
         });
         this.vditore.vditor.hint.genHTML(dataList, data.k, this.vditore.vditor);
     }
