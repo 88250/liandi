@@ -22,7 +22,7 @@ func (cmd *searchblock) Exec() {
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
 	keyword := cmd.param["k"].(string)
-	blocks := model.SearchBlock(url, keyword)
+	blocks := model.SearchBlock(url, p, keyword)
 	ret.Data = map[string]interface{}{
 		"blocks": blocks,
 		"k":      keyword,
