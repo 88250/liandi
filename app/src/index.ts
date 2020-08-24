@@ -21,7 +21,6 @@ import {resizeTabs} from "./layout/util";
 import {addScript} from "../vditore/src/ts/util/addScript";
 import * as path from "path";
 import {animationThrottle} from "./util/animationThrottle";
-import {Wnd} from "./layout/Wnd";
 
 class App {
     constructor() {

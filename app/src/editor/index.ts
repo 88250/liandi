@@ -348,7 +348,7 @@ export class Editor extends Model {
         this.blockTipElement.setAttribute("style", `display:block;top:${top}px;left:${left}px`);
         // 展现在上部
         if (this.blockTipElement.getBoundingClientRect().bottom > window.innerHeight) {
-            this.blockTipElement.style.top = `${top - this.blockTipElement.clientHeight - elementRect.height}px`;
+            this.blockTipElement.style.top = `${top - this.blockTipElement.clientHeight - elementRect.height - 15}px`;
         }
         if (this.blockTipElement.getBoundingClientRect().right > parentRect.right) {
             this.blockTipElement.style.left = "auto";

@@ -68,6 +68,7 @@
     list-style: none;
     align-items: center;
     background-color: var(--textarea-background-color);
+    flex-wrap: wrap;
 
     .item {
       font-size: 12px;

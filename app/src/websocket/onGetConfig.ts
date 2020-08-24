@@ -87,7 +87,7 @@ const initBar = () => {
                 pushMode: 0,
                 callback: Constants.CB_MOUNT_HELP
             });
-        }, 200)
+        }, 200);
     });
     document.getElementById("barBug").addEventListener("click", () => {
         remote.getCurrentWindow().webContents.openDevTools({mode: "bottom"});

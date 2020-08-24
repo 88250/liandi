@@ -187,19 +187,19 @@ export const addInitWnd = () => {
     }));
     window.liandi.centerLayout.addWnd(wnd);
 
-    const topWnd = new Wnd()
-    topWnd.addTab(new Tab({}))
+    const topWnd = new Wnd();
+    topWnd.addTab(new Tab({}));
     window.liandi.topLayout.addWnd(topWnd);
 
-    const leftWnd = new Wnd()
-    leftWnd.addTab(new Tab({}))
+    const leftWnd = new Wnd();
+    leftWnd.addTab(new Tab({}));
     window.liandi.leftLayout.addWnd(leftWnd);
 
-    const rightWnd = new Wnd()
-    rightWnd.addTab(new Tab({}))
+    const rightWnd = new Wnd();
+    rightWnd.addTab(new Tab({}));
     window.liandi.rightLayout.addWnd(rightWnd);
 
-    const bottomWnd = new Wnd()
-    bottomWnd.addTab(new Tab({}))
+    const bottomWnd = new Wnd();
+    bottomWnd.addTab(new Tab({}));
     window.liandi.bottomLayout.addWnd(bottomWnd);
 };

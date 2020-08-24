@@ -39,104 +39,104 @@ export class Wnd {
                 target = target.parentElement;
             }
         });
-        const dragElement = this.element.querySelector(".tab__drag") as HTMLElement
-        this.element.addEventListener('dragenter', (event: DragEvent & { target: HTMLElement }) => {
+        const dragElement = this.element.querySelector(".tab__drag") as HTMLElement;
+        this.element.addEventListener("dragenter", (event: DragEvent & { target: HTMLElement }) => {
             if (event.dataTransfer.types.includes("application/liandi")) {
-                const tabHeadersElement = hasClosestByClassName(event.target, "tab__headers")
+                const tabHeadersElement = hasClosestByClassName(event.target, "tab__headers");
                 if (tabHeadersElement) {
-                    return
+                    return;
                 }
-                const tabPanelsElement = hasClosestByClassName(event.target, "tab__panels", true)
+                const tabPanelsElement = hasClosestByClassName(event.target, "tab__panels", true);
                 if (tabPanelsElement) {
-                    dragElement.classList.remove("fn__none")
+                    dragElement.classList.remove("fn__none");
                 }
             }
         });
-        const tabHeadersElement = this.element.querySelector(".tab__headers")
+        const tabHeadersElement = this.element.querySelector(".tab__headers");
         tabHeadersElement.addEventListener("dragover", function (event: DragEvent & { target: HTMLElement }) {
-            const it = this as HTMLElement
+            const it = this as HTMLElement;
             it.querySelectorAll("li").forEach((item) => {
-                item.style.backgroundColor = ''
-            })
-            const newTabHeaderElement = hasClosestByTag(event.target, "LI")
-            if (newTabHeaderElement && newTabHeaderElement.style.opacity !== '0.6') {
-                newTabHeaderElement.style.backgroundColor = 'rgba(102, 161, 204, 0.36)'
+                item.style.backgroundColor = "";
+            });
+            const newTabHeaderElement = hasClosestByTag(event.target, "LI");
+            if (newTabHeaderElement && newTabHeaderElement.style.opacity !== "0.6") {
+                newTabHeaderElement.style.backgroundColor = "rgba(102, 161, 204, 0.36)";
             }
             if (!newTabHeaderElement) {
-                it.style.backgroundColor = 'rgba(102, 161, 204, 0.36)'
+                it.style.backgroundColor = "rgba(102, 161, 204, 0.36)";
             }
-            event.preventDefault()
-        })
-        tabHeadersElement.addEventListener("dragleave", function (event: DragEvent & { target: HTMLElement }) {
-            const it = this as HTMLElement
+            event.preventDefault();
+        });
+        tabHeadersElement.addEventListener("dragleave", function () {
+            const it = this as HTMLElement;
             it.querySelectorAll("li").forEach((item) => {
-                item.style.backgroundColor = ''
-            })
-            it.style.backgroundColor = ''
+                item.style.backgroundColor = "";
+            });
+            it.style.backgroundColor = "";
         });
         tabHeadersElement.addEventListener("drop", function (event: DragEvent & { target: HTMLElement }) {
-            const oldTab = getInstanceById(event.dataTransfer.getData("application/liandi")) as Tab
-            const it = this as HTMLElement
-            it.style.backgroundColor = ''
-            const newTabHeaderElement = hasClosestByTag(event.target, "LI")
+            const oldTab = getInstanceById(event.dataTransfer.getData("application/liandi")) as Tab;
+            const it = this as HTMLElement;
+            it.style.backgroundColor = "";
+            const newTabHeaderElement = hasClosestByTag(event.target, "LI");
             if (!it.contains(oldTab.headElement)) {
-                const newWnd = getInstanceById(it.parentElement.getAttribute("data-id")) as Wnd
-                newWnd.moveTab(oldTab)
+                const newWnd = getInstanceById(it.parentElement.getAttribute("data-id")) as Wnd;
+                newWnd.moveTab(oldTab);
                 if (newTabHeaderElement) {
-                    newTabHeaderElement.before(oldTab.headElement)
-                    newTabHeaderElement.style.backgroundColor = ''
+                    newTabHeaderElement.before(oldTab.headElement);
+                    newTabHeaderElement.style.backgroundColor = "";
                 }
-                return
+                return;
             }
             if (!newTabHeaderElement) {
                 return;
             }
-            newTabHeaderElement.style.backgroundColor = ''
+            newTabHeaderElement.style.backgroundColor = "";
             if (newTabHeaderElement !== oldTab.panelElement) {
-                const oldTabNextElement = oldTab.headElement.nextElementSibling
-                const oldTabPreviousElement = oldTab.headElement.previousElementSibling
+                const oldTabNextElement = oldTab.headElement.nextElementSibling;
+                const oldTabPreviousElement = oldTab.headElement.previousElementSibling;
                 if (!oldTabNextElement && oldTabPreviousElement === newTabHeaderElement) {
-                    newTabHeaderElement.before(oldTab.headElement)
+                    newTabHeaderElement.before(oldTab.headElement);
                     return;
                 }
-                newTabHeaderElement.after(oldTab.headElement)
+                newTabHeaderElement.after(oldTab.headElement);
                 if (oldTabNextElement && oldTabNextElement !== newTabHeaderElement) {
-                    oldTabNextElement.before(newTabHeaderElement)
+                    oldTabNextElement.before(newTabHeaderElement);
                 } else if (oldTabPreviousElement && oldTabPreviousElement !== newTabHeaderElement) {
-                    oldTabPreviousElement.after(newTabHeaderElement)
+                    oldTabPreviousElement.after(newTabHeaderElement);
                 }
             }
-        })
+        });
         // animationThrottle("dragover", "optimizedDragover", dragElement);
         dragElement.addEventListener("dragover", (event: DragEvent & { layerX: number, layerY: number }) => {
-            event.preventDefault()
+            event.preventDefault();
             // console.log(event.layerX, event.layerY);
-        })
-        dragElement.addEventListener("dragleave", (event) => {
-            dragElement.classList.add("fn__none")
+        });
+        dragElement.addEventListener("dragleave", () => {
+            dragElement.classList.add("fn__none");
         });
         dragElement.addEventListener("drop", (event: DragEvent & { target: HTMLElement }) => {
-            dragElement.classList.add("fn__none")
-            const newWndElement = event.target.parentElement.parentElement
-            const tabId = event.dataTransfer.getData("application/liandi")
+            dragElement.classList.add("fn__none");
+            const newWndElement = event.target.parentElement.parentElement;
+            const tabId = event.dataTransfer.getData("application/liandi");
             if (newWndElement.contains(document.querySelector(`[data-id="${tabId}"]`))) {
-                return
+                return;
             }
-            const newWnd = getInstanceById(newWndElement.getAttribute("data-id")) as Wnd
-            const tab = getInstanceById(tabId) as Tab
+            const newWnd = getInstanceById(newWndElement.getAttribute("data-id")) as Wnd;
+            const tab = getInstanceById(tabId) as Tab;
             if (newWnd) {
-                newWnd.moveTab(tab)
+                newWnd.moveTab(tab);
             }
         });
     }
 
     private switchTab(target: HTMLElement) {
-        let currentTab: Tab
+        let currentTab: Tab;
         this.children.forEach((item) => {
             if (target === item.headElement) {
                 item.headElement?.classList.add("item--current");
                 item.panelElement.classList.remove("fn__none");
-                currentTab = item
+                currentTab = item;
             } else {
                 item.headElement?.classList.remove("item--current");
                 item.panelElement.classList.add("fn__none");
@@ -157,8 +157,8 @@ export class Wnd {
         if (tab.headElement) {
             this.headersElement.append(tab.headElement);
             tab.headElement.querySelector(".item__svg--close").addEventListener("click", function (event) {
-                const it = this as HTMLElement
-                const currentTab = getInstanceById(it.parentElement.getAttribute("data-id")) as Tab
+                const it = this as HTMLElement;
+                const currentTab = getInstanceById(it.parentElement.getAttribute("data-id")) as Tab;
                 currentTab.parent.removeTab(tab.id);
                 event.stopPropagation();
                 event.preventDefault();
@@ -182,17 +182,17 @@ export class Wnd {
 
     private confirmRemoveEditor(model: Model) {
         if (!(model instanceof Editor)) {
-            return true
+            return true;
         }
         if (!model.saved) {
-            const confirmRst = confirm(path.posix.basename(model.path) + i18n[window.liandi.config.lang].saveTip)
+            const confirmRst = confirm(path.posix.basename(model.path) + i18n[window.liandi.config.lang].saveTip);
             // TODO: 光标丢失问题 https://github.com/electron/electron/issues/14474
             // 该解决方案会导致闪烁
-            remote.getCurrentWindow().blur()
-            remote.getCurrentWindow().focus()
-            return confirmRst
+            remote.getCurrentWindow().blur();
+            remote.getCurrentWindow().focus();
+            return confirmRst;
         }
-        return true
+        return true;
     }
 
     public removeTab(id: string) {
@@ -221,7 +221,7 @@ export class Wnd {
                 item.panelElement.remove();
                 this.destroyModel(item.model);
                 this.children.splice(index, 1);
-                this.resetLayout(item.parent.parent)
+                this.resetLayout(item.parent.parent);
                 return true;
             }
         });
@@ -233,10 +233,10 @@ export class Wnd {
         }
         this.element.querySelector(".tab__panels").append(tab.panelElement);
         this.children.push(tab);
-        this.resetLayout(this.parent)
+        this.resetLayout(this.parent);
         this.switchTab(tab.headElement);
 
-        const oldWnd = tab.parent
+        const oldWnd = tab.parent;
         if (oldWnd.children.length === 1) {
             oldWnd.children = [];
             oldWnd.remove();
@@ -244,7 +244,7 @@ export class Wnd {
             oldWnd.children.find((item, index) => {
                 if (item.id === tab.id) {
                     oldWnd.children.splice(index, 1);
-                    this.resetLayout(item.parent.parent)
+                    this.resetLayout(item.parent.parent);
                     return true;
                 }
             });
@@ -311,12 +311,12 @@ export class Wnd {
             element.nextElementSibling.remove();
         }
         element.remove();
-        this.resetLayout(layout)
+        this.resetLayout(layout);
     }
 
     private resetLayout(layout: Layout) {
         if (layout.type === "center" || layout.type === "normal" || layout.children.length !== 1) {
-            return
+            return;
         }
 
         if (layout.children[0].children.length === 2) {

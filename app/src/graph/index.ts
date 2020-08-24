@@ -7,6 +7,7 @@ import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
 import {openFile} from "../editor/util";
 import {showMessage} from "../util/message";
+import {getAllModels} from "../layout/util";
 
 export class Graph extends Model {
     public inputElement: HTMLInputElement;
@@ -80,13 +81,13 @@ export class Graph extends Model {
             this.searchGraph();
         });
         if (this.url) {
-            this.inputElement.insertAdjacentHTML("afterend", `<span class="graph__label">${i18n[window.liandi.config.lang].linkLevel}</span><input value='3' min='0' max='16' type='number' class='input graph__number'>`)
-            this.levelInputElement = options.tab.panelElement.firstElementChild.lastElementChild as HTMLInputElement
+            this.inputElement.insertAdjacentHTML("afterend", `<span class="graph__label">${i18n[window.liandi.config.lang].linkLevel}</span><input value='3' min='0' max='16' type='number' class='input graph__number'>`);
+            this.levelInputElement = options.tab.panelElement.firstElementChild.lastElementChild as HTMLInputElement;
             this.levelInputElement.addEventListener("input", (event: InputEvent & { target: HTMLInputElement }) => {
-                const value = parseInt(event.target.value, 10)
+                const value = parseInt(event.target.value, 10);
                 if (value < 0 || value > 16) {
-                    event.target.value = '3'
-                    showMessage(i18n[window.liandi.config.lang].linkLevelTip)
+                    event.target.value = "3";
+                    showMessage(i18n[window.liandi.config.lang].linkLevelTip);
                 }
                 this.searchGraph();
             });
@@ -114,6 +115,25 @@ export class Graph extends Model {
             this.chart.on("dblclick", (params: IEchartsFormatter) => {
                 if (params.dataType === "node") {
                     openFile(params.data.url, params.data.path, params.data.label.show ? "" : params.name);
+                }
+            });
+            this.chart.on("click", (params: IEchartsFormatter) => {
+                if (params.dataType === "node") {
+                    getAllModels().editor.find((item) => {
+                        if (item.url === params.data.url && item.path === params.data.path &&
+                            !item.element.classList.contains("fn__none")) {
+                            const vditorElement = item.vditore.vditor.ir.element;
+                            vditorElement.querySelectorAll(".editor__blockref").forEach(item=> {
+                                item.classList.remove("editor__blockref")
+                            })
+                            const nodeElement = vditorElement.querySelector(`[data-node-id="${params.name}"]`) as HTMLElement
+                            if (nodeElement && nodeElement.getClientRects().length > 0) {
+                                nodeElement.classList.add("editor__blockref");
+                                vditorElement.scrollTop = nodeElement.offsetTop - vditorElement.clientHeight / 2;
+                            }
+                            return true;
+                        }
+                    });
                 }
             });
         } else {
