@@ -55,7 +55,7 @@ const initBar = () => {
             title: `<svg class="item__svg"><use xlink:href="#iconFiles"></use></svg> ${i18n[window.liandi.config.lang].fileTree}`,
             callback(tab: Tab) {
                 if (window.liandi.leftLayout.element.clientWidth < 7) {
-                    window.liandi.leftLayout.parent.children[1].element.style.width = (window.liandi.leftLayout.parent.children[1].element.clientWidth - 200) + "px";
+                    window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - 200) + "px";
                     window.liandi.leftLayout.element.style.width = "206px";
                 }
                 tab.addModel(new Files(tab));
@@ -66,21 +66,19 @@ const initBar = () => {
     });
 
     document.getElementById("barGraph").addEventListener("click", function () {
-        const wnd = new Wnd(window.liandi.topLayout.children.length === 0 ? undefined : "lr");
+        const wnd = new Wnd(window.liandi.rightLayout.children.length === 0 ? undefined : "tb");
         const tab = new Tab({
             title: `<svg class="item__svg"><use xlink:href="#iconGraph"></use></svg> ${i18n[window.liandi.config.lang].graphView}`,
             panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
             callback(tab: Tab) {
-                if (window.liandi.topLayout.element.clientHeight < 7) {
-                    const height = window.innerHeight / 3;
-                    window.liandi.topLayout.parent.children[1].element.style.height = (window.liandi.topLayout.parent.children[1].element.clientHeight - height) + "px";
-                    window.liandi.topLayout.element.style.height = (height + 6) + "px";
+                if (window.liandi.rightLayout.element.clientWidth < 7) {
+                    window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - 300) + "px";
                 }
                 tab.addModel(new Graph({tab}));
             }
         });
         wnd.addTab(tab);
-        window.liandi.topLayout.addWnd(wnd);
+        window.liandi.rightLayout.addWnd(wnd);
     });
     document.getElementById("barHelp").addEventListener("click", function () {
         if (getAllModels().files.length === 0) {
