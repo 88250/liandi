@@ -20,6 +20,7 @@ import {newFile} from "./util/newFile";
 import {resizeTabs} from "./layout/util";
 import {addScript} from "../vditore/src/ts/util/addScript";
 import * as path from "path";
+import {animationThrottle} from "./util/animationThrottle";
 
 class App {
     constructor() {
@@ -103,18 +104,7 @@ class App {
             window.liandi.bottomLayoutHeight = liandi.bottomLayout.element.clientHeight;
         }, 100);
 
-        let running = false;
-        window.addEventListener("resize", () => {
-            if (running) {
-                return;
-            }
-            running = true;
-            requestAnimationFrame(() => {
-                window.dispatchEvent(new CustomEvent("optimizedResize"));
-                running = false;
-            });
-        });
-
+        animationThrottle("resize", "optimizedResize", window);
         window.addEventListener("optimizedResize", () => {
             window.liandi.layout.children[1].element.style.height = window.innerHeight - window.liandi.topLayout.element.clientHeight - window.liandi.bottomLayoutHeight - 20 + "px";
             window.liandi.centerLayout.element.style.width = window.innerWidth - window.liandi.leftLayout.element.clientWidth - window.liandi.rightLayoutWidth + "px";

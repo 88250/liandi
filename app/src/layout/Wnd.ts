@@ -1,10 +1,11 @@
 import {Layout} from "./index";
 import {genUUID} from "../util/genUUID";
-import {addCenterWnd, resizeTabs} from "./util";
+import {addCenterWnd, getInstanceById, resizeTabs} from "./util";
 import {Tab} from "./Tab";
 import {Model} from "./Model";
 import {Editor} from "../editor";
 import {Graph} from "../graph";
+import {animationThrottle} from "../util/animationThrottle";
 
 export class Wnd {
     public id: string
@@ -23,7 +24,7 @@ export class Wnd {
     <div class="fn__flex">
         <ul class="fn__flex fn__flex-1 tab__headers"></ul>
     </div>
-    <div class="tab__panels fn__flex-1"></div>
+    <div class="tab__panels fn__flex-1"><div class="tab__drag fn__none"></div></div>
 </div>`;
         this.headersElement = this.element.querySelector(".tab__headers");
         this.headersElement.addEventListener("click", (event) => {
@@ -34,6 +35,37 @@ export class Wnd {
                     break;
                 }
                 target = target.parentElement;
+            }
+        });
+        const dragElement = this.element.querySelector(".tab__drag") as HTMLElement
+        this.element.addEventListener('dragenter', (event) => {
+            if (event.dataTransfer.types.includes("application/liandi")) {
+                document.querySelectorAll('.tab__drag').forEach((item) => {
+                    item.classList.add("fn__none")
+                })
+                dragElement.classList.remove("fn__none")
+
+            }
+        });
+        // animationThrottle("dragover", "optimizedDragover", dragElement);
+        dragElement.addEventListener("dragover", (event: DragEvent & { layerX: number, layerY: number }) => {
+            event.preventDefault()
+            // console.log(event.layerX, event.layerY);
+        })
+        dragElement.addEventListener("dragleave", (event) => {
+            dragElement.classList.add("fn__none")
+        });
+        dragElement.addEventListener("drop", (event: DragEvent & { target: HTMLElement }) => {
+            dragElement.classList.add("fn__none")
+            const wndElement = event.target.parentElement.parentElement
+            const tabId = event.dataTransfer.getData("application/liandi")
+            if (wndElement.contains(document.querySelector(`[data-id="${tabId}"]`))) {
+                return
+            }
+            const newWnd = getInstanceById(wndElement.getAttribute("data-id")) as Wnd
+            const tab = getInstanceById(tabId) as Tab
+            if (newWnd) {
+                newWnd.moveTab(tab)
             }
         });
     }
@@ -66,7 +98,6 @@ export class Wnd {
             });
         }
         this.element.querySelector(".tab__panels").append(tab.panelElement);
-
         tab.parent = this;
         if (tab.callback) {
             tab.callback(tab);
@@ -85,6 +116,42 @@ export class Wnd {
     public removeTab(id: string) {
         if (this.children.length === 1) {
             this.destroyModel(this.children[0].model);
+            this.children = [];
+            this.remove();
+            return;
+        }
+        this.children.find((item, index) => {
+            if (item.id === id) {
+                if (item.headElement.classList.contains("item--current")) {
+                    let currentIndex = index + 1;
+                    if (index === this.children.length - 1) {
+                        currentIndex = index - 1;
+                    }
+                    this.switchTab(this.children[currentIndex].headElement);
+                }
+                item.headElement.remove();
+                item.panelElement.remove();
+                this.destroyModel(item.model);
+                this.children.splice(index, 1);
+                return true;
+            }
+        });
+    }
+
+    public moveTab(tab:Tab) {
+        this.children.forEach((item) => {
+            item.headElement?.classList.remove("item--current");
+            item.panelElement.classList.add("fn__none");
+        });
+        this.children.push(tab);
+
+        if (tab.headElement) {
+            this.headersElement.append(tab.headElement);
+        }
+        this.element.querySelector(".tab__panels").append(tab.panelElement);
+        tab.parent = this;
+
+        if (this.children.length === 1) {
             this.children = [];
             this.remove();
             return;
