@@ -1,13 +1,12 @@
 import {Layout} from "./index";
 import {genUUID} from "../util/genUUID";
-import {addCenterWnd, getInstanceById, resizeTabs} from "./util";
+import { getInstanceById, resizeTabs} from "./util";
 import {Tab} from "./Tab";
 import {Model} from "./Model";
 import {Editor} from "../editor";
 import {Graph} from "../graph";
 import * as path from "path";
-import {animationThrottle} from "../util/animationThrottle";
-import {hasClosestByClassName, hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
+import {hasClosestByClassName} from "../../vditore/src/ts/util/hasClosest";
 import {hasClosestByTag} from "../../vditore/src/ts/util/hasClosestByHeadings";
 import {i18n} from "../i18n";
 import {remote} from "electron";
@@ -61,10 +60,10 @@ export class Wnd {
             })
             const newTabHeaderElement = hasClosestByTag(event.target, "LI")
             if (newTabHeaderElement && newTabHeaderElement.style.opacity !== '0.6') {
-                newTabHeaderElement.style.backgroundColor = 'aliceblue'
+                newTabHeaderElement.style.backgroundColor = 'rgba(102, 161, 204, 0.36)'
             }
             if (!newTabHeaderElement) {
-                it.style.backgroundColor = 'aliceblue'
+                it.style.backgroundColor = 'rgba(102, 161, 204, 0.36)'
             }
             event.preventDefault()
         })
@@ -309,10 +308,7 @@ export class Wnd {
             element.nextElementSibling.remove();
         }
         element.remove();
-        if (layout.type === "center" && layout.children.length === 0) {
-            addCenterWnd();
-        }
-        if (layout.type !== "center" && layout.type !== "normal" && layout.children.length === 0) {
+        if (layout.type !== "center" && layout.type !== "normal" && layout.children.length === 1 && layout.children[0].children.length === 1) {
             if (layout.type === "left" || layout.type === "right") {
                 layout.parent.children[1].element.style.width = (layout.parent.children[1].element.clientWidth + layout.element.clientWidth - 6) + "px";
                 layout.parent.children[1].element.classList.remove("fn__flex-1");

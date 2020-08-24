@@ -2,7 +2,7 @@ import {Wnd} from "../layout/wnd";
 import {i18n} from "../i18n";
 import {initSearch} from "../search";
 import {remote} from "electron";
-import {addCenterWnd, getAllModels} from "../layout/util";
+import {addInitWnd, getAllModels} from "../layout/util";
 import {Constants} from "../constants";
 import * as path from "path";
 import {Graph} from "../graph";
@@ -14,7 +14,7 @@ export const onGetConfig = (data: IConfig) => {
     document.title = i18n[window.liandi.config.lang].slogan;
     initBar();
     initWindow();
-    addCenterWnd();
+    addInitWnd();
 };
 
 const initBar = () => {
@@ -98,7 +98,6 @@ const initBar = () => {
         initSearch("settings");
     });
 };
-
 
 const initWindow = () => {
     // window action
