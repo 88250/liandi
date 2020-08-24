@@ -38,7 +38,7 @@ export class Files extends Model {
                         this.onMount(data.data, getAllModels());
                         if (data.cmd === "mount" && data.callback === Constants.CB_MOUNT_HELP) {
                             setTimeout(() => {
-                                this.getLeaf(this.element.lastElementChild.firstElementChild as HTMLElement, data.box);
+                                this.getLeaf(this.element.lastElementChild.firstElementChild as HTMLElement, data.data.box);
                                 this.setCurrent(this.element.lastElementChild.firstElementChild as HTMLElement);
                             }, 200);
                         }

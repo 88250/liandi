@@ -50,7 +50,6 @@ const initBar = () => {
             </svg>
         </div>`;
     document.getElementById("barNavigation").addEventListener("click", () => {
-        const wnd = new Wnd(window.liandi.leftLayout.children.length === 0 ? undefined : "tb");
         const tab = new Tab({
             title: `<svg class="item__svg"><use xlink:href="#iconFiles"></use></svg> ${i18n[window.liandi.config.lang].fileTree}`,
             callback(tab: Tab) {
@@ -61,12 +60,10 @@ const initBar = () => {
                 tab.addModel(new Files(tab));
             }
         });
-        wnd.addTab(tab);
-        window.liandi.leftLayout.addWnd(wnd);
+        (window.liandi.leftLayout.children[0] as Wnd).addTab(tab);
     });
 
     document.getElementById("barGraph").addEventListener("click", function () {
-        const wnd = new Wnd(window.liandi.rightLayout.children.length === 0 ? undefined : "tb");
         const tab = new Tab({
             title: `<svg class="item__svg"><use xlink:href="#iconGraph"></use></svg> ${i18n[window.liandi.config.lang].graphView}`,
             panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
@@ -77,19 +74,20 @@ const initBar = () => {
                 tab.addModel(new Graph({tab}));
             }
         });
-        wnd.addTab(tab);
-        window.liandi.rightLayout.addWnd(wnd);
+        (window.liandi.rightLayout.children[0] as Wnd).addTab(tab);
     });
     document.getElementById("barHelp").addEventListener("click", function () {
         if (getAllModels().files.length === 0) {
             document.getElementById("barNavigation").dispatchEvent(new CustomEvent("click"));
         }
-        window.liandi.ws.send("mount", {
-            url: `${Constants.WEBDAV_ADDRESS}/`,
-            path: path.posix.join(Constants.APP_DIR, "public/zh_CN/链滴笔记用户指南"),
-            pushMode: 0,
-            callback: Constants.CB_MOUNT_HELP
-        });
+        setTimeout(() => {
+            getAllModels().files[0].send("mount", {
+                url: `${Constants.WEBDAV_ADDRESS}/`,
+                path: path.posix.join(Constants.APP_DIR, "public/zh_CN/链滴笔记用户指南"),
+                pushMode: 0,
+                callback: Constants.CB_MOUNT_HELP
+            });
+        }, 200)
     });
     document.getElementById("barBug").addEventListener("click", () => {
         remote.getCurrentWindow().webContents.openDevTools({mode: "bottom"});
