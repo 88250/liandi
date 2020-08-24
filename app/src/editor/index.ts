@@ -19,7 +19,7 @@ export class Editor extends Model {
     public element: HTMLElement;
     public blockVditorElement: HTMLElement;
     private blockTipElement: HTMLElement;
-    private saved = false
+    public saved = false
     public vditore: Vditor
     public url: string
     public path: string

@@ -1,6 +1,7 @@
 export const i18n: II18n = {
     en_US: {
         mark:"Enable ==mark==",
+        saveTip:" is not save, confirm close it?",
         splitLR:"Split Vertically",
         splitTB:"Split Horizontally",
         debug: "Developer Tools",
@@ -278,6 +279,7 @@ export const i18n: II18n = {
         "wysiwyg": "위지위그",
     },
     zh_CN: {
+        saveTip:" 还没有保存，确定关闭？",
         mark:"支持 ==标记==",
         splitLR:"左右分屏",
         splitTB:"上下分屏",

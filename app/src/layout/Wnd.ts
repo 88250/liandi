@@ -5,9 +5,11 @@ import {Tab} from "./Tab";
 import {Model} from "./Model";
 import {Editor} from "../editor";
 import {Graph} from "../graph";
+import * as path from "path";
 import {animationThrottle} from "../util/animationThrottle";
 import {hasClosestByClassName, hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
 import {hasClosestByTag} from "../../vditore/src/ts/util/hasClosestByHeadings";
+import {i18n} from "../i18n";
 
 export class Wnd {
     public id: string
@@ -178,8 +180,21 @@ export class Wnd {
         model.send("closews", {});
     }
 
+    private confirmRemoveEditor(model:Model) {
+        if (!(model instanceof  Editor)) {
+            return true
+        }
+        if (!model.saved) {
+            return confirm(path.posix.basename(model.path) + i18n[window.liandi.config.lang].saveTip)
+        }
+        return true
+    }
+
     public removeTab(id: string) {
         if (this.children.length === 1) {
+            if (!this.confirmRemoveEditor(this.children[0].model)) {
+                return;
+            }
             this.destroyModel(this.children[0].model);
             this.children = [];
             this.remove();
@@ -187,6 +202,9 @@ export class Wnd {
         }
         this.children.find((item, index) => {
             if (item.id === id) {
+                if (!this.confirmRemoveEditor(item.model)) {
+                    return true;
+                }
                 if (item.headElement.classList.contains("item--current")) {
                     let currentIndex = index + 1;
                     if (index === this.children.length - 1) {
