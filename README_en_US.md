@@ -42,7 +42,8 @@ Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi
   * Configure Markdown to analyze detailed rendering parameters
     * Whether to enable footnote support
     * Whether to enable [ToC] support
-    * Do you need to insert spaces between Chinese and Western languages ​​automatically
+    * Whether to enable ==Mark== support
+    * Do you need to insert spaces between Chinese and Western languages automatically
     * Whether to perform automatic term correction
     * Punctuation such as Chinese followed by English comma period is automatically replaced with Chinese corresponding punctuation
     * Does inline math formula allow starting $ followed by numbers
