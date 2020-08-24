@@ -53,11 +53,8 @@ const initBar = () => {
         const tab = new Tab({
             title: `<svg class="item__svg"><use xlink:href="#iconFiles"></use></svg> ${i18n[window.liandi.config.lang].fileTree}`,
             callback(tab: Tab) {
-                if (window.liandi.leftLayout.element.clientWidth < 7) {
-                    window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - 200) + "px";
-                    window.liandi.leftLayout.element.style.width = "206px";
-                }
                 tab.addModel(new Files(tab));
+                (window.liandi.leftLayout.children[0] as Wnd).resetLayout(window.liandi.leftLayout)
             }
         });
         (window.liandi.leftLayout.children[0] as Wnd).addTab(tab);
@@ -68,10 +65,8 @@ const initBar = () => {
             title: `<svg class="item__svg"><use xlink:href="#iconGraph"></use></svg> ${i18n[window.liandi.config.lang].graphView}`,
             panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
             callback(tab: Tab) {
-                if (window.liandi.rightLayout.element.clientWidth < 7) {
-                    window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - window.innerWidth / 3) + "px";
-                }
                 tab.addModel(new Graph({tab}));
+                (window.liandi.rightLayout.children[0] as Wnd).resetLayout(window.liandi.rightLayout)
             }
         });
         (window.liandi.rightLayout.children[0] as Wnd).addTab(tab);

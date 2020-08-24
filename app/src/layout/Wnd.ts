@@ -314,7 +314,7 @@ export class Wnd {
         this.resetLayout(layout);
     }
 
-    private resetLayout(layout: Layout) {
+    public resetLayout(layout: Layout) {
         if (layout.type === "center" || layout.type === "normal" || layout.children.length !== 1) {
             return;
         }
@@ -324,7 +324,9 @@ export class Wnd {
                 window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - 200) + "px";
                 layout.element.style.width = "206px";
             } else if (layout.type === "right" && layout.element.clientWidth < 7) {
-                window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - window.innerWidth / 3) + "px";
+                const rightWidth =  window.innerWidth / 3
+                window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - rightWidth) + "px";
+                window.liandi.rightLayoutWidth = rightWidth
             } else if (layout.type === "top" && layout.element.clientHeight < 7) {
                 window.liandi.centerLayout.parent.element.style.height = (window.liandi.centerLayout.parent.element.clientHeight - 200) + "px";
                 layout.element.style.height = "206px";
@@ -332,6 +334,7 @@ export class Wnd {
                 (layout.element.clientHeight + window.liandi.centerLayout.parent.element.clientHeight + window.liandi.topLayout.element.clientHeight > window.innerHeight
                     || layout.element.clientHeight < 7)) {
                 window.liandi.centerLayout.parent.element.style.height = (window.liandi.centerLayout.parent.element.clientHeight - 200) + "px";
+                window.liandi.bottomLayoutHeight = 200
             }
         } else if (layout.children[0].children.length === 1) {
             if (layout.type === "left" || layout.type === "right") {
