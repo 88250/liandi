@@ -129,15 +129,20 @@ export class Wnd {
     }
 
     private switchTab(target: HTMLElement) {
+        let currentTab: Tab
         this.children.forEach((item) => {
             if (target === item.headElement) {
                 item.headElement?.classList.add("item--current");
                 item.panelElement.classList.remove("fn__none");
+                currentTab = item
             } else {
                 item.headElement?.classList.remove("item--current");
                 item.panelElement.classList.add("fn__none");
             }
         });
+        if (currentTab && target === currentTab.headElement && currentTab.model instanceof Graph) {
+            currentTab.model.chart.resize();
+        }
     }
 
     public addTab(tab: Tab) {
