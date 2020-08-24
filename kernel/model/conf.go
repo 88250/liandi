@@ -32,7 +32,7 @@ import (
 var Mode = "dev"
 
 const (
-	Ver        = "1.1.3"
+	Ver        = "1.1.4"
 	ServerPort = "6806"
 	UserAgent  = "LianDi/v" + Ver
 )
