@@ -21,9 +21,7 @@ export class Wnd {
         this.element = document.createElement("div");
         this.element.classList.add("fn__flex-1", "fn__flex");
         this.element.innerHTML = `<div data-type="wnd" data-id="${this.id}" class="fn__flex-column fn__flex fn__flex-1">
-    <div class="fn__flex">
-        <ul class="fn__flex fn__flex-1 tab__headers"></ul>
-    </div>
+    <ul class="fn__flex tab__headers"></ul>
     <div class="tab__panels fn__flex-1"><div class="tab__drag fn__none"></div></div>
 </div>`;
         this.headersElement = this.element.querySelector(".tab__headers");
@@ -57,12 +55,12 @@ export class Wnd {
         });
         dragElement.addEventListener("drop", (event: DragEvent & { target: HTMLElement }) => {
             dragElement.classList.add("fn__none")
-            const wndElement = event.target.parentElement.parentElement
+            const newWndElement = event.target.parentElement.parentElement
             const tabId = event.dataTransfer.getData("application/liandi")
-            if (wndElement.contains(document.querySelector(`[data-id="${tabId}"]`))) {
+            if (newWndElement.contains(document.querySelector(`[data-id="${tabId}"]`))) {
                 return
             }
-            const newWnd = getInstanceById(wndElement.getAttribute("data-id")) as Wnd
+            const newWnd = getInstanceById(newWndElement.getAttribute("data-id")) as Wnd
             const tab = getInstanceById(tabId) as Tab
             if (newWnd) {
                 newWnd.moveTab(tab)
@@ -143,35 +141,33 @@ export class Wnd {
             item.headElement?.classList.remove("item--current");
             item.panelElement.classList.add("fn__none");
         });
-        this.children.push(tab);
-
         if (tab.headElement) {
             this.headersElement.append(tab.headElement);
         }
         this.element.querySelector(".tab__panels").append(tab.panelElement);
-        tab.parent = this;
 
-        if (this.children.length === 1) {
-            this.children = [];
-            this.remove();
-            return;
-        }
-        this.children.find((item, index) => {
-            if (item.id === id) {
-                if (item.headElement.classList.contains("item--current")) {
-                    let currentIndex = index + 1;
-                    if (index === this.children.length - 1) {
-                        currentIndex = index - 1;
+        const oldWnd = tab.parent
+        if (oldWnd.children.length === 1) {
+            oldWnd.children = [];
+            oldWnd.remove();
+        } else {
+            oldWnd.children.find((item, index) => {
+                if (item.id === tab.id) {
+                    if (item.headElement.classList.contains("item--current")) {
+                        let currentIndex = index + 1;
+                        if (index === this.children.length - 1) {
+                            currentIndex = index - 1;
+                        }
+                        this.switchTab(this.children[currentIndex].headElement);
                     }
-                    this.switchTab(this.children[currentIndex].headElement);
+                    this.children.splice(index, 1);
+                    return true;
                 }
-                item.headElement.remove();
-                item.panelElement.remove();
-                this.destroyModel(item.model);
-                this.children.splice(index, 1);
-                return true;
-            }
-        });
+            });
+        }
+
+        this.children.push(tab);
+        tab.parent = this;
     }
 
     public spilt(direction: TDirection) {
