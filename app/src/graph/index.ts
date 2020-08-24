@@ -121,6 +121,9 @@ export class Graph extends Model {
         }
         this.chart.setOption({
                 legend: {
+                    selected: {
+                        [i18n[window.liandi.config.lang].normalBlock]: false,
+                    },
                     data: [{
                         name: i18n[window.liandi.config.lang].rootBlock,
                         icon: "circle"

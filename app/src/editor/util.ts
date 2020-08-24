@@ -80,7 +80,7 @@ export const openFile = (url: string, filePath: string, id?: string) => {
                 const editor = new Editor({
                     tab,
                     url,
-                    nodeId:id,
+                    nodeId: id,
                     path: filePath
                 });
                 tab.addModel(editor);
