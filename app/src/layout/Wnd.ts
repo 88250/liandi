@@ -316,6 +316,7 @@ export class Wnd {
 
     public resetLayout(layout: Layout) {
         if (layout.type === "center" || layout.type === "normal" || layout.children.length !== 1) {
+            resizeTabs();
             return;
         }
 
