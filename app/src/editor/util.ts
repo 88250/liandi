@@ -38,12 +38,12 @@ export const getIconByType = (type: string) => {
 export const openFile = (url: string, filePath: string, id?: string) => {
     const editor = getAllModels().editor.find((item) => {
         if (item.url === url && item.path == filePath) {
-            item.parent.parent.switchTab(item.parent.headElement)
-            return true
+            item.parent.parent.switchTab(item.parent.headElement);
+            return true;
         }
-    })
+    });
     if (editor) {
-        return
+        return;
     }
 
     let wnd: Wnd = undefined;
