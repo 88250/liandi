@@ -106,7 +106,7 @@ const initWindow = () => {
         return;
     }
 
-    if (process.platform === "win32") {
+    if (process.platform === "win32" || process.platform === "linux") {
         document.body.classList.add("body--win32");
     }
 
