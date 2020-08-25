@@ -130,7 +130,7 @@ export class Wnd {
         });
     }
 
-    private switchTab(target: HTMLElement) {
+    public switchTab(target: HTMLElement) {
         let currentTab: Tab;
         this.children.forEach((item) => {
             if (target === item.headElement) {
