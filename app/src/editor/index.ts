@@ -107,7 +107,7 @@ export class Editor extends Model {
                 this.blockTipElement.style.display = "none";
             }, 300);
         });
-        this.element.addEventListener("mouseover", (event: MouseEvent & { target: HTMLElement }) => {
+        this.vditore.vditor.ir.element.addEventListener("mouseover", (event: MouseEvent & { target: HTMLElement }) => {
             const blockVditorElement = hasClosestByAttribute(event.target, "data-type", "block-ref");
             if (blockVditorElement) {
                 this.blockVditorElement = blockVditorElement;
