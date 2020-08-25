@@ -1,4 +1,4 @@
-import {remote} from "electron";
+import {remote, clipboard} from "electron";
 import {i18n} from "../i18n";
 
 export const initVditorMenu = () => {
@@ -9,6 +9,18 @@ export const initVditorMenu = () => {
         accelerator: "CmdOrCtrl+Shift+Alt+V",
         click: () => {
             remote.getCurrentWindow().webContents.pasteAndMatchStyle();
+        }
+    }));
+    return menu;
+};
+
+export const initVditorIconMenu = () => {
+    const menu = new remote.Menu();
+    menu.append(new remote.MenuItem({
+        label: i18n[window.liandi.config.lang].copyId,
+        click: () => {
+            const itemData = window.liandi.menus.itemData;
+            clipboard.writeText(itemData.target.parentElement.getAttribute("data-node-id"))
         }
     }));
     return menu;

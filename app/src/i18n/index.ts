@@ -1,5 +1,6 @@
 export const i18n: II18n = {
     en_US: {
+        copyId:"Copy Block ID",
         linkLevelTip: "Depth should between [1,16]",
         linkLevel: "Depth",
         mark:"Enable ==mark==",
@@ -275,6 +276,7 @@ export const i18n: II18n = {
         "wysiwyg": "위지위그",
     },
     zh_CN: {
+        copyId:"复制块 ID",
         linkLevelTip: "层级区间 [1,16]",
         linkLevel: "层级",
         saveTip:" 还没有保存，确定关闭？",

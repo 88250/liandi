@@ -2,7 +2,7 @@ import {initFolderMenu, initFileMenu} from "./file";
 import {initNavigationMenu} from "./navigation";
 import {initMountMenu} from "./mount";
 import {hasTopClosestByTag} from "../../vditore/src/ts/util/hasClosest";
-import {initVditorMenu} from "./vditor";
+import {initVditorIconMenu, initVditorMenu} from "./vditor";
 import {clipboard} from "electron";
 import {initEditorMenu, initTabMenu} from "./tab";
 
@@ -18,7 +18,7 @@ export class Menus {
                 if (dataType === "tab-header-editor") {
                     this.itemData = {
                         target,
-                        name:target.textContent.trim()
+                        name: target.textContent.trim()
                     };
                     initEditorMenu().popup();
                     event.preventDefault();
@@ -84,7 +84,20 @@ export class Menus {
                     vditorMenu.getMenuItemById("pasteAsPlainText").enabled = clipboard.readText() !== "";
                     vditorMenu.popup();
                     event.preventDefault();
-                    getSelection().getRangeAt(0).collapse(true);
+                    if (getSelection().rangeCount > 0) {
+                        getSelection().getRangeAt(0).collapse(true);
+                    }
+                    break;
+                }
+
+                if (target.classList.contains("vditor-ir__menu")) {
+                    // 编辑器菜单：复制 id
+                    this.itemData = {
+                        target,
+                    };
+                    const vditorIconMenu = initVditorIconMenu();
+                    vditorIconMenu.popup();
+                    event.preventDefault();
                     break;
                 }
 
