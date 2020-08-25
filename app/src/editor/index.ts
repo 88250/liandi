@@ -112,7 +112,8 @@ export class Editor extends Model {
             if (blockVditorElement) {
                 this.blockVditorElement = blockVditorElement;
                 this.send("getblock", {
-                    id: blockVditorElement.querySelector(".vditor-ir__marker--link").textContent
+                    id: blockVditorElement.querySelector(".vditor-ir__marker--link").textContent,
+                    url: this.url
                 });
 
                 clearTimeout(timeoutId);
