@@ -194,7 +194,6 @@ export class Editor extends Model {
                         "code-theme",
                         "content-theme",
                         "outline",
-                        "preview",
                         "devtools",
                     ],
                 }],
