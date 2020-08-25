@@ -1,3 +1,24 @@
+## v1.1.5 / 2020-08-25
+
+### 引入特性
+
+* [内容块复制 ID](https://github.com/88250/liandi/issues/145)
+* [为内容块增加显示标识](https://github.com/88250/liandi/issues/158)
+
+### 改进功能
+
+* [点击帮助后自动展开用户指南笔记本](https://github.com/88250/liandi/issues/93)
+* [已有文件打开应激活](https://github.com/88250/liandi/issues/148)
+* [编辑后文档自动保存](https://github.com/88250/liandi/issues/160)
+
+### 文档相关
+
+* [增加 Markdown 完整示例文档](https://github.com/88250/liandi/issues/161)
+
+### 修复缺陷
+
+* [mac window-all-closed 键盘监听报错](https://github.com/88250/liandi/issues/162)
+
 ## v1.1.4 / 2020-08-24
 
 * 完全重写
