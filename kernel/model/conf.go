@@ -128,7 +128,7 @@ func newMarkdown() *Markdown {
 	return &Markdown{
 		Footnotes:                           false,
 		ToC:                                 false,
-		AutoSpace:                           true,
+		AutoSpace:                           false,
 		FixTermTypo:                         false,
 		ChinesePunct:                        false,
 		InlineMathAllowDigitAfterOpenMarker: false,
