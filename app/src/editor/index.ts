@@ -130,7 +130,7 @@ export class Editor extends Model {
             html = processRemoveDataRender1(this.vditore.vditor.ir.element, "innerHTML");
             this.vditore.destroy();
         }
-        let inputTimeout: number
+        let inputTimeout: number;
         this.vditore = new Vditor(this.element, {
             _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
             debugger: process.env.NODE_ENV === "development",
@@ -277,7 +277,7 @@ export class Editor extends Model {
             input: (content: string) => {
                 this.saved = false;
                 this.parent.headElement.classList.add("item--unsave");
-                clearTimeout(inputTimeout)
+                clearTimeout(inputTimeout);
                 inputTimeout = window.setTimeout(() => {
                     if (this.saved) {
                         return;
@@ -290,7 +290,7 @@ export class Editor extends Model {
                     });
                     this.saved = true;
                     this.parent.headElement.classList.remove("item--unsave");
-                }, 2000)
+                }, 2000);
             }
         });
     }
