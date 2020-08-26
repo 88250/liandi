@@ -143,10 +143,7 @@ export class Graph extends Model {
                             if (nodeElement && nodeElement.getClientRects().length > 0) {
                                 nodeElement.classList.add("editor__blockref");
                                 vditorElement.scrollTop = nodeElement.offsetTop - vditorElement.clientHeight / 2;
-                                this.chart.dispatchAction({
-                                    type: 'highlight',
-                                    name: params.name
-                                })
+                                this.hlNode(params.name)
                             }
                             return true;
                         }
@@ -160,9 +157,6 @@ export class Graph extends Model {
         this.links = data.links
         this.chart.setOption({
             legend: {
-                selected: {
-                    // [i18n[window.liandi.config.lang].normalBlock]: false,
-                },
                 data: [{
                     name: i18n[window.liandi.config.lang].rootBlock,
                     icon: "circle"
@@ -204,7 +198,7 @@ export class Graph extends Model {
                     categories: [{
                         name: i18n[window.liandi.config.lang].rootBlock,
                         itemStyle: {
-                            color: "#161719"
+                            color: "#7c828b"
                         },
                     }, {
                         name: i18n[window.liandi.config.lang].normalBlock,
@@ -233,16 +227,6 @@ export class Graph extends Model {
                                 return params.data.content.substr(0, 8);
                             }
                         },
-                    },
-                    symbolSize: (value: number, params: IEchartsFormatter) => {
-                        if (params.data.symbolSize) {
-                            return params.data.symbolSize
-                        }
-                        if (params.data.category === 0) {
-                            return 18;
-                        } else {
-                            return 12;
-                        }
                     },
                     force: {
                         repulsion: 100,
