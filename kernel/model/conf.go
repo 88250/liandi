@@ -325,7 +325,7 @@ func (box *Box) Index() {
 		tree.URL = box.URL
 		tree.Path = p[:len(p)-len(".md.json")]
 		tree.Name = path.Base(tree.Path)
-		tree.Context.Option.LinkBase = path.Join(tree.URL, path.Dir(p)) + "/"
+		tree.Context.Option.LinkBase = path.Join(tree.URL, path.Dir(p)) + "/" // 这里需要设置图片相对路径，解析时从树上读取
 		box.IndexTree(tree)
 	}
 	Logger.Debugf("索引笔记本 [%s] 完毕", box.URL)
