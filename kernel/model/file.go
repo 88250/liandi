@@ -94,17 +94,19 @@ func Ls(url, path string) (ret []*File, err error) {
 	return
 }
 
-func Get(url, path string) (dom string, err error) {
+func Get(url, p string) (dom string, err error) {
 	box := Conf.Box(url)
 	if nil == box {
 		return "", errors.New(Conf.lang(0))
 	}
 
-	tree := box.Tree(path)
+	tree := box.Tree(p)
 	if nil == tree {
 		return "", errors.New(Conf.lang(13))
 	}
-	dom = Lute.Tree2VditorIRBlockDOM(tree, false)
+
+	lute := NewLute()
+	dom = lute.Tree2VditorIRBlockDOM(tree, false)
 	return
 }
 
@@ -121,7 +123,8 @@ func Put(url, p string, domStr string) (err error) {
 	}
 
 	// DOM 转树
-	tree, err = Lute.VditorIRBlockDOM2Tree(domStr)
+	lute := NewLute()
+	tree, err = lute.VditorIRBlockDOM2Tree(domStr)
 	if nil != err {
 		msg := fmt.Sprintf(Conf.lang(12), err)
 		Logger.Errorf(msg)

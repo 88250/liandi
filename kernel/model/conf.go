@@ -46,7 +46,6 @@ var (
 )
 
 var Conf *AppConf
-var Lute *lute.Lute
 
 func Close() {
 	Conf.Close()
@@ -56,7 +55,6 @@ func Close() {
 
 func InitConf() {
 	Conf = &AppConf{LogLevel: "debug", Theme: "dark", Lang: "zh_CN", Boxes: []*Box{}}
-	Lute = lute.New()
 	if gulu.File.IsExist(ConfPath) {
 		data, err := ioutil.ReadFile(ConfPath)
 		if nil != err {
@@ -81,7 +79,6 @@ func InitConf() {
 	if nil == Conf.Markdown {
 		Conf.Markdown = newMarkdown()
 	}
-	ConfLute()
 	if nil == Conf.Image {
 		Conf.Image = newImage()
 	}
@@ -140,17 +137,19 @@ func newMarkdown() *Markdown {
 	}
 }
 
-func ConfLute() {
-	Lute.Footnotes = Conf.Markdown.Footnotes
-	Lute.ToC = Conf.Markdown.ToC
-	Lute.AutoSpace = Conf.Markdown.AutoSpace
-	Lute.FixTermTypo = Conf.Markdown.FixTermTypo
-	Lute.ChinesePunct = Conf.Markdown.ChinesePunct
-	Lute.InlineMathAllowDigitAfterOpenMarker = Conf.Markdown.InlineMathAllowDigitAfterOpenMarker
-	Lute.InlineMathAllowDigitAfterOpenMarker = Conf.Markdown.InlineMathAllowDigitAfterOpenMarker
-	Lute.ChineseParagraphBeginningSpace = Conf.Markdown.ParagraphBeginningSpace
-	Lute.Mark = Conf.Markdown.Mark
-	Lute.BlockRef = true
+func NewLute() (ret *lute.Lute) {
+	ret = lute.New()
+	ret.Footnotes = Conf.Markdown.Footnotes
+	ret.ToC = Conf.Markdown.ToC
+	ret.AutoSpace = Conf.Markdown.AutoSpace
+	ret.FixTermTypo = Conf.Markdown.FixTermTypo
+	ret.ChinesePunct = Conf.Markdown.ChinesePunct
+	ret.InlineMathAllowDigitAfterOpenMarker = Conf.Markdown.InlineMathAllowDigitAfterOpenMarker
+	ret.InlineMathAllowDigitAfterOpenMarker = Conf.Markdown.InlineMathAllowDigitAfterOpenMarker
+	ret.ChineseParagraphBeginningSpace = Conf.Markdown.ParagraphBeginningSpace
+	ret.Mark = Conf.Markdown.Mark
+	ret.BlockRef = true
+	return
 }
 
 func newImage() *Image {
@@ -326,6 +325,7 @@ func (box *Box) Index() {
 		tree.URL = box.URL
 		tree.Path = p[:len(p)-len(".md.json")]
 		tree.Name = path.Base(tree.Path)
+		tree.Context.Option.LinkBase = path.Join(tree.URL, path.Dir(p)) + "/"
 		box.IndexTree(tree)
 	}
 	Logger.Debugf("索引笔记本 [%s] 完毕", box.URL)

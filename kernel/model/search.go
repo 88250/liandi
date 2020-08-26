@@ -78,7 +78,8 @@ func (box *Box) RemoveTree(path string) {
 }
 
 func (box *Box) ParseIndexTree(p, markdown string) (ret *parse.Tree) {
-	ret = parse.Parse("", util.StrToBytes(markdown), Lute.Options)
+	lute := NewLute()
+	ret = parse.Parse("", util.StrToBytes(markdown), lute.Options)
 	ret.URL = box.URL
 	ret.Path = p[:len(p)-len(path.Ext(p))]
 	ret.Name = path.Base(ret.Path)

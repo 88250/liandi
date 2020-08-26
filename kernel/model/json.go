@@ -25,7 +25,8 @@ func ParseJSON(jsonStr string) (ret *parse.Tree, err error) {
 		return nil, err
 	}
 
-	ret = &parse.Tree{Name: "", Root: &ast.Node{Type: ast.NodeDocument, ID: root.ID}, Context: &parse.Context{Option: Lute.Options}}
+	lute := NewLute()
+	ret = &parse.Tree{Name: "", Root: &ast.Node{Type: ast.NodeDocument, ID: root.ID}, Context: &parse.Context{Option: lute.Options}}
 	ret.Context.Tip = ret.Root
 	if nil == root.Children {
 		return
