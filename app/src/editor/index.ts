@@ -205,7 +205,6 @@ export class Editor extends Model {
                         "inline-code",
                         "code-theme",
                         "content-theme",
-                        "outline",
                         "devtools",
                     ],
                 }],
