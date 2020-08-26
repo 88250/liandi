@@ -17,10 +17,12 @@ import {image} from "./config/image";
 import {markdown} from "./config/markdown";
 import {showMessage} from "./util/message";
 import {newFile} from "./util/newFile";
-import {resizeTabs} from "./layout/util";
+import {getAllModels, resizeTabs} from "./layout/util";
 import {addScript} from "../vditore/src/ts/util/addScript";
 import * as path from "path";
 import {animationThrottle} from "./util/animationThrottle";
+import {destroyDialog} from "./util/dialog";
+import {openFile} from "./editor/util";
 
 class App {
     constructor() {
@@ -84,6 +86,15 @@ class App {
                         break;
                     case "settheme":
                         onSetTheme(data.data);
+                        break;
+                    case "create":
+                        // 没有文件树展开
+                        if (getAllModels().files.length === 0) {
+                            destroyDialog();
+                            if (data.callback !== Constants.CB_CREATE_INSERT) {
+                                openFile(data.data.box.url, data.data.path);
+                            }
+                        }
                         break;
                     case "getconf":
                         if (data.callback === Constants.CB_GETCONF_BOX) {

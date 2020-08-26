@@ -8,6 +8,9 @@ import {Graph} from "../graph";
 import {Editor} from "../editor";
 import {Files} from "../files";
 import {setPadding, setTypewriterPosition} from "../../vditore/src/ts/ui/initUI";
+import {newFile} from "../util/newFile";
+import {Constants} from "../constants";
+import {showMessage} from "../util/message";
 
 export const resizeTabs = () => {
     const models = getAllModels();
@@ -173,6 +176,7 @@ export const addInitWnd = () => {
     wnd.addTab(new Tab({
         panel: `<div class="layout__empty">
                     <div class="item fn__flex-inline">${i18n[window.liandi.config.lang].search}/${i18n[window.liandi.config.lang].config} &lt;Double Shift></div>
+                    <div class="item fn__a fn__pointer" id="editorEmptyFile">${i18n[window.liandi.config.lang].newFile}</div>
                     <div class="item fn__a fn__pointer" id="editorEmptyMount">${i18n[window.liandi.config.lang].mount}</div>
                     <div class="item fn__a fn__pointer" id="editorEmptyMountDAV">${i18n[window.liandi.config.lang].mountWebDAV}</div>
                 </div>`,
@@ -182,6 +186,9 @@ export const addInitWnd = () => {
             });
             tab.panelElement.querySelector("#editorEmptyMountDAV").addEventListener("click", () => {
                 mountWebDAV();
+            });
+            tab.panelElement.querySelector("#editorEmptyFile").addEventListener("click", () => {
+                newFile(undefined, Constants.CB_CREATE_HOTKEY);
             });
         }
     }));

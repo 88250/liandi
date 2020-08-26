@@ -151,18 +151,8 @@ export class Files extends Model {
             targetElement.setAttribute("data-files", JSON.stringify(data.data.files));
             this.getLeaf(targetElement, data.data.box);
         }
-        if (data.cmd === "create") {
-            const allModels = getAllModels();
-            allModels.graph.forEach((item) => {
-                if (!item.path) {
-                    item.send("graph", {
-                        k: item.inputElement.value
-                    });
-                }
-            });
-            if (data.callback === Constants.CB_CREATE_HOTKEY) {
-                openFile(data.data.box.url, data.data.path);
-            }
+        if (data.cmd === "create" && data.callback !== Constants.CB_CREATE_INSERT) {
+            openFile(data.data.box.url, data.data.path);
         }
         destroyDialog();
     }

@@ -1,5 +1,6 @@
 export const i18n: II18n = {
     en_US: {
+        newFileTip: "Please open folder first",
         copyId:"Copy Block ID",
         linkLevelTip: "Depth should between [1,16]",
         linkLevel: "Depth",
@@ -276,6 +277,7 @@ export const i18n: II18n = {
         "wysiwyg": "위지위그",
     },
     zh_CN: {
+        newFileTip: "你还没有打开文件夹，请先打开文件夹",
         copyId:"复制块 ID",
         linkLevelTip: "层级区间 [1,16]",
         linkLevel: "层级",

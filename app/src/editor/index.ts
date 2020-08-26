@@ -14,6 +14,7 @@ import {scrollCenter} from "../../vditore/src/ts/util/editorCommonEvent";
 import {processRemoveDataRender1} from "../../vditore/src/ts/ir/process";
 import {destroyDialog} from "../util/dialog";
 import {expandMarker} from "../../vditore/src/ts/ir/expandMarker";
+import {getAllModels} from "../layout/util";
 
 export class Editor extends Model {
     public element: HTMLElement;
@@ -77,6 +78,9 @@ export class Editor extends Model {
                         if (data.data.callback === Constants.CB_CREATE_INSERT) {
                             setSelectionFocus(this.range);
                             this.vditore.insertValue(`((${data.data.id} "${data.data.name}"))`);
+                            if (getAllModels().files.length === 0) {
+                                destroyDialog();
+                            }
                         }
                         break;
                     case "rename":
