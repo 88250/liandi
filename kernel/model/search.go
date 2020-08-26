@@ -184,7 +184,7 @@ func searchBlock0(tree *parse.Tree, keyword string, ret *[]*Block) {
 		}
 
 		if isSearchBlockSkipNode(n) {
-			return ast.WalkContinue
+			return ast.WalkStop
 		}
 
 		text := renderBlockText(n)

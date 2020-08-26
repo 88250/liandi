@@ -199,7 +199,7 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 		}
 
 		if isSearchBlockSkipNode(n) {
-			return ast.WalkContinue
+			return ast.WalkStop
 		}
 
 		text := renderBlockText(n)
