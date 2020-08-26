@@ -10,9 +10,7 @@ export class Model {
         id: string,
         callback?: () => void
     }) {
-        if (options.callback) {
-            this.ws = this.connect(options.id, options.callback);
-        }
+        this.ws = this.connect(options.id, options.callback);
     }
 
     private connect(id: string, callback?: () => void) {
@@ -38,9 +36,6 @@ export class Model {
     }
 
     public send(cmd: string, param: Record<string, unknown>, process = false) {
-        if (!this.ws) {
-            return
-        }
         this.reqId = process ? 0 : new Date().getTime();
         this.ws.send(JSON.stringify({
             cmd,

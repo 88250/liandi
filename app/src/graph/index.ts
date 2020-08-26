@@ -8,6 +8,7 @@ import {processMessage} from "../util/processMessage";
 import {openFile} from "../editor/util";
 import {showMessage} from "../util/message";
 import {getAllModels} from "../layout/util";
+import {bgFade} from "../util/bgFade";
 
 export class Graph extends Model {
     public inputElement: HTMLInputElement;
@@ -136,12 +137,9 @@ export class Graph extends Model {
                         if (item.url === params.data.url && item.path === params.data.path &&
                             !item.element.classList.contains("fn__none")) {
                             const vditorElement = item.vditore.vditor.ir.element;
-                            vditorElement.querySelectorAll(".editor__blockref").forEach(item => {
-                                item.classList.remove("editor__blockref");
-                            });
                             const nodeElement = vditorElement.querySelector(`[data-node-id="${params.name}"]`) as HTMLElement;
                             if (nodeElement && nodeElement.getClientRects().length > 0) {
-                                nodeElement.classList.add("editor__blockref");
+                                bgFade(nodeElement);
                                 vditorElement.scrollTop = nodeElement.offsetTop - vditorElement.clientHeight / 2;
                                 this.hlNode(params.name)
                             }
