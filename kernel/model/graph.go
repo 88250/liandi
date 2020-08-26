@@ -230,7 +230,7 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 				"symbol": "none",
 				"lineStyle": map[string]interface{}{
 					"type":  "solid",
-					"color": "#161719",
+					"color": "#7c828b",
 				},
 			})
 		}
