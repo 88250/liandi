@@ -143,6 +143,10 @@ export class Graph extends Model {
                             if (nodeElement && nodeElement.getClientRects().length > 0) {
                                 nodeElement.classList.add("editor__blockref");
                                 vditorElement.scrollTop = nodeElement.offsetTop - vditorElement.clientHeight / 2;
+                                this.chart.dispatchAction({
+                                    type: 'highlight',
+                                    name: params.name
+                                })
                             }
                             return true;
                         }
@@ -157,7 +161,7 @@ export class Graph extends Model {
         this.chart.setOption({
             legend: {
                 selected: {
-                   // [i18n[window.liandi.config.lang].normalBlock]: false,
+                    // [i18n[window.liandi.config.lang].normalBlock]: false,
                 },
                 data: [{
                     name: i18n[window.liandi.config.lang].rootBlock,
@@ -207,7 +211,7 @@ export class Graph extends Model {
                         itemStyle: {
                             color: "#7c828b"
                         },
-                    },  {
+                    }, {
                         name: "Bug",
                         itemStyle: {
                             color: "#ea4aaa"
@@ -250,21 +254,15 @@ export class Graph extends Model {
                     layout: "force",
                     focusNodeAdjacency: true,
                     roam: true,
-                    itemStyle: {
-                        borderColor: "rgba(255, 255, 255, 0.38)",
-                        borderWidth: 1,
-                    },
                     lineStyle: {
                         color: "source",
                         curveness: 0,
-                        opacity: 0.48,
+                        opacity: 0.68,
                     },
                     emphasis: {
                         lineStyle: {
-                            width: 3
-                        },
-                        itemStyle: {
-                            borderColor: "#fff",
+                            width: 5,
+                            opacity: 0.38,
                         },
                         label: {
                             show: true
