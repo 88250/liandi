@@ -194,7 +194,7 @@ export class Graph extends Model {
             },
             series: [
                 {
-                    animation: false,
+                    // animation: false,
                     categories: [{
                         name: i18n[window.liandi.config.lang].rootBlock,
                         itemStyle: {
@@ -213,7 +213,7 @@ export class Graph extends Model {
                     }],
                     draggable: true,
                     label: {
-                        position: "right",
+                        position: 'bottom',
                         padding: [2, 4, 2, 4],
                         color: "#d1d5da",
                         backgroundColor: "rgba(68, 77, 86, .68)",
@@ -241,7 +241,7 @@ export class Graph extends Model {
                     lineStyle: {
                         color: "source",
                         curveness: 0,
-                        opacity: 0.68,
+                        opacity: 0.28,
                     },
                     emphasis: {
                         lineStyle: {
