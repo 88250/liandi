@@ -31,6 +31,7 @@ export class Outline extends Model {
             }
         }
         this.element = options.tab.panelElement
+        this.element.classList.add("vditor-outline")
         this.element.addEventListener("click", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.isEqualNode(this.element)) {
