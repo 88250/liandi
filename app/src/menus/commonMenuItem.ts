@@ -1,4 +1,4 @@
-import {remote, shell} from "electron";
+import {remote, shell, clipboard} from "electron";
 import {i18n} from "../i18n";
 import * as path from "path";
 import {bindDialogInput, destroyDialog, dialog} from "../util/dialog";
@@ -9,6 +9,15 @@ import {copyTab, getInstanceById} from "../layout/util";
 import {Tab} from "../layout/Tab";
 import {Editor} from "../editor";
 
+export const copyBlockId = () => {
+    return new remote.MenuItem({
+        label: i18n[window.liandi.config.lang].copyId,
+        click: () => {
+            const itemData = window.liandi.menus.itemData;
+            clipboard.writeText(itemData.target.parentElement.getAttribute("data-node-id"));
+        }
+    })
+}
 export const showInFolder = () => {
     return new remote.MenuItem({
         label: i18n[window.liandi.config.lang].showInFolder,

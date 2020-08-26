@@ -1,5 +1,6 @@
 import {remote, clipboard} from "electron";
 import {i18n} from "../i18n";
+import {copyBlockId} from "./commonMenuItem";
 
 export const initVditorMenu = () => {
     const menu = new remote.Menu();
@@ -16,12 +17,6 @@ export const initVditorMenu = () => {
 
 export const initVditorIconMenu = () => {
     const menu = new remote.Menu();
-    menu.append(new remote.MenuItem({
-        label: i18n[window.liandi.config.lang].copyId,
-        click: () => {
-            const itemData = window.liandi.menus.itemData;
-            clipboard.writeText(itemData.target.parentElement.getAttribute("data-node-id"));
-        }
-    }));
+    menu.append(copyBlockId());
     return menu;
 };

@@ -83,7 +83,7 @@ export class Graph extends Model {
             this.searchGraph();
         });
         if (this.url) {
-            this.inputElement.insertAdjacentHTML("afterend", `<span class="graph__label">${i18n[window.liandi.config.lang].linkLevel}</span><input value='3' min='0' max='16' type='number' class='input graph__number'>`);
+            this.inputElement.insertAdjacentHTML("afterend", `<span class="graph__label">${i18n[window.liandi.config.lang].linkLevel}</span><input value='1' min='0' max='16' type='number' class='input graph__number'>`);
             this.levelInputElement = options.tab.panelElement.firstElementChild.lastElementChild as HTMLInputElement;
             this.levelInputElement.addEventListener("input", (event: InputEvent & { target: HTMLInputElement }) => {
                 const value = parseInt(event.target.value, 10);
