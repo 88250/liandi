@@ -267,7 +267,10 @@ func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
 			if (l["target"] == n["name"]) && "dotted" == lineStyle {
 				n["label"] = map[string]interface{}{"show": true}
-				size := n["symbolSize"].(int)
+				size := 12
+				if s := n["symbolSize"]; nil != s {
+					size = s.(int)
+				}
 				n["symbolSize"] = size + 2
 				l["lineStyle"].(map[string]interface{})["color"] = "#d23f31"
 			}
