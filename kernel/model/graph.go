@@ -56,22 +56,21 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 }
 
 func initNodes(nodes *[]interface{}) {
-	initialX := CANVAS_WIDTH * .5
-	initialY := CANVAS_HEIGHT * .5
-	initialSize := 200.0
+	centerX := CANVAS_WIDTH * .5
+	centerY := CANVAS_HEIGHT * .5
 	k = math.Sqrt(CANVAS_WIDTH * CANVAS_HEIGHT / float64(len(*nodes)))
 	for i := 0; i < len(*nodes); i++ {
 		node := (*nodes)[i].(map[string]interface{})
 		mNodeMap[node["name"].(string)] = node
-
-		node["x"] = initialX + initialSize*(rand.Float64())
-		node["y"] = initialY + initialSize*(rand.Float64())
+		node["x"] = centerX + 100*(rand.Float64())
+		node["y"] = centerY + 100*(rand.Float64())
 	}
 }
 
 func collide(nodes *[]interface{}, links *[]interface{}) {
 	graphLock.Lock()
 	defer graphLock.Unlock()
+
 	initNodes(nodes)
 	calculateRepulsive(nodes)
 	calculateTraction(links)
@@ -99,7 +98,7 @@ func calculateRepulsive(nodes *[]interface{}) {
 				distX = n["x"].(float64) - m["x"].(float64)
 				distY = n["y"].(float64) - -m["y"].(float64)
 				dist = math.Sqrt(distX*distX + distY*distY)
-				if dist < 30 {
+				if dist < 10 {
 					ejectFactor = 5.0
 				}
 				if dist > 0 && dist < 250 {
