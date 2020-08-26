@@ -70,10 +70,6 @@ export class Outline extends Model {
                 } else {
                     text = item.textContent.substring(headingNo + 1).trim();
                 }
-
-                const lastIndex = item.id.lastIndexOf("_");
-                const lastId = item.id.substring(0, lastIndex === -1 ? undefined : lastIndex);
-                item.id = lastId + "_" + index;
                 tocHTML += `<div data-id="${item.id}" class="vditor-outline__item">${space}${text}</div>`;
             }
         });
