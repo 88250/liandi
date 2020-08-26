@@ -108,6 +108,7 @@ declare interface IEchartsFormatter {
         lineStyle: {
             type: string
         }
+        symbolSize: number
         label: {
             show: boolean
         }

@@ -16,6 +16,8 @@ export class Graph extends Model {
     public chart: echarts.ECharts
     public url: string
     public path: string
+    private nodes: Record<string, unknown>[]
+    private links: Record<string, unknown>[]
 
     constructor(options: {
         tab: Tab
@@ -109,6 +111,17 @@ export class Graph extends Model {
         }
     }
 
+    public hlNode(id: string) {
+        this.nodes.forEach((item) => {
+            if (item.name === id) {
+                item.symbolSize = 30
+            } else {
+                item.symbolSize = undefined
+            }
+        })
+        this.onGraph({nodes: this.nodes, links: this.links})
+    }
+
     private onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
         if (!this.chart) {
             this.chart = echarts.init(this.graphElement);
@@ -123,7 +136,7 @@ export class Graph extends Model {
                         if (item.url === params.data.url && item.path === params.data.path &&
                             !item.element.classList.contains("fn__none")) {
                             const vditorElement = item.vditore.vditor.ir.element;
-                            vditorElement.querySelectorAll(".editor__blockref").forEach(item=> {
+                            vditorElement.querySelectorAll(".editor__blockref").forEach(item => {
                                 item.classList.remove("editor__blockref");
                             });
                             const nodeElement = vditorElement.querySelector(`[data-node-id="${params.name}"]`) as HTMLElement;
@@ -139,134 +152,139 @@ export class Graph extends Model {
         } else {
             this.chart.resize();
         }
+        this.nodes = data.nodes
+        this.links = data.links
         this.chart.setOption({
-                legend: {
-                    selected: {
-                        [i18n[window.liandi.config.lang].normalBlock]: false,
-                    },
-                    data: [{
+            legend: {
+                selected: {
+                   // [i18n[window.liandi.config.lang].normalBlock]: false,
+                },
+                data: [{
+                    name: i18n[window.liandi.config.lang].rootBlock,
+                    icon: "circle"
+                }, {
+                    name: i18n[window.liandi.config.lang].normalBlock,
+                    icon: "circle"
+                }, {
+                    name: i18n[window.liandi.config.lang].relativeBlock,
+                    icon: "circle"
+                }],
+                top: 20,
+                right: 20,
+                orient: "vertical",
+                textStyle: {
+                    padding: [2, 4, 2, 4],
+                    color: "#d1d5da",
+                    backgroundColor: "rgba(68, 77, 86, .68)",
+                    borderRadius: 3,
+                    lineHeight: 14,
+                    fontSize: 12,
+                },
+                inactiveColor: "#959da5",
+            },
+            tooltip: {
+                textStyle: {
+                    color: "#d1d5da",
+                },
+                backgroundColor: "rgba(36, 41, 46, .86)",
+                padding: [2, 4, 2, 4],
+                formatter: (params: IEchartsFormatter) => {
+                    if (params.dataType === "edge") {
+                        return `<div style="font-size: 10px;line-height: 12px">${params.data.lineStyle.type === "dotted" ? i18n[window.liandi.config.lang].relativeRelation : i18n[window.liandi.config.lang].parentRelation}</div>`;
+                    } else {
+                        return `<div style="font-size: 12px;line-height: 14px; word-break: break-all;width: 220px;white-space: normal;">${params.data.category === 3 ? "This is a bug block, please go to https://github.com/88250/window.liandi/issues/new for feedback" : escapeHtml(params.data.content)}</div>
+<div style="font-size: 10px;color:#959da5;line-height: 12px">${params.data.name}</div>`;
+                    }
+                },
+            },
+            series: [
+                {
+                    animation: false,
+                    categories: [{
                         name: i18n[window.liandi.config.lang].rootBlock,
-                        icon: "circle"
+                        itemStyle: {
+                            color: "#161719"
+                        },
                     }, {
                         name: i18n[window.liandi.config.lang].normalBlock,
-                        icon: "circle"
+                        itemStyle: {
+                            color: "#7c828b"
+                        },
                     }, {
                         name: i18n[window.liandi.config.lang].relativeBlock,
-                        icon: "circle"
+                        itemStyle: {
+                            color: "#d23f31"
+                        },
+                    }, {
+                        name: "bug",
+                        itemStyle: {
+                            color: "#ea4aaa"
+                        },
                     }],
-                    top: 20,
-                    right: 20,
-                    orient: "vertical",
-                    textStyle: {
+                    draggable: true,
+                    label: {
+                        position: "right",
                         padding: [2, 4, 2, 4],
                         color: "#d1d5da",
                         backgroundColor: "rgba(68, 77, 86, .68)",
+                        fontSize: 10,
                         borderRadius: 3,
-                        lineHeight: 14,
-                        fontSize: 12,
+                        lineHeight: 12,
+                        formatter: (params: IEchartsFormatter) => {
+                            if (params.data.category === 0) {
+                                return path.posix.basename(params.data.path);
+                            } else {
+                                return params.data.content.substr(0, 8);
+                            }
+                        },
                     },
-                    inactiveColor: "#959da5",
-                },
-                tooltip: {
-                    textStyle: {
-                        color: "#d1d5da",
-                    },
-                    backgroundColor: "rgba(36, 41, 46, .86)",
-                    padding: [2, 4, 2, 4],
-                    formatter: (params: IEchartsFormatter) => {
-                        if (params.dataType === "edge") {
-                            return `<div style="font-size: 10px;line-height: 12px">${params.data.lineStyle.type === "dotted" ? i18n[window.liandi.config.lang].relativeRelation : i18n[window.liandi.config.lang].parentRelation}</div>`;
+                    symbolSize: (value: number, params: IEchartsFormatter) => {
+                        if (params.data.symbolSize) {
+                            return params.data.symbolSize
+                        }
+                        if (params.data.category === 0) {
+                            return 18;
                         } else {
-                            return `<div style="font-size: 12px;line-height: 14px; word-break: break-all;width: 220px;white-space: normal;">${params.data.category === 3 ? "This is a bug block, please go to https://github.com/88250/window.liandi/issues/new for feedback" : escapeHtml(params.data.content)}</div>
-<div style="font-size: 10px;color:#959da5;line-height: 12px">${params.data.name}</div>`;
+                            return 12;
                         }
                     },
-                },
-                series: [
-                    {
-                        animation: false,
-                        categories: [{
-                            name: i18n[window.liandi.config.lang].rootBlock,
-                            itemStyle: {
-                                color: "#161719"
-                            },
-                        }, {
-                            name: i18n[window.liandi.config.lang].normalBlock,
-                            itemStyle: {
-                                color: "#7c828b"
-                            },
-                        }, {
-                            name: i18n[window.liandi.config.lang].relativeBlock,
-                            itemStyle: {
-                                color: "#d23f31"
-                            },
-                        }, {
-                            name: "bug",
-                            itemStyle: {
-                                color: "#ea4aaa"
-                            },
-                        }],
-                        draggable: true,
-                        label: {
-                            position: "right",
-                            padding: [2, 4, 2, 4],
-                            color: "#d1d5da",
-                            backgroundColor: "rgba(68, 77, 86, .68)",
-                            fontSize: 10,
-                            borderRadius: 3,
-                            lineHeight: 12,
-                            formatter: (params: IEchartsFormatter) => {
-                                if (params.data.category === 0) {
-                                    return path.posix.basename(params.data.path);
-                                } else {
-                                    return params.data.content.substr(0, 8);
-                                }
-                            },
-                        },
-                        symbolSize: (value: number, params: IEchartsFormatter) => {
-                            if (params.data.category === 0) {
-                                return 18;
-                            } else {
-                                return 12;
-                            }
-                        },
-                        force: {
-                            repulsion: 100,
-                            edgeLength: [30, 100],
-                            // @ts-ignores
-                            friction: 0.15
-                        },
-                        type: "graph",
-                        layout: "force",
-                        focusNodeAdjacency: true,
-                        roam: true,
-                        itemStyle: {
-                            borderColor: "rgba(255, 255, 255, 0.38)",
-                            borderWidth: 1,
-                        },
+                    force: {
+                        repulsion: 100,
+                        edgeLength: [30, 100],
+                        // @ts-ignores
+                        friction: 0.15
+                    },
+                    type: "graph",
+                    layout: "force",
+                    focusNodeAdjacency: true,
+                    roam: true,
+                    itemStyle: {
+                        borderColor: "rgba(255, 255, 255, 0.38)",
+                        borderWidth: 1,
+                    },
+                    lineStyle: {
+                        color: "source",
+                        curveness: 0,
+                        opacity: 0.48,
+                    },
+                    emphasis: {
                         lineStyle: {
-                            color: "source",
-                            curveness: 0,
-                            opacity: 0.48,
+                            width: 3
                         },
-                        emphasis: {
-                            lineStyle: {
-                                width: 3
-                            },
-                            itemStyle: {
-                                borderColor: "#fff",
-                            },
-                            label: {
-                                show: true
-                            }
+                        itemStyle: {
+                            borderColor: "#fff",
                         },
-                        edgeSymbol: ["none", "arrow"],
-                        edgeSymbolSize: [0, 8],
-                        data: data.nodes,
-                        links: data.links,
-                    }
-                ]
-            }
-        );
+                        label: {
+                            show: true
+                        }
+                    },
+                    edgeSymbol: ["none", "arrow"],
+                    edgeSymbolSize: [0, 8],
+                    data: this.nodes,
+                    links: this.links,
+                }
+            ]
+        });
+
     }
 }
