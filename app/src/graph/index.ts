@@ -16,8 +16,8 @@ export class Graph extends Model {
     public chart: echarts.ECharts
     public url: string
     public path: string
-    private nodes: Record<string, unknown>[]
-    private links: Record<string, unknown>[]
+    public nodes: Record<string, unknown>[]
+    public links: Record<string, unknown>[]
 
     constructor(options: {
         tab: Tab
@@ -122,7 +122,7 @@ export class Graph extends Model {
         this.onGraph({nodes: this.nodes, links: this.links})
     }
 
-    private onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
+    public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
         if (!this.chart) {
             this.chart = echarts.init(this.graphElement);
             this.chart.on("dblclick", (params: IEchartsFormatter) => {
@@ -155,11 +155,13 @@ export class Graph extends Model {
         }
         this.nodes = data.nodes
         this.links = data.links
+        const labelColor = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e"
+        const labelLightColor = window.liandi.config.theme === "dark" ? "#959da5" : "#6a737d"
         this.chart.setOption({
             legend: {
                 data: [{
                     name: i18n[window.liandi.config.lang].rootBlock,
-                    icon: "circle"
+                    icon: "circle",
                 }, {
                     name: i18n[window.liandi.config.lang].normalBlock,
                     icon: "circle"
@@ -168,14 +170,9 @@ export class Graph extends Model {
                 right: 20,
                 orient: "vertical",
                 textStyle: {
-                    padding: [2, 4, 2, 4],
-                    color: "#d1d5da",
-                    backgroundColor: "rgba(68, 77, 86, .68)",
-                    borderRadius: 3,
-                    lineHeight: 14,
-                    fontSize: 12,
+                    color: labelColor,
                 },
-                inactiveColor: "#959da5",
+                inactiveColor: labelLightColor,
             },
             tooltip: {
                 textStyle: {
@@ -197,12 +194,12 @@ export class Graph extends Model {
                     categories: [{
                         name: i18n[window.liandi.config.lang].rootBlock,
                         itemStyle: {
-                            color: "#7c828b"
+                            color: labelColor
                         },
                     }, {
                         name: i18n[window.liandi.config.lang].normalBlock,
                         itemStyle: {
-                            color: "#7c828b"
+                            color: labelLightColor
                         },
                     }, {
                         name: "Bug",
@@ -213,12 +210,8 @@ export class Graph extends Model {
                     draggable: true,
                     label: {
                         position: 'bottom',
-                        padding: [2, 4, 2, 4],
-                        color: "#d1d5da",
-                        backgroundColor: "rgba(68, 77, 86, .68)",
+                        color: labelColor,
                         fontSize: 10,
-                        borderRadius: 3,
-                        lineHeight: 12,
                         formatter: (params: IEchartsFormatter) => {
                             if (params.data.category === 0) {
                                 return path.posix.basename(params.data.path);

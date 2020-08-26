@@ -10,7 +10,11 @@ export const onSetTheme = (theme:TTheme) => {
     } else {
         document.body.classList.remove("theme--dark");
     }
-    getAllModels().editor.forEach((item) => {
+    const models = getAllModels()
+    models.editor.forEach((item) => {
         item.vditore.setTheme(theme === "dark" ? "dark" : "classic", theme);
     });
+    models.graph.forEach((item) => {
+        item.onGraph({nodes: item.nodes, links: item.links})
+    })
 };
