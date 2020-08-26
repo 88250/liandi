@@ -57,6 +57,7 @@ export class Editor extends Model {
             if (data) {
                 switch (data.cmd) {
                     case "get":
+                        this.parent.headElement.setAttribute("data-node-id", data.data.rootID)
                         if (data.callback === Constants.CB_PUT_RELOAD) {
                             this.reloadHTML(data.data.content);
                             this.saved = true;

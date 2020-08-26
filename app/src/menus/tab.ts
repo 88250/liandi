@@ -7,7 +7,7 @@ import {Graph} from "../graph";
 import {Editor} from "../editor";
 import {escapeHtml} from "../util/escape";
 import * as path from "path";
-import {renameMenu, splitLRMenu, splitTBMenu} from "./commonMenuItem";
+import {copyBlockId, renameMenu, splitLRMenu, splitTBMenu} from "./commonMenuItem";
 
 export const initTabMenu = () => {
     const menu = new remote.Menu();
@@ -18,6 +18,9 @@ export const initTabMenu = () => {
 
 export const initEditorMenu = () => {
     const menu = new remote.Menu();
+    menu.append(copyBlockId());
+    menu.append(splitLRMenu());
+    menu.append(splitTBMenu());
     menu.append(renameMenu());
     menu.append(new remote.MenuItem({
         label: i18n[window.liandi.config.lang].graphView,
@@ -41,7 +44,5 @@ export const initEditorMenu = () => {
             wnd.addTab(tab);
         }
     }));
-    menu.append(splitLRMenu());
-    menu.append(splitTBMenu());
     return menu;
 };

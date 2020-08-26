@@ -93,7 +93,7 @@ export class Menus {
                 if (target.classList.contains("vditor-ir__menu")) {
                     // 编辑器菜单：复制 id
                     this.itemData = {
-                        target,
+                        target:target.parentElement,
                     };
                     const vditorIconMenu = initVditorIconMenu();
                     vditorIconMenu.popup();

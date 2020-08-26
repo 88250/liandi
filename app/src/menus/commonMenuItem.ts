@@ -14,7 +14,7 @@ export const copyBlockId = () => {
         label: i18n[window.liandi.config.lang].copyId,
         click: () => {
             const itemData = window.liandi.menus.itemData;
-            clipboard.writeText(itemData.target.parentElement.getAttribute("data-node-id"));
+            clipboard.writeText(itemData.target.getAttribute("data-node-id"));
         }
     })
 }
