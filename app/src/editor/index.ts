@@ -15,10 +15,17 @@ import {processRemoveDataRender1} from "../../vditore/src/ts/ir/process";
 import {destroyDialog} from "../util/dialog";
 import {expandMarker} from "../../vditore/src/ts/ir/expandMarker";
 import {getAllModels} from "../layout/util";
+import {mathRender} from "../../vditore/src/ts/markdown/mathRender";
+import {mermaidRender} from "../../vditore/src/ts/markdown/mermaidRender";
+import {graphvizRender} from "../../vditore/src/ts/markdown/graphvizRender";
+import {chartRender} from "../../vditore/src/ts/markdown/chartRender";
+import {mindmapRender} from "../../vditore/src/ts/markdown/mindmapRender";
+import {abcRender} from "../../vditore/src/ts/markdown/abcRender";
+import {mediaRender} from "../../vditore/src/ts/markdown/mediaRender";
 
 export class Editor extends Model {
     public element: HTMLElement;
-    public blockVditorElement: HTMLElement;
+    private blockVditorElement: HTMLElement;
     private blockTipElement: HTMLElement;
     public saved = true
     public vditore: Vditor
@@ -357,8 +364,19 @@ export class Editor extends Model {
             return;
         }
         if (data.callback === Constants.CB_GETBLOCK_EMBED) {
-            this.blockVditorElement.setAttribute("data-render", "1");
-            this.blockVditorElement.innerHTML = data.block.content;
+            const blockVditorElement = this.vditore.vditor.ir.element.querySelector(`[data-block-def-id="${data.id}"]`) as HTMLElement
+            blockVditorElement.setAttribute("data-render", "1");
+            blockVditorElement.innerHTML = data.block.content;
+            mathRender(blockVditorElement, {
+                cdn: this.vditore.vditor.options.cdn,
+                math: this.vditore.vditor.options.preview.math,
+            });
+            mermaidRender(blockVditorElement, ".language-mermaid", this.vditore.vditor.options.cdn);
+            graphvizRender(blockVditorElement, this.vditore.vditor.options.cdn);
+            chartRender(blockVditorElement);
+            mindmapRender(blockVditorElement);
+            abcRender(blockVditorElement, this.vditore.vditor.options.cdn);
+            mediaRender(blockVditorElement);
             scrollCenter(this.vditore.vditor);
             return;
         }
@@ -366,6 +384,16 @@ export class Editor extends Model {
         const parentRect = this.vditore.vditor.element.getBoundingClientRect();
         const elementRect = this.blockVditorElement.getBoundingClientRect();
         this.blockTipElement.innerHTML = data.block.content;
+        mathRender(this.blockTipElement, {
+            cdn: this.vditore.vditor.options.cdn,
+            math: this.vditore.vditor.options.preview.math,
+        });
+        mermaidRender(this.blockTipElement, ".language-mermaid", this.vditore.vditor.options.cdn);
+        graphvizRender(this.blockTipElement, this.vditore.vditor.options.cdn);
+        chartRender(this.blockTipElement);
+        mindmapRender(this.blockTipElement);
+        abcRender(this.blockTipElement, this.vditore.vditor.options.cdn);
+        mediaRender(this.blockTipElement);
         const top = elementRect.top - parentRect.top + elementRect.height + 5;
         const left = elementRect.left - parentRect.left;
         this.blockTipElement.setAttribute("style", `display:block;top:${top}px;left:${left}px`);
