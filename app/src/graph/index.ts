@@ -115,12 +115,12 @@ export class Graph extends Model {
     public hlNode(id: string) {
         this.nodes.forEach((item) => {
             if (item.name === id) {
-                item.symbolSize = 30
+                item.symbolSize = 30;
             } else {
-                item.symbolSize = item.originalSize
+                item.symbolSize = item.originalSize;
             }
-        })
-        this.onGraph({nodes: this.nodes, links: this.links})
+        });
+        this.onGraph({nodes: this.nodes, links: this.links});
     }
 
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
@@ -141,7 +141,7 @@ export class Graph extends Model {
                             if (nodeElement && nodeElement.getClientRects().length > 0) {
                                 bgFade(nodeElement);
                                 vditorElement.scrollTop = nodeElement.offsetTop - vditorElement.clientHeight / 2;
-                                this.hlNode(params.name)
+                                this.hlNode(params.name);
                             }
                             return true;
                         }
@@ -151,10 +151,10 @@ export class Graph extends Model {
         } else {
             this.chart.resize();
         }
-        this.nodes = data.nodes
-        this.links = data.links
-        const labelColor = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e"
-        const labelLightColor = window.liandi.config.theme === "dark" ? "#959da5" : "#6a737d"
+        this.nodes = data.nodes;
+        this.links = data.links;
+        const labelColor = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e";
+        const labelLightColor = window.liandi.config.theme === "dark" ? "#959da5" : "#6a737d";
         this.chart.setOption({
             legend: {
                 data: [{
@@ -207,7 +207,7 @@ export class Graph extends Model {
                     }],
                     draggable: false,
                     label: {
-                        position: 'bottom',
+                        position: "bottom",
                         color: labelColor,
                         fontSize: 10,
                         formatter: (params: IEchartsFormatter) => {
@@ -228,11 +228,11 @@ export class Graph extends Model {
                     },
                     emphasis: {
                         lineStyle: {
-                            color: '#f3a92f',
+                            color: "#f3a92f",
                             opacity: 0.38,
                         },
                         itemStyle: {
-                            color: '#f3a92f',
+                            color: "#f3a92f",
                         }
                     },
                     edgeSymbol: ["none", "arrow"],

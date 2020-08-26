@@ -16,8 +16,8 @@ export const copyBlockId = () => {
             const itemData = window.liandi.menus.itemData;
             clipboard.writeText(itemData.target.getAttribute("data-node-id"));
         }
-    })
-}
+    });
+};
 export const showInFolder = () => {
     return new remote.MenuItem({
         label: i18n[window.liandi.config.lang].showInFolder,

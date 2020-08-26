@@ -1,5 +1,5 @@
 import {remote} from "electron";
-import {copyBlockId, deleteMenu, newFileMenu, newFolderMenu, renameMenu, showInFolder} from "./commonMenuItem";
+import {deleteMenu, newFileMenu, newFolderMenu, renameMenu, showInFolder} from "./commonMenuItem";
 
 export const initFolderMenu = () => {
     const menu = new remote.Menu();

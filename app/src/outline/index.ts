@@ -22,16 +22,16 @@ export class Outline extends Model {
                     case "reload":
                         getAllModels().editor.find((item) => {
                             if (data.data.url === item.url && data.data.path === item.path) {
-                                this.render(item.vditore.vditor.ir.element)
-                                return true
+                                this.render(item.vditore.vditor.ir.element);
+                                return true;
                             }
-                        })
-                        break
+                        });
+                        break;
                 }
             }
-        }
-        this.element = options.tab.panelElement
-        this.element.classList.add("vditor-outline")
+        };
+        this.element = options.tab.panelElement;
+        this.element.classList.add("vditor-outline");
         this.element.addEventListener("click", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.isEqualNode(this.element)) {
@@ -44,7 +44,7 @@ export class Outline extends Model {
                         }
                         item.vditore.vditor.ir.element.scrollTop = headingElement.offsetTop - 10;
                         bgFade(headingElement);
-                    })
+                    });
                     this.element.querySelectorAll(".vditor-outline__item").forEach((item) => {
                         item.classList.remove("vditor-outline__item--current");
                     });
@@ -53,16 +53,16 @@ export class Outline extends Model {
                 target = target.parentElement;
             }
         });
-        this.render(options.contentElement)
+        this.render(options.contentElement);
     }
 
     private render(contentElement: HTMLElement | string) {
         if (typeof contentElement === "string") {
             this.element.innerHTML = contentElement;
-            return
+            return;
         }
-        let tocHTML = ''
-        Array.from(contentElement.children).forEach((item: HTMLElement, index) => {
+        let tocHTML = "";
+        Array.from(contentElement.children).forEach((item: HTMLElement) => {
             if (hasClosestByHeadings(item)) {
                 const headingNo = parseInt(item.tagName.substring(1), 10);
                 const space = new Array(headingNo - 1).fill("&emsp;").join("");

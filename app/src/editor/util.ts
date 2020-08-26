@@ -33,7 +33,7 @@ export const getIconByType = (type: string) => {
             iconName = "vditor-icon-table";
             break;
         case "NodeMathBlock":
-            iconName = "iconMath"
+            iconName = "iconMath";
             break;
     }
     return iconName;
