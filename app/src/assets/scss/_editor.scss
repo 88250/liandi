@@ -18,7 +18,7 @@
   &__blockref {
     background-color: var(--border-color);
     border-radius: 3px;
-    box-shadow: var(--panel-shadow);
+    box-shadow: 5px 0px 0 var(--border-color), -5px 0px 0 var(--border-color);
   }
 
   &__mdref {
