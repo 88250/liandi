@@ -167,9 +167,9 @@ func connectBacklinks(links *[]interface{}) {
 }
 
 const (
-	NodeCategoryRoot   = 0 // 根块
-	NodeCategoryChild  = 1 // 子块
-	NodeCategoryBug    = 3 // 问题块
+	NodeCategoryRoot  = 0 // 根块
+	NodeCategoryChild = 1 // 子块
+	NodeCategoryBug   = 3 // 问题块
 )
 
 func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
@@ -213,6 +213,12 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 				"label": map[string]interface{}{"show": true},
 			},
 		}
+		size := 12
+		if isRoot {
+			size = 18
+		}
+		node["symbolSize"] = size
+
 		checkBadNodes(nodes, node, links)
 		*nodes = append(*nodes, node)
 
@@ -256,12 +262,13 @@ func checkBadNodes(nodes *[]interface{}, node interface{}, links *[]interface{})
 func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 	for _, node := range *nodes {
 		n := node.(map[string]interface{})
-
 		for _, link := range *links {
 			l := link.(map[string]interface{})
 			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
 			if (l["target"] == n["name"]) && "dotted" == lineStyle {
 				n["label"] = map[string]interface{}{"show": true}
+				size := n["symbolSize"].(int)
+				n["symbolSize"] = size + 2
 				l["lineStyle"].(map[string]interface{})["color"] = "#d23f31"
 			}
 		}
