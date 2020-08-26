@@ -232,7 +232,7 @@ func Search(keyword string) (ret []*Block) {
 				Path:    tree.Path,
 				ID:      tree.Root.ID,
 				Content: marked,
-				Type:    "title",
+				Type:    ast.NodeDocument.String(),
 			})
 		}
 	}
@@ -255,13 +255,9 @@ func Search(keyword string) (ret []*Block) {
 			text := renderBlockText(n)
 			pos, marked := markSearch(text, keyword)
 			if -1 < pos {
-				ret = append(ret, &Block{
-					URL:     tree.URL,
-					Path:    tree.Path,
-					ID:      n.ID,
-					Content: marked,
-					Type:    "content",
-				})
+				block := buildBlock(n)
+				block.Content = marked
+				ret = append(ret, block)
 			}
 
 			if 16 <= len(ret) {
