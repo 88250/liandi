@@ -11,6 +11,8 @@
 package model
 
 import (
+	"math"
+	"math/rand"
 	"strings"
 	"sync"
 
@@ -36,6 +38,7 @@ func TreeGraph(keyword string, url, p string, depth int) (nodes []interface{}, l
 	connectForwardlinks(&links)
 	connectBacklinks(&links)
 	markLinkedNodes(&nodes, &links)
+	collide(&nodes, &links)
 	return
 }
 
@@ -48,7 +51,131 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 	connectForwardlinks(&links)
 	connectBacklinks(&links)
 	markLinkedNodes(&nodes, &links)
+	collide(&nodes, &links)
 	return
+}
+
+func initNodes(nodes *[]interface{}) {
+	initialX := CANVAS_WIDTH * .5
+	initialY := CANVAS_HEIGHT * .5
+	initialSize := 200.0
+	k = math.Sqrt(CANVAS_WIDTH * CANVAS_HEIGHT / float64(len(*nodes)))
+	for i := 0; i < len(*nodes); i++ {
+		node := (*nodes)[i].(map[string]interface{})
+		mNodeMap[node["name"].(string)] = node
+
+		node["x"] = initialX + initialSize*(rand.Float64())
+		node["y"] = initialY + initialSize*(rand.Float64())
+	}
+}
+
+func collide(nodes *[]interface{}, links *[]interface{}) {
+	graphLock.Lock()
+	defer graphLock.Unlock()
+	initNodes(nodes)
+	calculateRepulsive(nodes)
+	calculateTraction(links)
+	updateCoordinates(nodes)
+}
+
+var (
+	CANVAS_WIDTH, CANVAS_HEIGHT = 1000.0, 1000.0
+	mDxMap, mDyMap              = map[string]float64{}, map[string]float64{}
+	mNodeMap                    = map[string]map[string]interface{}{}
+	k                           float64
+)
+
+func calculateRepulsive(nodes *[]interface{}) {
+	ejectFactor := 6.0
+	var distX, distY, dist float64
+	for i := 0; i < len(*nodes); i++ {
+		n := (*nodes)[i].(map[string]interface{})
+		key := n["name"].(string)
+		mDxMap[key] = 0.0
+		mDyMap[key] = 0.0
+		for j := 0; j < len(*nodes); j++ {
+			if j != i {
+				m := (*nodes)[j].(map[string]interface{})
+				distX = n["x"].(float64) - m["x"].(float64)
+				distY = n["y"].(float64) - -m["y"].(float64)
+				dist = math.Sqrt(distX*distX + distY*distY)
+				if dist < 30 {
+					ejectFactor = 5.0
+				}
+				if dist > 0 && dist < 250 {
+					mDxMap[key] = mDxMap[key] + distX/dist*k*k/dist*ejectFactor
+					mDyMap[key] = mDyMap[key] + distY/dist*k*k/dist*ejectFactor
+				}
+			}
+		}
+	}
+}
+
+func calculateTraction(links *[]interface{}) {
+	condenseFactor := 3.0
+	var startNode, endNode map[string]interface{}
+	for e := 0; e < len(*links); e++ {
+		l := (*links)[e].(map[string]interface{})
+		eStartID := l["source"].(string)
+		eEndID := l["target"].(string)
+		if nil == mNodeMap[eStartID] {
+			continue
+		}
+		if nil == mNodeMap[eEndID] {
+			continue
+		}
+
+		startNode = mNodeMap[eStartID]
+		endNode = mNodeMap[eEndID]
+
+		var distX, distY, dist float64
+		distX = startNode["x"].(float64) - endNode["x"].(float64)
+		distY = startNode["y"].(float64) - endNode["y"].(float64)
+		dist = math.Sqrt(distX*distX + distY*distY)
+		mDxMap[eStartID] = mDxMap[eStartID] - distX*dist/k*condenseFactor
+		mDyMap[eStartID] = mDyMap[eStartID] - distY*dist/k*condenseFactor
+		mDxMap[eEndID] = mDxMap[eEndID] + distX*dist/k*condenseFactor
+		mDyMap[eEndID] = mDyMap[eEndID] + distY*dist/k*condenseFactor
+	}
+}
+
+func updateCoordinates(nodes *[]interface{}) {
+	maxt, maxty := 4.0, 3.0
+	for v := 0; v < len(*nodes); v++ {
+		node := (*nodes)[v].(map[string]interface{})
+		dx := math.Floor(mDxMap[node["name"].(string)])
+		dy := math.Floor(mDyMap[node["name"].(string)])
+
+		if dx < -maxt {
+			dx = -maxt
+		}
+		if dx > maxt {
+			dx = maxt
+		}
+		if dy < -maxty {
+			dy = -maxty
+		}
+		if dy > maxty {
+			dy = maxty
+		}
+
+		x := node["x"].(float64)
+		y := node["y"].(float64)
+		var xx, yy float64
+		if (x+dx) >= CANVAS_WIDTH || (x+dx) <= 0 {
+			xx = x - dx
+		} else {
+			xx = x + dx
+		}
+		if (y+dy) >= CANVAS_HEIGHT || (y+dy <= 0) {
+			yy = y - dy
+		} else {
+			yy = y + dy
+		}
+
+		node["x"] = xx
+		node["y"] = yy
+	}
 }
 
 func growGraph(nodes *[]interface{}, maxDepth int) {

@@ -218,14 +218,7 @@ export class Graph extends Model {
                             }
                         },
                     },
-                    force: {
-                        repulsion: 100,
-                        edgeLength: [30, 100],
-                        // @ts-ignores
-                        friction: 0.15
-                    },
                     type: "graph",
-                    layout: "force",
                     focusNodeAdjacency: true,
                     roam: true,
                     lineStyle: {
