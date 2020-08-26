@@ -255,8 +255,7 @@ func Search(keyword string) (ret []*Block) {
 			text := renderBlockText(n)
 			pos, marked := markSearch(text, keyword)
 			if -1 < pos {
-				block := buildBlock(n)
-				block.Content = marked
+				block := &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Type: n.Type.String(), Content: marked}
 				ret = append(ret, block)
 			}
 
