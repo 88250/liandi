@@ -84,11 +84,11 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 						"label": map[string]interface{}{
 							"show": true,
 						},
-						"emphasis": map[string]interface{}{
-							"label": map[string]interface{}{
-								"show": true,
-							},
-						},
+						//"emphasis": map[string]interface{}{
+						//	"label": map[string]interface{}{
+						//		"show": true,
+						//	},
+						//},
 					}
 
 					*forwardGeneration = append(*forwardGeneration, def)
@@ -122,11 +122,11 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 							"label": map[string]interface{}{
 								"show": true,
 							},
-							"emphasis": map[string]interface{}{
-								"label": map[string]interface{}{
-									"show": true,
-								},
-							},
+							//"emphasis": map[string]interface{}{
+							//	"label": map[string]interface{}{
+							//		"show": true,
+							//	},
+							//},
 						}
 
 						*backGeneration = append(*backGeneration, ref)
@@ -226,11 +226,11 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 			"label": map[string]interface{}{
 				"show": show,
 			},
-			"emphasis": map[string]interface{}{
-				"label": map[string]interface{}{
-					"show": true,
-				},
-			},
+			//"emphasis": map[string]interface{}{
+			//	"label": map[string]interface{}{
+			//		"show": true,
+			//	},
+			//},
 		}
 		checkBadNodes(nodes, node, links)
 		*nodes = append(*nodes, node)
