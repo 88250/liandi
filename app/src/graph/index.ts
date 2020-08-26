@@ -205,7 +205,7 @@ export class Graph extends Model {
                             color: "#ea4aaa"
                         },
                     }],
-                    draggable: true,
+                    draggable: false,
                     label: {
                         position: 'bottom',
                         color: labelColor,
