@@ -56,14 +56,6 @@ export const openFile = (url: string, filePath: string, id?: string) => {
         const element = hasClosestByAttribute(range.startContainer, "data-type", "wnd", true);
         if (element && window.liandi.centerLayout.element.contains(element)) {
             wnd = getInstanceById(element.getAttribute("data-id")) as Wnd;
-            const tab = wnd.children.find((item) => {
-                if (item.model instanceof Editor) {
-                    return true;
-                }
-            });
-            if (!tab) {
-                wnd = undefined;
-            }
         }
     }
     if (!wnd) {
