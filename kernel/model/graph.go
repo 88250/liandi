@@ -221,6 +221,7 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 			size = NodeRootSize
 		}
 		node["symbolSize"] = size
+		node["originalSize"] = size
 
 		checkBadNodes(nodes, node, links)
 		*nodes = append(*nodes, node)
