@@ -116,8 +116,12 @@ func (box *Box) Tree(path string) *parse.Tree {
 	return nil
 }
 
-func GetBlock(id string) (ret *Block) {
+func GetBlock(url, id string) (ret *Block) {
 	for _, tree := range trees {
+		if tree.URL != url {
+			continue
+		}
+
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			if !entering {
 				return ast.WalkContinue
@@ -207,8 +211,8 @@ func searchBlock0(tree *parse.Tree, keyword string, ret *[]*Block) {
 func isSearchBlockSkipNode(node *ast.Node) bool {
 	return "" == node.ID ||
 		ast.NodeText == node.Type || ast.NodeThematicBreak == node.Type ||
-		ast.NodeHTMLBlock == node.Type || ast.NodeInlineHTML == node.Type || ast.NodeCodeBlock == node.Type ||
-		ast.NodeMathBlock == node.Type || ast.NodeInlineMath == node.Type ||
+		ast.NodeHTMLBlock == node.Type || ast.NodeInlineHTML == node.Type ||
+		ast.NodeInlineMath == node.Type ||
 		ast.NodeCodeSpan == node.Type || ast.NodeHardBreak == node.Type || ast.NodeSoftBreak == node.Type ||
 		ast.NodeHTMLEntity == node.Type || ast.NodeYamlFrontMatter == node.Type
 }

@@ -18,7 +18,8 @@ type getblock struct {
 
 func (cmd *getblock) Exec() {
 	id := cmd.param["id"].(string)
-	block := model.GetBlock(id)
+	url := cmd.param["url"].(string)
+	block := model.GetBlock(url, id)
 	cmd.PushPayload.Data = map[string]interface{}{
 		"block":    block,
 		"id":       id,
