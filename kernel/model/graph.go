@@ -35,7 +35,7 @@ func TreeGraph(keyword string, url, p string, depth int) (nodes []interface{}, l
 	growGraph(&nodes, depth)
 	connectForwardlinks(&links)
 	connectBacklinks(&links)
-	markBugBlock(&nodes, &links)
+	markLinkedNodes(&nodes, &links)
 	return
 }
 
@@ -47,7 +47,7 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 	}
 	connectForwardlinks(&links)
 	connectBacklinks(&links)
-	markBugBlock(&nodes, &links)
+	markLinkedNodes(&nodes, &links)
 	return
 }
 
@@ -81,9 +81,7 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 						"url":      ref.Def.URL,
 						"path":     ref.Def.Path,
 						"content":  render.SubStr(ref.Def.Content, 32),
-						"label": map[string]interface{}{
-							"show": true,
-						},
+						"label":    map[string]interface{}{"show": true},
 					}
 
 					*forwardGeneration = append(*forwardGeneration, def)
@@ -114,9 +112,7 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 							"url":      ref.URL,
 							"path":     ref.Path,
 							"content":  render.SubStr(ref.Content, 32),
-							"label": map[string]interface{}{
-								"show": true,
-							},
+							"label":    map[string]interface{}{"show": true},
 						}
 
 						*backGeneration = append(*backGeneration, ref)
@@ -173,7 +169,6 @@ func connectBacklinks(links *[]interface{}) {
 const (
 	NodeCategoryRoot   = 0 // 根块
 	NodeCategoryChild  = 1 // 子块
-	NodeCategoryLinked = 2 // 关联块
 	NodeCategoryBug    = 3 // 问题块
 )
 
@@ -213,13 +208,9 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 			"url":      tree.URL,
 			"path":     tree.Path,
 			"content":  text,
-			"label": map[string]interface{}{
-				"show": show,
-			},
+			"label":    map[string]interface{}{"show": show},
 			"emphasis": map[string]interface{}{
-				"label": map[string]interface{}{
-					"show": true,
-				},
+				"label": map[string]interface{}{"show": true},
 			},
 		}
 		checkBadNodes(nodes, node, links)
@@ -232,7 +223,8 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 				"target": n.ID,
 				"symbol": "none",
 				"lineStyle": map[string]interface{}{
-					"type": "solid",
+					"type":  "solid",
+					"color": "#161719",
 				},
 			})
 		}
@@ -252,29 +244,25 @@ func checkBadNodes(nodes *[]interface{}, node interface{}, links *[]interface{})
 			currentNode["name"] = currentNode["name"].(string) + "-" + gulu.Rand.String(7)
 			currentNode["category"] = NodeCategoryBug
 			*links = append(*links, map[string]interface{}{
-				"source": existNode["name"],
-				"target": currentNode["name"],
-				"symbol": "none",
-				"lineStyle": map[string]interface{}{
-					"type": "dashed",
-				},
+				"source":    existNode["name"],
+				"target":    currentNode["name"],
+				"symbol":    "none",
+				"lineStyle": map[string]interface{}{"type": "dashed"},
 			})
 		}
 	}
 }
 
-func markBugBlock(nodes *[]interface{}, links *[]interface{}) {
+func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 	for _, node := range *nodes {
 		n := node.(map[string]interface{})
-		if 0 == n["category"] {
-			// 跳过根块
-			continue
-		}
+
 		for _, link := range *links {
 			l := link.(map[string]interface{})
 			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
-			if (l["source"] == n["name"] || l["target"] == n["name"]) && "dotted" == lineStyle {
-				n["category"] = NodeCategoryLinked
+			if (l["target"] == n["name"]) && "dotted" == lineStyle {
+				n["label"] = map[string]interface{}{"show": true}
+				l["lineStyle"].(map[string]interface{})["color"] = "#d23f31"
 			}
 		}
 	}
