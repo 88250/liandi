@@ -10,7 +10,7 @@ import {Files} from "../files";
 import {setPadding, setTypewriterPosition} from "../../vditore/src/ts/ui/initUI";
 import {newFile} from "../util/newFile";
 import {Constants} from "../constants";
-import {showMessage} from "../util/message";
+import {Outline} from "../outline";
 
 export const resizeTabs = () => {
     const models = getAllModels();
@@ -80,6 +80,11 @@ export const copyTab = (tab: Tab) => {
                 });
             } else if (tab.model instanceof Files) {
                 model = new Files(newTab);
+            } else if (tab.model instanceof Outline) {
+                model = new Outline({
+                    tab: newTab,
+                    contentElement: tab.panelElement.innerHTML
+                });
             }
             newTab.addModel(model);
         }

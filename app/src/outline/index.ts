@@ -9,9 +9,7 @@ export class Outline extends Model {
     private element: HTMLElement
 
     constructor(options: {
-        url: string,
-        path: string,
-        contentElement: HTMLElement,
+        contentElement: HTMLElement | string,
         tab: Tab
     }) {
         super({
@@ -57,7 +55,11 @@ export class Outline extends Model {
         this.render(options.contentElement)
     }
 
-    private render(contentElement: HTMLElement) {
+    private render(contentElement: HTMLElement | string) {
+        if (typeof contentElement === "string") {
+            this.element.innerHTML = contentElement;
+            return
+        }
         let tocHTML = ''
         Array.from(contentElement.children).forEach((item: HTMLElement, index) => {
             if (hasClosestByHeadings(item)) {
