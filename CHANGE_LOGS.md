@@ -1,3 +1,25 @@
+## v1.1.6 / 2020-08-26
+
+### 引入特性
+
+* [实现引力布局](https://github.com/88250/liandi/issues/179)
+
+### 改进功能
+
+* [创建文档快捷入口](https://github.com/88250/liandi/issues/140)
+* [关系图增加选中操作](https://github.com/88250/liandi/issues/149)
+* [编辑器改进](https://github.com/88250/liandi/issues/167)
+* [选中内容块后关系图上对应的节点高亮](https://github.com/88250/liandi/issues/168)
+* [优化全局搜索结果渲染](https://github.com/88250/liandi/issues/170)
+* [简化关系图去掉“关联块”](https://github.com/88250/liandi/issues/175)
+* [编辑器页签加入复制 ID](https://github.com/88250/liandi/issues/177)
+* [优化关系图视觉效果](https://github.com/88250/liandi/issues/178)
+
+### 修复缺陷
+
+* [数学块公式块不能展现和引用问题](https://github.com/88250/liandi/issues/165)
+* [图片首次加载渲染问题](https://github.com/88250/liandi/issues/169)
+
 ## v1.1.5 / 2020-08-25
 
 ### 引入特性
