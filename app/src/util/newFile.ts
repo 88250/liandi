@@ -8,8 +8,8 @@ import {showMessage} from "./message";
 
 export const newFile = (editor?: Editor, callback?: string) => {
     if (window.liandi.config.boxes.length === 0) {
-        showMessage(i18n[window.liandi.config.lang].newFileTip)
-        return
+        showMessage(i18n[window.liandi.config.lang].newFileTip);
+        return;
     }
 
     dialog({

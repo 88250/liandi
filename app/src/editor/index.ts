@@ -57,7 +57,7 @@ export class Editor extends Model {
             if (data) {
                 switch (data.cmd) {
                     case "get":
-                        this.parent.headElement.setAttribute("data-node-id", data.data.rootID)
+                        this.parent.headElement.setAttribute("data-node-id", data.data.rootID);
                         if (data.callback === Constants.CB_PUT_RELOAD) {
                             this.reloadHTML(data.data.content);
                             this.saved = true;
@@ -289,7 +289,7 @@ export class Editor extends Model {
                 this.saved = false;
                 this.parent.headElement.classList.add("item--unsave");
                 if (process.env.NODE_ENV === "development") {
-                    return
+                    return;
                 }
                 clearTimeout(inputTimeout);
                 inputTimeout = window.setTimeout(() => {
@@ -364,7 +364,7 @@ export class Editor extends Model {
             return;
         }
         if (data.callback === Constants.CB_GETBLOCK_EMBED) {
-            const blockVditorElement = this.vditore.vditor.ir.element.querySelector(`[data-block-def-id="${data.id}"]`) as HTMLElement
+            const blockVditorElement = this.vditore.vditor.ir.element.querySelector(`[data-block-def-id="${data.id}"]`) as HTMLElement;
             blockVditorElement.setAttribute("data-render", "1");
             blockVditorElement.innerHTML = data.block.content;
             mathRender(blockVditorElement, {

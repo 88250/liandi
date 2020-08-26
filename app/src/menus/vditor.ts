@@ -1,4 +1,4 @@
-import {remote, clipboard} from "electron";
+import {remote} from "electron";
 import {i18n} from "../i18n";
 import {copyBlockId} from "./commonMenuItem";
 

@@ -64,18 +64,18 @@ export const initEditorMenu = () => {
             });
             newWnd.addTab(tab);
 
-            newWnd.element.classList.remove("fn__flex-1")
-            newWnd.element.style.width = "200px"
-            newWnd.element.after(currentTab.parent.element)
-            newWnd.element.after(newWnd.element.previousElementSibling)
+            newWnd.element.classList.remove("fn__flex-1");
+            newWnd.element.style.width = "200px";
+            newWnd.element.after(currentTab.parent.element);
+            newWnd.element.after(newWnd.element.previousElementSibling);
             newWnd.parent.children.find((item, index) => {
                 if (item.id === newWnd.id) {
                     const temp = item;
                     newWnd.parent.children[index] = newWnd.parent.children[index - 1];
                     newWnd.parent.children[index - 1] = temp;
-                    return true
+                    return true;
                 }
-            })
+            });
         }
     }));
     return menu;
