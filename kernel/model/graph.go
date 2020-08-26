@@ -170,6 +170,9 @@ const (
 	NodeCategoryRoot  = 0 // 根块
 	NodeCategoryChild = 1 // 子块
 	NodeCategoryBug   = 3 // 问题块
+
+	NodeRootSize  = 18 // 根块大小
+	NodeChildSize = 12 // 子块大小
 )
 
 func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
@@ -213,9 +216,9 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 				"label": map[string]interface{}{"show": true},
 			},
 		}
-		size := 12
+		size := NodeChildSize
 		if isRoot {
-			size = 18
+			size = NodeRootSize
 		}
 		node["symbolSize"] = size
 
@@ -267,11 +270,16 @@ func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
 			if (l["target"] == n["name"]) && "dotted" == lineStyle {
 				n["label"] = map[string]interface{}{"show": true}
-				size := 12
-				if s := n["symbolSize"]; nil != s {
-					size = s.(int)
+				size := NodeChildSize
+				if NodeCategoryRoot == n["category"].(int) {
+					size = NodeRootSize
+				} else {
+					if s := n["symbolSize"]; nil != s {
+						size = s.(int)
+					}
+					size += 2
 				}
-				n["symbolSize"] = size + 2
+				n["symbolSize"] = size
 				l["lineStyle"].(map[string]interface{})["color"] = "#d23f31"
 			}
 		}
