@@ -85,7 +85,8 @@ func buildBlockRefInText(trees []*parse.Tree) {
 				return ast.WalkContinue
 			}
 
-			t := parse.Parse("", n.Tokens, Lute.Options)
+			lute := NewLute()
+			t := parse.Parse("", n.Tokens, lute.Options)
 			var children []*ast.Node
 			for c := t.Root.FirstChild.FirstChild; nil != c; c = c.Next {
 				children = append(children, c)

@@ -7,7 +7,7 @@ import {initConfigSearch} from "../config/search";
 import {markdown} from "../config/markdown";
 import {image} from "../config/image";
 import {escapeHtml} from "../util/escape";
-import {openFile} from "../editor/util";
+import {getIconByType, openFile} from "../editor/util";
 
 export const initSearch = (type = "search") => {
     const liandi = window.liandi;
@@ -142,7 +142,7 @@ export const onSearch = (data: IBlock[]) => {
     let resultHTML = "";
     data.forEach((item, index) => {
         resultHTML += `<div class="list__item fn__flex${index === 0 ? " list__item--current" : ""}" data-url="${encodeURIComponent(JSON.stringify(item.url))}" data-path="${encodeURIComponent(item.path)}" data-id="${item.id}">
-<svg class="fn__flex-shrink0"><use xlink:href="#${item.type === "title" ? "iconMD" : "iconParagraph"}"></use></svg><span class="fn__flex-1 fn__ellipsis">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span>
+<svg class="fn__flex-shrink0"><use xlink:href="#${getIconByType(item.type)}"></use></svg><span class="fn__flex-1 fn__ellipsis">${escapeHtml(item.content).replace("&lt;mark", "<mark").replace("&lt;/mark", "</mark")}</span>
 <span class="fn__space"></span>
 <span class="ft__smaller ft__secondary">${escapeHtml(item.path)}</span>
 </div>`;

@@ -33,7 +33,8 @@ func renderBlockText(node *ast.Node) (ret string) {
 
 func renderBlockHTML(node *ast.Node) string {
 	root := &ast.Node{Type: ast.NodeDocument}
-	tree := &parse.Tree{Root: root, Context: &parse.Context{Option: Lute.Options}}
+	lute := NewLute()
+	tree := &parse.Tree{Root: root, Context: &parse.Context{Option: lute.Options}}
 	renderer := render.NewHtmlRenderer(tree)
 	ast.Walk(node, func(n *ast.Node, entering bool) ast.WalkStatus {
 		rendererFunc := renderer.RendererFuncs[n.Type]

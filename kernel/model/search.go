@@ -78,7 +78,8 @@ func (box *Box) RemoveTree(path string) {
 }
 
 func (box *Box) ParseIndexTree(p, markdown string) (ret *parse.Tree) {
-	ret = parse.Parse("", util.StrToBytes(markdown), Lute.Options)
+	lute := NewLute()
+	ret = parse.Parse("", util.StrToBytes(markdown), lute.Options)
 	ret.URL = box.URL
 	ret.Path = p[:len(p)-len(path.Ext(p))]
 	ret.Name = path.Base(ret.Path)
@@ -183,7 +184,7 @@ func searchBlock0(tree *parse.Tree, keyword string, ret *[]*Block) {
 		}
 
 		if isSearchBlockSkipNode(n) {
-			return ast.WalkContinue
+			return ast.WalkStop
 		}
 
 		text := renderBlockText(n)
@@ -231,7 +232,7 @@ func Search(keyword string) (ret []*Block) {
 				Path:    tree.Path,
 				ID:      tree.Root.ID,
 				Content: marked,
-				Type:    "title",
+				Type:    ast.NodeDocument.String(),
 			})
 		}
 	}
@@ -254,13 +255,9 @@ func Search(keyword string) (ret []*Block) {
 			text := renderBlockText(n)
 			pos, marked := markSearch(text, keyword)
 			if -1 < pos {
-				ret = append(ret, &Block{
-					URL:     tree.URL,
-					Path:    tree.Path,
-					ID:      n.ID,
-					Content: marked,
-					Type:    "content",
-				})
+				block := buildBlock(n)
+				block.Content = marked
+				ret = append(ret, block)
 			}
 
 			if 16 <= len(ret) {
