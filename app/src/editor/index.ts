@@ -277,6 +277,9 @@ export class Editor extends Model {
             input: (content: string) => {
                 this.saved = false;
                 this.parent.headElement.classList.add("item--unsave");
+                if (process.env.NODE_ENV === "development") {
+                    return
+                }
                 clearTimeout(inputTimeout);
                 inputTimeout = window.setTimeout(() => {
                     if (this.saved) {
