@@ -7,6 +7,7 @@
 ### 改进功能
 
 * [创建文档快捷入口](https://github.com/88250/liandi/issues/140)
+* [大纲独立页签](https://github.com/88250/liandi/issues/146)
 * [关系图增加选中操作](https://github.com/88250/liandi/issues/149)
 * [编辑器改进](https://github.com/88250/liandi/issues/167)
 * [选中内容块后关系图上对应的节点高亮](https://github.com/88250/liandi/issues/168)
