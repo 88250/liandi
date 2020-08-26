@@ -94,19 +94,20 @@ func Ls(url, path string) (ret []*File, err error) {
 	return
 }
 
-func Get(url, p string) (dom string, err error) {
+func Get(url, p string) (dom, treeID string, err error) {
 	box := Conf.Box(url)
 	if nil == box {
-		return "", errors.New(Conf.lang(0))
+		return "", "", errors.New(Conf.lang(0))
 	}
 
 	tree := box.Tree(p)
 	if nil == tree {
-		return "", errors.New(Conf.lang(13))
+		return "", "", errors.New(Conf.lang(13))
 	}
 
 	lute := NewLute()
 	dom = lute.Tree2VditorIRBlockDOM(tree, false)
+	treeID = tree.ID
 	return
 }
 

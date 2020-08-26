@@ -26,7 +26,7 @@ func (cmd *get) Exec() {
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
 	id := cmd.param["id"].(string)
-	content, err := model.Get(url, p)
+	content, rootID, err := model.Get(url, p)
 	if nil != err {
 		ret.Code = -1
 		ret.Msg = err.Error()
@@ -37,6 +37,7 @@ func (cmd *get) Exec() {
 			"url":     url,
 			"path":    p,
 			"id":      id,
+			"rootID":  rootID,
 		}
 	}
 	cmd.Push()
