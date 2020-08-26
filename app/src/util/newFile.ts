@@ -7,6 +7,11 @@ import {Constants} from "../constants";
 import {showMessage} from "./message";
 
 export const newFile = (editor?: Editor, callback?: string) => {
+    if (window.liandi.config.boxes.length === 0) {
+        showMessage(i18n[window.liandi.config.lang].newFileTip)
+        return
+    }
+
     dialog({
         title: i18n[window.liandi.config.lang].newFile,
         content: `<input class="input" value="">
@@ -37,10 +42,6 @@ export const newFile = (editor?: Editor, callback?: string) => {
             return;
         }
         if (callback === Constants.CB_CREATE_HOTKEY) {
-            if (window.liandi.config.boxes.length === 0) {
-                showMessage(i18n[window.liandi.config.lang].newFileTip)
-                return
-            }
             const currentNewPath = path.posix.join("/", name);
             window.liandi.ws.send("create", {
                 url: window.liandi.config.boxes[0].url,

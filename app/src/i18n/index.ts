@@ -1,6 +1,6 @@
 export const i18n: II18n = {
     en_US: {
-        newFileTip: "Please open folder first",
+        newFileTip: "Please open a notebook first",
         copyId:"Copy Block ID",
         linkLevelTip: "Depth should between [1,16]",
         linkLevel: "Depth",
@@ -30,7 +30,7 @@ export const i18n: II18n = {
         confirm: "Confirm",
         confirmDelete: "Delete",
         back: "Back",
-        mount: "Open local folder",
+        mount: "Open local notebook",
         mountWebDAV: "Connect to WebDAV",
         fileNameRule: 'Not Allow \\/:*?"<>|',
         slogan: "LianDi, connect every bit",
@@ -276,7 +276,7 @@ export const i18n: II18n = {
         "wysiwyg": "위지위그",
     },
     zh_CN: {
-        newFileTip: "你还没有打开文件夹，请先打开文件夹",
+        newFileTip: "请先打开一个笔记本",
         copyId:"复制块 ID",
         linkLevelTip: "层级区间 [1,16]",
         linkLevel: "层级",
@@ -306,7 +306,7 @@ export const i18n: II18n = {
         confirm: "确定",
         confirmDelete: "确定删除",
         back: "返回上一层",
-        mount: "打开文件夹",
+        mount: "打开本地笔记本",
         mountWebDAV: "连接 WebDAV",
         fileNameRule: '不能包含 \\/:*?"<>| 字符',
         slogan: "链滴笔记，连接点滴",
