@@ -165,9 +165,6 @@ export class Graph extends Model {
                 }, {
                     name: i18n[window.liandi.config.lang].normalBlock,
                     icon: "circle"
-                }, {
-                    name: i18n[window.liandi.config.lang].relativeBlock,
-                    icon: "circle"
                 }],
                 top: 20,
                 right: 20,
@@ -210,13 +207,8 @@ export class Graph extends Model {
                         itemStyle: {
                             color: "#7c828b"
                         },
-                    }, {
-                        name: i18n[window.liandi.config.lang].relativeBlock,
-                        itemStyle: {
-                            color: "#d23f31"
-                        },
-                    }, {
-                        name: "bug",
+                    },  {
+                        name: "Bug",
                         itemStyle: {
                             color: "#ea4aaa"
                         },
