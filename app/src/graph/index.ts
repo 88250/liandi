@@ -116,7 +116,7 @@ export class Graph extends Model {
             if (item.name === id) {
                 item.symbolSize = 30
             } else {
-                item.symbolSize = undefined
+                item.symbolSize = item.originalSize
             }
         })
         this.onGraph({nodes: this.nodes, links: this.links})
