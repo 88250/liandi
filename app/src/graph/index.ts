@@ -88,7 +88,7 @@ export class Graph extends Model {
             this.levelInputElement.addEventListener("input", (event: InputEvent & { target: HTMLInputElement }) => {
                 const value = parseInt(event.target.value, 10);
                 if (value < 0 || value > 16) {
-                    event.target.value = "3";
+                    event.target.value = "1";
                     showMessage(i18n[window.liandi.config.lang].linkLevelTip);
                 }
                 this.searchGraph();
