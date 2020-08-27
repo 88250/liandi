@@ -20,6 +20,8 @@ import (
 )
 
 func convertWikiLinks(trees []*parse.Tree) {
+	defer Recover()
+
 	for _, tree := range trees {
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			if !entering || ast.NodeText != n.Type {
@@ -88,8 +90,13 @@ func buildBlockRefInText(trees []*parse.Tree) {
 			lute := NewLute()
 			t := parse.Parse("", n.Tokens, lute.Options)
 			var children []*ast.Node
-			for c := t.Root.FirstChild.FirstChild; nil != c; c = c.Next {
-				children = append(children, c)
+			if nil != t.Root.FirstChild {
+				for c := t.Root.FirstChild.FirstChild; nil != c; c = c.Next {
+					children = append(children, c)
+				}
+			} else {
+				// 空白的文本节点
+				children = append(children, &ast.Node{Type: n.Type, Tokens: n.Tokens})
 			}
 			for _, c := range children {
 				n.InsertBefore(c)
