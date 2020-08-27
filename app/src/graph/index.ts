@@ -181,7 +181,7 @@ export class Graph extends Model {
 
         const link = svg.append("g")
             .attr("stroke-opacity", 0.36)
-            .attr('marker-start', 'url(#triangle)')
+            .attr('marker-end', 'url(#triangle)')
             .attr("stroke-width", 1)
             .selectAll("line")
             .data(linksData)
