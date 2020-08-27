@@ -9,7 +9,7 @@ import {openFile} from "../editor/util";
 import {showMessage} from "../util/message";
 import {getAllModels} from "../layout/util";
 import {bgFade} from "../util/bgFade";
-import * as d3 from "d3-force"
+import * as d3 from "d3-force";
 
 export class Graph extends Model {
     public inputElement: HTMLInputElement;
@@ -125,7 +125,7 @@ export class Graph extends Model {
     }
 
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
-        d3.forceSimulation(nodes)
+        // d3.forceSimulation(nodes);
 //         if (!this.chart) {
 //             this.chart = echarts.init(this.graphElement);
 //             this.chart.on("dblclick", (params: IEchartsFormatter) => {
