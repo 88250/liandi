@@ -213,6 +213,7 @@ export class Graph extends Model {
         node.append("text")
             .attr("x", -10)
             .attr("y", 16)
+            .attr("font-size", 12)
             .text(d => path.posix.basename(d.path))
 
         node.on('mouseover', function (d) {
@@ -275,15 +276,13 @@ export class Graph extends Model {
             })).on("dblclick.zoom", null);
 
         simulation.on("tick", () => {
-            link
-                .attr("x1", d => d.source.x)
+            link.attr("x1", d => d.source.x)
                 .attr("y1", d => d.source.y)
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
-            node.attr("transform", d => `translate(${d.x},${d.y})`);
-            // node
-            //     .attr("cx", d => d.x)
-            //     .attr("cy", d => d.y);
+            // node.attr("transform", d => `translate(${d.x},${d.y})`);
+            node.attr("cx", d => d.x)
+                .attr("cy", d => d.y);
         });
 
         // invalidation.then(() => simulation.stop());
