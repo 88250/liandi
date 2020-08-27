@@ -270,8 +270,10 @@ export class Graph extends Model {
         svg.call(d3.zoom()
             .extent([[0, 0], [width, height]])
             .scaleExtent([1, 8])
-            .on("zoom", (event: any, d: any) => {
-                node.attr("transform", event.transform);
+            .on("zoom", (event: any) => {
+                node.attr("transform", (item) => {
+                    return event.transform.translate(item.x, item.y)
+                });
                 link.attr("transform", event.transform);
             })).on("dblclick.zoom", null);
 
@@ -280,9 +282,10 @@ export class Graph extends Model {
                 .attr("y1", d => d.source.y)
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
-            // node.attr("transform", d => `translate(${d.x},${d.y})`);
-            node.attr("cx", d => d.x)
-                .attr("cy", d => d.y);
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+            // node
+            //     .attr("cx", d => d.x)
+            //     .attr("cy", d => d.y);
         });
 
         // invalidation.then(() => simulation.stop());
