@@ -129,6 +129,7 @@ func connectForwardlinks(links *[]interface{}) {
 		*links = append(*links, map[string]interface{}{
 			"source": ref.ID,
 			"target": ref.Def.ID,
+			"ref":    true,
 		})
 	}
 }
@@ -139,6 +140,7 @@ func connectBacklinks(links *[]interface{}) {
 			*links = append(*links, map[string]interface{}{
 				"source": ref.ID,
 				"target": def.ID,
+				"ref":    true,
 			})
 		}
 	}
@@ -187,6 +189,7 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 			*links = append(*links, map[string]interface{}{
 				"source": tree.ID,
 				"target": n.ID,
+				"ref":    false,
 			})
 		}
 
@@ -226,7 +229,6 @@ func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 				size += 1
 				n["symbolSize"] = size
 				targetFound = true
-				l["ref"] = true
 			} else if l["source"] == n["id"] {
 				sourceFound = true
 			}
