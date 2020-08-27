@@ -38,6 +38,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@types/d3-force": "^1.2.1",
     "@types/diff-match-patch": "^1.0.32",
     "@types/echarts": "^4.6.4",
     "@typescript-eslint/eslint-plugin": "^3.8.0",
@@ -60,6 +61,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
+    "d3-force": "^2.1.1",
     "diff-match-patch": "^1.0.5",
     "echarts": "^4.8.0"
   }
