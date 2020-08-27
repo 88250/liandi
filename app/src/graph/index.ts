@@ -1,5 +1,4 @@
 import * as echarts from "echarts";
-import * as path from "path";
 import {i18n} from "../i18n";
 import {escapeHtml} from "../util/escape";
 import {Model} from "../layout/Model";
@@ -156,22 +155,6 @@ export class Graph extends Model {
         const labelColor = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e";
         const labelLightColor = window.liandi.config.theme === "dark" ? "#959da5" : "#6a737d";
         this.chart.setOption({
-            legend: {
-                data: [{
-                    name: i18n[window.liandi.config.lang].rootBlock,
-                    icon: "circle",
-                }, {
-                    name: i18n[window.liandi.config.lang].normalBlock,
-                    icon: "circle"
-                }],
-                top: 20,
-                right: 20,
-                orient: "vertical",
-                textStyle: {
-                    color: labelColor,
-                },
-                inactiveColor: labelLightColor,
-            },
             tooltip: {
                 textStyle: {
                     color: "#d1d5da",
@@ -182,7 +165,7 @@ export class Graph extends Model {
                     if (params.dataType === "edge") {
                         return `<div style="font-size: 10px;line-height: 12px">${params.data.lineStyle.type === "dotted" ? i18n[window.liandi.config.lang].relativeRelation : i18n[window.liandi.config.lang].parentRelation}</div>`;
                     } else {
-                        return `<div style="font-size: 12px;line-height: 14px; word-break: break-all;width: 220px;white-space: normal;">${params.data.category === 3 ? "This is a bug block, please go to https://github.com/88250/window.liandi/issues/new for feedback" : escapeHtml(params.data.content)}</div>
+                        return `<div style="font-size: 12px;line-height: 14px; word-break: break-all;width: 220px;white-space: normal;">${params.data.category === 1 ? "This is a bug block, please go to https://github.com/88250/window.liandi/issues/new for feedback" : escapeHtml(params.data.content)}</div>
 <div style="font-size: 10px;color:#959da5;line-height: 12px">${params.data.name}</div>`;
                     }
                 },
@@ -190,16 +173,11 @@ export class Graph extends Model {
             series: [
                 {
                     categories: [{
-                        name: i18n[window.liandi.config.lang].rootBlock,
+                        name: "Block",
                         itemStyle: {
                             color: labelColor
                         },
-                    }, {
-                        name: i18n[window.liandi.config.lang].normalBlock,
-                        itemStyle: {
-                            color: labelLightColor
-                        },
-                    }, {
+                    },{
                         name: "Bug",
                         itemStyle: {
                             color: "#ea4aaa"
@@ -211,11 +189,7 @@ export class Graph extends Model {
                         color: labelColor,
                         fontSize: 10,
                         formatter: (params: IEchartsFormatter) => {
-                            if (params.data.category === 0) {
-                                return path.posix.basename(params.data.path);
-                            } else {
-                                return params.data.content.substr(0, 8);
-                            }
+                            return params.data.content.substr(0, 8);
                         },
                     },
                     type: "graph",

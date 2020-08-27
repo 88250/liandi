@@ -56,6 +56,8 @@ func Graph(keyword string) (nodes []interface{}, links []interface{}) {
 }
 
 func initNodes(nodes *[]interface{}) {
+	mDxMap, mDyMap = map[string]float64{}, map[string]float64{}
+	mNodeMap = map[string]map[string]interface{}{}
 	centerX := CANVAS_WIDTH * .5
 	centerY := CANVAS_HEIGHT * .5
 	k = math.Sqrt(CANVAS_WIDTH * CANVAS_HEIGHT / float64(len(*nodes)))
@@ -78,9 +80,9 @@ func collide(nodes *[]interface{}, links *[]interface{}) {
 }
 
 var (
-	CANVAS_WIDTH, CANVAS_HEIGHT = 1000.0, 1000.0
-	mDxMap, mDyMap              = map[string]float64{}, map[string]float64{}
-	mNodeMap                    = map[string]map[string]interface{}{}
+	CANVAS_WIDTH, CANVAS_HEIGHT = 1024.0, 1024.0
+	mDxMap, mDyMap              map[string]float64
+	mNodeMap                    map[string]map[string]interface{}
 	k                           float64
 )
 
@@ -196,14 +198,9 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 						continue
 					}
 
-					category := NodeCategoryChild
-					if ast.NodeDocument.String() == ref.Def.Type {
-						category = NodeCategoryRoot
-					}
-
 					def := map[string]interface{}{
 						"name":     ref.Def.ID,
-						"category": category,
+						"category": 0,
 						"url":      ref.Def.URL,
 						"path":     ref.Def.Path,
 						"content":  render.SubStr(ref.Def.Content, 32),
@@ -227,14 +224,9 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 							continue
 						}
 
-						category := NodeCategoryChild
-						if ast.NodeDocument.String() == ref.Type {
-							category = NodeCategoryRoot
-						}
-
 						ref := map[string]interface{}{
 							"name":     ref.ID,
-							"category": category,
+							"category": 0,
 							"url":      ref.URL,
 							"path":     ref.Path,
 							"content":  render.SubStr(ref.Content, 32),
@@ -293,12 +285,9 @@ func connectBacklinks(links *[]interface{}) {
 }
 
 const (
-	NodeCategoryRoot  = 0 // 根块
-	NodeCategoryChild = 1 // 子块
-	NodeCategoryBug   = 3 // 问题块
+	NodeCategoryBug = 1 // 问题块
 
-	NodeRootSize  = 18 // 根块大小
-	NodeChildSize = 12 // 子块大小
+	NodeSize = 6 // 节点默认大小
 )
 
 func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
@@ -324,16 +313,14 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 		text = render.SubStr(text, 32)
 
 		isRoot := ast.NodeDocument == n.Type
-		value := NodeCategoryRoot
 		show := true
 		if !isRoot {
-			value = NodeCategoryChild
 			show = false
 		}
 
 		node := map[string]interface{}{
 			"name":     n.ID,
-			"category": value,
+			"category": 0,
 			"url":      tree.URL,
 			"path":     tree.Path,
 			"content":  text,
@@ -342,10 +329,7 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 				"label": map[string]interface{}{"show": true},
 			},
 		}
-		size := NodeChildSize
-		if isRoot {
-			size = NodeRootSize
-		}
+		size := NodeSize
 		node["symbolSize"] = size
 		node["originalSize"] = size
 
@@ -397,15 +381,11 @@ func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
 			if (l["target"] == n["name"]) && "dotted" == lineStyle {
 				n["label"] = map[string]interface{}{"show": true}
-				size := NodeChildSize
-				if NodeCategoryRoot == n["category"].(int) {
-					size = NodeRootSize
-				} else {
-					if s := n["symbolSize"]; nil != s {
-						size = s.(int)
-					}
-					size += 2
+				size := NodeSize
+				if s := n["symbolSize"]; nil != s {
+					size = s.(int)
 				}
+				size += 1
 				n["symbolSize"] = size
 				l["lineStyle"].(map[string]interface{})["color"] = "#d23f31"
 			}
