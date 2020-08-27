@@ -373,8 +373,8 @@ export class Editor extends Model {
             });
             mermaidRender(blockVditorElement, ".language-mermaid", this.vditore.vditor.options.cdn);
             graphvizRender(blockVditorElement, this.vditore.vditor.options.cdn);
-            chartRender(blockVditorElement);
-            mindmapRender(blockVditorElement);
+            chartRender(blockVditorElement, this.vditore.vditor.options.cdn);
+            mindmapRender(blockVditorElement, this.vditore.vditor.options.cdn);
             abcRender(blockVditorElement, this.vditore.vditor.options.cdn);
             mediaRender(blockVditorElement);
             scrollCenter(this.vditore.vditor);
@@ -390,8 +390,8 @@ export class Editor extends Model {
         });
         mermaidRender(this.blockTipElement, ".language-mermaid", this.vditore.vditor.options.cdn);
         graphvizRender(this.blockTipElement, this.vditore.vditor.options.cdn);
-        chartRender(this.blockTipElement);
-        mindmapRender(this.blockTipElement);
+        chartRender(this.blockTipElement, this.vditore.vditor.options.cdn);
+        mindmapRender(this.blockTipElement, this.vditore.vditor.options.cdn);
         abcRender(this.blockTipElement, this.vditore.vditor.options.cdn);
         mediaRender(this.blockTipElement);
         const top = elementRect.top - parentRect.top + elementRect.height + 5;

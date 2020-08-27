@@ -97,25 +97,6 @@ declare interface IBox {
     user?: string;
 }
 
-declare interface IEchartsFormatter {
-    dataType: string
-    name: string
-    data: {
-        name: string
-        category: number
-        path: string
-        content: string
-        lineStyle: {
-            type: string
-        }
-        symbolSize: number
-        label: {
-            show: boolean
-        }
-        url: string
-    }
-}
-
 declare interface IMenuData {
     target?: HTMLElement
     path?: string
