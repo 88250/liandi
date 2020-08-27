@@ -107,7 +107,13 @@ export class Graph extends Model {
     }
 
     public resize() {
-
+        if (!this.graphElement.firstElementChild) {
+            return
+        }
+        const width = this.graphElement.clientWidth
+        const height = this.graphElement.clientHeight
+        this.graphElement.firstElementChild.setAttribute("viewBox", `-${width / 2} , -${height / 2} , ${width}, ${height}`)
+        this.graphElement.firstElementChild.setAttribute("style", `width: ${width}px; height:${height}px`)
     }
 
     public hlNode(id: string) {
@@ -122,10 +128,16 @@ export class Graph extends Model {
     }
 
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
-        const links = data.links.map(d => Object.create(d));
-        const nodes = data.nodes.map(d => Object.create(d));
-        const simulation = d3.forceSimulation(nodes)
-            .force("link", d3.forceLink(links).id((d) => {
+        const color = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e";
+        const lightColor = window.liandi.config.theme === "dark" ? "#959da5" : "#6a737d";
+        const hlColor = "#f3a92f";
+        const width = this.graphElement.clientWidth
+        const height = this.graphElement.clientHeight
+        const linksData = data.links.map(d => Object.create(d));
+        const nodesData = data.nodes.map(d => Object.create(d));
+
+        const simulation = d3.forceSimulation(nodesData)
+            .force("link", d3.forceLink(linksData).id((d) => {
                 // @ts-ignore
                 return d.id
             }))
@@ -134,9 +146,23 @@ export class Graph extends Model {
             .force("x", d3.forceX())
             .force("y", d3.forceY())
             .force("center", d3.forceCenter());
-
-        const width = this.graphElement.clientWidth
-        const height = this.graphElement.clientHeight
+        const drag = (simulation: any) => {
+            return d3.drag()
+                .on("start", (event: any, d: any) => {
+                    if (!event.active) simulation.alphaTarget(0.3).restart();
+                    d.fx = d.x;
+                    d.fy = d.y;
+                })
+                .on("drag", (event: any, d: any) => {
+                    d.fx = event.x;
+                    d.fy = event.y;
+                })
+                .on("end", (event: any, d: any) => {
+                    if (!event.active) simulation.alphaTarget(0);
+                    d.fx = null;
+                    d.fy = null;
+                });
+        }
 
         const svg = d3.create("svg")
             // @ts-ignore
@@ -144,46 +170,38 @@ export class Graph extends Model {
             .attr("style", 'width: ' + width + 'px; height: ' + height + 'px;')
 
         const link = svg.append("g")
-            .attr("stroke", "#999")
-            .attr("stroke-opacity", 0.6)
+            .attr("stroke", lightColor)
+            .attr("stroke-opacity", 0.36)
             .selectAll("line")
-            .data(links)
+            .data(linksData)
             .join("line")
-            .attr("stroke-width", d => 1);
+            .attr("stroke-width", 1);
 
         const node = svg.append("g")
-            .attr("stroke", "#fff")
-            .attr("stroke-width", 1.5)
+            // .attr("stroke", "#fff")
+            // .attr("stroke-width", 1.5)
             .selectAll("circle")
-            .data(nodes)
+            .data(nodesData)
             .join("circle")
-            .attr("r", 5)
+            .attr("r", d => d.symbolSize)
             // @ts-ignore
-            .attr("fill", (d) => {
-                const scale = d3.scaleOrdinal(d3.schemeCategory10);
-                // @ts-ignore
-                return d => scale(d.group);
-            })
-            .call((simulation: any) => {
-                return d3.drag()
-                    .on("start", (event: any, d: any) => {
-                        if (!event.active) simulation.alphaTarget(0.3).restart();
-                        d.fx = d.x;
-                        d.fy = d.y;
-                    })
-                    .on("drag", (event: any, d: any) => {
-                        d.fx = event.x;
-                        d.fy = event.y;
-                    })
-                    .on("end", (event: any, d: any) => {
-                        if (!event.active) simulation.alphaTarget(0);
-                        d.fx = null;
-                        d.fy = null;
-                    });
-            });
+            .attr("fill", lightColor)
+            .call(drag(simulation));
 
         node.append("title")
             .text(d => d.id);
+
+        node.on('mouseover', function (d) {
+            d3.select(this).style('fill', hlColor)
+            link.style('stroke', function (l) {
+                return l.source === d.target.__data__ || l.target === d.target.__data__ ? hlColor : lightColor;
+            }).style('stroke-width', function (l) {
+                return l.source === d.target.__data__ || l.target === d.target.__data__ ? 3 : 1;
+            })
+        }).on('mouseout', function (d) {
+            node.style('fill', color)
+            link.style('stroke', lightColor).style('stroke-width', '1')
+        })
 
         svg.call(d3.zoom()
             .extent([[0, 0], [width, height]])
