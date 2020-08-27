@@ -75,6 +75,7 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 						"url":        ref.Def.URL,
 						"path":       ref.Def.Path,
 						"symbolSize": NodeSize,
+						"type":       ref.Def.Type,
 					}
 
 					*forwardGeneration = append(*forwardGeneration, def)
@@ -99,6 +100,7 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 							"url":        ref.URL,
 							"path":       ref.Path,
 							"symbolSize": NodeSize,
+							"type":       ref.Type,
 						}
 
 						*backGeneration = append(*backGeneration, ref)
@@ -179,6 +181,7 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 			"url":     tree.URL,
 			"path":    tree.Path,
 			"content": text,
+			"type":    n.Type.String(),
 		}
 		size := NodeSize
 		node["symbolSize"] = size
