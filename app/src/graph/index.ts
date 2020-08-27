@@ -4,6 +4,9 @@ import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
 import {showMessage} from "../util/message";
 import * as d3 from "d3";
+import {openFile} from "../editor/util";
+import {getAllModels} from "../layout/util";
+import {bgFade} from "../util/bgFade";
 
 export class Graph extends Model {
     public inputElement: HTMLInputElement;
@@ -237,6 +240,28 @@ export class Graph extends Model {
                 }
                 return lightColor
             })
+        }).on('dblclick', (item) => {
+            openFile(item.target.__data__.url, item.target.__data__.path, item.target.__data__.type === "NodeDocument" ? undefined : item.target.__data__.id);
+        }).on('click', (clickItem) => {
+            node.attr("r", (d) => {
+                return d.symbolSize
+            })
+            getAllModels().editor.find((item) => {
+                if (item.url === clickItem.target.__data__.url && item.path === clickItem.target.__data__.path &&
+                    !item.element.classList.contains("fn__none")) {
+                    const vditorElement = item.vditore.vditor.ir.element;
+                    const nodeElement = vditorElement.querySelector(`[data-node-id="${clickItem.target.__data__.id}"]`) as HTMLElement;
+                    if (nodeElement && nodeElement.getClientRects().length > 0) {
+                        bgFade(nodeElement);
+                        vditorElement.scrollTop = nodeElement.offsetTop - vditorElement.clientHeight / 2;
+                        d3.select(clickItem.target).attr("r", clickItem.target.__data__.symbolSize * 3)
+                        setTimeout(() => {
+                            d3.select(clickItem.target).attr("r", clickItem.target.__data__.symbolSize)
+                        }, 3000)
+                    }
+                    return true;
+                }
+            });
         })
 
         svg.call(d3.zoom()
@@ -245,7 +270,7 @@ export class Graph extends Model {
             .on("zoom", (event: any, d: any) => {
                 node.attr("transform", event.transform);
                 link.attr("transform", event.transform);
-            }));
+            })).on("dblclick.zoom", null);
 
         simulation.on("tick", () => {
             link
