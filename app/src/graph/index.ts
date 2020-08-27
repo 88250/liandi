@@ -1,4 +1,4 @@
-import * as echarts from "echarts";
+// import * as echarts from "echarts";
 import * as path from "path";
 import {i18n} from "../i18n";
 import {escapeHtml} from "../util/escape";
@@ -9,7 +9,7 @@ import {openFile} from "../editor/util";
 import {showMessage} from "../util/message";
 import {getAllModels} from "../layout/util";
 import {bgFade} from "../util/bgFade";
-import * as d3 from "d3-force";
+import * as d3 from "d3";
 
 export class Graph extends Model {
     public inputElement: HTMLInputElement;
@@ -125,7 +125,56 @@ export class Graph extends Model {
     }
 
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
-        // d3.forceSimulation(nodes);
+        const links = data.links.map(d => Object.create(d));
+        const nodes = data.nodes.map(d => Object.create(d));
+
+        const simulation = d3.forceSimulation(nodes)
+            // @ts-ignore
+            .force("link", d3.forceLink(links).id(d => d.id))
+            .force("charge", d3.forceManyBody())
+            .force("x", d3.forceX())
+            .force("y", d3.forceY());
+
+        const svg = d3.create("svg")
+            // @ts-ignore
+            .attr("viewBox", [-500 / 2, -500 / 2, 500, 500]);
+
+        const link = svg.append("g")
+            .attr("stroke", "#999")
+            .attr("stroke-opacity", 0.6)
+            .selectAll("line")
+            .data(links)
+            .join("line")
+            .attr("stroke-width", d => Math.sqrt(d.value));
+
+        const node = svg.append("g")
+            .attr("stroke", "#fff")
+            .attr("stroke-width", 1.5)
+            .selectAll("circle")
+            .data(nodes)
+            .join("circle")
+            .attr("r", 5)
+        // .attr("fill", color)
+        // .call(drag(simulation));
+
+        node.append("title")
+            .text(d => d.id);
+
+        simulation.on("tick", () => {
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+        });
+
+        // invalidation.then(() => simulation.stop());
+        this.graphElement.append(svg.node())
+
 //         if (!this.chart) {
 //             this.chart = echarts.init(this.graphElement);
 //             this.chart.on("dblclick", (params: IEchartsFormatter) => {
