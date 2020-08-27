@@ -47,7 +47,7 @@ export const openFile = (url: string, filePath: string, id?: string) => {
         if (item.url === url && item.path == filePath) {
             item.parent.parent.switchTab(item.parent.headElement);
             if (id) {
-                const vditorElement = item.vditore.vditor.ir.element
+                const vditorElement = item.vditore.vditor.ir.element;
                 const nodeElement = vditorElement.querySelector(`[data-node-id="${id}"]`) as HTMLElement;
                 if (nodeElement) {
                     const range = getEditorRange(vditorElement);

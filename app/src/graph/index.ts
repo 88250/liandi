@@ -146,7 +146,7 @@ export class Graph extends Model {
             .selectAll("circle")
             .data(nodes)
             .join("circle")
-            .attr("r", 5)
+            .attr("r", 5);
         // .attr("fill", color)
         // .call(drag(simulation));
 
@@ -166,7 +166,7 @@ export class Graph extends Model {
         });
 
         // invalidation.then(() => simulation.stop());
-        this.graphElement.append(svg.node())
+        this.graphElement.append(svg.node());
 
 //         if (!this.chart) {
 //             this.chart = echarts.init(this.graphElement);

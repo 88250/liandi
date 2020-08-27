@@ -5,9 +5,9 @@ import {isCtrl} from "../../vditore/src/ts/util/compatibility";
 export const globalShortcut = () => {
     let lastKeypressTime = 0;
     let timeoutId = 0;
-    window.addEventListener("keyup", (event) => {
+    window.addEventListener("keyup", () => {
         window.liandi.ctrlIsPressed = true;
-    })
+    });
     window.addEventListener("keydown", (event) => {
         if (isCtrl(event)) {
             window.liandi.ctrlIsPressed = true;
