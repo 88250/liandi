@@ -177,7 +177,7 @@ export const splitLRMenu = () => {
             const itemData = window.liandi.menus.itemData;
             const id = itemData.target.getAttribute("data-id");
             const currentTab = getInstanceById(id) as Tab;
-            currentTab.parent.spilt("lr").addTab(copyTab(currentTab));
+            currentTab.parent.split("lr").addTab(copyTab(currentTab));
         }
     });
 };
@@ -189,7 +189,7 @@ export const splitTBMenu = () => {
             const itemData = window.liandi.menus.itemData;
             const id = itemData.target.getAttribute("data-id");
             const currentTab = getInstanceById(id) as Tab;
-            currentTab.parent.spilt("tb").addTab(copyTab(currentTab));
+            currentTab.parent.split("tb").addTab(copyTab(currentTab));
         }
     });
 };

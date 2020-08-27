@@ -30,7 +30,7 @@ export const initEditorMenu = () => {
             const id = itemData.target.getAttribute("data-id");
             const currentTab = getInstanceById(id) as Tab;
             const filePath = (currentTab.model as Editor).path;
-            const wnd = (currentTab.parent as Wnd).spilt("lr");
+            const wnd = (currentTab.parent as Wnd).split("lr");
             const tab = new Tab({
                 title: `<svg class="item__svg"><use xlink:href="#iconGraph"></use></svg> ${escapeHtml(path.posix.basename(filePath))}`,
                 panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
@@ -52,7 +52,7 @@ export const initEditorMenu = () => {
             const id = itemData.target.getAttribute("data-id");
             const currentTab = getInstanceById(id) as Tab;
             const filePath = (currentTab.model as Editor).path;
-            const newWnd = (currentTab.parent as Wnd).spilt("lr");
+            const newWnd = (currentTab.parent as Wnd).split("lr");
             const tab = new Tab({
                 title: `<svg class="item__svg"><use xlink:href="#vditor-icon-align-center"></use></svg> ${escapeHtml(path.posix.basename(filePath))}`,
                 callback(tab: Tab) {

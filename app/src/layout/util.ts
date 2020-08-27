@@ -158,7 +158,7 @@ export const addResize = (obj: Layout | Wnd) => {
                     documentSelf.onselect = null;
 
                     if (!nextElement.nextElementSibling) {
-                        nextElement.style[direction === "lr" ? "width" : "height"] = "auto";
+                        nextElement.style[direction === "lr" ? "width" : "height"] = "";
                         nextElement.classList.add("fn__flex-1");
                     }
                     window.liandi.rightLayoutWidth = window.liandi.rightLayout.element.clientWidth;
