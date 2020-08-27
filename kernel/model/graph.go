@@ -214,10 +214,12 @@ func checkBadNodes(nodes *[]interface{}, node interface{}, links *[]interface{})
 }
 
 func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
-	for _, node := range *nodes {
-		n := node.(map[string]interface{})
-		for _, link := range *links {
-			l := link.(map[string]interface{})
+	tmpLinks := (*links)[:0]
+	for _, link := range *links {
+		l := link.(map[string]interface{})
+		var foundNode bool
+		for _, node := range *nodes {
+			n := node.(map[string]interface{})
 			if l["target"] == n["id"] {
 				size := NodeSize
 				if s := n["symbolSize"]; nil != s {
@@ -225,7 +227,14 @@ func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 				}
 				size += 1
 				n["symbolSize"] = size
+				foundNode = true
+			} else if l["source"] == n["id"] {
+				foundNode = true
 			}
 		}
+		if foundNode {
+			tmpLinks = append(tmpLinks, link)
+		}
 	}
+	*links = tmpLinks
 }

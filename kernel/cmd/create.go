@@ -25,6 +25,9 @@ func (cmd *create) Exec() {
 	url := cmd.param["url"].(string)
 	url = model.NormalizeURL(url)
 	p := cmd.param["path"].(string)
+	if "/" == p {
+		p = "Untitled"
+	}
 	err := model.Create(url, p)
 	if nil != err {
 		ret.Code = -1
