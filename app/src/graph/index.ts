@@ -7,6 +7,7 @@ import * as d3 from "d3";
 import {openFile} from "../editor/util";
 import {getAllModels} from "../layout/util";
 import {bgFade} from "../util/bgFade";
+import * as path from "path";
 
 export class Graph extends Model {
     public inputElement: HTMLInputElement;
@@ -183,7 +184,7 @@ export class Graph extends Model {
 
         const link = svg.append("g")
             .attr("stroke-opacity", 0.36)
-            .attr("stroke-width", 1)
+            .attr("stroke-width", 0.8)
             .selectAll("line")
             .data(linksData)
             .join("line")
@@ -201,14 +202,18 @@ export class Graph extends Model {
 
         const node = svg.append("g")
             .attr("fill", color)
-            .selectAll("circle")
+            .selectAll("g")
             .data(nodesData)
-            .join("circle")
-            .attr("r", d => d.symbolSize)
+            .join("g")
             .call(drag(simulation));
-
+        node.append("circle")
+            .attr("r", d => d.symbolSize);
         node.append("title")
             .text(d => d.content);
+        node.append("text")
+            .attr("x", -10)
+            .attr("y", 16)
+            .text(d => path.posix.basename(d.path))
 
         node.on('mouseover', function (d) {
             d3.select(this).style('fill', hlColor)
@@ -275,9 +280,10 @@ export class Graph extends Model {
                 .attr("y1", d => d.source.y)
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
-            node
-                .attr("cx", d => d.x)
-                .attr("cy", d => d.y);
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+            // node
+            //     .attr("cx", d => d.x)
+            //     .attr("cy", d => d.y);
         });
 
         // invalidation.then(() => simulation.stop());
