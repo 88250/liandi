@@ -143,7 +143,7 @@ export class Wnd {
             }
         });
         if (currentTab && target === currentTab.headElement && currentTab.model instanceof Graph) {
-            // TODO currentTab.model.chart.resize();
+            currentTab.model.resize()
         }
     }
 
@@ -174,8 +174,6 @@ export class Wnd {
     private destroyModel(model: Model) {
         if (model instanceof Editor) {
             model.vditore.destroy();
-        } else if (model instanceof Graph) {
-            // TODO model.chart.dispose();
         }
         model.send("closews", {});
     }
@@ -186,7 +184,6 @@ export class Wnd {
         }
         if (!model.saved) {
             const confirmRst = confirm(path.posix.basename(model.path) + i18n[window.liandi.config.lang].saveTip);
-            // TODO: 光标丢失问题 https://github.com/electron/electron/issues/14474
             // 该解决方案会导致闪烁
             remote.getCurrentWindow().blur();
             remote.getCurrentWindow().focus();
