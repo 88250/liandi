@@ -145,7 +145,7 @@ func connectBacklinks(links *[]interface{}) {
 }
 
 const (
-	NodeSize = 6 // 节点默认大小
+	NodeSize = 1 // 节点默认大小
 )
 
 func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
@@ -178,7 +178,6 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 		}
 		size := NodeSize
 		node["symbolSize"] = size
-		node["originalSize"] = size
 
 		checkBadNodes(nodes, node, links)
 		*nodes = append(*nodes, node)
@@ -204,7 +203,6 @@ func checkBadNodes(nodes *[]interface{}, node interface{}, links *[]interface{})
 		existNode := n.(map[string]interface{})
 		if currentNode["id"] == existNode["id"] {
 			currentNode["id"] = currentNode["id"].(string) + "-" + gulu.Rand.String(7)
-			// TODO: currentNode["category"] = NodeCategoryBug
 			*links = append(*links, map[string]interface{}{
 				"source": existNode["id"],
 				"target": currentNode["id"],
@@ -217,7 +215,7 @@ func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 	tmpLinks := (*links)[:0]
 	for _, link := range *links {
 		l := link.(map[string]interface{})
-		var foundNode bool
+		var sourceFound, targetFound bool
 		for _, node := range *nodes {
 			n := node.(map[string]interface{})
 			if l["target"] == n["id"] {
@@ -227,12 +225,13 @@ func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 				}
 				size += 1
 				n["symbolSize"] = size
-				foundNode = true
+				targetFound = true
+				l["ref"] = true
 			} else if l["source"] == n["id"] {
-				foundNode = true
+				sourceFound = true
 			}
 		}
-		if foundNode {
+		if sourceFound && targetFound {
 			tmpLinks = append(tmpLinks, link)
 		}
 	}
