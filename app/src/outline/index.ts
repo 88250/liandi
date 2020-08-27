@@ -36,8 +36,8 @@ export class Outline extends Model {
                 }
             }
         };
-        this.url = options.url
-        this.path = options.path
+        this.url = options.url;
+        this.path = options.path;
         this.element = options.tab.panelElement;
         this.element.classList.add("vditor-outline");
         this.element.addEventListener("click", (event) => {

@@ -66,8 +66,8 @@ export class Layout {
             this.children.find((item, index) => {
                 if (item.id === id) {
                     this.children.splice(index + 1, 0, child);
-                    item.element.style.width = "auto";
-                    item.element.style.height = "auto";
+                    item.element.style.width = "";
+                    item.element.style.height = "";
                     item.element.classList.add("fn__flex-1");
                     item.element.after(child.element);
                     return true;

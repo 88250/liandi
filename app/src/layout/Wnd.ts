@@ -256,7 +256,7 @@ export class Wnd {
         resizeTabs();
     }
 
-    public spilt(direction: TDirection) {
+    public split(direction: TDirection) {
         const wnd = new Wnd(direction);
         if (direction === this.parent.direction) {
             this.parent.addWnd(wnd, this.id);
@@ -271,6 +271,18 @@ export class Wnd {
                     movedWnd.resize = undefined;
                     layout.addWnd.call(layout, movedWnd);
                     layout.addWnd.call(layout, wnd);
+
+                    if (direction === "tb" && movedWnd.element.style.width) {
+                        layout.element.style.width = movedWnd.element.style.width
+                        layout.element.classList.remove("fn__flex-1")
+                        movedWnd.element.style.width = ""
+                        movedWnd.element.classList.add("fn__flex-1")
+                    } else if (direction === "lr" && movedWnd.element.style.height) {
+                        layout.element.style.height = movedWnd.element.style.height
+                        layout.element.classList.remove("fn__flex-1")
+                        movedWnd.element.style.height = ""
+                        movedWnd.element.classList.add("fn__flex-1")
+                    }
                     return true;
                 }
             });
@@ -325,7 +337,7 @@ export class Wnd {
                 window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - 200) + "px";
                 layout.element.style.width = "206px";
             } else if (layout.type === "right" && layout.element.clientWidth < 7) {
-                const rightWidth =  window.innerWidth / 3;
+                const rightWidth = window.innerWidth / 3;
                 window.liandi.centerLayout.element.style.width = (window.liandi.centerLayout.element.clientWidth - rightWidth) + "px";
                 window.liandi.rightLayoutWidth = rightWidth;
             } else if (layout.type === "top" && layout.element.clientHeight < 7) {
@@ -344,7 +356,7 @@ export class Wnd {
                 if (layout.type === "left") {
                     layout.element.style.width = "6px";
                 } else {
-                    layout.element.style.width = "auto";
+                    layout.element.style.width = "";
                     layout.element.classList.add("fn__flex-1");
                     window.liandi.rightLayoutWidth = 6;
                 }
@@ -354,7 +366,7 @@ export class Wnd {
                 if (layout.type === "top") {
                     layout.element.style.height = "6px";
                 } else {
-                    layout.element.style.height = "auto";
+                    layout.element.style.height = "";
                     layout.element.classList.add("fn__flex-1");
                     window.liandi.bottomLayoutHeight = 6;
                 }
