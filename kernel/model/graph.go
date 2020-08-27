@@ -242,4 +242,11 @@ func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 		}
 	}
 	*links = tmpLinks
+
+	if 1 > len(*links) {
+		*links = []interface{}{}
+	}
+	if 1 > len(*nodes) {
+		*nodes = []interface{}{}
+	}
 }
