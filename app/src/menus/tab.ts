@@ -59,6 +59,8 @@ export const initEditorMenu = () => {
                     tab.addModel(new Outline({
                         tab,
                         contentElement: (currentTab.model as Editor).vditore.vditor.ir.element,
+                        path:filePath,
+                        url:(currentTab.model as Editor).url
                     }));
                 }
             });

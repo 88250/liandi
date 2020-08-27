@@ -22,6 +22,7 @@ import {chartRender} from "../../vditore/src/ts/markdown/chartRender";
 import {mindmapRender} from "../../vditore/src/ts/markdown/mindmapRender";
 import {abcRender} from "../../vditore/src/ts/markdown/abcRender";
 import {mediaRender} from "../../vditore/src/ts/markdown/mediaRender";
+import {bgFade} from "../util/bgFade";
 
 export class Editor extends Model {
     public element: HTMLElement;
@@ -145,7 +146,7 @@ export class Editor extends Model {
         }
         let inputTimeout: number;
         this.vditore = new Vditor(this.element, {
-            _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
+            // _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
             debugger: process.env.NODE_ENV === "development",
             icon: "material",
             height: this.element.parentElement.clientHeight,
@@ -266,6 +267,7 @@ export class Editor extends Model {
                         expandMarker(range, vditore.vditor);
                         setSelectionFocus(range);
                         vditore.vditor.ir.element.scrollTop = nodeElement.offsetTop - vditore.vditor.ir.element.clientHeight / 2;
+                        bgFade(nodeElement);
                     }
                 } else {
                     vditore.focus();
@@ -357,7 +359,7 @@ export class Editor extends Model {
             return;
         }
         if (data.callback === Constants.CB_GETBLOCK_OPEN) {
-            openFile(data.block.url, data.block.path);
+            openFile(data.block.url, data.block.path, data.id);
             return;
         }
         if (data.block.content.trim() === "") {

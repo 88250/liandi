@@ -1,10 +1,18 @@
 import {initSearch} from "../search";
 import {Constants} from "../constants";
+import {isCtrl} from "../../vditore/src/ts/util/compatibility";
 
-export const doubleShift = () => {
+export const globalShortcut = () => {
     let lastKeypressTime = 0;
     let timeoutId = 0;
+    window.addEventListener("keyup", (event) => {
+        window.liandi.ctrlIsPressed = true;
+    })
     window.addEventListener("keydown", (event) => {
+        if (isCtrl(event)) {
+            window.liandi.ctrlIsPressed = true;
+        }
+
         // 快捷搜素
         if (event.key === "Shift" && event.isComposing === false) {
             const thisKeypressTime = new Date().getTime();

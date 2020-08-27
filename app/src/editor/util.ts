@@ -6,6 +6,9 @@ import {Wnd} from "../layout/Wnd";
 import {hasClosestByAttribute} from "../../vditore/src/ts/util/hasClosest";
 import {getAllModels, getInstanceById} from "../layout/util";
 import {Layout} from "../layout";
+import {getEditorRange, setSelectionFocus} from "../../vditore/src/ts/util/selection";
+import {expandMarker} from "../../vditore/src/ts/ir/expandMarker";
+import {bgFade} from "../util/bgFade";
 
 export const getIconByType = (type: string) => {
     let iconName = "";
@@ -43,6 +46,19 @@ export const openFile = (url: string, filePath: string, id?: string) => {
     const editor = getAllModels().editor.find((item) => {
         if (item.url === url && item.path == filePath) {
             item.parent.parent.switchTab(item.parent.headElement);
+            if (id) {
+                const vditorElement = item.vditore.vditor.ir.element
+                const nodeElement = vditorElement.querySelector(`[data-node-id="${id}"]`) as HTMLElement;
+                if (nodeElement) {
+                    const range = getEditorRange(vditorElement);
+                    range.selectNodeContents(nodeElement.firstChild);
+                    range.collapse(true);
+                    expandMarker(range, item.vditore.vditor);
+                    setSelectionFocus(range);
+                    vditorElement.scrollTop = nodeElement.offsetTop - vditorElement.clientHeight / 2;
+                    bgFade(nodeElement);
+                }
+            }
             return true;
         }
     });

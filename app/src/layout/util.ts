@@ -83,7 +83,9 @@ export const copyTab = (tab: Tab) => {
             } else if (tab.model instanceof Outline) {
                 model = new Outline({
                     tab: newTab,
-                    contentElement: tab.panelElement.innerHTML
+                    contentElement: tab.panelElement.innerHTML,
+                    url: tab.model.url,
+                    path: tab.model.path
                 });
             }
             newTab.addModel(model);

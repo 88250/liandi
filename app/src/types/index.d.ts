@@ -18,7 +18,7 @@ interface ILiandi {
     find?: import("../search/Find").Find,
     config?: IConfig;
     ws: import("../layout/Model").Model,
-    // resizeList?: any[]
+    ctrlIsPressed: boolean,
     menus: import("../menus").Menus
     current?: {
         box?: IBox

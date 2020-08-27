@@ -7,10 +7,14 @@ import {processMessage} from "../util/processMessage";
 
 export class Outline extends Model {
     private element: HTMLElement
+    public url: string
+    public path: string
 
     constructor(options: {
         contentElement: HTMLElement | string,
-        tab: Tab
+        tab: Tab,
+        url: string,
+        path: string
     }) {
         super({
             id: options.tab.id
@@ -20,16 +24,20 @@ export class Outline extends Model {
             if (data) {
                 switch (data.cmd) {
                     case "reload":
-                        getAllModels().editor.find((item) => {
-                            if (data.data.url === item.url && data.data.path === item.path) {
-                                this.render(item.vditore.vditor.ir.element);
-                                return true;
-                            }
-                        });
+                        if (data.data.url === this.url && data.data.path === this.path) {
+                            getAllModels().editor.find((item) => {
+                                if (data.data.url === item.url && data.data.path === item.path) {
+                                    this.render(item.vditore.vditor.ir.element);
+                                    return true;
+                                }
+                            });
+                        }
                         break;
                 }
             }
         };
+        this.url = options.url
+        this.path = options.path
         this.element = options.tab.panelElement;
         this.element.classList.add("vditor-outline");
         this.element.addEventListener("click", (event) => {

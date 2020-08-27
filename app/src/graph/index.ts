@@ -107,14 +107,14 @@ export class Graph extends Model {
     }
 
     public hlNode(id: string) {
-        this.nodes.forEach((item) => {
-            if (item.name === id) {
-                item.symbolSize = 30;
-            } else {
-                item.symbolSize = item.originalSize;
-            }
-        });
-        this.onGraph({nodes: this.nodes, links: this.links});
+        // this.nodes.forEach((item) => {
+        //     if (item.name === id) {
+        //         item.symbolSize = 30;
+        //     } else {
+        //         item.symbolSize = item.originalSize;
+        //     }
+        // });
+        // this.onGraph({nodes: this.nodes, links: this.links});
     }
 
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {

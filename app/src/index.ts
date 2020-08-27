@@ -5,7 +5,7 @@ import {ipcRenderer} from "electron";
 import {Constants} from "./constants";
 import {Layout} from "./layout";
 import {Find} from "./search/Find";
-import {doubleShift} from "./util/doubleShift";
+import {globalShortcut} from "./util/globalShortcut";
 import {genUUID} from "./util/genUUID";
 import {Menus} from "./menus";
 import {Model} from "./layout/Model";
@@ -39,7 +39,7 @@ class App {
         }));
         (layout.children[1] as Layout).addLayout(new Layout({resize: "lr", type: "right"}));
 
-        doubleShift();
+        globalShortcut();
         // 监听主线程发送的消息
         ipcRenderer.on(Constants.LIANDI_FIND_SHOW, () => {
             liandi.find.open();
@@ -49,6 +49,7 @@ class App {
         });
 
         const liandi: ILiandi = {
+            ctrlIsPressed: false,
             find: new Find(),
             layout,
             topLayout: layout.children[0] as Layout,
