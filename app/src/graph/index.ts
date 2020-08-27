@@ -168,16 +168,33 @@ export class Graph extends Model {
             // @ts-ignore
             .attr("viewBox", [-width / 2, -height / 2, width, height])
             .attr("style", 'width: ' + width + 'px; height: ' + height + 'px;')
+        svg.append("svg:defs").append("svg:marker")
+            .attr("id", "triangle")
+            .attr("refX", 6)
+            .attr("refY", 6)
+            .attr("markerWidth", 30)
+            .attr("markerHeight", 30)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M 0 0 12 6 0 12 3 6")
+            .style("fill", "black");
 
         const link = svg.append("g")
-            .attr("stroke", lightColor)
             .attr("stroke-opacity", 0.36)
+            .attr('marker-start', 'url(#triangle)')
+            .attr("stroke-width", 1)
             .selectAll("line")
             .data(linksData)
             .join("line")
-            .attr("stroke-width", 1);
+            .attr("stroke", (item: any) => {
+                if (item.ref) {
+                    return '#d23f31'
+                }
+                return lightColor
+            });
 
         const node = svg.append("g")
+            .attr("fill", color)
             // .attr("stroke", "#fff")
             // .attr("stroke-width", 1.5)
             .selectAll("circle")
@@ -185,7 +202,6 @@ export class Graph extends Model {
             .join("circle")
             .attr("r", d => d.symbolSize)
             // @ts-ignore
-            .attr("fill", color)
             .call(drag(simulation));
 
         node.append("title")
@@ -193,20 +209,25 @@ export class Graph extends Model {
 
         node.on('mouseover', function (d) {
             d3.select(this).style('fill', hlColor)
-            const hlNodeId: string[] = []
+            let hlNodeId: string[] = []
             link.style('stroke', function (item) {
                 if (item.target === d.target.__data__ || item.source === d.target.__data__) {
-                    hlNodeId.push(item.target)
+                    hlNodeId.push(item.target.id)
+                    hlNodeId.push(item.source.id)
                     return hlColor
                 }
                 return lightColor;
             })
-            console.log(hlNodeId)
+            hlNodeId = [...new Set(hlNodeId)];
+            node.style('fill', (item) => {
+                if (hlNodeId.includes(item.id)) {
+                    return hlColor
+                }
+                return lightColor
+            })
+        }).on('mouseout', function () {
+            node.style('fill', color)
         })
-        //     .on('mouseout', function (d) {
-        //     node.style('fill', color)
-        //     link.style('stroke', lightColor).style('stroke-width', '1')
-        // })
 
         svg.call(d3.zoom()
             .extent([[0, 0], [width, height]])
