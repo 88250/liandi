@@ -185,23 +185,28 @@ export class Graph extends Model {
             .join("circle")
             .attr("r", d => d.symbolSize)
             // @ts-ignore
-            .attr("fill", lightColor)
+            .attr("fill", color)
             .call(drag(simulation));
 
         node.append("title")
-            .text(d => d.id);
+            .text(d => d.content);
 
         node.on('mouseover', function (d) {
             d3.select(this).style('fill', hlColor)
-            link.style('stroke', function (l) {
-                return l.source === d.target.__data__ || l.target === d.target.__data__ ? hlColor : lightColor;
-            }).style('stroke-width', function (l) {
-                return l.source === d.target.__data__ || l.target === d.target.__data__ ? 3 : 1;
+            const hlNodeId: string[] = []
+            link.style('stroke', function (item) {
+                if (item.target === d.target.__data__ || item.source === d.target.__data__) {
+                    hlNodeId.push(item.target)
+                    return hlColor
+                }
+                return lightColor;
             })
-        }).on('mouseout', function (d) {
-            node.style('fill', color)
-            link.style('stroke', lightColor).style('stroke-width', '1')
+            console.log(hlNodeId)
         })
+        //     .on('mouseout', function (d) {
+        //     node.style('fill', color)
+        //     link.style('stroke', lightColor).style('stroke-width', '1')
+        // })
 
         svg.call(d3.zoom()
             .extent([[0, 0], [width, height]])
