@@ -15,6 +15,16 @@ export const onSetTheme = (theme:TTheme) => {
         item.vditore.setTheme(theme === "dark" ? "dark" : "classic", theme);
     });
     models.graph.forEach((item) => {
-        item.onGraph({nodes: item.nodes, links: item.links});
+        if (item.url) {
+            item.send("treegraph", {
+                k: item.inputElement.value,
+                url: item.url,
+                path: item.path
+            });
+        } else {
+            item.send("graph", {
+                k: item.inputElement.value
+            });
+        }
     });
 };
