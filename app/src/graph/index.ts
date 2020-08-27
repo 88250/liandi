@@ -131,7 +131,7 @@ export class Graph extends Model {
             return
         }
         const color = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e";
-        const lightColor = window.liandi.config.theme === "dark" ? "#959da5" : "#6a737d";
+        const secondColor = window.liandi.config.theme === "dark" ? "#959da5" : "#6a737d";
         const hlColor = "#f3a92f";
         const width = this.graphElement.clientWidth
         const height = this.graphElement.clientHeight
@@ -191,7 +191,7 @@ export class Graph extends Model {
                 if (item.ref) {
                     return '#d23f31'
                 }
-                return lightColor
+                return secondColor
             }).attr('marker-end', (item) => {
                 if (item.ref) {
                     return 'url(#triangle)'
@@ -219,14 +219,14 @@ export class Graph extends Model {
                     hlNodeId.push(item.source.id)
                     return hlColor
                 }
-                return lightColor;
+                return secondColor;
             })
             hlNodeId = [...new Set(hlNodeId)];
             node.style('fill', (item) => {
                 if (hlNodeId.includes(item.id)) {
                     return hlColor
                 }
-                return lightColor
+                return secondColor
             })
         }).on('mouseout', function () {
             node.style('fill', color)
@@ -234,7 +234,7 @@ export class Graph extends Model {
                 if (item.ref) {
                     return '#d23f31'
                 }
-                return lightColor
+                return secondColor
             })
         }).on('dblclick', (item) => {
             openFile(item.target.__data__.url, item.target.__data__.path, item.target.__data__.type === "NodeDocument" ? undefined : item.target.__data__.id);
