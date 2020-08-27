@@ -14,8 +14,8 @@ export class Graph extends Model {
     private levelInputElement: HTMLInputElement;
     public url: string
     public path: string
-    public nodes: Record<string, unknown>[]
-    public links: Record<string, unknown>[]
+    private nodes: any
+    private links: any
 
     constructor(options: {
         tab: Tab
@@ -120,14 +120,10 @@ export class Graph extends Model {
     }
 
     public hlNode(id: string) {
-        // this.nodes.forEach((item) => {
-        //     if (item.name === id) {
-        //         item.symbolSize = 30;
-        //     } else {
-        //         item.symbolSize = item.originalSize;
-        //     }
-        // });
-        // this.onGraph({nodes: this.nodes, links: this.links});
+        const color = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e";
+        this.nodes.style("fill", color);
+        const hlNode = this.nodes.filter((item: any) => item.id === id)
+        hlNode.style("fill", '#f3a92f')
     }
 
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
@@ -263,6 +259,7 @@ export class Graph extends Model {
                 }
             });
         })
+        this.nodes = node
 
         svg.call(d3.zoom()
             .extent([[0, 0], [width, height]])
