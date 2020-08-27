@@ -165,8 +165,7 @@ export class Graph extends Model {
         }
 
         const svg = d3.create("svg")
-            // @ts-ignore
-            .attr("viewBox", [-width / 2, -height / 2, width, height])
+            .attr("viewBox", `-${width / 2} , -${height / 2} , ${width}, ${height}`)
             .attr("style", 'width: ' + width + 'px; height: ' + height + 'px;')
         svg.append("svg:defs").append("svg:marker")
             .attr("id", "triangle")
@@ -182,7 +181,6 @@ export class Graph extends Model {
 
         const link = svg.append("g")
             .attr("stroke-opacity", 0.36)
-            .attr('marker-end', 'url(#triangle)')
             .attr("stroke-width", 1)
             .selectAll("line")
             .data(linksData)
@@ -201,13 +199,10 @@ export class Graph extends Model {
 
         const node = svg.append("g")
             .attr("fill", color)
-            // .attr("stroke", "#fff")
-            // .attr("stroke-width", 1.5)
             .selectAll("circle")
             .data(nodesData)
             .join("circle")
             .attr("r", d => d.symbolSize)
-            // @ts-ignore
             .call(drag(simulation));
 
         node.append("title")
@@ -233,6 +228,12 @@ export class Graph extends Model {
             })
         }).on('mouseout', function () {
             node.style('fill', color)
+            link.style('stroke', (item) => {
+                if (item.ref) {
+                    return '#d23f31'
+                }
+                return lightColor
+            })
         })
 
         svg.call(d3.zoom()
