@@ -106,6 +106,10 @@ export class Graph extends Model {
         }
     }
 
+    public resize() {
+
+    }
+
     public hlNode(id: string) {
         // this.nodes.forEach((item) => {
         //     if (item.name === id) {
@@ -120,17 +124,19 @@ export class Graph extends Model {
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
         const links = data.links.map(d => Object.create(d));
         const nodes = data.nodes.map(d => Object.create(d));
-
         const simulation = d3.forceSimulation(nodes)
-            // @ts-ignore
-            .force("link", d3.forceLink(links).id(d => d.id))
+            .force("link", d3.forceLink(links).id((d) => {
+                // @ts-ignore
+                return d.id
+            }))
             .force("charge", d3.forceManyBody())
             .force("collision", d3.forceCollide())
             .force("x", d3.forceX())
             .force("y", d3.forceY())
             .force("center", d3.forceCenter());
 
-        const width = 1000, height = 1000
+        const width = this.graphElement.clientWidth
+        const height = this.graphElement.clientHeight
 
         const svg = d3.create("svg")
             // @ts-ignore
@@ -153,8 +159,28 @@ export class Graph extends Model {
             .join("circle")
             .attr("r", 5)
             // @ts-ignore
-            .attr("fill", color)
-            .call(drag(simulation));
+            .attr("fill", (d) => {
+                const scale = d3.scaleOrdinal(d3.schemeCategory10);
+                // @ts-ignore
+                return d => scale(d.group);
+            })
+            .call((simulation: any) => {
+                return d3.drag()
+                    .on("start", (event: any, d: any) => {
+                        if (!event.active) simulation.alphaTarget(0.3).restart();
+                        d.fx = d.x;
+                        d.fy = d.y;
+                    })
+                    .on("drag", (event: any, d: any) => {
+                        d.fx = event.x;
+                        d.fy = event.y;
+                    })
+                    .on("end", (event: any, d: any) => {
+                        if (!event.active) simulation.alphaTarget(0);
+                        d.fx = null;
+                        d.fy = null;
+                    });
+            });
 
         node.append("title")
             .text(d => d.id);
@@ -162,7 +188,10 @@ export class Graph extends Model {
         svg.call(d3.zoom()
             .extent([[0, 0], [width, height]])
             .scaleExtent([1, 8])
-            .on("zoom", zoomed));
+            .on("zoom", (event: any, d: any) => {
+                node.attr("transform", event.transform);
+                link.attr("transform", event.transform);
+            }));
 
         simulation.on("tick", () => {
             link
@@ -174,40 +203,6 @@ export class Graph extends Model {
                 .attr("cx", d => d.x)
                 .attr("cy", d => d.y);
         });
-
-        function zoomed(g: any) {
-            g.attr("transform", d3.event.transform);
-        }
-
-        function color(d: any) {
-            const scale = d3.scaleOrdinal(d3.schemeCategory10);
-            // @ts-ignore
-            return d => scale(d.group);
-        }
-
-        function drag(simulation: any) {
-            function dragstarted(event: any, d: any) {
-                if (!event.active) simulation.alphaTarget(0.3).restart();
-                d.fx = d.x;
-                d.fy = d.y;
-            }
-
-            function dragged(event: any, d: any) {
-                d.fx = event.x;
-                d.fy = event.y;
-            }
-
-            function dragended(event: any, d: any) {
-                if (!event.active) simulation.alphaTarget(0);
-                d.fx = null;
-                d.fy = null;
-            }
-
-            return d3.drag()
-                .on("start", dragstarted)
-                .on("drag", dragged)
-                .on("end", dragended);
-        }
 
         // invalidation.then(() => simulation.stop());
         this.graphElement.append(svg.node())
