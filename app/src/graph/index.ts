@@ -123,19 +123,19 @@ export class Graph extends Model {
 
         const simulation = d3.forceSimulation(nodes)
             // @ts-ignore
-            .force("link", d3.forceLink(links).id(d => d.id).distance(60))
+            .force("link", d3.forceLink(links).id(d => d.id))
             .force("charge", d3.forceManyBody())
             .force("collision", d3.forceCollide())
             .force("x", d3.forceX())
             .force("y", d3.forceY())
-            .force("center", d3.forceCenter(0, 0));
+            .force("center", d3.forceCenter());
 
         const width = 1000, height = 1000
 
         const svg = d3.create("svg")
             // @ts-ignore
             .attr("viewBox", [-width / 2, -height / 2, width, height])
-            .attr("style", 'width: ' + width + '; height: ' + height)
+            .attr("style", 'width: ' + width + 'px; height: ' + height + 'px;')
 
         const link = svg.append("g")
             .attr("stroke", "#999")
@@ -143,7 +143,7 @@ export class Graph extends Model {
             .selectAll("line")
             .data(links)
             .join("line")
-            .attr("stroke-width", d => Math.sqrt(2));
+            .attr("stroke-width", d => 1);
 
         const node = svg.append("g")
             .attr("stroke", "#fff")
@@ -159,18 +159,25 @@ export class Graph extends Model {
         node.append("title")
             .text(d => d.id);
 
+        svg.call(d3.zoom()
+            .extent([[0, 0], [width, height]])
+            .scaleExtent([1, 8])
+            .on("zoom", zoomed));
+
         simulation.on("tick", () => {
             link
                 .attr("x1", d => d.source.x)
                 .attr("y1", d => d.source.y)
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
-
             node
                 .attr("cx", d => d.x)
                 .attr("cy", d => d.y);
         });
 
+        function zoomed(g: any) {
+            g.attr("transform", d3.event.transform);
+        }
 
         function color(d: any) {
             const scale = d3.scaleOrdinal(d3.schemeCategory10);
