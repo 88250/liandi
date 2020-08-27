@@ -128,6 +128,9 @@ export class Graph extends Model {
     }
 
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
+        if (data.nodes.length === 0) {
+            return
+        }
         const color = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e";
         const lightColor = window.liandi.config.theme === "dark" ? "#959da5" : "#6a737d";
         const hlColor = "#f3a92f";
@@ -170,13 +173,13 @@ export class Graph extends Model {
         svg.append("svg:defs").append("svg:marker")
             .attr("id", "triangle")
             .attr("refX", 10)
-            .attr("refY", 5)
+            .attr("refY", 3)
             .attr("stroke-opacity", 0.36)
-            .attr("markerWidth", 10)
-            .attr("markerHeight", 10)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
             .attr("orient", "auto")
             .append("path")
-            .attr("d", "M0 0l10 5-10 5 2.5-5z")
+            .attr("d", "M0 0l6 3-6 3 1.5-3z")
             .style("fill", 'rgba(210, 63, 49, 0.36)');
 
         const link = svg.append("g")
