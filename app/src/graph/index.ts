@@ -170,14 +170,15 @@ export class Graph extends Model {
             .attr("style", 'width: ' + width + 'px; height: ' + height + 'px;')
         svg.append("svg:defs").append("svg:marker")
             .attr("id", "triangle")
-            .attr("refX", 6)
-            .attr("refY", 6)
-            .attr("markerWidth", 30)
-            .attr("markerHeight", 30)
+            .attr("refX", 10)
+            .attr("refY", 5)
+            .attr("stroke-opacity", 0.36)
+            .attr("markerWidth", 10)
+            .attr("markerHeight", 10)
             .attr("orient", "auto")
             .append("path")
-            .attr("d", "M 0 0 12 6 0 12 3 6")
-            .style("fill", "black");
+            .attr("d", "M0 0l10 5-10 5 2.5-5z")
+            .style("fill", 'rgba(210, 63, 49, 0.36)');
 
         const link = svg.append("g")
             .attr("stroke-opacity", 0.36)
@@ -186,11 +187,16 @@ export class Graph extends Model {
             .selectAll("line")
             .data(linksData)
             .join("line")
-            .attr("stroke", (item: any) => {
+            .attr("stroke", (item) => {
                 if (item.ref) {
                     return '#d23f31'
                 }
                 return lightColor
+            }).attr('marker-end', (item) => {
+                if (item.ref) {
+                    return 'url(#triangle)'
+                }
+                return ''
             });
 
         const node = svg.append("g")
@@ -249,6 +255,7 @@ export class Graph extends Model {
         });
 
         // invalidation.then(() => simulation.stop());
+        this.graphElement.innerHTML = ""
         this.graphElement.append(svg.node())
 
 //         if (!this.chart) {
