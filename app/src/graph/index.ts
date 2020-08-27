@@ -1,21 +1,14 @@
-// import * as echarts from "echarts";
-import * as path from "path";
 import {i18n} from "../i18n";
-import {escapeHtml} from "../util/escape";
 import {Model} from "../layout/Model";
 import {Tab} from "../layout/Tab";
 import {processMessage} from "../util/processMessage";
-import {openFile} from "../editor/util";
 import {showMessage} from "../util/message";
-import {getAllModels} from "../layout/util";
-import {bgFade} from "../util/bgFade";
 import * as d3 from "d3";
 
 export class Graph extends Model {
     public inputElement: HTMLInputElement;
     private graphElement: HTMLDivElement;
     private levelInputElement: HTMLInputElement;
-    public chart: echarts.ECharts
     public url: string
     public path: string
     public nodes: Record<string, unknown>[]

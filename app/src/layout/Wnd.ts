@@ -143,7 +143,7 @@ export class Wnd {
             }
         });
         if (currentTab && target === currentTab.headElement && currentTab.model instanceof Graph) {
-            currentTab.model.chart.resize();
+            // TODO currentTab.model.chart.resize();
         }
     }
 
@@ -175,7 +175,7 @@ export class Wnd {
         if (model instanceof Editor) {
             model.vditore.destroy();
         } else if (model instanceof Graph) {
-            model.chart.dispose();
+            // TODO model.chart.dispose();
         }
         model.send("closews", {});
     }

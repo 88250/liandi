@@ -39,9 +39,8 @@
   "license": "MIT",
   "devDependencies": {
     "@types/d3": "^5.7.2",
-    "@types/d3-force": "^1.2.1",
     "@types/diff-match-patch": "^1.0.32",
-    "@types/echarts": "^4.6.4",
+    "@types/echarts": "^4.6.5",
     "@typescript-eslint/eslint-plugin": "^3.8.0",
     "@typescript-eslint/parser": "^3.8.0",
     "autoprefixer": "^9.8.6",
@@ -63,7 +62,6 @@
   },
   "dependencies": {
     "d3": "^6.0.0",
-    "d3-force": "^2.1.1",
     "diff-match-patch": "^1.0.5",
     "echarts": "^4.8.0"
   }
