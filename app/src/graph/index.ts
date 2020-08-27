@@ -123,14 +123,19 @@ export class Graph extends Model {
 
         const simulation = d3.forceSimulation(nodes)
             // @ts-ignore
-            .force("link", d3.forceLink(links).id(d => d.id))
+            .force("link", d3.forceLink(links).id(d => d.id).distance(60))
             .force("charge", d3.forceManyBody())
+            .force("collision", d3.forceCollide())
             .force("x", d3.forceX())
-            .force("y", d3.forceY());
+            .force("y", d3.forceY())
+            .force("center", d3.forceCenter(0, 0));
+
+        const width = 1000, height = 1000
 
         const svg = d3.create("svg")
             // @ts-ignore
-            .attr("viewBox", [-500 / 2, -500 / 2, 500, 500]);
+            .attr("viewBox", [-width / 2, -height / 2, width, height])
+            .attr("style", 'width: ' + width + '; height: ' + height)
 
         const link = svg.append("g")
             .attr("stroke", "#999")
@@ -138,7 +143,7 @@ export class Graph extends Model {
             .selectAll("line")
             .data(links)
             .join("line")
-            .attr("stroke-width", d => Math.sqrt(d.value));
+            .attr("stroke-width", d => Math.sqrt(2));
 
         const node = svg.append("g")
             .attr("stroke", "#fff")
@@ -147,8 +152,9 @@ export class Graph extends Model {
             .data(nodes)
             .join("circle")
             .attr("r", 5)
-        // .attr("fill", color)
-        // .call(drag(simulation));
+            // @ts-ignore
+            .attr("fill", color)
+            .call(drag(simulation));
 
         node.append("title")
             .text(d => d.id);
@@ -164,6 +170,37 @@ export class Graph extends Model {
                 .attr("cx", d => d.x)
                 .attr("cy", d => d.y);
         });
+
+
+        function color(d: any) {
+            const scale = d3.scaleOrdinal(d3.schemeCategory10);
+            // @ts-ignore
+            return d => scale(d.group);
+        }
+
+        function drag(simulation: any) {
+            function dragstarted(event: any, d: any) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event: any, d: any) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event: any, d: any) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+
+            return d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended);
+        }
 
         // invalidation.then(() => simulation.stop());
         this.graphElement.append(svg.node())
