@@ -71,11 +71,9 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 					}
 
 					def := map[string]interface{}{
-						"id":     ref.Def.ID,
-						"url":      ref.Def.URL,
-						"path":     ref.Def.Path,
-						"content":  render.SubStr(ref.Def.Content, 32),
-						"label":    map[string]interface{}{"show": true},
+						"id":   ref.Def.ID,
+						"url":  ref.Def.URL,
+						"path": ref.Def.Path,
 					}
 
 					*forwardGeneration = append(*forwardGeneration, def)
@@ -96,11 +94,9 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 						}
 
 						ref := map[string]interface{}{
-							"id":     ref.ID,
-							"url":      ref.URL,
-							"path":     ref.Path,
-							"content":  render.SubStr(ref.Content, 32),
-							"label":    map[string]interface{}{"show": true},
+							"id":   ref.ID,
+							"url":  ref.URL,
+							"path": ref.Path,
 						}
 
 						*backGeneration = append(*backGeneration, ref)
@@ -133,9 +129,6 @@ func connectForwardlinks(links *[]interface{}) {
 		*links = append(*links, map[string]interface{}{
 			"source": ref.ID,
 			"target": ref.Def.ID,
-			"lineStyle": map[string]interface{}{
-				"type": "dotted",
-			},
 		})
 	}
 }
@@ -146,9 +139,6 @@ func connectBacklinks(links *[]interface{}) {
 			*links = append(*links, map[string]interface{}{
 				"source": ref.ID,
 				"target": def.ID,
-				"lineStyle": map[string]interface{}{
-					"type": "dotted",
-				},
 			})
 		}
 	}
@@ -180,26 +170,15 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 
 		text = render.SubStr(text, 32)
 
-		isRoot := ast.NodeDocument == n.Type
-		show := true
-		if !isRoot {
-			show = false
-		}
-
 		node := map[string]interface{}{
-			"id":     n.ID,
-			"url":      tree.URL,
-			"path":     tree.Path,
-			"content":  text,
-			"label":    map[string]interface{}{"show": show},
-			"emphasis": map[string]interface{}{
-				"label": map[string]interface{}{"show": true},
-			},
+			"id":      n.ID,
+			"url":     tree.URL,
+			"path":    tree.Path,
+			"content": text,
 		}
 		size := NodeSize
 		node["symbolSize"] = size
 		node["originalSize"] = size
-		node["isRoot"] = isRoot
 
 		checkBadNodes(nodes, node, links)
 		*nodes = append(*nodes, node)
@@ -209,11 +188,6 @@ func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links 
 			*links = append(*links, map[string]interface{}{
 				"source": tree.ID,
 				"target": n.ID,
-				"symbol": "none",
-				"lineStyle": map[string]interface{}{
-					"type":  "solid",
-					"color": "#7c828b",
-				},
 			})
 		}
 
@@ -232,10 +206,8 @@ func checkBadNodes(nodes *[]interface{}, node interface{}, links *[]interface{})
 			currentNode["id"] = currentNode["id"].(string) + "-" + gulu.Rand.String(7)
 			// TODO: currentNode["category"] = NodeCategoryBug
 			*links = append(*links, map[string]interface{}{
-				"source":    existNode["id"],
-				"target":    currentNode["id"],
-				"symbol":    "none",
-				"lineStyle": map[string]interface{}{"type": "dashed"},
+				"source": existNode["id"],
+				"target": currentNode["id"],
 			})
 		}
 	}
@@ -246,16 +218,13 @@ func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 		n := node.(map[string]interface{})
 		for _, link := range *links {
 			l := link.(map[string]interface{})
-			lineStyle := l["lineStyle"].(map[string]interface{})["type"]
-			if (l["target"] == n["id"]) && "dotted" == lineStyle {
-				n["label"] = map[string]interface{}{"show": true}
+			if l["target"] == n["id"] {
 				size := NodeSize
 				if s := n["symbolSize"]; nil != s {
 					size = s.(int)
 				}
 				size += 1
 				n["symbolSize"] = size
-				l["lineStyle"].(map[string]interface{})["color"] = "#d23f31"
 			}
 		}
 	}
