@@ -191,6 +191,10 @@ svg {
   height: 14px;
 }
 
+line, circle {
+  transition: fill .15s ease-in-out;
+}
+
 blockquote {
   margin: 0;
 }
