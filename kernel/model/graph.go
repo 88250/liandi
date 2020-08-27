@@ -71,9 +71,10 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 					}
 
 					def := map[string]interface{}{
-						"id":   ref.Def.ID,
-						"url":  ref.Def.URL,
-						"path": ref.Def.Path,
+						"id":         ref.Def.ID,
+						"url":        ref.Def.URL,
+						"path":       ref.Def.Path,
+						"symbolSize": NodeSize,
 					}
 
 					*forwardGeneration = append(*forwardGeneration, def)
@@ -94,9 +95,10 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 						}
 
 						ref := map[string]interface{}{
-							"id":   ref.ID,
-							"url":  ref.URL,
-							"path": ref.Path,
+							"id":         ref.ID,
+							"url":        ref.URL,
+							"path":       ref.Path,
+							"symbolSize": NodeSize,
 						}
 
 						*backGeneration = append(*backGeneration, ref)
@@ -222,12 +224,14 @@ func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 		for _, node := range *nodes {
 			n := node.(map[string]interface{})
 			if l["target"] == n["id"] {
-				size := NodeSize
-				if s := n["symbolSize"]; nil != s {
-					size = s.(int)
+				if l["ref"].(bool) {
+					size := NodeSize
+					if s := n["symbolSize"]; nil != s {
+						size = s.(int)
+					}
+					size += 1
+					n["symbolSize"] = size
 				}
-				size += 1
-				n["symbolSize"] = size
 				targetFound = true
 			} else if l["source"] == n["id"] {
 				sourceFound = true
