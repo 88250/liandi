@@ -22,7 +22,7 @@ export const resizeTabs = () => {
         }
     });
     models.graph.forEach((item) => {
-      item.resize()
+      item.resize();
     });
 };
 

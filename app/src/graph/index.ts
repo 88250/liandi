@@ -7,7 +7,7 @@ import * as d3 from "d3";
 import {openFile} from "../editor/util";
 import {getAllModels} from "../layout/util";
 import {bgFade} from "../util/bgFade";
-import * as path from "path";
+import {escapeHtml} from "../util/escape";
 
 export class Graph extends Model {
     public inputElement: HTMLInputElement;
@@ -69,19 +69,19 @@ export class Graph extends Model {
         };
 
         options.tab.panelElement.classList.add("graph");
-        let levelHTML = ''
+        let levelHTML = "";
         if (this.url) {
             levelHTML = `<span class="graph__label">${i18n[window.liandi.config.lang].linkLevel}</span>
-    <input value="1" min="0" max="16" type="number" class="input graph__number">`
+    <input value="1" min="0" max="16" type="number" class="input graph__number">`;
 
         }
         options.tab.panelElement.innerHTML = `<div class="graph__input">
     <input class="input" placeholder="${i18n[window.liandi.config.lang].search}">${levelHTML}
 </div>
-<div class="fn__flex-1 graph__svg"></div>`
+<div class="fn__flex-1 graph__svg"></div>`;
 
-        this.graphElement = options.tab.panelElement.querySelector(".graph__svg")
-        this.inputElement = options.tab.panelElement.querySelector(".input")
+        this.graphElement = options.tab.panelElement.querySelector(".graph__svg");
+        this.inputElement = options.tab.panelElement.querySelector(".input");
         this.inputElement.addEventListener("compositionend", () => {
             this.searchGraph();
         });
@@ -92,7 +92,7 @@ export class Graph extends Model {
             this.searchGraph();
         });
         if (this.url) {
-            this.levelInputElement = options.tab.panelElement.querySelector(".graph__number")
+            this.levelInputElement = options.tab.panelElement.querySelector(".graph__number");
             this.levelInputElement.addEventListener("input", (event: InputEvent & { target: HTMLInputElement }) => {
                 const value = parseInt(event.target.value, 10);
                 if (value < 0 || value > 16) {
@@ -120,40 +120,40 @@ export class Graph extends Model {
     }
 
     public resize() {
-        const svgElement = this.graphElement.querySelector("svg")
+        const svgElement = this.graphElement.querySelector("svg");
         if (!svgElement) {
-            return
+            return;
         }
-        const width = this.graphElement.clientWidth
-        const height = this.graphElement.clientHeight
-        svgElement.setAttribute("viewBox", `-${width / 2} , -${height / 2} , ${width}, ${height}`)
-        svgElement.setAttribute("style", `width: ${width}px; height:${height}px`)
+        const width = this.graphElement.clientWidth;
+        const height = this.graphElement.clientHeight;
+        svgElement.setAttribute("viewBox", `-${width / 2} , -${height / 2} , ${width}, ${height}`);
+        svgElement.setAttribute("style", `width: ${width}px; height:${height}px`);
     }
 
     public hlNode(id: string) {
         const color = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e";
         this.nodes.style("fill", color);
-        const hlNode = this.nodes.filter((item: any) => item.id === id)
-        hlNode.style("fill", '#f3a92f')
+        const hlNode = this.nodes.filter((item: any) => item.id === id);
+        hlNode.style("fill", "#f3a92f");
     }
 
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
         if (data.nodes.length === 0) {
-            return
+            return;
         }
-        this.graphElement.innerHTML = "<div class='graph__tip vditor-reset'></div>"
+        this.graphElement.innerHTML = "<div class='graph__tip vditor-reset'></div>";
         const color = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e";
         const secondColor = window.liandi.config.theme === "dark" ? "#959da5" : "#6a737d";
         const hlColor = "#f3a92f";
-        const width = this.graphElement.clientWidth
-        const height = this.graphElement.clientHeight
+        const width = this.graphElement.clientWidth;
+        const height = this.graphElement.clientHeight;
         const linksData = data.links.map(d => Object.create(d));
         const nodesData = data.nodes.map(d => Object.create(d));
-        const tooltipElement = this.graphElement.firstElementChild
+        const tooltipElement = this.graphElement.firstElementChild;
         const simulation = d3.forceSimulation(nodesData)
             .force("link", d3.forceLink(linksData).id((d) => {
                 // @ts-ignore
-                return d.id
+                return d.id;
             }))
             .force("charge", d3.forceManyBody())
             .force("collision", d3.forceCollide())
@@ -176,11 +176,11 @@ export class Graph extends Model {
                     d.fx = null;
                     d.fy = null;
                 });
-        }
+        };
 
         const svg = d3.create("svg")
             .attr("viewBox", `-${width / 2} , -${height / 2} , ${width}, ${height}`)
-            .attr("style", 'width: ' + width + 'px; height: ' + height + 'px;')
+            .attr("style", "width: " + width + "px; height: " + height + "px;");
         svg.append("svg:defs").append("svg:marker")
             .attr("id", "triangle")
             .attr("refX", 10)
@@ -191,7 +191,7 @@ export class Graph extends Model {
             .attr("orient", "auto")
             .append("path")
             .attr("d", "M0 0l6 3-6 3 1.5-3z")
-            .style("fill", 'rgba(210, 63, 49, 0.36)');
+            .style("fill", "rgba(210, 63, 49, 0.36)");
 
         const link = svg.append("g")
             .attr("stroke-opacity", 0.36)
@@ -201,14 +201,14 @@ export class Graph extends Model {
             .join("line")
             .attr("stroke", (item) => {
                 if (item.ref) {
-                    return '#d23f31'
+                    return "#d23f31";
                 }
-                return secondColor
-            }).attr('marker-end', (item) => {
+                return secondColor;
+            }).attr("marker-end", (item) => {
                 if (item.ref) {
-                    return 'url(#triangle)'
+                    return "url(#triangle)";
                 }
-                return ''
+                return "";
             });
 
         const node = svg.append("g")
@@ -219,43 +219,43 @@ export class Graph extends Model {
             .attr("r", d => d.symbolSize)
             .call(drag(simulation));
 
-        node.on('mouseover', function (d) {
-            d3.select(this).style('fill', hlColor)
-            let hlNodeId: string[] = []
-            link.style('stroke', function (item) {
+        node.on("mouseover", function (d) {
+            d3.select(this).style("fill", hlColor);
+            let hlNodeId: string[] = [];
+            link.style("stroke", function (item) {
                 if (item.target === d.target.__data__ || item.source === d.target.__data__) {
-                    hlNodeId.push(item.target.id)
-                    hlNodeId.push(item.source.id)
-                    return hlColor
+                    hlNodeId.push(item.target.id);
+                    hlNodeId.push(item.source.id);
+                    return hlColor;
                 }
                 return secondColor;
-            })
+            });
             hlNodeId = [...new Set(hlNodeId)];
-            node.style('fill', (item) => {
+            node.style("fill", (item) => {
                 if (hlNodeId.includes(item.id)) {
-                    return hlColor
+                    return hlColor;
                 }
-                return secondColor
-            })
+                return secondColor;
+            });
             tooltipElement.innerHTML = `<div>${d.target.__data__.content}</div>
-<div class="ft__secondary ft__smaller">${d.target.__data__.type === "NodeDocument" ? d.target.__data__.path : d.target.__data__.id}</div>`
+<div class="ft__secondary ft__smaller">${d.target.__data__.type === "NodeDocument" ? escapeHtml(d.target.__data__.path) : d.target.__data__.id}</div>`;
             tooltipElement.setAttribute("style", `display:block;top:${d.offsetY + 20}px;left: ${d.offsetX - 15}px`);
-        }).on('mouseout', (d) => {
-            node.style('fill', color)
-            link.style('stroke', (item) => {
+        }).on("mouseout", () => {
+            node.style("fill", color);
+            link.style("stroke", (item) => {
                 if (item.ref) {
-                    return '#d23f31'
+                    return "#d23f31";
                 }
-                return secondColor
-            })
-            tooltipElement.innerHTML = ``
-            tooltipElement.setAttribute("style", `display:none`);
-        }).on('dblclick', (item) => {
+                return secondColor;
+            });
+            tooltipElement.innerHTML = "";
+            tooltipElement.setAttribute("style", "display:none");
+        }).on("dblclick", (item) => {
             openFile(item.target.__data__.url, item.target.__data__.path, item.target.__data__.type === "NodeDocument" ? undefined : item.target.__data__.id);
-        }).on('click', (clickItem) => {
+        }).on("click", (clickItem) => {
             node.attr("r", (d) => {
-                return d.symbolSize
-            })
+                return d.symbolSize;
+            });
             getAllModels().editor.find((item) => {
                 if (item.url === clickItem.target.__data__.url && item.path === clickItem.target.__data__.path &&
                     !item.element.classList.contains("fn__none")) {
@@ -264,16 +264,16 @@ export class Graph extends Model {
                     if (nodeElement && nodeElement.getClientRects().length > 0) {
                         bgFade(nodeElement);
                         vditorElement.scrollTop = nodeElement.offsetTop - vditorElement.clientHeight / 2;
-                        d3.select(clickItem.target).attr("r", clickItem.target.__data__.symbolSize * 3)
+                        d3.select(clickItem.target).attr("r", clickItem.target.__data__.symbolSize * 3);
                         setTimeout(() => {
-                            d3.select(clickItem.target).attr("r", clickItem.target.__data__.symbolSize)
-                        }, 2000)
+                            d3.select(clickItem.target).attr("r", clickItem.target.__data__.symbolSize);
+                        }, 2000);
                     }
                     return true;
                 }
             });
-        })
-        this.nodes = node
+        });
+        this.nodes = node;
 
         svg.call(d3.zoom()
             .extent([[0, 0], [width, height]])
@@ -293,6 +293,6 @@ export class Graph extends Model {
         });
 
         // invalidation.then(() => simulation.stop());
-        this.graphElement.append(svg.node())
+        this.graphElement.append(svg.node());
     }
 }
