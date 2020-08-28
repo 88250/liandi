@@ -13,8 +13,12 @@ export class Menus {
         window.addEventListener("contextmenu", (event) => {
             let target = event.target as HTMLElement;
             while (target && !target.parentElement.isEqualNode(document.querySelector("body"))) {
-                const dataType = target.getAttribute("data-type");
+                event.preventDefault();
+                if (getSelection().rangeCount > 0) {
+                    getSelection().getRangeAt(0).collapse(true);
+                }
 
+                const dataType = target.getAttribute("data-type");
                 if (dataType === "tab-header-editor") {
                     this.itemData = {
                         target,
@@ -83,24 +87,19 @@ export class Menus {
                     const vditorMenu = initVditorMenu();
                     vditorMenu.getMenuItemById("pasteAsPlainText").enabled = clipboard.readText() !== "";
                     vditorMenu.popup();
-                    event.preventDefault();
-                    if (getSelection().rangeCount > 0) {
-                        getSelection().getRangeAt(0).collapse(true);
-                    }
                     break;
                 }
 
                 if (target.classList.contains("vditor-ir__menu")) {
                     // 编辑器菜单：复制 id
                     this.itemData = {
-                        target:target.parentElement,
+                        target: target.parentElement,
                     };
                     const vditorIconMenu = initVditorIconMenu();
                     vditorIconMenu.popup();
                     event.preventDefault();
                     break;
                 }
-
                 target = target.parentElement;
             }
         }, false);
