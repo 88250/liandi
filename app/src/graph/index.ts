@@ -183,7 +183,7 @@ export class Graph extends Model {
             .attr("style", "width: " + width + "px; height: " + height + "px;");
         svg.append("svg:defs").append("svg:marker")
             .attr("id", "triangle")
-            .attr("refX", 10)
+            .attr("refX", 12)
             .attr("refY", 3)
             .attr("stroke-opacity", 0.36)
             .attr("markerWidth", 6)
