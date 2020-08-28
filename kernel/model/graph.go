@@ -214,6 +214,7 @@ func checkBadNodes(nodes *[]interface{}, node interface{}, links *[]interface{})
 			*links = append(*links, map[string]interface{}{
 				"source": existNode["id"],
 				"target": currentNode["id"],
+				"ref": true,
 			})
 		}
 	}
@@ -223,7 +224,6 @@ func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 	tmpLinks := (*links)[:0]
 	for _, link := range *links {
 		l := link.(map[string]interface{})
-		Logger.Debugf("%v", l)
 		var sourceFound, targetFound bool
 		for _, node := range *nodes {
 			n := node.(map[string]interface{})
