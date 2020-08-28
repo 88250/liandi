@@ -120,13 +120,14 @@ export class Graph extends Model {
     }
 
     public resize() {
-        if (!this.graphElement.firstElementChild) {
+        const svgElement = this.graphElement.querySelector("svg")
+        if (!svgElement) {
             return
         }
         const width = this.graphElement.clientWidth
         const height = this.graphElement.clientHeight
-        this.graphElement.firstElementChild.setAttribute("viewBox", `-${width / 2} , -${height / 2} , ${width}, ${height}`)
-        this.graphElement.firstElementChild.setAttribute("style", `width: ${width}px; height:${height}px`)
+        svgElement.setAttribute("viewBox", `-${width / 2} , -${height / 2} , ${width}, ${height}`)
+        svgElement.setAttribute("style", `width: ${width}px; height:${height}px`)
     }
 
     public hlNode(id: string) {

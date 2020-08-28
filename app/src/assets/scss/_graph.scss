@@ -37,5 +37,6 @@
     min-width: 80px;
     transition: $transition;
     color: var(--toolbar-icon-color);
+    user-select: none;
   }
 }
