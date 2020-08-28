@@ -88,15 +88,10 @@ func buildBlockRefInText(trees []*parse.Tree) {
 			}
 
 			lute := NewLute()
-			t := parse.Parse("", n.Tokens, lute.Options)
+			t := parse.Inline("", n.Tokens, lute.Options) // 使用行级解析
 			var children []*ast.Node
-			if nil != t.Root.FirstChild {
-				for c := t.Root.FirstChild.FirstChild; nil != c; c = c.Next {
-					children = append(children, c)
-				}
-			} else {
-				// 空白的文本节点
-				children = append(children, &ast.Node{Type: n.Type, Tokens: n.Tokens})
+			for c := t.Root.FirstChild.FirstChild; nil != c; c = c.Next {
+				children = append(children, c)
 			}
 			for _, c := range children {
 				n.InsertBefore(c)
