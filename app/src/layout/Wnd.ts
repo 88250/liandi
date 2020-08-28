@@ -143,7 +143,7 @@ export class Wnd {
             }
         });
         if (currentTab && target === currentTab.headElement && currentTab.model instanceof Graph) {
-            currentTab.model.resize()
+            currentTab.model.resize();
         }
     }
 
@@ -270,15 +270,15 @@ export class Wnd {
                     layout.addWnd.call(layout, wnd);
 
                     if (direction === "tb" && movedWnd.element.style.width) {
-                        layout.element.style.width = movedWnd.element.style.width
-                        layout.element.classList.remove("fn__flex-1")
-                        movedWnd.element.style.width = ""
-                        movedWnd.element.classList.add("fn__flex-1")
+                        layout.element.style.width = movedWnd.element.style.width;
+                        layout.element.classList.remove("fn__flex-1");
+                        movedWnd.element.style.width = "";
+                        movedWnd.element.classList.add("fn__flex-1");
                     } else if (direction === "lr" && movedWnd.element.style.height) {
-                        layout.element.style.height = movedWnd.element.style.height
-                        layout.element.classList.remove("fn__flex-1")
-                        movedWnd.element.style.height = ""
-                        movedWnd.element.classList.add("fn__flex-1")
+                        layout.element.style.height = movedWnd.element.style.height;
+                        layout.element.classList.remove("fn__flex-1");
+                        movedWnd.element.style.height = "";
+                        movedWnd.element.classList.add("fn__flex-1");
                     }
                     return true;
                 }
