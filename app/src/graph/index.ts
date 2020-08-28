@@ -202,19 +202,11 @@ export class Graph extends Model {
 
         const node = svg.append("g")
             .attr("fill", color)
-            .selectAll("g")
+            .selectAll("circle")
             .data(nodesData)
-            .join("g")
+            .join("circle")
+            .attr("r", d => d.symbolSize)
             .call(drag(simulation));
-        node.append("circle")
-            .attr("r", d => d.symbolSize);
-        node.append("title")
-            .text(d => d.content);
-        node.append("text")
-            .attr("x", -10)
-            .attr("y", 16)
-            .attr("font-size", 12)
-            .text(d => path.posix.basename(d.path))
 
         node.on('mouseover', function (d) {
             d3.select(this).style('fill', hlColor)
@@ -259,7 +251,7 @@ export class Graph extends Model {
                         d3.select(clickItem.target).attr("r", clickItem.target.__data__.symbolSize * 3)
                         setTimeout(() => {
                             d3.select(clickItem.target).attr("r", clickItem.target.__data__.symbolSize)
-                        }, 3000)
+                        }, 2000)
                     }
                     return true;
                 }
@@ -271,9 +263,7 @@ export class Graph extends Model {
             .extent([[0, 0], [width, height]])
             .scaleExtent([1, 8])
             .on("zoom", (event: any) => {
-                node.attr("transform", (item) => {
-                    return event.transform.translate(item.x, item.y)
-                });
+                node.attr("transform", event.transform);
                 link.attr("transform", event.transform);
             })).on("dblclick.zoom", null);
 
@@ -282,10 +272,8 @@ export class Graph extends Model {
                 .attr("y1", d => d.source.y)
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
-            node.attr("transform", d => `translate(${d.x},${d.y})`);
-            // node
-            //     .attr("cx", d => d.x)
-            //     .attr("cy", d => d.y);
+            node.attr("cx", d => d.x)
+                .attr("cy", d => d.y);
         });
 
         // invalidation.then(() => simulation.stop());
