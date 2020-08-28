@@ -32,7 +32,7 @@ export const initEditorMenu = () => {
             const filePath = (currentTab.model as Editor).path;
             const wnd = (currentTab.parent as Wnd).split("lr");
             const tab = new Tab({
-                title: `<svg class="item__svg"><use xlink:href="#iconGraph"></use></svg> ${escapeHtml(path.posix.basename(filePath))}`,
+                title: `<svg class="item__svg"><use xlink:href="#iconGraph"></use></svg><span>${escapeHtml(path.posix.basename(filePath))}</span>`,
                 callback(tab: Tab) {
                     tab.addModel(new Graph({
                         tab,
@@ -53,7 +53,7 @@ export const initEditorMenu = () => {
             const filePath = (currentTab.model as Editor).path;
             const newWnd = (currentTab.parent as Wnd).split("lr");
             const tab = new Tab({
-                title: `<svg class="item__svg"><use xlink:href="#vditor-icon-align-center"></use></svg> ${escapeHtml(path.posix.basename(filePath))}`,
+                title: `<svg class="item__svg"><use xlink:href="#vditor-icon-align-center"></use></svg><span>${escapeHtml(path.posix.basename(filePath))}</span>`,
                 callback(tab: Tab) {
                     tab.addModel(new Outline({
                         tab,
