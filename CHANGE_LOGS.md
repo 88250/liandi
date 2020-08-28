@@ -1,3 +1,21 @@
+## v1.1.7 / 2020-08-28
+
+### 引入特性
+
+* [支持指定配置目录路径](https://github.com/88250/liandi/issues/78)
+
+### 改进功能
+
+* [稳定关系图布局](https://github.com/88250/liandi/issues/180)
+* [关系图去掉根块子块](https://github.com/88250/liandi/issues/182)
+* [跳转块定义定位优化](https://github.com/88250/liandi/issues/184)
+
+### 修复缺陷
+
+* [大纲上下分割问题](https://github.com/88250/liandi/issues/181)
+* [导入异常引起内核崩溃导致的白屏问题](https://github.com/88250/liandi/issues/183)
+* [新建空文件名文档问题](https://github.com/88250/liandi/issues/185)
+
 ## v1.1.6 / 2020-08-26
 
 ### 引入特性
