@@ -165,6 +165,9 @@ export class Graph extends Model {
         const color = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e";
         this.nodes.style("fill", color);
         const hlNode = this.nodes.filter((item: any) => item.id === id);
+        if (hlNode._groups[0].length === 0) {
+            return
+        }
         hlNode.style("fill", "#f3a92f");
         this.svg.transition().duration(1000).call(
             this.zoom.transform,
