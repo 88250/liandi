@@ -134,7 +134,7 @@ app.whenReady().then(() => {
   if (isDevEnv) {
     kernelPath = path.join('..', 'kernel', kernelName)
   }
-  spawn(kernelPath)
+  spawn(`${kernelPath} --conf=${app.commandLine.getSwitchValue('conf')}`)
 
   createWindow()
 })
