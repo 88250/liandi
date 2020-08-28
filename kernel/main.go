@@ -12,10 +12,12 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"math/rand"
 	"net/http/pprof"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 	"time"
 
@@ -28,6 +30,14 @@ import (
 
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
+
+	confPath := flag.String("conf", filepath.Join(model.HomeDir, ".liandi"), "dir path of conf dir (.liandi/), default to ~/liandi/")
+	flag.Parse()
+	if "" != *confPath {
+		model.LianDiDir = *confPath
+	}
+	model.ConfPath      = filepath.Join(model.LianDiDir, "conf.json")
+	model.LogPath       = filepath.Join(model.LianDiDir, "liandi.log")
 
 	model.InitLog()
 	model.InitConf()

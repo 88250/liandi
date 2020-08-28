@@ -17,7 +17,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -39,10 +38,10 @@ const (
 
 var (
 	HomeDir, _    = gulu.OS.Home()
-	LianDiDir     = filepath.Join(HomeDir, ".liandi")
-	ConfPath      = filepath.Join(LianDiDir, "conf.json")
-	LogPath       = filepath.Join(LianDiDir, "liandi.log")
 	WorkingDir, _ = os.Getwd()
+	LianDiDir     string
+	ConfPath      string
+	LogPath       string
 )
 
 var Conf *AppConf
