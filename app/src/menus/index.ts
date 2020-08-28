@@ -66,7 +66,7 @@ export class Menus {
                 }
 
                 if (dataType === "navigation-file") {
-                    // navigation 文件上：删除/重命名/打开文件位置
+                    // navigation 文件上：删除/重命名/打开文件位置/导出
                     this.itemData = {
                         target,
                         url: this.getUrl(target),

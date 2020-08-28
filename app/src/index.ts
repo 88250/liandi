@@ -23,6 +23,7 @@ import * as path from "path";
 import {animationThrottle} from "./util/animationThrottle";
 import {destroyDialog} from "./util/dialog";
 import {openFile} from "./editor/util";
+import {exportFile} from "./util/download";
 
 class App {
     constructor() {
@@ -70,6 +71,9 @@ class App {
             const data = processMessage(event.data);
             if (data) {
                 switch (data.cmd) {
+                    case "exportmd":
+                        exportFile(data.data.content, data.data.name)
+                        break;
                     case "search":
                         onSearch(data.data);
                         break;
