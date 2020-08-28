@@ -70,6 +70,12 @@ export class Editor extends Model {
                     case "searchblock":
                         this.showSearchBlock(data.data);
                         break;
+                    case "unmount":
+                    case "remove":
+                        if (this.url === data.data.url && this.path.indexOf(data.data.path) === 0) {
+                            this.parent.parent.removeTab(this.parent.id);
+                        }
+                        break;
                     case "getblock":
                         this.onGetBlock(data.data);
                         break;

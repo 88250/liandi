@@ -63,6 +63,22 @@ export class Graph extends Model {
                             this.path = data.data.newPath
                             this.parent.headElement.querySelector("span").textContent = data.data.newName
                         }
+                        if (!this.url) {
+                            this.send("graph", {
+                                k: this.inputElement.value
+                            });
+                        }
+                        break;
+                    case "unmount":
+                    case "remove":
+                        if (this.url && this.url === data.data.url && this.path.indexOf(data.data.path) === 0) {
+                            this.parent.parent.removeTab(this.parent.id);
+                        }
+                        if (!this.url) {
+                            this.send("graph", {
+                                k: this.inputElement.value
+                            });
+                        }
                         break;
                     case "reload":
                         if (this.path) {
