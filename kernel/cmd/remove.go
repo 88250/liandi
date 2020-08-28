@@ -11,8 +11,6 @@
 package cmd
 
 import (
-	"path"
-
 	"github.com/88250/liandi/kernel/model"
 )
 
@@ -31,16 +29,11 @@ func (cmd *remove) Exec() {
 		ret.Msg = err.Error()
 	}
 
-	p = path.Dir(path.Clean(p))
-	if "." == p {
-		p = "/"
-	}
 	ret.Data = map[string]interface{}{
 		"url":  url,
 		"path": p,
 	}
 	cmd.Push()
-
 
 	pushReloadEvent(ret, map[string]interface{}{
 		"url":  url,
