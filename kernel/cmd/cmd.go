@@ -90,6 +90,8 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, sess
 		ret = &treegraph{baseCmd}
 	case "exportmd":
 		ret = &exportmd{baseCmd}
+	case "getblockinfo":
+		ret = &getblockinfo{baseCmd}
 	}
 
 	pushMode := model.PushModeSingleSelf
