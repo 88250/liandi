@@ -16,7 +16,8 @@ export class Graph extends Model {
     public url: string
     public path: string
     private nodes: any
-    private links: any
+    private svg: any
+    private zoom: any
 
     constructor(options: {
         tab: Tab
@@ -135,6 +136,10 @@ export class Graph extends Model {
         this.nodes.style("fill", color);
         const hlNode = this.nodes.filter((item: any) => item.id === id);
         hlNode.style("fill", "#f3a92f");
+        this.svg.transition().duration(1000).call(
+            this.zoom.transform,
+            d3.zoomIdentity.scale(3).translate(-hlNode._groups[0][0].__data__.x, -hlNode._groups[0][0].__data__.y)
+        );
     }
 
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
@@ -192,7 +197,16 @@ export class Graph extends Model {
             .append("path")
             .attr("d", "M0 0l6 3-6 3 1.5-3z")
             .style("fill", "rgba(210, 63, 49, 0.36)");
-
+        this.svg = svg
+        svg.on("click", (item) => {
+            node.style("fill", color);
+            link.style("stroke", (item) => {
+                if (item.ref) {
+                    return "#d23f31";
+                }
+                return secondColor;
+            });
+        })
         const g = svg.append("g");
 
         const link = g.append("g")
@@ -221,14 +235,18 @@ export class Graph extends Model {
             .attr("r", d => d.symbolSize)
             .call(drag(simulation));
 
+        let hlNodeId: string[] = [];
         node.on("mouseover", function (d) {
+            hlNodeId = []
             d3.select(this).style("fill", hlColor);
-            let hlNodeId: string[] = [];
             link.style("stroke", function (item) {
                 if (item.target === d.target.__data__ || item.source === d.target.__data__) {
                     hlNodeId.push(item.target.id);
                     hlNodeId.push(item.source.id);
                     return hlColor;
+                }
+                if (item.ref) {
+                    return "#d23f31";
                 }
                 return secondColor;
             });
@@ -239,20 +257,22 @@ export class Graph extends Model {
                 }
                 return secondColor;
             });
-            tooltipElement.innerHTML = `<div>${d.target.__data__.content}</div>
-<div class="ft__secondary ft__smaller">${d.target.__data__.type === "NodeDocument" ? escapeHtml(d.target.__data__.path) : d.target.__data__.id}</div>`;
+            tooltipElement.innerHTML = `<div>${d.target.__data__.type === "NodeDocument" ? escapeHtml(d.target.__data__.path.substr(1)) : ""}</div>
+<div class="ft__secondary ft__smaller">${d.target.__data__.content}</div>`;
             tooltipElement.setAttribute("style", `display:block;top:${d.offsetY + 20}px;left: ${d.offsetX - 15}px`);
         }).on("mouseout", () => {
-            node.style("fill", color);
-            link.style("stroke", (item) => {
-                if (item.ref) {
-                    return "#d23f31";
+            node.style("fill",  (item) => {
+                if (hlNodeId.includes(item.id)) {
+                    return hlColor;
                 }
-                return secondColor;
+                return color;
             });
-            tooltipElement.innerHTML = "";
             tooltipElement.setAttribute("style", "display:none");
         }).on("dblclick", (item) => {
+            svg.transition().duration(1000).call(
+                zoom.transform,
+                d3.zoomIdentity.scale(3).translate(-item.target.__data__.x, -item.target.__data__.y)
+            );
             openFile(item.target.__data__.url, item.target.__data__.path, item.target.__data__.type === "NodeDocument" ? undefined : item.target.__data__.id);
         }).on("click", (clickItem) => {
             node.attr("r", (d) => {
@@ -274,15 +294,18 @@ export class Graph extends Model {
                     return true;
                 }
             });
+            clickItem.stopPropagation();
         });
         this.nodes = node;
 
-        svg.call(d3.zoom()
+        const zoom = d3.zoom()
             .extent([[0, 0], [width, height]])
             .scaleExtent([1, 8])
             .on("zoom", (event: any) => {
-                g.attr("transform", "scale(" + event.transform.k + ")");
-            })).on("dblclick.zoom", null);
+                g.attr("transform", `translate(${event.transform.x}, ${event.transform.y})` + "scale(" + event.transform.k + ")");
+            })
+        svg.call(zoom).on("dblclick.zoom", null);
+        this.zoom = zoom
 
         simulation.on("tick", () => {
             link.attr("x1", d => d.source.x)

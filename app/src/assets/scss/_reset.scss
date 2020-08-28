@@ -195,6 +195,10 @@ line, circle {
   transition: fill .15s ease-in-out;
 }
 
+circle {
+  cursor: pointer;
+}
+
 blockquote {
   margin: 0;
 }
