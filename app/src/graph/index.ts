@@ -17,6 +17,7 @@ export class Graph extends Model {
     public url: string
     public path: string
     private nodes: any
+    private links: any
     private svg: any
     private zoom: any
 
@@ -169,10 +170,27 @@ export class Graph extends Model {
             return
         }
         hlNode.style("fill", "#f3a92f");
+        const hlNodeData = hlNode._groups[0][0].__data__
         this.svg.transition().duration(1000).call(
             this.zoom.transform,
-            d3.zoomIdentity.scale(3).translate(-hlNode._groups[0][0].__data__.x, -hlNode._groups[0][0].__data__.y)
+            d3.zoomIdentity.scale(3).translate(-hlNodeData.x, -hlNodeData.y)
         );
+        let hlRefNodeId: string[] = []
+        this.links.each(function (item: any) {
+            if (item.target === hlNodeData || item.source === hlNodeData) {
+                if (item.ref) {
+                    if (item.target.id !== hlNodeData.id) {
+                        hlRefNodeId.push(item.target.id)
+                    }
+                    if (item.source.id !== hlNodeData.id) {
+                        hlRefNodeId.push(item.source.id)
+                    }
+                }
+            }
+        });
+        hlRefNodeId = [...new Set(hlRefNodeId)];
+        this.nodes.selectChildren('text').attr("display", "none");
+        (this.nodes.filter((item: any) => hlRefNodeId.includes(item.id)) as any).selectChildren('text').attr("display", "block")
     }
 
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
@@ -259,23 +277,39 @@ export class Graph extends Model {
                 }
                 return "";
             });
-
+        this.links = link;
         const node = g.append("g")
             .attr("fill", color)
-            .selectAll("circle")
+            .selectAll("g")
             .data(nodesData)
-            .join("circle")
-            .attr("r", d => d.symbolSize)
+            .join("g")
             .call(drag(simulation));
+        node.append("circle")
+            .attr("r", d => d.symbolSize);
+        node.append("text")
+            .attr("x", -12)
+            .attr("y", 12)
+            .attr("font-size", 10)
+            .attr("display", 'none')
+            .text(d => d.content);
 
         let hlNodeId: string[] = [];
+        let hlRefNodeId: string[] = [];
         node.on("mouseover", function (d) {
             hlNodeId = []
-            d3.select(this).style("fill", hlColor);
+            hlRefNodeId = []
             link.style("stroke", function (item) {
                 if (item.target === d.target.__data__ || item.source === d.target.__data__) {
                     hlNodeId.push(item.target.id);
                     hlNodeId.push(item.source.id);
+                    if (item.ref) {
+                        if (item.target.id !== d.target.__data__.id) {
+                            hlRefNodeId.push(item.target.id)
+                        }
+                        if (item.source.id !== d.target.__data__.id) {
+                            hlRefNodeId.push(item.source.id)
+                        }
+                    }
                     return hlColor;
                 }
                 if (item.ref) {
@@ -284,22 +318,16 @@ export class Graph extends Model {
                 return secondColor;
             });
             hlNodeId = [...new Set(hlNodeId)];
-            node.style("fill", (item) => {
-                if (hlNodeId.includes(item.id)) {
-                    return hlColor;
-                }
-                return secondColor;
-            });
+            hlRefNodeId = [...new Set(hlRefNodeId)];
+            node.style("fill", secondColor);
+            node.filter((item) => hlNodeId.includes(item.id)).style("fill", hlColor);
+            (node.filter((item) => hlRefNodeId.includes(item.id)) as any).selectChildren('text').attr("display", "block")
             tooltipElement.innerHTML = `<div>${d.target.__data__.type === "NodeDocument" ? escapeHtml(d.target.__data__.path.substr(1)) : ""}</div>
 <div class="ft__secondary ft__smaller">${d.target.__data__.content}</div>`;
             tooltipElement.setAttribute("style", `display:block;top:${d.offsetY + 20}px;left: ${d.offsetX - 15}px`);
         }).on("mouseout", () => {
-            node.style("fill", (item) => {
-                if (hlNodeId.includes(item.id)) {
-                    return hlColor;
-                }
-                return color;
-            });
+            (node.filter((item) => hlRefNodeId.includes(item.id)) as any).selectChildren('text').attr("display", "none")
+            node.filter((item) => !hlNodeId.includes(item.id)).style("fill", color)
             tooltipElement.setAttribute("style", "display:none");
         }).on("dblclick", (item) => {
             svg.transition().duration(1000).call(
@@ -345,8 +373,7 @@ export class Graph extends Model {
                 .attr("y1", d => d.source.y)
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
-            node.attr("cx", d => d.x)
-                .attr("cy", d => d.y);
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
         });
         this.graphElement.append(svg.node());
     }
