@@ -23,4 +23,5 @@ export abstract class Constants {
     public static readonly CB_PUT_RELOAD = "cb-put-reload"
     public static readonly CB_GETCONF_BOX = "cb-getconf-box"
     public static readonly CB_MOUNT_HELP = "cb-mount-help"
+    public static readonly CB_GRAPH_FOCUS = "cb-graph-focus"
 }

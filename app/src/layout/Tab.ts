@@ -35,6 +35,7 @@ export class Tab {
         this.panelElement = document.createElement("div");
         this.panelElement.classList.add("fn__flex-1");
         this.panelElement.innerHTML = options.panel || "";
+        this.panelElement.setAttribute("data-id", this.id);
     }
 
     public addModel(model: Model) {
