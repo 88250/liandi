@@ -123,6 +123,24 @@ func GetBlock(url, id string) (ret *Block) {
 			continue
 		}
 
+		def := getBlock(url, id)
+		if nil == def {
+			return
+		}
+
+		text := renderBlockHTML(def)
+		ret = &Block{URL: tree.URL, Path: tree.Path, ID: def.ID, Type: def.Type.String(), Content: text}
+		return
+	}
+	return
+}
+
+func getBlock(url, id string) (ret *ast.Node) {
+	for _, tree := range trees {
+		if tree.URL != url {
+			continue
+		}
+
 		ast.Walk(tree.Root, func(n *ast.Node, entering bool) ast.WalkStatus {
 			if !entering {
 				return ast.WalkContinue
@@ -138,12 +156,15 @@ func GetBlock(url, id string) (ret *Block) {
 			}
 
 			if id == n.ID {
-				text := renderBlockHTML(n)
-				ret = &Block{URL: tree.URL, Path: tree.Path, ID: n.ID, Type: n.Type.String(), Content: text}
+				ret = n
 				return ast.WalkStop
 			}
 			return ast.WalkContinue
 		})
+
+		if nil != ret {
+			return
+		}
 	}
 	return
 }

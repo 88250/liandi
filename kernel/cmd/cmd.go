@@ -88,6 +88,8 @@ func NewCommand(cmdStr string, cmdId float64, param map[string]interface{}, sess
 		ret = &graph{baseCmd}
 	case "treegraph":
 		ret = &treegraph{baseCmd}
+	case "exportmd":
+		ret = &exportmd{baseCmd}
 	}
 
 	pushMode := model.PushModeSingleSelf

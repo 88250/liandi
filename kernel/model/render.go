@@ -42,3 +42,15 @@ func renderBlockHTML(node *ast.Node) string {
 	})
 	return strings.TrimSpace(renderer.Writer.String())
 }
+
+func renderBlockMarkdown(node *ast.Node) string {
+	root := &ast.Node{Type: ast.NodeDocument}
+	lute := NewLute()
+	tree := &parse.Tree{Root: root, Context: &parse.Context{Option: lute.Options}}
+	renderer := render.NewFormatRenderer(tree)
+	ast.Walk(node, func(n *ast.Node, entering bool) ast.WalkStatus {
+		rendererFunc := renderer.RendererFuncs[n.Type]
+		return rendererFunc(n, entering)
+	})
+	return strings.TrimSpace(renderer.Writer.String())
+}
