@@ -8,6 +8,7 @@ import {openFile} from "../editor/util";
 import {getAllModels} from "../layout/util";
 import {bgFade} from "../util/bgFade";
 import {escapeHtml} from "../util/escape";
+import {Constants} from "../constants";
 
 export class Graph extends Model {
     public inputElement: HTMLInputElement;
@@ -23,6 +24,7 @@ export class Graph extends Model {
         tab: Tab
         url?: string
         path?: string
+        nodeId?: string
     }) {
         super({
             id: options.tab.id,
@@ -31,7 +33,8 @@ export class Graph extends Model {
                     this.send("treegraph", {
                         k: this.inputElement.value,
                         url: options.url,
-                        path: options.path
+                        path: options.path,
+                        callback: options.nodeId ? Constants.CB_GRAPH_FOCUS : undefined
                     });
                 } else {
                     this.send("graph", {
@@ -49,6 +52,11 @@ export class Graph extends Model {
                     case "graph":
                     case "treegraph":
                         this.onGraph(data.data);
+                        if (data.callback === Constants.CB_GRAPH_FOCUS) {
+                            setTimeout(() => {
+                                this.hlNode(options.nodeId)
+                            })
+                        }
                         break;
                     case "reload":
                         if (this.path) {
@@ -261,7 +269,7 @@ export class Graph extends Model {
 <div class="ft__secondary ft__smaller">${d.target.__data__.content}</div>`;
             tooltipElement.setAttribute("style", `display:block;top:${d.offsetY + 20}px;left: ${d.offsetX - 15}px`);
         }).on("mouseout", () => {
-            node.style("fill",  (item) => {
+            node.style("fill", (item) => {
                 if (hlNodeId.includes(item.id)) {
                     return hlColor;
                 }
