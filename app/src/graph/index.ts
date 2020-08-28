@@ -58,6 +58,12 @@ export class Graph extends Model {
                             }, 100)
                         }
                         break;
+                    case "rename":
+                        if (this.url && data.data.url === this.url && data.data.oldPath === this.path) {
+                            this.path = data.data.newPath
+                            this.parent.headElement.querySelector("span").textContent = data.data.newName
+                        }
+                        break;
                     case "reload":
                         if (this.path) {
                             if (data.data.url === this.url && data.data.path === this.path) {
