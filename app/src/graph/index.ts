@@ -193,9 +193,11 @@ export class Graph extends Model {
             .attr("d", "M0 0l6 3-6 3 1.5-3z")
             .style("fill", "rgba(210, 63, 49, 0.36)");
 
-        const link = svg.append("g")
+        const g = svg.append("g");
+
+        const link = g.append("g")
             .attr("stroke-opacity", 0.36)
-            .attr("stroke-width", 0.8)
+            .attr("stroke-width", 0.5)
             .selectAll("line")
             .data(linksData)
             .join("line")
@@ -211,7 +213,7 @@ export class Graph extends Model {
                 return "";
             });
 
-        const node = svg.append("g")
+        const node = g.append("g")
             .attr("fill", color)
             .selectAll("circle")
             .data(nodesData)
@@ -279,8 +281,7 @@ export class Graph extends Model {
             .extent([[0, 0], [width, height]])
             .scaleExtent([1, 8])
             .on("zoom", (event: any) => {
-                node.attr("transform", event.transform);
-                link.attr("transform", event.transform);
+                g.attr("transform", "scale(" + event.transform.k + ")");
             })).on("dblclick.zoom", null);
 
         simulation.on("tick", () => {
@@ -291,8 +292,6 @@ export class Graph extends Model {
             node.attr("cx", d => d.x)
                 .attr("cy", d => d.y);
         });
-
-        // invalidation.then(() => simulation.stop());
         this.graphElement.append(svg.node());
     }
 }
