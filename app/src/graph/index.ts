@@ -55,7 +55,7 @@ export class Graph extends Model {
                         if (data.callback === Constants.CB_GRAPH_FOCUS) {
                             setTimeout(() => {
                                 this.hlNode(options.nodeId)
-                            })
+                            }, 100)
                         }
                         break;
                     case "reload":
