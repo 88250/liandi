@@ -135,7 +135,6 @@ app.whenReady().then(() => {
     kernelPath = path.join('..', 'kernel', kernelName)
   }
   spawn(`${kernelPath} --conf=${app.commandLine.getSwitchValue('conf')}`)
-
   createWindow()
 })
 
