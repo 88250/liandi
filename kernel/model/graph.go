@@ -214,7 +214,7 @@ func checkBadNodes(nodes *[]interface{}, node interface{}, links *[]interface{})
 			*links = append(*links, map[string]interface{}{
 				"source": existNode["id"],
 				"target": currentNode["id"],
-				"ref": true,
+				"ref":    true,
 			})
 		}
 	}
