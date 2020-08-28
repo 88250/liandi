@@ -30,9 +30,6 @@ export class Files extends Model {
                     case "ls":
                         this.onLs(data.data);
                         break;
-                    case "unmount":
-                        this.onUnmount(data.data.url);
-                        break;
                     case "mount":
                     case "mountremote":
                         this.onMount(data.data, getAllModels());
@@ -43,8 +40,9 @@ export class Files extends Model {
                             }, 200);
                         }
                         break;
+                    case "unmount":
                     case "remove":
-                        this.onRemove(data.data.url);
+                        this.onRemove(data.data.url, data.cmd);
                         break;
                     case "create":
                     case "mkdir":
@@ -113,16 +111,6 @@ export class Files extends Model {
         });
     }
 
-    private reloadGraph(allModels: IModels) {
-        allModels.graph.forEach((item) => {
-            if (!item.path) {
-                item.send("graph", {
-                    k: item.inputElement.value
-                });
-            }
-        });
-    }
-
     private onMkdir(data: {
         cmd: string,
         callback?: string,
@@ -157,46 +145,27 @@ export class Files extends Model {
         destroyDialog();
     }
 
-    private onRemove(url: string) {
+    private onRemove(url: string, type: string) {
         const itemData = window.liandi.menus?.itemData;
         let targetElement = itemData?.target;
         if (!this.element.contains(targetElement)) {
             targetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(url)}'] li[data-path='${targetElement.getAttribute("data-path")}']`);
         }
-        if (targetElement) {
-            if (targetElement.nextElementSibling?.tagName === "UL") {
-                targetElement.nextElementSibling.remove();
-            }
-            targetElement.remove();
-        }
         destroyDialog();
-        const allModels = getAllModels();
-        allModels.editor.forEach((item) => {
-            if (item.url === itemData.url && item.path.indexOf(itemData.path) === 0) {
-                item.parent.parent.removeTab(item.parent.id);
+        if (targetElement) {
+            if (type === "remove") {
+                if (targetElement.nextElementSibling?.tagName === "UL") {
+                    targetElement.nextElementSibling.remove();
+                }
+                targetElement.remove();
+            } else {
+                targetElement.parentElement.remove();
             }
-        });
-        this.reloadGraph(allModels);
-    }
 
-    private onUnmount(url: string) {
-        const itemData = window.liandi.menus?.itemData;
-        let targetElement = itemData?.target;
-        if (!this.element.contains(targetElement)) {
-            targetElement = this.element.querySelector(`ul[data-url='${encodeURIComponent(url)}'] li[data-path='${targetElement.getAttribute("data-path")}']`);
         }
-        if (targetElement) {
-            targetElement.parentElement.remove();
+        if (type === "unmount") {
+            window.liandi.ws.send("getconf", {callback: Constants.CB_GETCONF_BOX});
         }
-        destroyDialog();
-        const allModels = getAllModels();
-        allModels.editor.forEach((item) => {
-            if (item.url === itemData.url && item.path.indexOf(itemData.path) === 0) {
-                item.parent.parent.removeTab(item.parent.id);
-            }
-        });
-        this.reloadGraph(allModels);
-        window.liandi.ws.send("getconf", {callback: Constants.CB_GETCONF_BOX});
     }
 
     public getLeaf(liElement: HTMLElement, box: IBox) {
@@ -286,7 +255,13 @@ export class Files extends Model {
             url: data.box.url,
             path: "/",
         }, true);
-        this.reloadGraph(allModels);
+        allModels.graph.forEach((item) => {
+            if (!item.path) {
+                item.send("graph", {
+                    k: item.inputElement.value
+                });
+            }
+        });
         window.liandi.ws.send("getconf", {callback: Constants.CB_GETCONF_BOX});
     }
 
