@@ -151,7 +151,7 @@ func connectBacklinks(links *[]interface{}) {
 }
 
 const (
-	NodeSize = 2 // 节点默认大小
+	NodeSize = 3 // 节点默认大小
 )
 
 func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
