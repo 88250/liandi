@@ -69,9 +69,19 @@ export class Graph extends Model {
         };
 
         options.tab.panelElement.classList.add("graph");
-        this.graphElement = options.tab.panelElement.lastElementChild as HTMLDivElement;
-        this.inputElement = options.tab.panelElement.firstElementChild.firstElementChild as HTMLInputElement;
-        this.inputElement.placeholder = i18n[window.liandi.config.lang].search;
+        let levelHTML = ''
+        if (this.url) {
+            levelHTML = `<span class="graph__label">${i18n[window.liandi.config.lang].linkLevel}</span>
+    <input value="1" min="0" max="16" type="number" class="input graph__number">`
+
+        }
+        options.tab.panelElement.innerHTML = `<div class="graph__input">
+    <input class="input" placeholder="${i18n[window.liandi.config.lang].search}">${levelHTML}
+</div>
+<div class="fn__flex-1 graph__svg"></div>`
+
+        this.graphElement = options.tab.panelElement.querySelector(".graph__svg")
+        this.inputElement = options.tab.panelElement.querySelector(".input")
         this.inputElement.addEventListener("compositionend", () => {
             this.searchGraph();
         });
@@ -82,8 +92,7 @@ export class Graph extends Model {
             this.searchGraph();
         });
         if (this.url) {
-            this.inputElement.insertAdjacentHTML("afterend", `<span class="graph__label">${i18n[window.liandi.config.lang].linkLevel}</span><input value='1' min='0' max='16' type='number' class='input graph__number'>`);
-            this.levelInputElement = options.tab.panelElement.firstElementChild.lastElementChild as HTMLInputElement;
+            this.levelInputElement = options.tab.panelElement.querySelector(".graph__number")
             this.levelInputElement.addEventListener("input", (event: InputEvent & { target: HTMLInputElement }) => {
                 const value = parseInt(event.target.value, 10);
                 if (value < 0 || value > 16) {
@@ -131,6 +140,7 @@ export class Graph extends Model {
         if (data.nodes.length === 0) {
             return
         }
+        this.graphElement.innerHTML = "<div class='graph__tip vditor-reset'></div>"
         const color = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e";
         const secondColor = window.liandi.config.theme === "dark" ? "#959da5" : "#6a737d";
         const hlColor = "#f3a92f";
@@ -138,7 +148,7 @@ export class Graph extends Model {
         const height = this.graphElement.clientHeight
         const linksData = data.links.map(d => Object.create(d));
         const nodesData = data.nodes.map(d => Object.create(d));
-
+        const tooltipElement = this.graphElement.firstElementChild
         const simulation = d3.forceSimulation(nodesData)
             .force("link", d3.forceLink(linksData).id((d) => {
                 // @ts-ignore
@@ -202,19 +212,11 @@ export class Graph extends Model {
 
         const node = svg.append("g")
             .attr("fill", color)
-            .selectAll("g")
+            .selectAll("circle")
             .data(nodesData)
-            .join("g")
+            .join("circle")
+            .attr("r", d => d.symbolSize)
             .call(drag(simulation));
-        node.append("circle")
-            .attr("r", d => d.symbolSize);
-        node.append("title")
-            .text(d => d.content);
-        node.append("text")
-            .attr("x", -10)
-            .attr("y", 16)
-            .attr("font-size", 12)
-            .text(d => path.posix.basename(d.path))
 
         node.on('mouseover', function (d) {
             d3.select(this).style('fill', hlColor)
@@ -234,7 +236,10 @@ export class Graph extends Model {
                 }
                 return secondColor
             })
-        }).on('mouseout', function () {
+            tooltipElement.innerHTML = `<div>${d.target.__data__.content}</div>
+<div class="ft__secondary ft__smaller">${d.target.__data__.type === "NodeDocument" ? d.target.__data__.path : d.target.__data__.id}</div>`
+            tooltipElement.setAttribute("style", `display:block;top:${d.offsetY + 20}px;left: ${d.offsetX - 15}px`);
+        }).on('mouseout', (d) => {
             node.style('fill', color)
             link.style('stroke', (item) => {
                 if (item.ref) {
@@ -242,6 +247,8 @@ export class Graph extends Model {
                 }
                 return secondColor
             })
+            tooltipElement.innerHTML = ``
+            tooltipElement.setAttribute("style", `display:none`);
         }).on('dblclick', (item) => {
             openFile(item.target.__data__.url, item.target.__data__.path, item.target.__data__.type === "NodeDocument" ? undefined : item.target.__data__.id);
         }).on('click', (clickItem) => {
@@ -259,7 +266,7 @@ export class Graph extends Model {
                         d3.select(clickItem.target).attr("r", clickItem.target.__data__.symbolSize * 3)
                         setTimeout(() => {
                             d3.select(clickItem.target).attr("r", clickItem.target.__data__.symbolSize)
-                        }, 3000)
+                        }, 2000)
                     }
                     return true;
                 }
@@ -271,9 +278,7 @@ export class Graph extends Model {
             .extent([[0, 0], [width, height]])
             .scaleExtent([1, 8])
             .on("zoom", (event: any) => {
-                node.attr("transform", (item) => {
-                    return event.transform.translate(item.x, item.y)
-                });
+                node.attr("transform", event.transform);
                 link.attr("transform", event.transform);
             })).on("dblclick.zoom", null);
 
@@ -282,14 +287,11 @@ export class Graph extends Model {
                 .attr("y1", d => d.source.y)
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
-            node.attr("transform", d => `translate(${d.x},${d.y})`);
-            // node
-            //     .attr("cx", d => d.x)
-            //     .attr("cy", d => d.y);
+            node.attr("cx", d => d.x)
+                .attr("cy", d => d.y);
         });
 
         // invalidation.then(() => simulation.stop());
-        this.graphElement.innerHTML = ""
         this.graphElement.append(svg.node())
     }
 }

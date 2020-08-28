@@ -63,7 +63,6 @@ const initBar = () => {
     document.getElementById("barGraph").addEventListener("click", function () {
         const tab = new Tab({
             title: `<svg class="item__svg"><use xlink:href="#iconGraph"></use></svg> ${i18n[window.liandi.config.lang].graphView}`,
-            panel: '<div class="graph__input"><input class="input"></div><div class="fn__flex-1"></div>',
             callback(tab: Tab) {
                 tab.addModel(new Graph({tab}));
                 (window.liandi.rightLayout.children[0] as Wnd).resetLayout(window.liandi.rightLayout);
