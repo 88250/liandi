@@ -129,7 +129,7 @@ func GetBlock(url, id string) (ret *Block) {
 		}
 
 		text := renderBlockHTML(def)
-		ret = &Block{URL: tree.URL, Path: tree.Path, ID: def.ID, Type: def.Type.String(), Content: text}
+		ret = &Block{URL: def.URL, Path: def.Path, ID: def.ID, Type: def.Type.String(), Content: text}
 		return
 	}
 	return
@@ -157,6 +157,8 @@ func getBlock(url, id string) (ret *ast.Node) {
 
 			if id == n.ID {
 				ret = n
+				ret.URL = url
+				ret.Path = tree.Path
 				return ast.WalkStop
 			}
 			return ast.WalkContinue

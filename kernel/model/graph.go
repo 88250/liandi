@@ -75,6 +75,7 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 						"url":        ref.Def.URL,
 						"path":       ref.Def.Path,
 						"symbolSize": NodeSize,
+						"content":    ref.Def.Content,
 						"type":       ref.Def.Type,
 					}
 
@@ -100,6 +101,7 @@ func growLinkedNodes(nodes, all *[]interface{}, forwardDepth, backDepth *int, ma
 							"url":        ref.URL,
 							"path":       ref.Path,
 							"symbolSize": NodeSize,
+							"content":    ref.Content,
 							"type":       ref.Type,
 						}
 
@@ -151,7 +153,7 @@ func connectBacklinks(links *[]interface{}) {
 }
 
 const (
-	NodeSize = 2 // 节点默认大小
+	NodeSize = 2.0 // 节点默认大小
 )
 
 func genTreeGraph(keyword string, tree *parse.Tree, nodes *[]interface{}, links *[]interface{}) {
@@ -231,9 +233,9 @@ func markLinkedNodes(nodes *[]interface{}, links *[]interface{}) {
 				if l["ref"].(bool) {
 					size := NodeSize
 					if s := n["symbolSize"]; nil != s {
-						size = s.(int)
+						size = s.(float64)
 					}
-					size += 1
+					size += 0.5
 					n["symbolSize"] = size
 				}
 				targetFound = true
