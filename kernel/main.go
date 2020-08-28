@@ -33,6 +33,7 @@ func init() {
 
 	confPath := flag.String("conf", filepath.Join(model.HomeDir, ".liandi"), "dir path of conf dir (.liandi/), default to ~/liandi/")
 	flag.Parse()
+	model.LianDiDir = filepath.Join(model.HomeDir, ".liandi")
 	if "" != *confPath {
 		model.LianDiDir = *confPath
 	}
