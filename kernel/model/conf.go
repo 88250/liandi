@@ -24,6 +24,8 @@ import (
 	"github.com/88250/gulu"
 	"github.com/88250/lute"
 	"github.com/88250/lute/parse"
+	locale "github.com/Xuanwo/go-locale"
+	"golang.org/x/text/language"
 )
 
 // Mode 标识了运行模式，默认开发环境。
@@ -53,7 +55,8 @@ func Close() {
 }
 
 func InitConf() {
-	Conf = &AppConf{LogLevel: "debug", Theme: "dark", Lang: "zh_CN", Boxes: []*Box{}}
+	defaultLang := "zh_CN"
+	Conf = &AppConf{LogLevel: "debug", Theme: "dark", Lang: defaultLang, Boxes: []*Box{}}
 	if gulu.File.IsExist(ConfPath) {
 		data, err := ioutil.ReadFile(ConfPath)
 		if nil != err {
@@ -64,6 +67,27 @@ func InitConf() {
 			Logger.Fatalf("解析配置文件 [%s] 失败：%s", ConfPath, err)
 		}
 		Logger.Debugf("加载配置文件 [%s] 完毕", ConfPath)
+	} else {
+		// 初始化时根据设备 Locale 设置语言 https://github.com/88250/liandi/issues/194
+		if userLang, err := locale.Detect(); nil == err {
+			var supportLangs []language.Tag
+			for lang, _ := range langs {
+				if tag, err := language.Parse(lang); nil == err {
+					supportLangs = append(supportLangs, tag)
+				} else {
+					Logger.Errorf("加载语言配置 [%s] 失败：%s", lang, err)
+				}
+			}
+			matcher := language.NewMatcher(supportLangs)
+			lang, _, _ := matcher.Match(userLang)
+			base, _ := lang.Base()
+			region, _ := lang.Region()
+			Conf.Lang = base.String() + "_" + region.String()
+			Logger.Debugf("根据设备初始化默认语言为 [%s]", Conf.Lang)
+		} else {
+			Logger.Debugf("检查设备语言失败：%s", err)
+			Logger.Debugf("使用默认的语言 [%s] 进行初始化", defaultLang)
+		}
 	}
 
 	for i := 0; i < len(Conf.Boxes); i++ {
