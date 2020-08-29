@@ -291,6 +291,7 @@ export class Graph extends Model {
             .attr("y", 18)
             .attr("font-size", 12)
             .attr("display", 'none')
+            .attr("stroke-width", 0)
             .attr("fill", color)
             .text(d => d.content);
 

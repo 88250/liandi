@@ -167,7 +167,10 @@ export class Editor extends Model {
     private onGetBlockInfo(data: { blocks: IBlock[] }) {
         data.blocks.forEach((item) => {
             if (item.refs) {
-                this.vditore.vditor.ir.element.querySelector(`[data-node-id="${item.id}"]`)
+                const menuElement = this.vditore.vditor.ir.element.querySelector(`[data-node-id="${item.id}"] .vditor-ir__menu`)
+                if (menuElement) {
+                    menuElement.insertAdjacentHTML("beforeend", `<span contenteditable="false">${item.refs.length}</span>`)
+                }
             }
         })
     }
