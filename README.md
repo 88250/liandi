@@ -67,6 +67,10 @@
 
 ![vditor-ir](https://b3logfile.com/file/2020/07/ir-67cd956c.gif)
 
+### 漫游
+
+![roam.gif](https://b3logfile.com/file/2020/08/roam-ee61e1c5.gif) 
+
 ### 明亮主题
 
 ![light.png](https://b3logfile.com/file/2020/08/light-75289939.png)

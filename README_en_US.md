@@ -65,6 +65,10 @@ Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi
 
 ![vditor-ir](https://b3logfile.com/file/2020/07/ir-67cd956c.gif)
 
+### Roam
+
+![roam.gif](https://b3logfile.com/file/2020/08/roam-ee61e1c5.gif) 
+
 ### Light theme
 
 ![light.png](https://b3logfile.com/file/2020/08/light-75289939.png)
