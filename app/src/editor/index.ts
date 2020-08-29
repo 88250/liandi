@@ -86,7 +86,7 @@ export class Editor extends Model {
                         break;
                     case "unmount":
                     case "remove":
-                        if (this.url === data.data.url && this.path.indexOf(data.data.path) === 0) {
+                        if (this.url === data.data.url && (!data.data.path || this.path.indexOf(data.data.path) === 0)) {
                             this.parent.parent.removeTab(this.parent.id);
                         }
                         break;
