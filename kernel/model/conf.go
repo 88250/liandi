@@ -55,7 +55,8 @@ func Close() {
 }
 
 func InitConf() {
-	Conf = &AppConf{LogLevel: "debug", Theme: "dark", Lang: "zh_CN", Boxes: []*Box{}}
+	defaultLang := "zh_CN"
+	Conf = &AppConf{LogLevel: "debug", Theme: "dark", Lang: defaultLang, Boxes: []*Box{}}
 	if gulu.File.IsExist(ConfPath) {
 		data, err := ioutil.ReadFile(ConfPath)
 		if nil != err {
@@ -82,7 +83,10 @@ func InitConf() {
 			base, _ := lang.Base()
 			region, _ := lang.Region()
 			Conf.Lang = base.String() + "_" + region.String()
-			Logger.Debugf("初始化默认语言为 [%s]", Conf.Lang)
+			Logger.Debugf("根据设备初始化默认语言为 [%s]", Conf.Lang)
+		} else {
+			Logger.Debugf("检查设备语言失败：%s", err)
+			Logger.Debugf("使用默认的语言 [%s] 进行初始化", defaultLang)
 		}
 	}
 
