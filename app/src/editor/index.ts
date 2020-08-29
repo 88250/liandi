@@ -65,14 +65,20 @@ export class Editor extends Model {
                             this.parent.headElement.classList.remove("item--unsave");
                         } else {
                             this.initVditor(data.data.content);
+                            this.send("getblockinfo", {
+                                url: this.url,
+                                path: this.path
+                            })
                         }
+                        break;
+                    case "getblockinfo":
+                        this.onGetBlockInfo(data.data);
+                        break;
+                    case "put":
                         this.send("getblockinfo", {
                             url: this.url,
                             path: this.path
                         })
-                        break;
-                    case "getblockinfo":
-                        this.onGetBlockInfo(data.data);
                         break;
                     case "searchblock":
                         this.showSearchBlock(data.data);
@@ -95,6 +101,10 @@ export class Editor extends Model {
                                 callback: Constants.CB_PUT_RELOAD
                             });
                         }
+                        this.send("getblockinfo", {
+                            url: this.url,
+                            path: this.path
+                        })
                         break;
                     case "create":
                         if (data.data.callback === Constants.CB_CREATE_INSERT) {
