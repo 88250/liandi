@@ -67,19 +67,19 @@ Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi
 
 ### Light theme
 
-![light.png](https://b3logfile.com/file/2020/08/light-e1387cb0.png)
+![light.png](https://b3logfile.com/file/2020/08/light-75289939.png)
 
 ### Dark theme
 
-![dark.png](https://b3logfile.com/file/2020/08/dark-1488df60.png)
+![dark.png](https://b3logfile.com/file/2020/08/dark-eb8b11ba.png)
 
 ### Markdown Options
 
-![md.png](https://b3logfile.com/file/2020/08/md-49d02fd3.png)
+![md.png](https://b3logfile.com/file/2020/08/md-070d5a94.png)
 
 ### Fulltext search
 
-![search.png](https://b3logfile.com/file/2020/08/search-b2599547.png)
+![search.png](https://b3logfile.com/file/2020/08/search-7ba4939e.png)
 
 ### Block Reference
 

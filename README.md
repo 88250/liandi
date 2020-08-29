@@ -69,19 +69,19 @@
 
 ### 明亮主题
 
-![light.png](https://b3logfile.com/file/2020/08/light-02f6e7fc.png)
+![light.png](https://b3logfile.com/file/2020/08/light-75289939.png)
 
 ### 暗黑主题
 
-![dark.png](https://b3logfile.com/file/2020/08/dark-61d34ed2.png)
+![dark.png](https://b3logfile.com/file/2020/08/dark-eb8b11ba.png)
 
 ### Markdown 配置
 
-![md.png](https://b3logfile.com/file/2020/08/md-b3ff30fa.png)
+![md.png](https://b3logfile.com/file/2020/08/md-070d5a94.png)
 
 ### 全文搜索
 
-![search.png](https://b3logfile.com/file/2020/08/search-6261fc8a.png)
+![search.png](https://b3logfile.com/file/2020/08/search-7ba4939e.png)
 
 ### 块级引用
 
