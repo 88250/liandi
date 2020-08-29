@@ -79,6 +79,7 @@ export class Wnd {
             const it = this as HTMLElement;
             it.style.backgroundColor = "";
             const newTabHeaderElement = hasClosestByTag(event.target, "LI");
+            // TODO 对象顺序
             if (!it.contains(oldTab.headElement)) {
                 const newWnd = getInstanceById(it.parentElement.getAttribute("data-id")) as Wnd;
                 newWnd.moveTab(oldTab);
