@@ -1,3 +1,20 @@
+## v1.1.8 / 2020-08-29
+
+### 引入特性
+
+* [内容块被引用数统计](https://github.com/88250/liandi/issues/138)
+* [导出为标准 Markdown](https://github.com/88250/liandi/issues/192)
+
+### 改进功能
+
+* [关系图优化](https://github.com/88250/liandi/issues/190)
+* [删除、重命名文档以及关闭笔记本时关系图、编辑器、大纲页签的同步](https://github.com/88250/liandi/issues/193)
+* [初始化时根据设备 Locale 设置语言](https://github.com/88250/liandi/issues/194)
+
+### 修复缺陷
+
+* [标题和有序列表导入的问题](https://github.com/88250/liandi/issues/191)
+
 ## v1.1.7 / 2020-08-28
 
 ### 引入特性
