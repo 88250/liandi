@@ -288,9 +288,10 @@ export class Graph extends Model {
             .attr("r", d => d.symbolSize);
         node.append("text")
             .attr("x", -12)
-            .attr("y", 12)
-            .attr("font-size", 10)
+            .attr("y", 18)
+            .attr("font-size", 12)
             .attr("display", 'none')
+            .attr("fill", color)
             .text(d => d.content);
 
         let hlNodeId: string[] = [];
@@ -363,6 +364,9 @@ export class Graph extends Model {
             .extent([[0, 0], [width, height]])
             .scaleExtent([1, 8])
             .on("zoom", (event: any) => {
+                const fontSize = 12 / event.transform.k;
+                (node as any).selectChildren('text').attr("font-size", fontSize).attr("x", -fontSize)
+                    .attr("y", fontSize * 1.5)
                 g.attr("transform", `translate(${event.transform.x}, ${event.transform.y})` + "scale(" + event.transform.k + ")");
             })
         svg.call(zoom).on("dblclick.zoom", null);
@@ -375,6 +379,12 @@ export class Graph extends Model {
                 .attr("y2", d => d.target.y);
             node.attr("transform", d => `translate(${d.x},${d.y})`);
         });
+        if (this.url) {
+            svg.transition().duration(1000).call(
+                this.zoom.transform,
+                d3.zoomIdentity.scale(3)
+            );
+        }
         this.graphElement.append(svg.node());
     }
 }
