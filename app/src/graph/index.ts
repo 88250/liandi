@@ -258,6 +258,7 @@ export class Graph extends Model {
             .style("fill", "rgba(210, 63, 49, 0.36)");
         this.svg = svg;
         svg.on("click", () => {
+            (node as any).selectChildren("text").attr("display", "none");
             node.style("fill", color);
             link.style("stroke", (item) => {
                 if (item.ref) {
@@ -301,7 +302,7 @@ export class Graph extends Model {
             .attr("display", "none")
             .attr("stroke-width", 0)
             .attr("fill", color)
-            .text(d => d.content);
+            .text(d => escapeHtml(d.content));
 
         let hlNodeId: string[] = [];
         let hlRefNodeId: string[] = [];
@@ -333,7 +334,7 @@ export class Graph extends Model {
             node.filter((item) => hlNodeId.includes(item.id)).style("fill", hlColor);
             (node.filter((item) => hlRefNodeId.includes(item.id)) as any).selectChildren("text").attr("display", "block");
             tooltipElement.innerHTML = `<div>${d.target.__data__.type === "NodeDocument" ? escapeHtml(d.target.__data__.path.substr(1)) : ""}</div>
-<div class="ft__secondary ft__smaller">${d.target.__data__.content}</div>`;
+<div class="ft__secondary ft__smaller">${escapeHtml(d.target.__data__.content)}</div>`;
             tooltipElement.setAttribute("style", `display:block;top:${d.offsetY + 20}px;left: ${d.offsetX - 15}px`);
         }).on("mouseout", () => {
             (node.filter((item) => hlRefNodeId.includes(item.id)) as any).selectChildren("text").attr("display", "none");
