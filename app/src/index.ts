@@ -72,7 +72,7 @@ class App {
             if (data) {
                 switch (data.cmd) {
                     case "exportmd":
-                        exportFile(data.data.content, data.data.name)
+                        exportFile(data.data.content, data.data.name);
                         break;
                     case "search":
                         onSearch(data.data);

@@ -55,14 +55,14 @@ export class Graph extends Model {
                         this.onGraph(data.data);
                         if (data.callback === Constants.CB_GRAPH_FOCUS) {
                             setTimeout(() => {
-                                this.hlNode(options.nodeId)
-                            }, 100)
+                                this.hlNode(options.nodeId);
+                            }, 100);
                         }
                         break;
                     case "rename":
                         if (this.url && data.data.url === this.url && data.data.oldPath === this.path) {
-                            this.path = data.data.newPath
-                            this.parent.headElement.querySelector("span").textContent = data.data.newName
+                            this.path = data.data.newPath;
+                            this.parent.headElement.querySelector("span").textContent = data.data.newName;
                         }
                         if (!this.url) {
                             this.send("graph", {
@@ -167,30 +167,30 @@ export class Graph extends Model {
         this.nodes.style("fill", color);
         const hlNode = this.nodes.filter((item: any) => item.id === id);
         if (hlNode._groups[0].length === 0) {
-            return
+            return;
         }
         hlNode.style("fill", "#f3a92f");
-        const hlNodeData = hlNode._groups[0][0].__data__
+        const hlNodeData = hlNode._groups[0][0].__data__;
         this.svg.transition().duration(1000).call(
             this.zoom.transform,
             d3.zoomIdentity.scale(3).translate(-hlNodeData.x, -hlNodeData.y)
         );
-        let hlRefNodeId: string[] = []
+        let hlRefNodeId: string[] = [];
         this.links.each(function (item: any) {
             if (item.target === hlNodeData || item.source === hlNodeData) {
                 if (item.ref) {
                     if (item.target.id !== hlNodeData.id) {
-                        hlRefNodeId.push(item.target.id)
+                        hlRefNodeId.push(item.target.id);
                     }
                     if (item.source.id !== hlNodeData.id) {
-                        hlRefNodeId.push(item.source.id)
+                        hlRefNodeId.push(item.source.id);
                     }
                 }
             }
         });
         hlRefNodeId = [...new Set(hlRefNodeId)];
-        this.nodes.selectChildren('text').attr("display", "none");
-        (this.nodes.filter((item: any) => hlRefNodeId.includes(item.id)) as any).selectChildren('text').attr("display", "block")
+        this.nodes.selectChildren("text").attr("display", "none");
+        (this.nodes.filter((item: any) => hlRefNodeId.includes(item.id)) as any).selectChildren("text").attr("display", "block");
     }
 
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
@@ -248,8 +248,8 @@ export class Graph extends Model {
             .append("path")
             .attr("d", "M0 0l6 3-6 3 1.5-3z")
             .style("fill", "rgba(210, 63, 49, 0.36)");
-        this.svg = svg
-        svg.on("click", (item) => {
+        this.svg = svg;
+        svg.on("click", () => {
             node.style("fill", color);
             link.style("stroke", (item) => {
                 if (item.ref) {
@@ -257,7 +257,7 @@ export class Graph extends Model {
                 }
                 return secondColor;
             });
-        })
+        });
         const g = svg.append("g");
 
         const link = g.append("g")
@@ -290,7 +290,7 @@ export class Graph extends Model {
             .attr("x", -12)
             .attr("y", 18)
             .attr("font-size", 12)
-            .attr("display", 'none')
+            .attr("display", "none")
             .attr("stroke-width", 0)
             .attr("fill", color)
             .text(d => d.content);
@@ -298,18 +298,18 @@ export class Graph extends Model {
         let hlNodeId: string[] = [];
         let hlRefNodeId: string[] = [];
         node.on("mouseover", function (d) {
-            hlNodeId = []
-            hlRefNodeId = []
+            hlNodeId = [];
+            hlRefNodeId = [];
             link.style("stroke", function (item) {
                 if (item.target === d.target.__data__ || item.source === d.target.__data__) {
                     hlNodeId.push(item.target.id);
                     hlNodeId.push(item.source.id);
                     if (item.ref) {
                         if (item.target.id !== d.target.__data__.id) {
-                            hlRefNodeId.push(item.target.id)
+                            hlRefNodeId.push(item.target.id);
                         }
                         if (item.source.id !== d.target.__data__.id) {
-                            hlRefNodeId.push(item.source.id)
+                            hlRefNodeId.push(item.source.id);
                         }
                     }
                     return hlColor;
@@ -323,13 +323,13 @@ export class Graph extends Model {
             hlRefNodeId = [...new Set(hlRefNodeId)];
             node.style("fill", secondColor);
             node.filter((item) => hlNodeId.includes(item.id)).style("fill", hlColor);
-            (node.filter((item) => hlRefNodeId.includes(item.id)) as any).selectChildren('text').attr("display", "block")
+            (node.filter((item) => hlRefNodeId.includes(item.id)) as any).selectChildren("text").attr("display", "block");
             tooltipElement.innerHTML = `<div>${d.target.__data__.type === "NodeDocument" ? escapeHtml(d.target.__data__.path.substr(1)) : ""}</div>
 <div class="ft__secondary ft__smaller">${d.target.__data__.content}</div>`;
             tooltipElement.setAttribute("style", `display:block;top:${d.offsetY + 20}px;left: ${d.offsetX - 15}px`);
         }).on("mouseout", () => {
-            (node.filter((item) => hlRefNodeId.includes(item.id)) as any).selectChildren('text').attr("display", "none")
-            node.filter((item) => !hlNodeId.includes(item.id)).style("fill", color)
+            (node.filter((item) => hlRefNodeId.includes(item.id)) as any).selectChildren("text").attr("display", "none");
+            node.filter((item) => !hlNodeId.includes(item.id)).style("fill", color);
             tooltipElement.setAttribute("style", "display:none");
         }).on("dblclick", (item) => {
             svg.transition().duration(1000).call(
@@ -366,12 +366,12 @@ export class Graph extends Model {
             .scaleExtent([1, 8])
             .on("zoom", (event: any) => {
                 const fontSize = 12 / event.transform.k;
-                (node as any).selectChildren('text').attr("font-size", fontSize).attr("x", -fontSize)
-                    .attr("y", fontSize * 1.5)
+                (node as any).selectChildren("text").attr("font-size", fontSize).attr("x", -fontSize)
+                    .attr("y", fontSize * 1.5);
                 g.attr("transform", `translate(${event.transform.x}, ${event.transform.y})` + "scale(" + event.transform.k + ")");
-            })
+            });
         svg.call(zoom).on("dblclick.zoom", null);
-        this.zoom = zoom
+        this.zoom = zoom;
 
         simulation.on("tick", () => {
             link.attr("x1", d => d.source.x)

@@ -7,7 +7,7 @@ import {Editor} from "../editor";
 import {Wnd} from "../layout/Wnd";
 import {escapeHtml} from "../util/escape";
 import {Graph} from "../graph";
-import * as path from "path"
+import * as path from "path";
 import {hasClosestByClassName} from "../../vditore/src/ts/util/hasClosest";
 
 export const initVditorMenu = () => {
@@ -30,7 +30,7 @@ export const initVditorIconMenu = () => {
         label: i18n[window.liandi.config.lang].graphView,
         click: () => {
             const itemTarget = window.liandi.menus.itemData.target;
-            const vditorElement = hasClosestByClassName(itemTarget, "vditor", true)
+            const vditorElement = hasClosestByClassName(itemTarget, "vditor", true);
             if (vditorElement) {
                 const currentTab = getInstanceById(vditorElement.getAttribute("data-id")) as Tab;
                 const filePath = (currentTab.model as Editor).path;

@@ -68,7 +68,7 @@ export class Editor extends Model {
                             this.send("getblockinfo", {
                                 url: this.url,
                                 path: this.path
-                            })
+                            });
                         }
                         break;
                     case "getblockinfo":
@@ -80,7 +80,7 @@ export class Editor extends Model {
                         this.send("getblockinfo", {
                             url: this.url,
                             path: this.path
-                        })
+                        });
                         break;
                     case "searchblock":
                         this.showSearchBlock(data.data);
@@ -106,7 +106,7 @@ export class Editor extends Model {
                         this.send("getblockinfo", {
                             url: this.url,
                             path: this.path
-                        })
+                        });
                         break;
                     case "create":
                         if (data.data.callback === Constants.CB_CREATE_INSERT) {
@@ -167,12 +167,12 @@ export class Editor extends Model {
     private onGetBlockInfo(data: { blocks: IBlock[] }) {
         data.blocks.forEach((item) => {
             if (item.refs) {
-                const menuElement = this.vditore.vditor.ir.element.querySelector(`[data-node-id="${item.id}"] .vditor-ir__menu`)
+                const menuElement = this.vditore.vditor.ir.element.querySelector(`[data-node-id="${item.id}"] .vditor-ir__menu`);
                 if (menuElement) {
-                    menuElement.insertAdjacentHTML("beforeend", `<span contenteditable="false">${item.refs.length}</span>`)
+                    menuElement.insertAdjacentHTML("beforeend", `<span contenteditable="false">${item.refs.length}</span>`);
                 }
             }
-        })
+        });
     }
 
     public initVditor(html?: string) {

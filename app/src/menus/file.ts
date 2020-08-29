@@ -25,7 +25,7 @@ export const initFileMenu = () => {
             window.liandi.ws.send("exportmd", {
                 url: itemData.url,
                 path: itemData.path
-            })
+            });
         }
     }));
     return menu;

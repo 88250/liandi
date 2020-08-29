@@ -25,8 +25,8 @@ export class Outline extends Model {
                 switch (data.cmd) {
                     case "rename":
                         if (data.data.url === this.url && data.data.oldPath === this.path) {
-                            this.path = data.data.newPath
-                            this.parent.headElement.querySelector("span").textContent = data.data.newName
+                            this.path = data.data.newPath;
+                            this.parent.headElement.querySelector("span").textContent = data.data.newName;
                         }
                         break;
                     case "unmount":
