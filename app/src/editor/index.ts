@@ -75,6 +75,8 @@ export class Editor extends Model {
                         this.onGetBlockInfo(data.data);
                         break;
                     case "put":
+                        this.saved = true;
+                        this.parent.headElement.classList.remove("item--unsave");
                         this.send("getblockinfo", {
                             url: this.url,
                             path: this.path
@@ -163,7 +165,11 @@ export class Editor extends Model {
     }
 
     private onGetBlockInfo(data: { blocks: IBlock[] }) {
-        console.log(data)
+        data.blocks.forEach((item) => {
+            if (item.refs) {
+                this.vditore.vditor.ir.element.querySelector(`[data-node-id="${item.id}"]`)
+            }
+        })
     }
 
     public initVditor(html?: string) {
@@ -173,7 +179,7 @@ export class Editor extends Model {
         }
         let inputTimeout: number;
         this.vditore = new Vditor(this.element, {
-            // _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
+            _lutePath: process.env.NODE_ENV === "development" ? `http://192.168.0.107:9090/lute.min.js?${new Date().getTime()}` : null,
             debugger: process.env.NODE_ENV === "development",
             icon: "material",
             height: this.element.parentElement.clientHeight,
@@ -311,8 +317,6 @@ export class Editor extends Model {
                     content,
                     reloadPushMode: 2
                 });
-                this.saved = true;
-                this.parent.headElement.classList.remove("item--unsave");
             },
             input: (content: string) => {
                 this.saved = false;
@@ -331,8 +335,6 @@ export class Editor extends Model {
                         content,
                         reloadPushMode: 2
                     });
-                    this.saved = true;
-                    this.parent.headElement.classList.remove("item--unsave");
                 }, 2000);
             }
         });
