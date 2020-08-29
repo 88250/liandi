@@ -59,6 +59,14 @@ export class Graph extends Model {
                             }, 100);
                         }
                         break;
+                    case "mount":
+                    case "mountremote":
+                        if (!this.url) {
+                            this.send("graph", {
+                                k: this.inputElement.value
+                            });
+                        }
+                        break;
                     case "rename":
                         if (this.url && data.data.url === this.url && data.data.oldPath === this.path) {
                             this.path = data.data.newPath;
