@@ -73,7 +73,7 @@ func MountRemote(url, user, password string) (ret string, alreadyMount bool) {
 	routeWebDAV()
 	Conf.Save()
 	box.InitClient()
-	go box.Index()
+	box.Index()
 	Logger.Debugf("打开远程笔记本 [%s] 完毕", url)
 	return url, false
 }
@@ -93,7 +93,7 @@ func Mount(url, localPath string) (ret string, alreadyMount bool) {
 	routeWebDAV()
 	Conf.Save()
 	box.InitClient()
-	go box.Index()
+	box.Index()
 	Logger.Debugf("打开本地笔记本 [%s] 完毕", url)
 	return url, false
 }
