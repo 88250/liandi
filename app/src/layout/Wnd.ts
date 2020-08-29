@@ -111,7 +111,6 @@ export class Wnd {
         // animationThrottle("dragover", "optimizedDragover", dragElement);
         dragElement.addEventListener("dragover", (event: DragEvent & { layerX: number, layerY: number }) => {
             event.preventDefault();
-            // console.log(event.layerX, event.layerY);
         });
         dragElement.addEventListener("dragleave", () => {
             dragElement.classList.add("fn__none");
