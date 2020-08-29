@@ -66,6 +66,13 @@ export class Editor extends Model {
                         } else {
                             this.initVditor(data.data.content);
                         }
+                        this.send("getblockinfo", {
+                            url: this.url,
+                            path: this.path
+                        })
+                        break;
+                    case "getblockinfo":
+                        this.onGetBlockInfo(data.data);
                         break;
                     case "searchblock":
                         this.showSearchBlock(data.data);
@@ -143,6 +150,10 @@ export class Editor extends Model {
                 };
             }
         });
+    }
+
+    private onGetBlockInfo(data: any) {
+        console.log(data)
     }
 
     public initVditor(html?: string) {
