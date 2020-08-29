@@ -20,7 +20,6 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/parnurzeal/gorequest v0.2.16
 	github.com/smartystreets/assertions v1.0.1 // indirect
-	github.com/smartystreets/goconvey v1.6.4 // indirect
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381
 	golang.org/x/sys v0.0.0-20200828194041-157a740278f4 // indirect
 	golang.org/x/text v0.3.3
