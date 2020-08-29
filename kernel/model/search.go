@@ -118,6 +118,7 @@ func (box *Box) Tree(path string) *parse.Tree {
 }
 
 func GetBlockInfo(url, p string) (ret []*Block) {
+	ret = []*Block{}
 	rebuildLinks()
 
 	for _, ref := range forwardlinks {
