@@ -202,10 +202,10 @@ export class Graph extends Model {
     }
 
     public onGraph(data: { nodes: Record<string, unknown>[], links: Record<string, unknown>[], url?: string, path?: string }) {
+        this.graphElement.innerHTML = "<div class='graph__tip vditor-reset'></div>";
         if (data.nodes.length === 0) {
             return;
         }
-        this.graphElement.innerHTML = "<div class='graph__tip vditor-reset'></div>";
         const color = window.liandi.config.theme === "dark" ? "#d1d5da" : "#24292e";
         const secondColor = window.liandi.config.theme === "dark" ? "#959da5" : "#6a737d";
         const hlColor = "#f3a92f";
