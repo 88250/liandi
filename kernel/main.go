@@ -37,13 +37,13 @@ func init() {
 	if "" != *confPath {
 		model.LianDiDir = *confPath
 	}
-	model.ConfPath      = filepath.Join(model.LianDiDir, "conf.json")
-	model.LogPath       = filepath.Join(model.LianDiDir, "liandi.log")
+	model.ConfPath = filepath.Join(model.LianDiDir, "conf.json")
+	model.LogPath = filepath.Join(model.LianDiDir, "liandi.log")
 
 	model.InitLog()
 	model.InitConf()
 	model.InitMount()
-	model.InitIndex()
+	go model.InitIndex()
 
 	model.InitProcess()
 	go model.ParentExited()

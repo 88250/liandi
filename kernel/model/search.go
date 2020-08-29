@@ -37,7 +37,7 @@ type Block struct {
 
 func InitIndex() {
 	for _, box := range Conf.Boxes {
-		go box.Index()
+		box.Index()
 	}
 }
 
