@@ -152,7 +152,7 @@ export class Editor extends Model {
         });
     }
 
-    private onGetBlockInfo(data: any) {
+    private onGetBlockInfo(data: { blocks: IBlock[] }) {
         console.log(data)
     }
 
