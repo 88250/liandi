@@ -121,11 +121,11 @@ func GetBlockInfo(url, p string) (ret []*Block) {
 	ret = []*Block{}
 	rebuildLinks()
 
-	for _, ref := range forwardlinks {
-		if ref.URL != url || ref.Path != p {
+	for _, def := range backlinks {
+		if def.URL != url || def.Path != p {
 			continue
 		}
-		ret = append(ret, ref)
+		ret = append(ret, def)
 	}
 	return
 }
