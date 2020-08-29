@@ -109,9 +109,7 @@ func (box *Box) IndexTree(tree *parse.Tree) {
 }
 
 func (box *Box) Tree(path string) *parse.Tree {
-	Logger.Infof("box [%s], query path [%s]", box.URL, path)
 	for _, t := range trees {
-		Logger.Infof("url [%s] path [%s]", t.URL, t.Path)
 		if box.URL == t.URL && path == t.Path {
 			return t
 		}
