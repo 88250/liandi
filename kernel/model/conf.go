@@ -82,6 +82,7 @@ func InitConf() {
 			base, _ := lang.Base()
 			region, _ := lang.Region()
 			Conf.Lang = base.String() + "_" + region.String()
+			Logger.Debugf("初始化默认语言为 [%s]", Conf.Lang)
 		}
 	}
 
