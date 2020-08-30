@@ -26,6 +26,8 @@
 <a href="https://github.com/88250/liandi/blob/master/README.md">中文</a>
 </p>
 
+**Welcome to follow our latest project: [SiYuan Note](https://b3log.org/siyuan)**
+
 ## 💡 Introduction
 
 LianDi Note is a desktop Markdown Block-Reference and Bidirectional-Link note-taking application, supports Windows, Mac and Linux.

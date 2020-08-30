@@ -26,6 +26,8 @@
 <a href="https://github.com/88250/liandi/blob/master/README_en_US.md">English</a>
 </p>
 
+**欢迎关注我们的最新项目：[思源笔记](https://b3log.org/siyuan)**
+
 ## 💡 简介
 
 链滴笔记是一款桌面端的 Markdown 块级引用和双向链接笔记应用，支持 Windows、Mac 和 Linux。
