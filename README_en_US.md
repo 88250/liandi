@@ -134,8 +134,7 @@ If you want to modify the source code, please set up the development environment
 
 ## 🏘️ Community
 
-* [Forum](https://hacpai.com/tag/liandi-biji)
-* [Issues](https://github.com/88250/liandi/issues/new/choose)
+* [SiYuan Note Forum](https://hacpai.com/tag/siyuan)
 
 ## 📄 License
 

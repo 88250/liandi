@@ -136,8 +136,7 @@
 
 ## 🏘️ 社区
 
-* [讨论区](https://hacpai.com/tag/liandi-biji)
-* [报告问题](https://github.com/88250/liandi/issues/new/choose)
+* [思源笔记讨论区](https://hacpai.com/tag/siyuan)
 
 ## 📄 开源协议
 
