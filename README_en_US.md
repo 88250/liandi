@@ -26,7 +26,7 @@
 <a href="https://github.com/88250/liandi/blob/master/README.md">中文</a>
 </p>
 
-**Link Note Issues has been closed, welcome to follow our latest project [SiYuan Note](https://github.com/siyuan-note/siyuan) :heart:**
+**LianDi has stopped maintenance, welcome to follow our latest project [SiYuan](https://github.com/siyuan-note/siyuan) :heart:**
 
 ## 💡 Introduction
 

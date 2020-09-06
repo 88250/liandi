@@ -26,7 +26,7 @@
 <a href="https://github.com/88250/liandi/blob/master/README_en_US.md">English</a>
 </p>
 
-**链滴笔记 Issues 已经关闭，欢迎关注我们的最新项目[思源笔记](https://github.com/siyuan-note/siyuan) :heart:**
+**链滴笔记已经停止维护，欢迎关注我们的最新项目[思源笔记](https://github.com/siyuan-note/siyuan) :heart:**
 
 ## 💡 简介
 
