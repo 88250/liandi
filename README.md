@@ -32,7 +32,7 @@
 
 链滴笔记是一款桌面端的 Markdown 块级引用和双向链接笔记应用，支持 Windows、Mac 和 Linux。
 
-欢迎到[链滴笔记官方讨论区](https://hacpai.com/tag/liandi-biji)了解更多。同时也欢迎关注 B3log 开源社区微信公众号 `B3log开源`：
+欢迎到[链滴笔记官方讨论区](https://ld246.com/tag/liandi-biji)了解更多。同时也欢迎关注 B3log 开源社区微信公众号 `B3log开源`：
 
 ![b3logos.jpg](https://b3logfile.com/file/2020/08/b3logos-032af045.jpg)
 
@@ -130,13 +130,13 @@
 
 ## 📜 文档
 
-* [链滴笔记 - 一款桌面端的 Markdown 块级引用和双向链接笔记应用](https://hacpai.com/article/1582274499427)
-* [Markdown 实现块级引用双向链接的探索](https://hacpai.com/article/1597226949061)
-* [链滴笔记路线图](https://hacpai.com/article/1579786655216)
+* [链滴笔记 - 一款桌面端的 Markdown 块级引用和双向链接笔记应用](https://ld246.com/article/1582274499427)
+* [Markdown 实现块级引用双向链接的探索](https://ld246.com/article/1597226949061)
+* [链滴笔记路线图](https://ld246.com/article/1579786655216)
 
 ## 🏘️ 社区
 
-* [思源笔记讨论区](https://hacpai.com/tag/siyuan)
+* [思源笔记讨论区](https://ld246.com/tag/siyuan)
 
 ## 📄 开源协议
 

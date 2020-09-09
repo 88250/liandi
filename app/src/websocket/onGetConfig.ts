@@ -29,7 +29,7 @@ const initBar = () => {
             </svg>
         </div>
         <div class="fn__flex-1" id="drag"></div>
-        <a href="https://hacpai.com/sponsor" class="item ft__pink" aria-label="${i18n[window.liandi.config.lang].sponsor}">
+        <a href="https://ld246.com/sponsor" class="item ft__pink" aria-label="${i18n[window.liandi.config.lang].sponsor}">
             <svg>
                 <use xlink:href="#iconFavorite"></use>
             </svg>

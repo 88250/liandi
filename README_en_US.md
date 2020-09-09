@@ -32,7 +32,7 @@
 
 LianDi Note is a desktop Markdown Block-Reference and Bidirectional-Link note-taking application, supports Windows, Mac and Linux.
 
-Welcome to [LianDi Note Official Discussion Forum](https://hacpai.com/tag/liandi-biji) to learn more.
+Welcome to [LianDi Note Official Discussion Forum](https://ld246.com/tag/liandi-biji) to learn more.
 
 ## ✨  Features
 
@@ -128,13 +128,13 @@ If you want to modify the source code, please set up the development environment
 
 ## 📜 Documentation
 
-* [LianDi Note - A desktop Markdown Block-Reference and Bidirectional-Link note-taking application](https://hacpai.com/article/1582274499427)
-* [Markdown implements the exploration of block-level reference bidirectional links](https://hacpai.com/article/1597226949061)
-* [LianDi Note roadmap](https://hacpai.com/article/1579786655216)
+* [LianDi Note - A desktop Markdown Block-Reference and Bidirectional-Link note-taking application](https://ld246.com/article/1582274499427)
+* [Markdown implements the exploration of block-level reference bidirectional links](https://ld246.com/article/1597226949061)
+* [LianDi Note roadmap](https://ld246.com/article/1579786655216)
 
 ## 🏘️ Community
 
-* [SiYuan Note Forum](https://hacpai.com/tag/siyuan)
+* [SiYuan Note Forum](https://ld246.com/tag/siyuan)
 
 ## 📄 License
 
